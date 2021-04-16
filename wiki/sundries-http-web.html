@@ -1,0 +1,1116 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>HTTP Web 服务 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="简单地讲，HTTP web 服务是指以编程的方式直接使用 http 操作从远程服务器发送和接收数据。
+  
+如果你要从服务器获取数据，使用http GET；
+如果你要向服务器发送新数据，使用http POST.
+
+
+一些更高级的http Web 服务 API 也允许使用 http PUT 和 htt">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="HTTP Web 服务"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: 'HTTP Web 服务'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-41569408-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> HTTP Web 服务</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc', 2, 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<p>简单地讲，HTTP web 服务是指以编程的方式直接使用 http 操作从远程服务器发送和接收数据。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  <ul>
+<li>如果你要从服务器获取数据，使用http GET；</li>
+<li>如果你要向服务器发送新数据，使用http POST.</li>
+</ul>
+</div>
+<p>一些更高级的http Web 服务 API 也允许使用 http PUT 和 http DELETE 来创建、修改和删除数据。 换句话说，http 协议中的“verbs (动作)” (GET, POST, PUT 和 DELETE) 可以直接对应到应用层的操作：获取，创建，修改，删除数据。</p>
+<p>这个方法主要的优点是简单, 它的简单证明是受欢迎的。数据 — 通常是xml或json — 可以事先创建好并静态的存储下来 ，或者由服务器端脚本动态生成, 并且所有主要的编程语言(当然包括 Python)都包含http 库用于下载数据。调试也很方便; 由于http web 服务中每一个资源都有一个唯一的地址(以url的形式存在), 你可以在浏览器中加载它并且立即看到原始的数据.</p>
+<h2 id="HTTP-特性">HTTP 特性</h2>
+<p>这里有一个 HTTP 头的具体例子。 你通过浏览器访问 &lt;<a target="_blank" rel="noopener" href="http://diveintomark.org">diveintomark.org</a>&gt; 。该网页包含一个背景图片， &lt;<a target="_blank" rel="noopener" href="http://wearehugh.com/m.jpg">wearehugh.com/m.jpg</a>&gt; 。当你的浏览器下载那张图片时,服务器的返回包含了下面的 http 头：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">HTTP/1.1</span> <span class="number">200</span> <span class="string">OK</span></span><br><span class="line"><span class="attr">Date:</span> <span class="string">Sun,</span> <span class="number">31</span> <span class="string">May</span> <span class="number">2009 17:14:04 </span><span class="string">GMT</span></span><br><span class="line"><span class="attr">Server:</span> <span class="string">Apache</span></span><br><span class="line"><span class="attr">Last-Modified:</span> <span class="string">Fri,</span> <span class="number">22</span> <span class="string">Aug</span> <span class="number">2008 04:28:16 </span><span class="string">GMT</span></span><br><span class="line"><span class="attr">ETag:</span> <span class="string">&quot;3075-ddc8d800&quot;</span></span><br><span class="line"><span class="attr">Accept-Ranges:</span> <span class="string">bytes</span></span><br><span class="line"><span class="attr">Content-Length:</span> <span class="number">12405</span></span><br><span class="line"><span class="attr">Cache-Control:</span> <span class="string">max-age=31536000,</span> <span class="string">public</span></span><br><span class="line"><span class="attr">Expires:</span> <span class="string">Mon,</span> <span class="number">31</span> <span class="string">May</span> <span class="number">2010 17:14:04 </span><span class="string">GMT</span></span><br><span class="line"><span class="attr">Connection:</span> <span class="string">close</span></span><br><span class="line"><span class="attr">Content-Type:</span> <span class="string">image/jpeg</span></span><br></pre></td></tr></table></figure>
+<p>根据这个http头我们可以从中了解到http几个特性：</p>
+<h3 id="缓存">缓存</h3>
+<ul>
+<li>Cache-Control 和 Expires 头告诉浏览器(以及任何处于你和服务器之间的缓存代理服务器) 这张图片可以缓存长达一年。 如果在明年之前，你访问另外一个也包含这张图片的页面，你的浏览器会从缓存中加载这样图片而不会产生任何网络活动.</li>
+</ul>
+<h3 id="Last-Modified">Last-Modified</h3>
+<p>Last-Modified告诉浏览器这张图片最后的修改时间为<code>Fri, 22 Aug 2008 04:28:16 GMT</code>。如果第二(第三，第四）次请求同样一个资源，你可以在你的请求中发送一个If-Modified-Since头，其值为你上次从服务器返回的时间。如果从那时开始，数据已经发成过变化，服务器会忽略If-Modified-Since头并返回新数据和200状态码给你。否则的话，服务器将发回一个特殊的http 304 状态码, 它的含义是“从上次请求到现在数据没有发生过变化.” 你可以在命令行上使用<a target="_blank" rel="noopener" href="http://curl.haxx.se/">curl</a>来测试：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">you@localhost:~$ curl -I -H <span class="string">&quot;If-Modified-Since: Fri, 22 Aug 2008 04:28:16 GMT&quot;</span> http://wearehugh.com/m.jpg</span><br><span class="line">HTTP/1.1 304 Not Modified</span><br><span class="line">Date: Sun, 31 May 2009 18:04:39 GMT</span><br><span class="line">Server: Apache</span><br><span class="line">Connection: close</span><br><span class="line">ETag: <span class="string">&quot;3075-ddc8d800&quot;</span></span><br><span class="line">Expires: Mon, 31 May 2010 18:04:39 GMT</span><br><span class="line">Cache-Control: max-age=31536000, public</span><br></pre></td></tr></table></figure>
+<h3 id="ETag">ETag</h3>
+<p>ETag 是另一个和 Last-Modified 达到同样目的的方法。使用ETag时，服务器在返回数据的同时在ETag头里返回一个哈希码(如何生成哈希码完全取决于服务器，唯一的要求是数据改变时哈希码也要改变) diveintomark.org引用的背景图片包含有ETag头。当你再次请求同样的数据时，你在If-None-Match头里放入ETag值。如果数据没有发生改变，服务器将会返回304状态码。同最后修改时间检查一样，服务器发回的只有304 状态码，不会再一次给你发送同样的数据。通过在请求中包含ETag 哈希码，你告诉服务器如果哈希值匹配就不需要重新发送同样的数据了，因为你仍然保留着上次收到的数据：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">you@localhost:~$ curl -I -H <span class="string">&quot;If-None-Match: \&quot;3075-ddc8d800\&quot;&quot;</span> http://wearehugh.com/m.jpg  ①</span><br><span class="line">HTTP/1.1 304 Not Modified</span><br><span class="line">Date: Sun, 31 May 2009 18:04:39 GMT</span><br><span class="line">Server: Apache</span><br><span class="line">Connection: close</span><br><span class="line">ETag: <span class="string">&quot;3075-ddc8d800&quot;</span></span><br><span class="line">Expires: Mon, 31 May 2010 18:04:39 GMT</span><br><span class="line">Cache-Control: max-age=31536000, public</span><br></pre></td></tr></table></figure>
+<p>另外，http还有其他两个重要特性：</p>
+<h3 id="压缩">压缩</h3>
+<p>当我们谈论 http web 服务的时候, 你总是会讨论到在线路上来回运送文本数据。可能是xml，也可能是json，抑或仅仅是纯文本。不管是什么格式，文本的压缩性能很好。</p>
+<p>http支持若干种压缩算法。最常见的两种是gzip 和 deflate。当你通过http请求资源时，你可以要求服务器以压缩格式返回资源。你在请求中包含一个Accept-encoding头，里面列出了你支持的压缩算法。如果服务器也支持其中的某一种算法，它就会返回给你压缩后的数据(同时通过Content-encoding头标识它使用的算法)。接下来的事情就是由你去解压数据了。</p>
+<h3 id="重定向">重定向</h3>
+<p>每一次你向http服务器请求资源的时候, 服务器都会在响应中包含一个状态码。 状态码200的意思是一切正常，这就是你请求的页面; 状态码404的意思是找不到页面; (你很可能在浏览网页的时候碰到过404)。300 系列的状态码意味着某种形式的重定向。</p>
+<p>http 有多种方法表示一个资源已经被移动。最常见两个技术是状态码 302 和 301。 状态码 302 是一个 临时重定向; 它意味着, 资源被被临时从这里移动走了; (并且临时地址在Location<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>头里面给出)。状态码301是永久重定向; 它意味着，资源被永久的移动了; (并且在Location头里面给出了新的地址)。如果你得到302状态码和一个新地址, http规范要求你访问新地址来获得你要的资源，但是下次你要访问同样的资源的时候你应该重新尝试旧的地址。但是如果你得到301状态码和新地址, 你从今以后都应该使用新的地址。</p>
+<h2 id="URI">URI</h2>
+<p>HTTP协议通过URI（Uniform Resource Identifiers，统一资源定位符）来访问资源。根据RFC 1808的官方定义，一个完整URI的组成如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;myname:mypass@www.hahack.com:80&#x2F;mydir&#x2F;myfile.html?myvar&#x3D;myvalue#myfrag</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>URI部分</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>http</td>
+<td>协议名称</td>
+</tr>
+<tr>
+<td>myname</td>
+<td>用户名（可选）</td>
+</tr>
+<tr>
+<td>mypass</td>
+<td>密码（可选）</td>
+</tr>
+<tr>
+<td><a href="http://www.hahack.com">www.hahack.com</a></td>
+<td>主机网络地址</td>
+</tr>
+<tr>
+<td>80</td>
+<td>端口号（可选）</td>
+</tr>
+<tr>
+<td>/mydir/myfile.html</td>
+<td>资源路径</td>
+</tr>
+<tr>
+<td>myvar=myvalue</td>
+<td>查询字符串（可选）</td>
+</tr>
+<tr>
+<td>myfrag</td>
+<td>锚点（可选）</td>
+</tr>
+</tbody>
+</table>
+<p>可见协议名称用“😕/”结束，用户名和密码以“:”分隔，以“@”结束，端口号与主机网络地址以“:”分隔，资源路径与查询字符串以“?”分隔，锚点以#开头。并且，只有协议名称、主机网络地址和资源路径是必须包含在URI里的。</p>
+<p>一个更常见的例子如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;www.hahack.com&#x2F;</span><br></pre></td></tr></table></figure>
+<h2 id="HTTP请求与响应">HTTP请求与响应</h2>
+<h3 id="HTTP响应状态码">HTTP响应状态码</h3>
+<table>
+<thead>
+<tr>
+<th>状态码</th>
+<th>定义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1xx 报告</td>
+<td>接收到请求，继续进程</td>
+</tr>
+<tr>
+<td>2xx 成功</td>
+<td>步骤成功接收，被理解，并被接受</td>
+</tr>
+<tr>
+<td>3xx 重定向</td>
+<td>为了完成请求,必须采取进一步措施</td>
+</tr>
+<tr>
+<td>4xx 客户端出错</td>
+<td>请求包括错的顺序或不能完成</td>
+</tr>
+<tr>
+<td>5xx 服务器出错</td>
+<td>服务器无法完成显然有效的请求</td>
+</tr>
+</tbody>
+</table>
+<h4 id="客户端错误">客户端错误</h4>
+<table>
+<thead>
+<tr>
+<th>状态码</th>
+<th>定义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>“100”</td>
+<td>Continue  继续</td>
+</tr>
+<tr>
+<td>“101”</td>
+<td>witching Protocols  交换协议</td>
+</tr>
+</tbody>
+</table>
+<h4 id="成功">成功</h4>
+<table>
+<thead>
+<tr>
+<th>状态码</th>
+<th>定义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>“200”</td>
+<td>OK</td>
+</tr>
+<tr>
+<td>“201”</td>
+<td>Created 已创建</td>
+</tr>
+<tr>
+<td>“202”</td>
+<td>Accepted 接收</td>
+</tr>
+<tr>
+<td>“203”</td>
+<td>Non-Authoritative Information 非认证信息</td>
+</tr>
+<tr>
+<td>“204”</td>
+<td>No Content 无内容</td>
+</tr>
+<tr>
+<td>“205”</td>
+<td>Reset Content 重置内容</td>
+</tr>
+<tr>
+<td>“206”</td>
+<td>Partial Content 部分内容</td>
+</tr>
+</tbody>
+</table>
+<h4 id="重定向-v2">重定向</h4>
+<table>
+<thead>
+<tr>
+<th>状态码</th>
+<th>定义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>“300”</td>
+<td>Multiple Choices 多路选择</td>
+</tr>
+<tr>
+<td>“301”</td>
+<td>Moved Permanently  永久转移</td>
+</tr>
+<tr>
+<td>“302”</td>
+<td>Found 暂时转移</td>
+</tr>
+<tr>
+<td>“303”</td>
+<td>See Other 参见其它</td>
+</tr>
+<tr>
+<td>“304”</td>
+<td>Not Modified 未修改</td>
+</tr>
+<tr>
+<td>“305”</td>
+<td>Use Proxy 使用代理</td>
+</tr>
+<tr>
+<td>“307”</td>
+<td>Temporary Redirect</td>
+</tr>
+</tbody>
+</table>
+<h4 id="客户方错误">客户方错误</h4>
+<table>
+<thead>
+<tr>
+<th>状态码</th>
+<th>定义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>“400”</td>
+<td>Bad Request 错误请求</td>
+</tr>
+<tr>
+<td>“401”</td>
+<td>Unauthorized 未认证</td>
+</tr>
+<tr>
+<td>“402”</td>
+<td>Payment Required 需要付费</td>
+</tr>
+<tr>
+<td>“403”</td>
+<td>Forbidden 禁止</td>
+</tr>
+<tr>
+<td>“404”</td>
+<td>Not Found 未找到</td>
+</tr>
+<tr>
+<td>“405”</td>
+<td>Method Not Allowed 方法不允许</td>
+</tr>
+<tr>
+<td>“406”</td>
+<td>Not Acceptable 不接受</td>
+</tr>
+<tr>
+<td>“407”</td>
+<td>Proxy Authentication Required 需要代理认证</td>
+</tr>
+<tr>
+<td>“408”</td>
+<td>Request Time-out 请求超时</td>
+</tr>
+<tr>
+<td>“409”</td>
+<td>Conflict 冲突</td>
+</tr>
+<tr>
+<td>“410”</td>
+<td>Gone 失败</td>
+</tr>
+<tr>
+<td>“411”</td>
+<td>Length Required 需要长度</td>
+</tr>
+<tr>
+<td>“412”</td>
+<td>Precondition Failed 条件失败</td>
+</tr>
+<tr>
+<td>“413”</td>
+<td>Request Entity Too Large 请求实体太大</td>
+</tr>
+<tr>
+<td>“414”</td>
+<td>Request-URI Too Large 请求URI太长</td>
+</tr>
+<tr>
+<td>“415”</td>
+<td>Unsupported Media Type 不支持媒体类型</td>
+</tr>
+<tr>
+<td>“416”</td>
+<td>Requested range not satisfiable</td>
+</tr>
+<tr>
+<td>“417”</td>
+<td>Expectation Failed</td>
+</tr>
+</tbody>
+</table>
+<h4 id="服务器错误">服务器错误</h4>
+<table>
+<thead>
+<tr>
+<th>状态码</th>
+<th>定义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>“500”</td>
+<td>Internal Server Error 服务器内部错误</td>
+</tr>
+<tr>
+<td>“501”</td>
+<td>Not Implemented 未实现</td>
+</tr>
+<tr>
+<td>“502”</td>
+<td>Bad Gateway 网关失败</td>
+</tr>
+<tr>
+<td>“503”</td>
+<td>Service Unavailable</td>
+</tr>
+<tr>
+<td>“504”</td>
+<td>Gateway Time-out 网关超时</td>
+</tr>
+<tr>
+<td>“505”</td>
+<td>HTTP Version not supported  HTTP版本不支持</td>
+</tr>
+</tbody>
+</table>
+<p>HTTP状态码是可扩展的。HTTP应用程序不需要理解所有已注册状态码的含义，尽管那样的理解显而易见是很合算的。但是，应用程序必须了解由第一位数字指定的状态码的类型，任何未被识别的响应应被看作是该类型的x00状态，有一个例外就是未被识别的响应不能缓存。例如，如果客户端收到一个未被识别的状态码431，则可以安全的假定请求有错，并且它会对待此响应就像它接收了一个状态码是400的响应。在这种情况下，用户代理（user agent）应当把实体和响应一起提交给用户，因为实体很可能包括人可读的关于解释不正常状态的信息。报文最后是实体信息，即客户请求得到的HTTP服务器上的资源内容。</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>Location 的意思是 “看那边!” <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/sundries-thoughts.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/sundries-xml.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: 'HTTP Web 服务'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

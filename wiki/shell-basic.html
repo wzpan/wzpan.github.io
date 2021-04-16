@@ -1,0 +1,1024 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>基础 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="命令行格式
+不同的命令可接受的命令行格式或有不同，一般情况下，一个标准的命令行格式为如下所列：
+1conmmand-name options argement
+从技术上看，shell会依据 IFS(Internet Field Seperator) 将命令行所输入的文字拆解成“字段”（word）。当">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="基础"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '基础'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-41569408-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 基础</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="命令行格式">命令行格式</h2>
+<p>不同的命令可接受的命令行格式或有不同，一般情况下，一个标准的命令行格式为如下所列：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conmmand-name options argement</span><br></pre></td></tr></table></figure>
+<p>从技术上看，shell会依据 <code>IFS</code>(Internet Field Seperator) 将命令行所输入的文字拆解成“字段”（word）。当遇到 <code>CR</code> （Carriage Return） 键时，执行语句。</p>
+<p>其中的 IFS 是 shell 预设使用的分隔符，可以由一个或多个如下符号组成：</p>
+<ul>
+<li>空格符（White Space）</li>
+<li>制表符（Tab）</li>
+<li>回车符（Enter）</li>
+</ul>
+<p>系统可接受的命令名称（command-name）可以从如下途径获得：</p>
+<ul>
+<li>明确路径所指定的外部命令</li>
+<li>命令别名（alias）</li>
+<li>自定义的函数（function）</li>
+<li>shell内建命令（built-in）</li>
+<li>$PATH 之下的外部命令</li>
+</ul>
+<div class="alert alert-green"><i class="fas fa-lightbulb"></i>  可以使用 <code>type</code> 命令来区分一个命令是shell内建的命令还是外部命令。
+</div>
+<p>每一个命令行均必需包含命令名，这是不可或缺的。</p>
+<h2 id="特殊符号（meta）">特殊符号（meta）</h2>
+<p>command-line 的每一个字符分成以下两种：</p>
+<ul>
+<li>literal：也就是普通纯文本（字面值），对 shell 来说没特殊功能；</li>
+<li>meta：具有特定功能的字符保留单元。<code>IFS</code>、<code>CR</code> 就是这类字符的典型代表。</li>
+</ul>
+<p>除了 <code>IFS</code> 与 <code>CR</code>，常用的 meta 有：</p>
+<table>
+<thead>
+<tr>
+<th>meta</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>=</code></td>
+<td>设定变量</td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td>作变量或运算替换（请不要与 shell prompt 搞混了）</td>
+</tr>
+<tr>
+<td><code>&gt;</code></td>
+<td>重定向 stdout</td>
+</tr>
+<tr>
+<td><code>&lt;</code></td>
+<td>重定向 stdin</td>
+</tr>
+<tr>
+<td><code>|</code></td>
+<td>管道</td>
+</tr>
+<tr>
+<td><code>&amp;</code></td>
+<td>重定向文件描述符，或将命令置于后台执行。</td>
+</tr>
+<tr>
+<td><code>()</code></td>
+<td>将其内的命令置于嵌套子shell中执行，或用于运算或命令替换。</td>
+</tr>
+<tr>
+<td><code>&#123;&#125;</code></td>
+<td>将其内的命令置于匿名函数中执行，或用在变量替换的界定范围。</td>
+</tr>
+<tr>
+<td><code>[]</code></td>
+<td>做判断，相当于 test 命令。</td>
+</tr>
+<tr>
+<td><code>;</code></td>
+<td>在前一个命令执行结束时，忽略其返回值。继续执行下一个命令。</td>
+</tr>
+<tr>
+<td><code>!</code></td>
+<td>执行 history 列表中的命令。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="关闭-meta">关闭 meta</h3>
+<p>假如我们需要在 command-line 中将这些保留字元的功能关闭的话，就需要使用引号来处理了。</p>
+<p>在 bash 中，常用的 quoting 有如下三种方法：</p>
+<ul>
+<li>hard quote：<code>' '</code>（单引号），凡在 hard quote 中的所有 meta 均被关闭。</li>
+<li>soft quote：<code>&quot; &quot;</code>（双引号），在 soft quote 中部分 meta 都会被关闭，但某些刚保留（如 <code>$</code>）。</li>
+<li>escape：<code>\</code>（反斜线），只有紧接在 escape （逃逸字符）之后的 <strong>单一</strong> meta 才被关闭。</li>
+</ul>
+<h4 id="示例">示例</h4>
+<h5 id="示例1-空格键未被关闭">示例1 空格键未被关闭</h5>
+<p>下面的例子中，空格键未被关闭，作为 IFS 处理，导致了未找到命令的错误：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ A=B C    <span class="comment"># 空格键未被关闭</span></span><br><span class="line">Bash C: 未找到命令</span><br><span class="line">$ <span class="built_in">echo</span> <span class="variable">$A</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h5 id="示例2-空格键被引号关闭">示例2 空格键被引号关闭</h5>
+<p>下面的例子演示了用 soft quote 关闭空格键，此时空格键不再作为 IFS，而是普通的空格符。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ A=<span class="string">&quot;B C&quot;</span>  <span class="comment"># 空格键被引号关闭</span></span><br><span class="line">$ <span class="built_in">echo</span> A</span><br><span class="line">B C</span><br></pre></td></tr></table></figure>
+<h5 id="示例3-Enter键被引号关闭">示例3 Enter键被引号关闭</h5>
+<p>下面的例子演示了用 hard quote 关闭回车键，此时回车键不再作为 CR，而是普通的换行符。后面会演示 hard quote 和 soft quote 的区别。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ A=<span class="string">&#x27;B    # 回车键也可以被引号关闭</span></span><br><span class="line"><span class="string">&gt; C</span></span><br><span class="line"><span class="string">&gt;&#x27;</span></span><br><span class="line">$ <span class="built_in">echo</span> <span class="variable">$A</span></span><br><span class="line">B</span><br><span class="line">C</span><br></pre></td></tr></table></figure>
+<h5 id="示例4-空格键">示例4 空格键</h5>
+<p>下面的例子演示了用 反斜杆 作为逃逸字符关闭后面紧跟的回车键。此时回车键不再作为 CR，而是普通的换行符。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ A=B\    <span class="comment"># 回车键被escape关闭</span></span><br><span class="line">&gt;C</span><br><span class="line">&gt;</span><br><span class="line">$ <span class="built_in">echo</span> <span class="variable">$A</span></span><br><span class="line">BC</span><br></pre></td></tr></table></figure>
+<h3 id="soft-quote-vs-hard-quote">soft quote vs. hard quote</h3>
+<p>soft quote 和 hard quote 的不同主要是对于某些 meta 的关闭与否。以 <code>$</code> 来做说明：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ A=B\ C</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$A</span>&quot;</span></span><br><span class="line">B C</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">&#x27;$A&#x27;</span></span><br><span class="line"><span class="variable">$A</span></span><br></pre></td></tr></table></figure>
+<h2 id="区分-shell-meta-与-command-meta">区分 shell meta 与 command meta</h2>
+<p>前面我们提到的那些 meta ，都是在 command line 中有特殊用途的。但有时候我们需要让这些 meta 不直接作为整条语句的 meta （shell meta） ，而是作为这条语句内部某个命令的 meta（command meta），这时就需要使用上面的手段来将这些 meta 关闭，让它作为该命令的 meta 而不是整条语句的 meta。</p>
+<p>例如，<code>&#123;&#125;</code> 是将其一系列 command line 置于匿名函数中执行（可简单视为 command block），但是 awk 却需要用 <code>&#123;&#125;</code> 来区分出 awk 的命令区段（BEGIN、MAIN、END）。如果在 shell 中输入：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ awk &#123;<span class="built_in">print</span> <span class="variable">$0</span>&#125; 1.txt</span><br></pre></td></tr></table></figure>
+<p>由于 <code>&#123;&#125;</code> 在 shell 中并没有被关闭，于是 shell 就将 <code>&#123;print $0&#125;</code> 视为<a href="#%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E4%BB%A3%E7%A0%81%E5%9D%97">代码块</a>，但后面又没有<code>;</code>符号作为命令分隔符，因此就出现语法错误结果。</p>
+<p>要解决之，可以用下面三种关闭方法任一种：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ awk <span class="string">&#x27;&#123;print $0&#125;&#x27;</span> 1.txt</span><br><span class="line">$ awk <span class="string">&quot;&#123;print \$0&#125;&quot;</span> 1.txt</span><br><span class="line">$ awk \&#123;<span class="built_in">print</span>\ \<span class="variable">$0</span>\&#125; 1.txt</span><br></pre></td></tr></table></figure>
+<p>这样，<code>&#123;print $0&#125;</code> 完整的成为了 awk 参数中的 command meta。</p>
+<h2 id="shell-中的各种括号">shell 中的各种括号</h2>
+<h3 id="：一个圆括号">()：一个圆括号</h3>
+<h4 id="子程序">子程序</h4>
+<p>返回整个里边表达的返回值。<strong>里边的变量都是局部的，修改不会带到外边</strong>。括号中多个命令之间用分号隔开，最后一个命令可以没有分号，各命令和括号之间不必有空格。</p>
+<p>例如：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ a=1</span><br><span class="line">$ (a=3; <span class="built_in">echo</span> <span class="variable">$a</span>); <span class="built_in">echo</span> <span class="variable">$a</span></span><br><span class="line">3</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+<h4 id="命令替换">命令替换</h4>
+<p>即<code>$(cmd)</code>语句，与 `cmd` 等效。shell在执行一条命令时，会先将其中的 `cmd` 或 <code>$(cmd)</code> 中的语句当作命令执行一遍，再将结果加入到原命令中重新执行。注意有些shell不支持，如tcsh。</p>
+<h4 id="初始化数组">初始化数组</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ array=(a b c d)</span><br><span class="line">$ <span class="keyword">for</span> i <span class="keyword">in</span> <span class="variable">$array</span></span><br><span class="line">&gt; <span class="keyword">do</span></span><br><span class="line">&gt;     <span class="built_in">echo</span> <span class="variable">$i</span></span><br><span class="line">&gt; <span class="keyword">done</span></span><br><span class="line">a</span><br><span class="line">b</span><br><span class="line">c</span><br><span class="line">d</span><br></pre></td></tr></table></figure>
+<h3 id="：一对圆括号">(())：一对圆括号</h3>
+<h4 id="数学计算">数学计算</h4>
+<p><code>$(())</code> 可以进行整数型的运算。若是逻辑判断，表达式exp为真则为1,假则为0。比如：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="string">&quot;1+2=<span class="subst">$(( 1 + 2 )</span>)&quot;</span></span><br><span class="line">1+2=3</span><br></pre></td></tr></table></figure>
+<p>注意这种用法只适合是整数型的计算，不支持浮点型，输出的结果将自动转成十进制。更复杂的运算可以使用 <a href="/wiki/shell-arithmetic.html#expr">expr</a> 命令。</p>
+<p><code>(())</code> 的用法与 let 一样：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ a=5; ((a++))</span><br><span class="line">$ <span class="built_in">echo</span> <span class="variable">$a</span></span><br><span class="line">6</span><br><span class="line">$ <span class="built_in">let</span> a++</span><br><span class="line">$ <span class="built_in">echo</span> <span class="variable">$a</span></span><br><span class="line">7</span><br></pre></td></tr></table></figure>
+<h4 id="for-循环">for 循环</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (( condiction1; condiction2; condiction3 ))</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    .....</span><br><span class="line">        ...</span><br><span class="line">    repeat all statements between <span class="keyword">do</span> and </span><br><span class="line">    <span class="keyword">done</span> until condiction2 is TRUE</span><br><span class="line">Done</span><br></pre></td></tr></table></figure>
+<h4 id="重定义变量值">重定义变量值</h4>
+<h3 id="：一个方括号">[]：一个方括号</h3>
+<p>和 test 命令等效。</p>
+<h3 id="：一对方括号">[[]]：一对方括号</h3>
+<p><code>[[</code> 是 bash 程序语言的关键字。并不是一个命令，<code>[[ ]]</code> 结构比<code>[ ]</code>结构更加通用。在 <code>[[</code> 和 <code>]]</code> 之间所有的字符都不会发生文件名扩展或者单词分割，但是会发生参数扩展和命令替换。<code>[[ ]]</code>的主要优点有：</p>
+<ol>
+<li>支持字符串的模式匹配，使用 <code>=~</code> 操作符时甚至支持shell的正则表达式。字符串比较时可以把右边的作为一个模式，而不仅仅是一个字符串，比如 <code>[[ hello == hell? ]]</code>，结果为真。<code>[[ ]]</code>中匹配字符串或通配符，不需要引号。</li>
+<li>使用<code>[[ ... ]]</code>条件判断结构，而不是<code>[ ... ]</code>，能够防止脚本中的许多逻辑错误。比如，<code>&amp;&amp;</code>、<code>||</code>、<code>&lt;</code>和<code>&gt;</code>操作符能够正常存在于<code>[[ ]]</code>条件判断结构中，但是如果出现在<code>[ ]</code>结构中的话，会报错。</li>
+<li>bash把双中括号中的表达式看作一个单独的元素，并返回一个退出状态码。</li>
+</ol>
+<h3 id="：一对大括号">{}：一对大括号</h3>
+<h4 id="大括号扩展">大括号扩展</h4>
+<p>示例：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cp <span class="variable">$HOME</span>/&#123;.zshrc,.xprofile&#125; <span class="variable">$HOME</span>/Dropbox/Documents/backup/</span><br></pre></td></tr></table></figure>
+<h4 id="区分变量">区分变量</h4>
+<p>例如：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ var=abcd; <span class="built_in">echo</span> <span class="variable">$&#123;var&#125;</span>EFG;</span><br></pre></td></tr></table></figure>
+<p>这样，Bash就不会认为变量是 varEFG 了。</p>
+<h4 id="匿名函数（代码块）">匿名函数（代码块）</h4>
+<p>用来区分代码的，但是跟<code>( )</code>有个区别，就是在末尾要加上 <code>;</code>。例如删除当前目录里面所有的 .svn 目录</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ find . -name .svn -<span class="built_in">type</span> d -<span class="built_in">exec</span> rm -fr &#123;&#125; \;</span><br></pre></td></tr></table></figure>
+<p>注意这里的 <code>\</code> 就是将 <code>;</code> 默认作为 shell meta 关闭，而使之成为 <code>rm -fr &#123;&#125;</code> 的分隔符。</p>
+<p>子函数和代码块的异同：</p>
+<ul>
+<li><code>( )</code>只是对一串命令重新开一个子shell进行执行，也称 nested sub-shell；</li>
+<li><code>&#123; &#125;</code>对一串命令在当前shell执行，也称为 non-named command group；</li>
+<li><code>( )</code>和<code>&#123; &#125;</code>都是把一串的命令放在括号里面，并且命令之间用<code>;</code>号隔开；</li>
+<li><code>( )</code>最后一个命令可以不用分号；</li>
+<li><code>&#123; &#125;</code>最后一个命令要用分号；</li>
+<li><code>&#123; &#125;</code>的第一个命令和左括号之间必须要有一个空格；</li>
+<li><code>( )</code>里的各命令不必和括号有空格；</li>
+<li><code>( )</code>和<code>&#123; &#125;</code>中括号里面的某个命令的重定向只影响该命令，但括号外的重定向则影响到括号里的所有命令。</li>
+</ul>
+<p>通常而言，若所作的修改是临时的，且不想影响原有或以后的设定，那我们就用 <code>( )</code>，反之，则用 <code>&#123; &#125;</code> 。</p>
+<h4 id="截取字符串">截取字符串</h4>
+<p>几种特殊的替换结构：</p>
+<ul>
+<li><a href="#var-string">${var:-string}</a></li>
+<li><a href="#varstring">${var:=string}</a></li>
+<li><a href="#varstring-1">${var:+string}</a></li>
+<li><a href="#varstring-2">${var:?string}</a></li>
+</ul>
+<h5 id="var-string">${var:-string}</h5>
+<p>若变量var为空，则使用<code>$&#123;var:-string&#125;</code>中的<code>string</code>作为<code>$&#123;var:-string&#125;</code>的值（有点像html图像的alt属性），否则变量var不为空时，则用<code>$&#123;var:-string&#125;</code>中的<code>var</code>的值来替换<code>$&#123;var:-string&#125;</code>，如：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="variable">$newvar</span>    <span class="comment"># newvar 为空</span></span><br><span class="line"></span><br><span class="line">$ <span class="built_in">echo</span> <span class="variable">$&#123;newvar:-a&#125;</span>   <span class="comment"># 使用备选的a</span></span><br><span class="line">a </span><br><span class="line">$ <span class="built_in">echo</span> <span class="variable">$newvar</span>    <span class="comment"># newvar的值仍然是空</span></span><br><span class="line"></span><br><span class="line">$ newvar=b</span><br><span class="line">$ <span class="built_in">echo</span> <span class="variable">$&#123;newvar:-a&#125;</span> <span class="comment"># 变量newvar的值不为空</span></span><br><span class="line">b </span><br><span class="line">$</span><br></pre></td></tr></table></figure>
+<h5 id="var-string-v2">${var:=string}</h5>
+<p><code>$&#123;var:=string&#125;</code>的替换规则和<code>$&#123;var:-string&#125;</code>是一样的，所不同之处是<code>$&#123;var:=string&#125;</code>若var为空时，用<code>string</code>替换<code>$&#123;var:=string&#125;</code>的同时，把<code>string</code>赋给变量<code>var</code>：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="variable">$newvar</span></span><br><span class="line"></span><br><span class="line">$ <span class="built_in">echo</span> <span class="variable">$&#123;newvar:=a&#125;</span> </span><br><span class="line">a </span><br><span class="line">$ <span class="built_in">echo</span> <span class="variable">$newvar</span> <span class="comment"># 变量newvar被赋值为a，同时$&#123;newvar:=a&#125;被替换成a </span></span><br><span class="line">a </span><br><span class="line">$ <span class="built_in">echo</span> <span class="variable">$&#123;newvar:=b&#125;</span> <span class="comment"># 变量newvar不为空(其值已被赋为a)</span></span><br><span class="line">a </span><br><span class="line">$ <span class="built_in">echo</span> <span class="variable">$newvar</span> </span><br><span class="line">a</span><br></pre></td></tr></table></figure>
+<p><code>$&#123;var:=string&#125;</code>很常用的一种用法是，判断某个变量是否赋值，没有的话则给它赋上一个默认值。</p>
+<p>如设置默认的编辑器：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> You use editor: <span class="variable">$&#123;EDITOR:=/bin/vi&#125;</span></span><br></pre></td></tr></table></figure>
+<h5 id="var-string-v3">${var:+string}</h5>
+<p><code>$&#123;var:+string&#125;</code>的替换规则和上面的相反，即只有当<code>var</code>不是空的时候才替换成<code>string</code>，若<code>var</code>为空时则不替换或者说是替换成变量 <code>var</code> 的值，即空值。(因为变量<code>var</code>此时为空，所以这两种说法是等价的)</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> <span class="variable">$newvar</span> </span><br><span class="line">a </span><br><span class="line">$ <span class="built_in">echo</span> <span class="variable">$&#123;newvar:+b&#125;</span> </span><br><span class="line">b </span><br><span class="line">$ <span class="built_in">echo</span> <span class="variable">$newvar</span> </span><br><span class="line">a </span><br><span class="line">$ newvar= </span><br><span class="line">$ <span class="built_in">echo</span> <span class="variable">$&#123;newvar:+b&#125;</span></span><br><span class="line"></span><br><span class="line">$</span><br></pre></td></tr></table></figure>
+<h5 id="var-string-v4">${var:?string}</h5>
+<p>替换规则为：若变量<code>var</code>不为空，则用变量<code>var</code>的值来替换<code>$&#123;var:?string&#125;</code>；若变量<code>var</code>为空，则把<code>string</code>输出到标准错误中，并从脚本中退出。我们可利用此特性来检查是否设置了变量的值。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ newvar= </span><br><span class="line">$ <span class="built_in">echo</span> <span class="variable">$&#123;newvar:?没有设置newvar的值&#125;</span> </span><br><span class="line">bash: newvar: 没有设置newvar的值 </span><br><span class="line">n$ newvar=a </span><br><span class="line">$ <span class="built_in">echo</span> <span class="variable">$&#123;newvar:?没有设置newvar的值&#125;</span> </span><br><span class="line">a </span><br><span class="line">$</span><br></pre></td></tr></table></figure>
+<h5 id="补充扩展">补充扩展</h5>
+<p>在上面这五种替换结构中<code>string</code>并不要求是常值，你也可以用另外一个变量的值或是一种命令的输出。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ echo $&#123;var:-&#96;date&#96;&#125; </span><br><span class="line">日 3月 6 02:10:39 CST 2005 </span><br><span class="line">$ echo $&#123;var:-$(date)&#125; </span><br><span class="line">日 3月 6 02:11:46 CST 2005 </span><br><span class="line">$ a&#x3D;test </span><br><span class="line">$ echo $&#123;var:-$a&#125; </span><br><span class="line">test </span><br><span class="line">$</span><br></pre></td></tr></table></figure>
+<h2 id="参考材料">参考材料</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://www.jiajun.org/2011/10/17/brackets_in_shell.html">shell十三问</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.jiajun.org/2011/10/17/brackets_in_shell.html">Bash Shell 里的各种括号</a></li>
+</ol>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/shell-shift-and-getopts.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/shell-debug.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '基础'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

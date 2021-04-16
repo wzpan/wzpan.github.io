@@ -1,0 +1,1593 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>进程 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="参考材料
+
+linux监控命令全覆盖（图文说明）
+
+常用命令
+下面列举了一些常用的进程管理相关的命令：
+
+
+
+命令
+用途
+举例 [1]
+
+
+
+
+ps
+查看当前正在运行的进程
+$ ps
+
+
+kill (PID)
+根据进程PID号关闭某一进程
+$ kill 1012
+
+
+killall (进程的名字)
+">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="进程"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '进程'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-41569408-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 进程</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="参考材料">参考材料</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.cnblogs.com/lingfengblogs/p/4158727.html">linux监控命令全覆盖（图文说明）</a></li>
+</ul>
+<h2 id="常用命令">常用命令</h2>
+<p>下面列举了一些常用的进程管理相关的命令：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>用途</th>
+<th>举例 <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ps</code></td>
+<td>查看当前正在运行的进程</td>
+<td><code>$ ps</code></td>
+</tr>
+<tr>
+<td><code>kill (PID)</code></td>
+<td>根据进程PID号关闭某一进程</td>
+<td><code>$ kill 1012</code></td>
+</tr>
+<tr>
+<td><code>killall (进程的名字)</code></td>
+<td>根据进程的名字来关闭进程</td>
+<td><code>$ killall httpd</code></td>
+</tr>
+<tr>
+<td><code>ps -ag</code></td>
+<td>获取所有正在运行的进程的信息</td>
+<td><code>$ ps -ag</code></td>
+</tr>
+<tr>
+<td><code>linux-command &amp;</code></td>
+<td>后台执行某个命令</td>
+<td><code>$ ls / -R wc -l &amp;</code></td>
+</tr>
+<tr>
+<td><code>ps aux</code></td>
+<td>显示进程的创建者</td>
+<td><code>$ ps aux</code></td>
+</tr>
+<tr>
+<td><code>ps ax | grep process-U-want-to-see</code></td>
+<td>测试某个进程是否正在运行，需要和grep命令一起搭配使用</td>
+<td><code>ps ax | grep httpd</code></td>
+</tr>
+<tr>
+<td><code>top</code></td>
+<td>查看当前正在运行的进程以及实时刷新的占用资源信息（如内存、CPU）</td>
+<td><code>$ top</code></td>
+</tr>
+<tr>
+<td><code>pstree</code></td>
+<td>展示一个进程树</td>
+<td><code>$ pstree</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="top">top</h2>
+<h3 id="命令说明">命令说明</h3>
+<p>Top 命令能够实时监控系统的运行状态，并且可以按照cpu、内存和执行时间进行排序。</p>
+<h3 id="参数说明">参数说明</h3>
+<h4 id="命令行启动参数">命令行启动参数</h4>
+<p>用法：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top -hv | -bcisSHM -d delay -n iterations [-u user | -U user] -p pid [,pid ...]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>-b : 批次模式运行。通常用作来将top的输出的结果传送给其他程式或储存成文件</li>
+<li>-c : 显示执行任务的命令行</li>
+<li>-d : 设定延迟时间</li>
+<li>-h : 帮助</li>
+<li>-H : 显示线程。当这个设定开启时，将显示所有进程产生的线程</li>
+<li>-i : 显示空闲的进程</li>
+<li>-n : 执行次数。一般与-b搭配使用</li>
+<li>-u : 监控指定用户相关进程</li>
+<li>-U : 监控指定用户相关进程</li>
+<li>-p : 监控指定的进程。当监控多个进程时，进程ID以逗号分隔。这个选项只能在命令行下使用</li>
+<li>-s : 安全模式操作</li>
+<li>-S : 累计时间模式</li>
+<li>-v : 显示top版本，然后退出。</li>
+<li>-M : 自动显示内存单位（k/M/G）</li>
+</ul>
+<h4 id="全局命令">全局命令</h4>
+<ul>
+<li>回车、空格 : 刷新显示信息</li>
+<li>?、h : 帮助</li>
+<li>= : 移除所有任务显示的限制</li>
+<li>A : 交替显示模式切换</li>
+<li>B : 粗体显示切换</li>
+<li>d、s : 更改界面刷新时间间隔</li>
+<li>G : 选择其它窗口/栏位组</li>
+<li>I : Irix或Solaris模式切换</li>
+<li>u、U : 监控指定用户相关进程</li>
+<li>k : 结束进程</li>
+<li>q : 退出top</li>
+<li>r : 重新设定进程的nice值</li>
+<li>W : 存储当前设定</li>
+<li>Z : 改变颜色模板</li>
+</ul>
+<h4 id="摘要区命令">摘要区命令</h4>
+<ul>
+<li>l : 平均负载及系统运行时间显示开关</li>
+<li>m : 内存及交换空间使用率显示开关</li>
+<li>t : 当前任务及CPU状态显示开关</li>
+</ul>
+<p>1 : 汇总显示CPU状态或分开显示每个CPU状态</p>
+<h4 id="任务区命令">任务区命令</h4>
+<h5 id="外观样式">外观样式</h5>
+<ul>
+<li>b : 黑体/反色显示高亮的行/列。控制x和y交互命令的显示样式</li>
+<li>x : 高亮显示排序的列</li>
+<li>y : 高亮显示正在运行的任务</li>
+<li>z : 彩色/黑白显示。</li>
+</ul>
+<h5 id="显示内容">显示内容</h5>
+<ul>
+<li>c : 任务执行的命令行或进程名称</li>
+<li>f、o : 增加和移除进程信息栏位及调整进程信息栏位显示顺序</li>
+<li>H : 显示线程</li>
+<li>S : 时间累计模式</li>
+<li>u : 监控指定用户相关进程</li>
+</ul>
+<h5 id="任务显示的数量">任务显示的数量</h5>
+<ul>
+<li>i : 显示空闲的进程</li>
+<li>n或# : 设置任务显示最大数量</li>
+<li>任务排序（shift+f）</li>
+<li>M : 按内存使用率排序</li>
+<li>N : 按PID排序</li>
+<li>P : 按CPU使用率排序</li>
+<li>T : 按Time+排序</li>
+<li><code>&lt;</code> : 按当前排序栏位左边相邻栏位排序</li>
+<li><code>&gt;</code> : 按当前排序栏位右边相邻栏位排序</li>
+<li>F 或 O : 选择排序栏位</li>
+<li>R : 反向排序</li>
+</ul>
+<h3 id="结果说明">结果说明</h3>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/shell-process/top-1.jpg" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h2 id="free">free</h2>
+<h3 id="命令说明-v2">命令说明</h3>
+<p>Free命令是监控系统内存最常用的命令</p>
+<h3 id="参数说明-v2">参数说明</h3>
+<ul>
+<li>-m：以M为单位查看内存使用情况（默认为kb）</li>
+<li>-b：以字节为单位查看内存使用情况</li>
+<li>-s：可以在指定时间段内不简单监控内存的使用情况</li>
+</ul>
+<h3 id="结果说明-v2">结果说明</h3>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/shell-process/free.jpg" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<ul>
+<li>total：总计物理内存的大小。</li>
+<li>Used：已使用多大。</li>
+<li>Free：可用有多少。</li>
+<li>shared：多个进程共享的内存总额。</li>
+<li>buffers/cached:磁盘缓存的大小。</li>
+</ul>
+<h2 id="vmstat">vmstat</h2>
+<h3 id="命令说明-v3">命令说明</h3>
+<p>可以监控操作系统的进程状态、内存、虚拟内存、磁盘IO、上下文、CPU的信息。</p>
+<h3 id="参数说明-v3">参数说明</h3>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vmstat [-a] [-n] [-S unit] [delay [ count]]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>-a：显示活跃和非活跃内存</li>
+<li>-m：显示slabinfo</li>
+<li>-n：只在开始时显示一次各字段名称。</li>
+<li>-s：显示内存相关统计信息及多种系统活动数量。</li>
+<li>delay：刷新时间间隔。如果不指定，只显示一条结果。</li>
+<li>count：刷新次数。如果不指定刷新次数，但指定了刷新时间间隔，这时刷新次数为无穷。</li>
+<li>-d：显示各个磁盘相关统计信息。</li>
+<li>-S：使用指定单位显示。参数有 k 、K 、m 、M ，分别代表1000、1024、1000000、1048576字节（byte）。默认单位为K（1024 bytes）</li>
+<li>-V：显示vmstat版本信息。</li>
+<li>-p：显示指定磁盘分区统计信息</li>
+<li>-D：显示磁盘总体信息</li>
+</ul>
+<h3 id="结果说明-v3">结果说明</h3>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/shell-process/vmstat.jpg" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<ul>
+<li>procs
+<ul>
+<li>r: 等待被执行的进程数，即表示运行和等待CPU时间片的进程数</li>
+<li>b: 排队的进程数，即等待资源的进程数</li>
+</ul>
+</li>
+<li>memory
+<ul>
+<li>swap: 虚拟内存，切换到虚拟内存的内存大小</li>
+<li>free: 空闲的物理内存大小</li>
+<li>buff: 缓冲区大小</li>
+<li>cache: 缓存大小</li>
+</ul>
+</li>
+<li>swap
+<ul>
+<li>si: 磁盘写入虚拟内存，即由内存进入到虚拟内存的大小。</li>
+<li>so :虚拟内存写入磁盘，即由虚拟内存进入到磁盘的大小。</li>
+</ul>
+</li>
+<li>io
+<ul>
+<li>bi: 由块设备读入的数据总量，读磁盘</li>
+<li>bo: 由块设备写入的数据总量，写磁盘</li>
+</ul>
+</li>
+<li>system
+<ul>
+<li>in: 每秒设备中断数</li>
+<li>cs: 每秒上下文切换的次数</li>
+</ul>
+</li>
+<li>cpu
+<ul>
+<li>us: 用户进程消耗cpu百分比</li>
+<li>sy: 内核进程消耗cpu百分比</li>
+<li>id: cpu处于空闲状态的时间百分比</li>
+<li>wa: io等待cpu所占时间的百分比</li>
+</ul>
+</li>
+</ul>
+<h2 id="iostat">iostat</h2>
+<h3 id="命令说明-v4">命令说明</h3>
+<p>iostat 是对系统磁盘 IO 操作进行监控，它的输出主要显示磁盘的读写操作的统计信息。同时给出 cpu 的使用情况。</p>
+<h3 id="参数说明-v4">参数说明</h3>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iostat [ -c | -d ] [ -k | -m ] [ -t ] [ -V ] [ -x ] [ device [ ... ] | ALL ] [ -p [ device | ALL ] ] [ interval [ count ] ]</span><br></pre></td></tr></table></figure>
+<p>各选项以及参数含义如下：</p>
+<ul>
+<li>-c： 仅显示CPU统计信息.与-d选项互斥.</li>
+<li>-d ：仅显示磁盘统计信息.与-c选项互斥.</li>
+<li>-k ：以K为单位显示每秒的磁盘请求数,默认单位块.</li>
+<li>-p ：device | ALL</li>
+</ul>
+<p>与 <code>-x</code> 选项互斥，用于显示块设备及系统分区的统计信息。也可以在 <code>-p</code> 后指定一个设备名，如：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ iostat -p had</span><br></pre></td></tr></table></figure>
+<p>或显示所有设备</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ iostat -p ALL</span><br></pre></td></tr></table></figure>
+<ul>
+<li>-t ：在输出数据时,打印搜集数据的时间.</li>
+<li>-V ：打印版本号和帮助信息.</li>
+<li>-x  device 输出指定要统计的磁盘设备名称，默认为所有磁盘设备.</li>
+<li>-interval ：指两次统计间隔时间</li>
+<li>-count ：按照interval 指定的时间间隔统计的次数</li>
+</ul>
+<h3 id="结果说明-v4">结果说明</h3>
+<h4 id="简单应用">简单应用</h4>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/shell-process/iosstat-1.jpg" alt="iostat的简单应用" />
+        <figcaption>iostat的简单应用</figcaption>
+      </figure>
+    </p>
+<h4 id="磁盘监控">磁盘监控</h4>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/shell-process/iosstat-2.jpg" alt="iostat磁盘监控" />
+        <figcaption>iostat磁盘监控</figcaption>
+      </figure>
+    </p>
+<ul>
+<li>rrqm/s：每秒进行 merge 的读操作数目，即 delta(rmerge)/s 。</li>
+<li>wrqm/s：每秒进行 merge 的写操作数目，即 delta(wmerge)/s 。</li>
+<li>r/s：每秒完成的读 I/O 设备次数，即 delta(rio)/s 。</li>
+<li>w/s： 每秒完成的写 I/O 设备次数，即 delta(wio)/s 。</li>
+<li>rsec/s：每秒读扇区数，即 delta(rsect)/s。</li>
+<li>wsec/s：每秒写扇区数，即 delta(wsect)/s</li>
+<li>rkB/s：每秒读K字节数，是 rsect/s 的一半，因为每扇区大小为512字节。</li>
+<li>wkB/s：每秒写K字节数，是 wsect/s 的一半</li>
+<li>avgrq-sz：平均每次设备I/O操作的数据大小 (扇区)，即 delta(rsect+wsect)/delta(rio+wio) 。</li>
+<li>avgqu-sz：平均I/O队列长度，即 delta(aveq)/s/1000 (因为aveq的单位为毫秒)。</li>
+<li>Await：平均每次设备I/O操作的等待时间 (毫秒)，即  delta(ruse+wuse)/delta(rio+wio) 。</li>
+<li>Svctm：平均每次设备I/O操作的服务时间 (毫秒)，即 delta(use)/delta(rio+wio) 。</li>
+<li>%util：一秒中有百分之多少的时间用于 I/O 操作，或者说一秒中有多少时间 I/O 队列是非空的，即 delta(use)/s/1000 (因为use的单位为毫秒) 。</li>
+</ul>
+<h4 id="CPU监控">CPU监控</h4>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/shell-process/iosstat-3.jpg" alt="iosstat的CPU监控" />
+        <figcaption>iosstat的CPU监控</figcaption>
+      </figure>
+    </p>
+<ul>
+<li>%usr：用户进程消耗的CPU时间百分比。</li>
+<li>%nice:  运行正常进程消耗的CPU时间百分比。</li>
+<li>%system：系统进程消耗的CPU时间百分比。</li>
+<li>%iowait：I/O等待所占CPU时间百分比。</li>
+<li>%steal：在内存紧张环境下，pagein强制对不同的页面进行的steal操作。</li>
+<li>%idle：CPU空闲状态的时间百分比。</li>
+</ul>
+<h2 id="mpstat">mpstat</h2>
+<h3 id="命令说明-v5">命令说明</h3>
+<p>mpstat 可以监控到 cpu 的一些统计信息，在多核 CPU 的系统里不但能够查看所有 CPU 的平均状况信息，而且能够查看特定的 CPU 的信息。</p>
+<h3 id="参数说明-v5">参数说明</h3>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mpstat [-P &#123;|ALL&#125;] [internal [count]]</span><br></pre></td></tr></table></figure>
+<p>参数：</p>
+<ul>
+<li>P {|ALL}：表示监控哪个CPU，在[0,cpu个数-1]中取值；</li>
+<li>internal：相邻的两次采样的间隔时间；</li>
+<li>count：采样的次数，count只能和delay一起使用；</li>
+</ul>
+<p>备注：当没有参数时，mpstat则显示系统启动以后所有信息的平均值。有interval时，第一行的信息自系统启动以来的平均信息。从第二行开始，输出为前一个interval时间段的平均信息。</p>
+<h3 id="结果说明-v5">结果说明</h3>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/shell-process/mpstat.jpg" alt="mpstat" />
+        <figcaption>mpstat</figcaption>
+      </figure>
+    </p>
+<ul>
+<li>user：在internal时间段里，用户态的CPU时间（%），不包含nice值为负进程，值为 (usr/total)*100；</li>
+<li>nice：在internal时间段里，nice值为负进程的CPU时间（%），值为(nice/total)*100；</li>
+<li>system：在internal时间段里，核心时间（%），值为(system/total)*100；</li>
+<li>iowait：在internal时间段里，硬盘IO等待时间（%），值为(iowait/total)*100；</li>
+<li>irq：在internal时间段里，硬中断时间（%），值为(irq/total)*100；</li>
+<li>soft：在internal时间段里，软中断时间（%），值为(softirq/total)*100；</li>
+<li>idle：在internal时间段里，CPU除去等待磁盘IO操作外的因为任何原因而空闲的时间闲置时间（%），值为(idle/total)*100；</li>
+<li>intr/s：在internal时间段里，每秒CPU接收的中断的次数，值为(intr/total)*100；</li>
+</ul>
+<h2 id="sar">sar</h2>
+<h3 id="命令说明-v6">命令说明</h3>
+<p>sar 命令可以全名的获取到 CPU 、运行、磁盘IO、虚拟内存、内存、网络等信息。</p>
+<h3 id="参数说明-v6">参数说明</h3>
+<p>sar 命令行的常用格式：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sar [options] [-A] [-o file] t [n]</span><br></pre></td></tr></table></figure>
+<p>在命令行中，n 和 t 两个参数组合起来定义采样间隔和次数，t为采样间隔，是必须有的参数，n为采样次数，是可选的，默认值是1，-o file表示将命令结果以二进制格式存放在文件中，file 在此处不是关键字，是文件名。options 为命令行选项，sar命令的选项很多，下面只列出常用选项：</p>
+<ul>
+<li>-A：所有报告的总和。</li>
+<li>-u：CPU利用率</li>
+<li>-v：进程、节点、文件和锁表状态。</li>
+<li>-p：像是当前系统中指定CPU使用信息。</li>
+<li>-d：硬盘使用报告。</li>
+<li>-r：显示系统内存的使用情况。</li>
+<li>-n：显示网络运行状态。参数后面可跟DEV、EDEV、SOCK和FULL。DEV显示网络接口信息，EDEV显示网络错误的统计数据，SOCK显示套接字信息，FULL显示前三参数所有信息。</li>
+<li>-q：显示运行队列的大小，它与系统当时的平均负载相同</li>
+<li>-B：内存分页情况</li>
+<li>-R：显示进程在采样时间内的活动情况。</li>
+<li>-g：串口I/O的情况。</li>
+<li>-b：缓冲区使用情况。</li>
+<li>-a：文件读写情况。</li>
+<li>-c：系统调用情况。</li>
+<li>-R：进程的活动情况。</li>
+<li>-y：终端设备活动情况。</li>
+<li>-W：系统交换活动。</li>
+</ul>
+<h3 id="结果说明-v6">结果说明</h3>
+<h4 id="CPU资源监控">CPU资源监控</h4>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/shell-process/sar.jpg" alt="CPU资源监控" />
+        <figcaption>CPU资源监控</figcaption>
+      </figure>
+    </p>
+<ul>
+<li>CPU：all 表示统计信息为所有 CPU 的平均值。</li>
+<li>%user：显示在用户级别(application)运行使用 CPU 总时间的百分比。</li>
+<li>%nice：显示在用户级别，用于nice操作，所占用 CPU 总时间的百分比。</li>
+<li>%system：在核心级别(kernel)运行所使用 CPU 总时间的百分比。</li>
+<li>%iowait：显示用于等待I/O操作占用 CPU 总时间的百分比。</li>
+<li>%steal：管理程序(hypervisor)为另一个虚拟进程提供服务而等待虚拟 CPU 的百分比。</li>
+<li>%idle：显示 CPU 空闲时间占用 CPU 总时间的百分比。</li>
+</ul>
+<ol>
+<li>若 %iowait 的值过高，表示硬盘存在I/O瓶颈</li>
+<li>若 %idle 的值高但系统响应慢时，有可能是 CPU 等待分配内存，此时应加大内存容量</li>
+<li>若 %idle 的值持续低于1，则系统的 CPU 处理能力相对较低，表明系统中最需要解决的资源是 CPU 。</li>
+</ol>
+<p>如果要查看二进制文件test中的内容，需键入如下 sar 命令：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sar -u -f <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+<h4 id="inode、文件和其他内核表监控">inode、文件和其他内核表监控</h4>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/shell-process/sar2.jpg" alt="inode、文件和其他内核表监控" />
+        <figcaption>inode、文件和其他内核表监控</figcaption>
+      </figure>
+    </p>
+<ul>
+<li>Dentunued: 目录告诉缓存中未被使用的条目数量</li>
+<li>File-nr: 文件句柄的使用数量</li>
+<li>Inode-nr: 索引节点句柄的使用数量</li>
+<li>Pty-nr :使用的pty的数量</li>
+</ul>
+<h4 id="内存和交换空间监控">内存和交换空间监控</h4>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/shell-process/sar3.jpg" alt="内存和交换空间监控" />
+        <figcaption>内存和交换空间监控</figcaption>
+      </figure>
+    </p>
+<ul>
+<li>kbmemfree：这个值和free命令中的free值基本一致,所以它不包括buffer和cache的空间.</li>
+<li>kbmemused：这个值和free命令中的used值基本一致,所以它包括buffer和cache的空间.</li>
+<li>%memused：这个值是kbmemused和内存总量(不包括swap)的一个百分比.</li>
+<li>kbbuffers和kbcached：这两个值就是free命令中的buffer和cache.</li>
+<li>kbcommit：保证当前系统所需要的内存,即为了确保不溢出而需要的内存(RAM+swap).</li>
+<li>%commit：这个值是kbcommit与内存总量(包括swap)的一个百分比.</li>
+</ul>
+<h4 id="内存分页监控">内存分页监控</h4>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/shell-process/sar4.jpg" alt="内存分页监控" />
+        <figcaption>内存分页监控</figcaption>
+      </figure>
+    </p>
+<ul>
+<li>pgpgin/s：表示每秒从磁盘或SWAP置换到内存的字节数(KB)</li>
+<li>pgpgout/s：表示每秒从内存置换到磁盘或SWAP的字节数(KB)</li>
+<li>fault/s：每秒钟系统产生的缺页数,即主缺页与次缺页之和(major + minor)</li>
+<li>majflt/s：每秒钟产生的主缺页数.</li>
+<li>pgfree/s：每秒被放入空闲队列中的页个数</li>
+<li>pgscank/s：每秒被kswapd扫描的页个数</li>
+<li>pgscand/s：每秒直接被扫描的页个数</li>
+<li>pgsteal/s：每秒钟从cache中被清除来满足内存需要的页个数</li>
+<li>%vmeff：每秒清除的页(pgsteal)占总扫描页(pgscank+pgscand)的百分比</li>
+</ul>
+<h4 id="IO和传送速率监控">IO和传送速率监控</h4>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/shell-process/sar5.jpg" alt="IO和传送速率监控" />
+        <figcaption>IO和传送速率监控</figcaption>
+      </figure>
+    </p>
+<ul>
+<li>tps：每秒钟物理设备的 I/O 传输总量</li>
+<li>rtps：每秒钟从物理设备读入的数据总量</li>
+<li>wtps：每秒钟向物理设备写入的数据总量</li>
+<li>bread/s：每秒钟从物理设备读入的数据量，单位为 块/s</li>
+<li>bwrtn/s：每秒钟向物理设备写入的数据量，单位为 块/s</li>
+</ul>
+<h4 id="进程队列长度和平均负载状态监控">进程队列长度和平均负载状态监控</h4>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/shell-process/sar6.jpg" alt="进程队列长度和平均负载状态监控" />
+        <figcaption>进程队列长度和平均负载状态监控</figcaption>
+      </figure>
+    </p>
+<ul>
+<li>runq-sz：运行队列的长度（等待运行的进程数）</li>
+<li>plist-sz：进程列表中进程（processes）和线程（threads）的数量</li>
+<li>ldavg-1：最后1分钟的系统平均负载（System load average）</li>
+<li>ldavg-5：过去5分钟的系统平均负载</li>
+<li>ldavg-15：过去15分钟的系统平均负载</li>
+</ul>
+<h4 id="系统交换活动信息监控">系统交换活动信息监控</h4>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/shell-process/sar7.jpg" alt="系统交换活动信息监控" />
+        <figcaption>系统交换活动信息监控</figcaption>
+      </figure>
+    </p>
+<ul>
+<li>pswpin/s：每秒系统换入的交换页面（swap page）数量</li>
+<li>pswpout/s：每秒系统换出的交换页面（swap page）数量</li>
+</ul>
+<h4 id="设备使用情况监控">设备使用情况监控</h4>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/shell-process/sar8.jpg" alt="设备使用情况监控" />
+        <figcaption>设备使用情况监控</figcaption>
+      </figure>
+    </p>
+<ul>
+<li>-p可以打印出sda,hdc等磁盘设备名称,如果不用参数-p,设备节点则有可能是dev8-0,dev22-0</li>
+<li>tps:每秒从物理磁盘I/O的次数.多个逻辑请求会被合并为一个I/O磁盘请求,一次传输的大小是不确定的.</li>
+<li>rd_sec/s:每秒读扇区的次数.</li>
+<li>wr_sec/s:每秒写扇区的次数.</li>
+<li>avgrq-sz:平均每次设备I/O操作的数据大小(扇区).</li>
+<li>avgqu-sz:磁盘请求队列的平均长度.</li>
+<li>await:从请求磁盘操作到系统完成处理,每次请求的平均消耗时间,包括请求队列等待时间,单位是毫秒(1秒=1000毫秒).</li>
+<li>svctm:系统处理每次请求的平均时间,不包括在请求队列中消耗的时间.</li>
+<li>%util:I/O请求占CPU的百分比,比率越大,说明越饱和.</li>
+</ul>
+<ol>
+<li>avgqu-sz 的值较低时，设备的利用率较高。</li>
+<li>当%util的值接近 1% 时，表示设备带宽已经占满。</li>
+</ol>
+<h2 id="netstat">netstat</h2>
+<h3 id="命令说明-v7">命令说明</h3>
+<p>Netstat 命令用于显示本机网络链接、运行端口、路由表等信息</p>
+<h3 id="参数说明-v7">参数说明</h3>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat [选项]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>-a (all)：显示一个所有的有效连接信息列表，包括已建立的连接（ESTABLISHED），也包括监听连接请求（LISTENING）的那些连接，断开连接（CLOSE_WAIT）或者处于联机等待状态的（TIME_WAIT）等</li>
+<li>-t (tcp)：显示tcp相关选项</li>
+<li>-u (udp)：仅显示udp相关选项</li>
+<li>-n ：拒绝显示别名，能显示数字的全部转化成数字。</li>
+<li>-l ：仅列出有在 Listen (监听) 的服务状态</li>
+<li>-p ：显示建立相关链接的程序名</li>
+<li>-r ：显示路由信息，路由表，除了显示有效路由外，还显示当前有效的连接</li>
+<li>-e ：显示扩展信息，例如uid等</li>
+<li>-s ：按各个协议进行统计</li>
+<li>-c ：每隔一个固定时间，执行该netstat命令。</li>
+<li>-v ：显示当前的有效连接，与-n选项类似</li>
+<li>-I ：显示自动匹配接口的信息</li>
+<li>-e ：显示关于以太网的统计数据。它列出的项目包括传送的数据报的总字节数、错误数、删除数、数据报的数量和广播的数量。这些统计数据既有发送的数据报数量，也有接收的数据报数量。这个选项可以用来统计一些基本的网络流量。</li>
+</ul>
+<p>提示：LISTEN和LISTENING的状态只有用-a或者-l才能看到</p>
+<h3 id="结果说明-v7">结果说明</h3>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/shell-process/netstat.jpg" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<ul>
+<li>Iface：表示网络设备的接口名称。</li>
+<li>MTU：表示最大传输单元，单位为字节。</li>
+<li>RX-OK/TX-OK：表示已经准确无误地接收/发送了多少数据包。</li>
+<li>RX-ERR/TX-ERR：表示接收/发送数据包时候产生了多少错误。</li>
+<li>RX-DRP/TX-DRP：表示接收/发送数据包时候丢弃了多少数据包。</li>
+<li>RX-OVR/TX-OVR：表示由于误差而丢失了多少数据包。</li>
+<li>Flg表示接口标记，其中
+<ul>
+<li>B 已经设置了一个广播地址。</li>
+<li>L 该接口是一个回送设备。</li>
+<li>M 接收所有数据包（混乱模式）。</li>
+<li>N 避免跟踪。</li>
+<li>O 在该接口上，禁用A R P。</li>
+<li>P 这是一个点到点链接。</li>
+<li>R 接口正在运行。</li>
+<li>U 接口处于“活动”状态。</li>
+</ul>
+</li>
+</ul>
+<p>其中RX-ERR/TX-ERR、 RX-DRP/TX-DRP和RX-OVR/TX-OVR的值应该都为0，如果不为0，并且很大，那么网络质量肯定有问题，网络传输性能也一代会下降。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/shell-process/netstat2.jpg" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<ul>
+<li>Recv-Q：表示接收队列。</li>
+<li>Send-Q ：表示发送队列。</li>
+<li>Local Address ：表示本地机器名、端口</li>
+<li>Foreign Address ：表示远程机器名、端口</li>
+<li>State：表示状态，其中
+<ul>
+<li>LISTEN ：在监听状态中。</li>
+<li>ESTABLISHED：已建立联机的联机情况。</li>
+<li>TIME_WAIT：该联机在目前已经是等待的状态。</li>
+</ul>
+</li>
+</ul>
+<h2 id="uptime">uptime</h2>
+<h3 id="命令说明-v8">命令说明</h3>
+<p>Uptime主要是用来统计系统当前的运行状态。</p>
+<h3 id="参数说明-v8">参数说明</h3>
+<ul>
+<li>-V  显示版本</li>
+</ul>
+<h3 id="结果说明-v8">结果说明</h3>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/shell-process/uptime.jpg" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<ul>
+<li>输出信息依次是：系统现在的时间，系统从上次开机到现在运行了多长时间，系统当前有多少个登录用户，系统在一分钟内、5分钟内、15分钟内的平均负载</li>
+<li>注意点：如果load average值长期大于系统CPU的个数则说明CPU很繁忙，负载很高，可能会影响系统性能</li>
+</ul>
+<h2 id="ps">ps</h2>
+<h3 id="命令说明-v9">命令说明</h3>
+<p>ps 命令是进程查看命令，使用这个命令可以确定有哪些进程正在运行和运行的状态、进程是否结束、进程有没有僵死、哪些进程占用了过多的资源等。</p>
+<h3 id="参数说明-v9">参数说明</h3>
+<p>常用参数：</p>
+<ul>
+<li>-A 显示所有进程（等价于-e）(utility)</li>
+<li>-a 显示一个终端的所有进程，除了会话引线</li>
+<li>-N 忽略选择。</li>
+<li>-d 显示所有进程，但省略所有的会话引线(utility)</li>
+<li>-x 显示没有控制终端的进程，同时显示各个命令的具体路径。dx不可合用。（utility）</li>
+<li>-p pid 进程使用cpu的时间</li>
+<li>-u uid or username 选择有效的用户id或者是用户名</li>
+<li>-g gid or groupname 显示组的所有进程。</li>
+<li>U username 显示该用户下的所有进程，且显示各个命令的详细路径。如:ps U zhang;(utility)</li>
+<li>-f 全部列出，通常和其他选项联用。如：ps -fa or ps -fx and so on.</li>
+<li>-l 长格式（有F,wchan,C 等字段）</li>
+<li>-j 作业格式</li>
+<li>-o 用户自定义格式。</li>
+<li>v 以虚拟存储器格式显示</li>
+<li>s 以信号格式显示</li>
+<li>-m 显示所有的线程</li>
+<li>-H 显示进程的层次(和其它的命令合用，如：ps -Ha)（utility）</li>
+<li>e 命令之后显示环境（如：ps -d e; ps -a e）(utility)</li>
+<li>h 不显示第一行</li>
+</ul>
+<h3 id="常用用法">常用用法</h3>
+<ul>
+<li>ps a： 显示现行终端机下的所有程序，包括其他用户的程序。</li>
+<li>ps -A ：显示所有程序。</li>
+<li>ps c ：列出程序时，显示每个程序真正的指令名称，而不包含路径，参数或常驻服务的标示。</li>
+<li>ps -e ：此参数的效果和指定”A”参数相同。</li>
+<li>ps e ：列出程序时，显示每个程序所使用的环境变量。</li>
+<li>ps f ：用ASCII字符显示树状结构，表达程序间的相互关系。</li>
+<li>ps -H：显示树状结构，表示程序间的相互关系。</li>
+<li>ps –N：显示所有的程序，除了执行ps指令终端机下的程序之外。</li>
+<li>ps s：采用程序信号的格式显示程序状况。</li>
+<li>ps S ：列出程序时，包括已中断的子程序资料。</li>
+<li>ps -t&lt;终端机编号&gt; ：指定终端机编号，并列出属于该终端机的程序的状况。</li>
+<li>ps u：以用户为主的格式来显示程序状况。</li>
+<li>ps x：显示所有程序，不以终端机来区分。</li>
+<li>Ps -l：较长较详细的显示该pid信息</li>
+</ul>
+<p>最常用的方法是ps -aux,然后再利用一个管道符号导向到grep去查找特定的进程,然后再对特定的进程进行操作。</p>
+<h3 id="结果说明-v9">结果说明</h3>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/shell-process/ps.jpg" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<ul>
+<li>USER    用户名</li>
+<li>UID    用户ID（User ID）</li>
+<li>PID    进程ID（Process ID）</li>
+<li>PPID    父进程的进程ID（Parent Process id）</li>
+<li>SID    会话ID（Session id）</li>
+<li>%CPU    进程的cpu占用率</li>
+<li>%MEM    进程的内存占用率</li>
+<li>VSZ    进程所使用的虚存的大小（Virtual Size）</li>
+<li>RSS    进程使用的驻留集大小或者是实际内存的大小，Kbytes字节。</li>
+<li>TTY    与进程关联的终端（tty）
+<ul>
+<li>STAT    进程的状态：进程状态使用字符表示的（STAT的状态码）</li>
+<li>R 运行    Runnable (on run queue)            正在运行或在运行队列中等待。</li>
+<li>S 睡眠    Sleeping                休眠中, 受阻, 在等待某个条件的形成或接受到信号。</li>
+<li>I 空闲    Idle</li>
+<li>Z 僵死    Zombie（a defunct process)        进程已终止, 但进程描述符存在, 直到父进程调用wait4()系统调用后释放。</li>
+<li>D 不可中断    Uninterruptible sleep (ususally IO)    收到信号不唤醒和不可运行, 进程必须等待直到有中断发生。</li>
+<li>T 终止    Terminate                进程收到SIGSTOP, SIGSTP, SIGTIN, SIGTOU信号后停止运行运行。</li>
+<li>P 等待交换页</li>
+<li>W 无驻留页    has no resident pages        没有足够的记忆体分页可分配。</li>
+<li>X 死掉的进程</li>
+<li>&lt; 高优先级进程                    高优先序的进程</li>
+<li>N 低优先    级进程                    低优先序的进程</li>
+<li>L 内存锁页 Lock 有记忆体分页分配并缩在记忆体内</li>
+<li>s 进程的领导者（在它之下有子进程）；</li>
+<li>l 多进程的（使用 CLONE_THREAD, 类似 NPTL pthreads）</li>
+<li><code>+</code> 位于后台的进程组</li>
+<li>START 进程启动时间和日期</li>
+<li>TIME 进程使用的总cpu时间</li>
+<li>COMMAND 正在执行的命令行命令</li>
+<li>NI 优先级(Nice)</li>
+<li>PRI 进程优先级编号(Priority)</li>
+<li>WCHAN 进程正在睡眠的内核函数名称；该函数的名称是从/root/system.map文件中获得的。</li>
+<li>FLAGS 与进程相关的数字标识</li>
+</ul>
+</li>
+</ul>
+<h2 id="watch">watch</h2>
+<h3 id="命令说明-v10">命令说明</h3>
+<p>实时监测命令，还可以检测其他命令运行情况的命令。</p>
+<h3 id="参数说明-v10">参数说明</h3>
+<ul>
+<li>-d 高亮显示变动</li>
+<li>-n 周期（秒）</li>
+</ul>
+<h3 id="结果说明-v10">结果说明</h3>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ Watch –d –n 1 netstat -ant</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/shell-process/watch.jpg" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>每秒监测网络，高亮显示变化。</p>
+<h2 id="strace">strace</h2>
+<h3 id="命令说明-v11">命令说明</h3>
+<p>strace 命令用来跟踪进程执行时的系统调用和所接收的信号。在Linux世界，进程不能直接访问硬件设备，当进程需要访问硬件设备(比如读取磁盘文件，接收网络数据等等)时，必须由用户态模式切换至内核态模式，通过系统调用访问硬件设备。strace可以跟踪到一个进程产生的系统调用,包括参数，返回值，执行消耗的时间。</p>
+<h3 id="参数说明-v11">参数说明</h3>
+<p>strace使用参数</p>
+<ul>
+<li>-p：跟踪指定的进程。</li>
+<li>-f：跟踪由fork子进程系统调用。</li>
+<li>-F：尝试跟踪vfork子进程系统调吸入，与-f同时出现时, vfork不被跟踪。</li>
+<li>-o filename：默认strace将结果输出到stdout。通过-o可以将输出写入到filename文件中。</li>
+<li>-ff：常与-o选项一起使用，不同进程(子进程)产生的系统调用输出到filename.PID文</li>
+<li>-r：打印每一个系统调用的相对时间。</li>
+<li>-t：在输出中的每一行前加上时间信息。 -tt 时间确定到微秒级。还可以使用-ttt打印相对时间。</li>
+<li>-v：输出所有系统调用。默认情况下，一些频繁调用的系统调用不会输出。</li>
+<li>-s：指定每一行输出字符串的长度,默认是32。文件名一直全部输出。</li>
+<li>-c：统计每种系统调用所执行的时间，调用次数，出错次数。</li>
+<li>-e expr：输出过滤器，通过表达式，可以过滤出掉你不想要输出。</li>
+<li>-d：输出strace关于标准错误的调试信息。</li>
+<li>-h：输出简要的帮助信息。</li>
+<li>-i：输出系统调用的入口指针。</li>
+<li>-q：禁止输出关于脱离的消息。</li>
+<li>-tt：在输出中的每一行前加上时间信息,微秒级。</li>
+<li>-T：显示每一调用所耗的时间。</li>
+<li>-V ：输出strace的版本信息。</li>
+<li>-x：以十六进制形式输出非标准字符串。</li>
+<li>-xx：所有字符串以十六进制形式输出。</li>
+</ul>
+<h3 id="结果说明-v11">结果说明</h3>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ strace -ff -F -o ls.log ls –l  <span class="comment"># 跟踪ls –l命令的执行情况</span></span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/shell-process/strace.jpg" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>当某个函数执行失败时，那么返回值一般为-1</p>
+<h2 id="lsof">lsof</h2>
+<h3 id="命令说明-v12">命令说明</h3>
+<p>lsof 的原始功能是列出打开的文件的进程。Linux 下一切皆文件。</p>
+<h3 id="参数说明-v12">参数说明</h3>
+<ul>
+<li>-a ：列出打开文件存在的进程</li>
+<li>-c&lt;进程名&gt; ：列出指定进程所打开的文件</li>
+<li>-g ：列出GID号进程详情</li>
+<li>-d&lt;文件号&gt; ：列出占用该文件号的进程</li>
+<li>+d&lt;目录&gt; ：列出目录下被打开的文件</li>
+<li>+D&lt;目录&gt; ：递归列出目录下被打开的文件</li>
+<li>-n&lt;目录&gt; ：列出使用NFS的文件</li>
+<li>-i&lt;条件&gt; ：列出符合条件的进程。</li>
+<li>-p&lt;进程号&gt;： 列出指定进程号所打开的文件</li>
+<li>-u 后面跟username：列出该用户相关进程所打开文件</li>
+<li>-U ：仅列出系统socket文件类型</li>
+<li>-h：显示帮助信息</li>
+<li>-v：显示版本信息</li>
+</ul>
+<h3 id="结果说明-v12">结果说明</h3>
+<p>列出所有root用户下的socket文件进程：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/shell-process/lsof.jpg" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<ul>
+<li>COMMAND：进程的名称</li>
+<li>PID：进程标识符</li>
+<li>USER：进程所有者</li>
+<li>FD：文件描述符，应用程序通过文件描述符识别该文件。如cwd、txt等</li>
+<li>TYPE：文件类型，如DIR、REG等</li>
+<li>DEVICE：指定磁盘的名称</li>
+<li>SIZE：文件的大小</li>
+<li>NODE：索引节点（文件在磁盘上的标识）</li>
+<li>NAME：打开文件的确切名称</li>
+</ul>
+<h2 id="其他资源">其他资源</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://blog.jobbole.com/22318/">使用Shell脚本对Linux系统和进程资源进行监控</a></li>
+</ul>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>要使用其中一些命令，可能需要root用户和相同等级的用户身份 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+			
+		
+	
+	    
+			
+		
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/shell-wild-cards.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/shell-zsh.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '进程'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

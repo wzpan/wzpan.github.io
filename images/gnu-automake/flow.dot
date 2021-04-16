@@ -1,0 +1,19 @@
+digraph {
+        node [shape = box, style=filled, fillcolor="#C0D0C0"];
+        
+        source [label="源代码", URL="#编写-helloworld-程序"] ;
+        conf_scan [label="configure.scan", URL = "#生成-configure.scan"];
+        conf_ac [label="configure.ac", URL = "#修改-configure.ac"];
+        makefile_am [label="Makefile.am", URL = "#实战-makefile.am"];
+        makefile_in [label="Makefile.in"];
+        aclocal [label="aclocal.m4", labelURL="#生成-configure", URL="#生成-configure"];
+                
+        source -> conf_scan [label = "执行autoscan", labelURL="#生成-configure.scan", labeltooltip="生成configure.scan文件，作为configure.ac的模板"];
+        conf_scan -> conf_ac [label = "重命名+修改", labelURL="#修改-configure.ac"];
+        conf_ac -> configure;
+        aclocal -> configure[label = "执行autoconf", labelURL="#autoconf" , labeltooltip="利用M4解析configure.ac，生成shell脚本configure"];        
+        conf_ac -> aclocal [label = "执行aclocal", URL="#aclocal", labeltooltip="收集configure.ac中用到的各种非Autoconf的宏，包括自定义宏"];        
+        configure -> Makefile;
+        makefile_am -> makefile_in [label = "执行autoheader和automake", URL="#运行-automake", labeltooltip="将每个Makefile.am转化成Makefile.in"];
+        makefile_in -> Makefile;
+}

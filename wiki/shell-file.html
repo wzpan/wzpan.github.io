@@ -1,0 +1,1260 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>文件操纵 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="本文相关的两个示例文件：
+
+sname
+
+
+
+
+
+
+
+
+
+
+Sr.No
+Name
+
+
+11
+Vivek
+
+
+12
+Renuka
+
+
+13
+Prakash
+
+
+14
+Ashish
+
+
+15
+Rani
+
+
+
+
+smark
+
+
+
+
+
+
+
+
+
+
+Sr.No
+Mark
+
+
+11
+67
+
+
+12
+55
+
+
+13">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="文件操纵"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '文件操纵'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-41569408-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 文件操纵</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc', 2, 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<p>本文相关的两个示例文件：</p>
+<ul>
+<li>sname</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a target="_blank" rel="noopener" href="http://Sr.No">Sr.No</a></td>
+<td>Name</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Vivek</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Renuka</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Prakash</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Ashish</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Rani</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>smark</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a target="_blank" rel="noopener" href="http://Sr.No">Sr.No</a></td>
+<td>Mark</td>
+</tr>
+<tr>
+<td>11</td>
+<td>67</td>
+</tr>
+<tr>
+<td>12</td>
+<td>55</td>
+</tr>
+<tr>
+<td>13</td>
+<td>96</td>
+</tr>
+<tr>
+<td>14</td>
+<td>36</td>
+</tr>
+<tr>
+<td>15</td>
+<td>67</td>
+</tr>
+</tbody>
+</table>
+<h2 id="cut">cut</h2>
+<div class="alert alert-info">
+<strong>功能</strong>： 从文件或者标准输入中读取内容并截取每一行的特定部分并送到标准输出。
+</div>
+<h3 id="用法">用法</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cut -f&#123;field number&#125; &#123;file-name&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="示例">示例</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$cut -f2 sname</span><br><span class="line">Vivek</span><br><span class="line">Renuka</span><br><span class="line">Prakash</span><br><span class="line">Ashish</span><br><span class="line">Rani</span><br></pre></td></tr></table></figure>
+<h2 id="paste">paste</h2>
+<div class="alert alert-info">
+<strong>功能</strong>： 用于按列合并文件。
+</div>
+<h3 id="用法-v2">用法</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">paste &#123;file1&#125; &#123;file2&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="示例-v2">示例</h3>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ paste sname smark</span><br><span class="line">11    Vivek    11    67</span><br><span class="line">12    Renuka   12    55</span><br><span class="line">13    Prakash  13    96</span><br><span class="line">14    Ashish   14    36</span><br><span class="line">15    Rani     15    67</span><br></pre></td></tr></table></figure>
+<h2 id="join">join</h2>
+<div class="alert alert-info">
+<strong>功能</strong>： 根据指定栏位连接两个文件。
+</div>
+<h3 id="用法-v3">用法</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">join &#123;file1&#125; &#123;file2&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="示例-v3">示例</h3>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$join</span> sname smark</span><br><span class="line">11   Vivek    67</span><br><span class="line">12   Renuka   55</span><br><span class="line">13   Prakash  96</span><br><span class="line">14   Ashish   36</span><br><span class="line">15   Rani     67</span><br></pre></td></tr></table></figure>
+<h2 id="tr">tr</h2>
+<div class="alert alert-info">
+<strong>功能</strong>： 转换字符。
+</div>
+<h3 id="用法-v4">用法</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tr &#123;pattern-1&#125; &#123;pattern-2&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="示例-v4">示例</h3>
+<h4 id="示例1">示例1</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ tr <span class="string">&quot;h2&quot;</span> <span class="string">&quot;3x&quot;</span> &lt; sname</span><br><span class="line">11   Vivek</span><br><span class="line">1x   Renuka</span><br><span class="line">13   Prakas3</span><br><span class="line">14   As3is3</span><br><span class="line">15   Rani</span><br></pre></td></tr></table></figure>
+<h4 id="示例2">示例2</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ tr <span class="string">&quot;[a-z]&quot;</span> <span class="string">&quot;[A-Z]&quot;</span> </span><br><span class="line">hi i am Vivek</span><br><span class="line">HI I AM VIVEK</span><br><span class="line">what a magic</span><br><span class="line">WHAT A MAGIC</span><br></pre></td></tr></table></figure>
+<h2 id="sed">sed</h2>
+<div class="alert alert-info">
+<strong>功能</strong>： 编辑文件，而无需借助编辑器。
+</div>
+<h3 id="用法-v5">用法</h3>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sed option <span class="string">&#x27;script&#x27;</span> file1 file2 ...</span><br><span class="line">sed option -f scriptfile file1 file2 ...</span><br></pre></td></tr></table></figure>
+<p>sed处理的文件既可以由标准输入重定向得到，也可以当命令行参数传入，命令行参数可以一次传入多个文件，sed会依次处理。sed的编辑命令可以直接当命令行参数传入，也可以写成一个脚本文件然后用<code>-f</code>参数指定，编辑命令的格式为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;pattern&#x2F;action</span><br></pre></td></tr></table></figure>
+<p>其中pattern是正则表达式，action是编辑操作。sed程序一行一行读出待处理文件，如果某一行与pattern匹配，则执行相应的action。<strong>如果一条命令没有pattern而只有action，这个action将作用于待处理文件的每一行</strong>。</p>
+<p>注意，<strong>sed命令不会修改原文件</strong>。要使得 sed 的结果保存到文件中，可以借助重定向命令将标准输出重定向到文件。</p>
+<h3 id="常用-sed-命令">常用 sed 命令</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/pattern/p</code></td>
+<td>打印匹配pattern的行</td>
+</tr>
+<tr>
+<td><code>/pattern/d</code></td>
+<td>删除匹配pattern的行</td>
+</tr>
+<tr>
+<td><code>/pattern/s/pattern1/pattern2/</code></td>
+<td>查找符合pattern的行，将该行第一个匹配pattern1的字符串替换为pattern2</td>
+</tr>
+<tr>
+<td><code>/pattern/s/pattern1/pattern2/g</code></td>
+<td>查找符合pattern的行，将该行所有匹配pattern1的字符串替换为pattern2</td>
+</tr>
+</tbody>
+</table>
+<h3 id="示例-v5">示例</h3>
+<h4 id="p命令">p命令</h4>
+<p>使用<code>p</code>命令需要注意，sed是把待处理文件的内容连同处理结果一起输出到标准输出的，因此 <strong><code>p</code>命令表示除了把文件内容打印出来之外还额外打印一遍匹配pattern的行</strong> 。要想只输出处理结果，应加上<code>-n</code>选项，这种用法相当于grep命令</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sed -n <span class="string">&#x27;/abc/p&#x27;</span> testfile</span><br><span class="line">abc</span><br></pre></td></tr></table></figure>
+<h4 id="d命令">d命令</h4>
+<p>使用d命令就不需要<code>-n</code>参数了，比如删除含有abc的行</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ sed <span class="string">&#x27;/abc/d&#x27;</span> testfile</span><br><span class="line">123</span><br><span class="line">456</span><br></pre></td></tr></table></figure>
+<h4 id="s命令">s命令</h4>
+<p>当前目录有一文件 teaormilk：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">India&#39;s milk is good.</span><br><span class="line">tea Red-Lable is good.</span><br><span class="line">tea is better than the coffee.</span><br></pre></td></tr></table></figure>
+<p>之后</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ sed <span class="string">&#x27;/tea/s//milk/g&#x27;</span> teaormilk  &gt; /tmp/result.tmp.$$</span><br><span class="line">$ cat /tmp/result.tmp.$$</span><br><span class="line">India<span class="string">&#x27;s milk is good.</span></span><br><span class="line"><span class="string">milk Red-Lable is good.</span></span><br><span class="line"><span class="string">milk is better than the coffee.</span></span><br></pre></td></tr></table></figure>
+<p>使用查找替换命令时，可以把匹配pattern1的字符串复制到pattern2中，比如：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ sed <span class="string">&#x27;s/bc/-&amp;-/&#x27;</span> testfile</span><br><span class="line">123</span><br><span class="line">a-bc-</span><br><span class="line">456</span><br></pre></td></tr></table></figure>
+<p>pattern2中的<code>&amp;</code>表示原文件的当前行中与pattern1相匹配的字符串，再比如：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ sed <span class="string">&#x27;s/\([0-9]\)\([0-9]\)/-\1-~\2~/&#x27;</span> testfile</span><br><span class="line">-1-~2~3</span><br><span class="line">abc</span><br><span class="line">-4-~5~6</span><br></pre></td></tr></table></figure>
+<p>pattern2中的<code>\1</code>表示与pattern1的第一个<code>()</code>括号相匹配的内容，<code>\2</code>表示与pattern1的第二个<code>()</code>括号相匹配的内容。sed默认使用Basic正则表达式规范，如果指定了<code>-r</code>选项则使用Extended规范，那么<code>()</code>括号就不必转义了。</p>
+<p>如果testfile的内容是</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span><span class="tag">&lt;<span class="name">head</span>&gt;</span><span class="tag">&lt;<span class="name">title</span>&gt;</span>Hello World<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span>Welcome to the world of regexp!<span class="tag">&lt;/<span class="name">body</span>&gt;</span><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="grep-是贪心的">grep 是贪心的</h3>
+<p>现在要去掉所有的HTML标签，使输出结果为</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Hello World</span><br><span class="line">Welcome to the world of regexp!</span><br></pre></td></tr></table></figure>
+<p>怎么做呢？如果用下面的命令</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sed <span class="string">&#x27;s/&lt;.*&gt;//g&#x27;</span> testfile</span><br></pre></td></tr></table></figure>
+<p>结果是两个空行，把所有字符都过滤掉了。这是因为，正则表达式中的数量限定符会匹配尽可能长的字符串，这称为贪心的（Greedy）[^1:有些正则表达式规范支持Non-greedy的数量限定符，匹配尽可能短的字符串，例如在Python中<code>*?</code>和<code>*</code>一样表示0个或任意多个，但前者是Non-greedy的]。比如sed在处理第一行时，<code>&lt;.*&gt;</code>匹配的并不是<code>&lt;html&gt;</code>或<code>&lt;head&gt;</code>这样的标签，而是</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span><span class="tag">&lt;<span class="name">head</span>&gt;</span><span class="tag">&lt;<span class="name">title</span>&gt;</span>Hello World<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这样一整行，因为这一行开头是<code>&lt;</code>，中间是若干个任意字符，末尾是<code>&gt;</code>。对于 sed 中的贪婪性问题，暂时没有一个通用的解决办法。</p>
+<h2 id="awk">awk</h2>
+<div class="alert alert-info">
+<strong>功能</strong>： 数据操纵。sed以行为单位处理文件，awk比sed强的地方在于不仅能以行为单位还能以列为单位处理文件。
+</div>
+<h3 id="用法-v6">用法</h3>
+<p>awk实际上是一门很复杂的脚本语言，还有像C语言一样的分支和循环结构，但是基本用法和sed类似，awk命令行的基本形式为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">awk option &#39;script&#39; file1 file2 ...</span><br><span class="line">awk option -f scriptfile file1 file2 ...</span><br></pre></td></tr></table></figure>
+<p>awk缺省的行分隔符是换行，缺省的列分隔符是连续的空格和Tab，但是行分隔符和列分隔符都可以自定义，比如/etc/passwd文件的每一行有若干个字段，字段之间以:分隔，就可以重新定义awk的列分隔符为:并以列为单位处理这个文件。</p>
+<p>和sed一样，awk处理的文件既可以由标准输入重定向得到，也可以当命令行参数传入，编辑命令可以直接当命令行参数传入，也可以用<code>-f</code>参数指定一个脚本文件。</p>
+<p>编辑命令的格式为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;pattern&#x2F;&#123;actions&#125;</span><br><span class="line">condition&#123;actions&#125;</span><br></pre></td></tr></table></figure>
+<p>和sed类似，pattern是正则表达式，actions是一系列操作。awk程序一行一行读出待处理文件，如果某一行与pattern匹配，或者满足condition条件，则执行相应的actions，如果一条awk命令只有actions部分，则actions作用于待处理文件的每一行。</p>
+<h4 id="pattern-action">pattern + action</h4>
+<p>若当前目录有一文件 inventory：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>egg</td>
+<td>order</td>
+<td>4</td>
+</tr>
+<tr>
+<td>cacke</td>
+<td>good</td>
+<td>10</td>
+</tr>
+<tr>
+<td>cheese</td>
+<td>okay</td>
+<td>4</td>
+</tr>
+<tr>
+<td>pen</td>
+<td>good</td>
+<td>12</td>
+</tr>
+<tr>
+<td>floppy</td>
+<td>good</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+<p>之后</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ awk <span class="string">&#x27;/good/ &#123; print $3 &#125;&#x27;</span> inventory</span><br><span class="line">10</span><br><span class="line">12</span><br><span class="line">5</span><br></pre></td></tr></table></figure>
+<p>其中，自动变量 <code>$3</code> 表示第三列，类似的<code>$1</code>、<code>$2</code>分别表示第一列、第二列等，而<code>$0</code>表示整个当前行。<code>print</code> 命令用来打印 awk 的变量或者用双引号括起来的文本。</p>
+<h4 id="condition-action">condition + action</h4>
+<p>再比如，如果某种产品的库存量低于75则在行末标注需要订货：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ awk <span class="string">&#x27;$2&lt;75 &#123;printf &quot;%s\t%s\n&quot;, $0, &quot;REORDER&quot;;&#125; $2&gt;=75 &#123;print $0;&#125;&#x27;</span> testfile</span><br><span class="line">ProductA  30    REORDER</span><br><span class="line">ProductB  76</span><br><span class="line">ProductC  55    REORDER</span><br></pre></td></tr></table></figure>
+<p>可见awk也有和C语言非常相似的<code>printf</code>函数。</p>
+<h3 id="awk-常用的内建变量">awk 常用的内建变量</h3>
+<p>awk命令有一些内建变量。</p>
+<table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FILENAME</td>
+<td>当前输入文件的文件名，该变量是只读的</td>
+</tr>
+<tr>
+<td>NR</td>
+<td>当前行的行号，该变量是只读的，R代表record</td>
+</tr>
+<tr>
+<td>NF</td>
+<td>当前行所拥有的列数，该变量是只读的，F代表field</td>
+</tr>
+<tr>
+<td>OFS</td>
+<td>输出格式的列分隔符，缺省是空格</td>
+</tr>
+<tr>
+<td>FS</td>
+<td>输入文件的列分融符，缺省是连续的空格和Tab</td>
+</tr>
+<tr>
+<td>ORS</td>
+<td>输出格式的行分隔符，缺省是换行符</td>
+</tr>
+<tr>
+<td>RS</td>
+<td>输入文件的行分隔符，缺省是换行符</td>
+</tr>
+</tbody>
+</table>
+<p>除此之外，用户也可可以像C语言一样使用自定义变量。例如：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ awk <span class="string">&#x27;/^ *$/ &#123;x=x+1;&#125; END &#123;print x;&#125;&#x27;</span> testfile</span><br></pre></td></tr></table></figure>
+<h3 id="数学运算">数学运算</h3>
+<p>awk还可以进行一些简单的数学计算：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ cat &gt; math </span><br><span class="line">&#123;</span><br><span class="line">  print $1 &quot; + &quot; $2 &quot; &#x3D; &quot; $1 + $2</span><br><span class="line">  print $1 &quot; - &quot; $2 &quot; &#x3D; &quot; $1 - $2</span><br><span class="line">  print $1 &quot; &#x2F; &quot; $2 &quot; &#x3D; &quot; $1 &#x2F; $2</span><br><span class="line">  print $1 &quot; x &quot; $2 &quot; &#x3D; &quot; $1 * $2</span><br><span class="line">  print $1 &quot; mod &quot; $2 &quot; &#x3D; &quot; $1 % $2</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$ awk -f math </span><br><span class="line">20 3</span><br><span class="line">20 + 3 &#x3D; 23</span><br><span class="line">20 - 3 &#x3D; 17</span><br><span class="line">20 &#x2F; 3 &#x3D; 6.66667</span><br><span class="line">20 x 3 &#x3D; 60</span><br><span class="line">20 mod 3 &#x3D; 2</span><br><span class="line">(Press CTRL + D to terminate)</span><br></pre></td></tr></table></figure>
+<h3 id="BEGIN…END">BEGIN…END</h3>
+<p>awk命令的condition部分还可以是两个特殊的condition－<code>BEGIN</code>和<code>END</code>，对于每个待处理文件，BEGIN后面的actions在处理整个文件之前执行一次，END后面的actions在整个文件处理完之后执行一次。</p>
+<h5 id="计算下面数据每个同学的平均分">计算下面数据每个同学的平均分</h5>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>王一</td>
+<td>90</td>
+</tr>
+<tr>
+<td>赵二</td>
+<td>95</td>
+</tr>
+<tr>
+<td>刘三</td>
+<td>80</td>
+</tr>
+<tr>
+<td>陈四</td>
+<td>70</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ awk &#39;&#123;x&#x3D;x+$2; y&#x3D;y+1&#125; END &#123;print &quot;total: &quot; x&#x2F;y &#125;&#39; test</span><br><span class="line">total: 83.75</span><br></pre></td></tr></table></figure>
+<h5 id="一个更复杂的例子">一个更复杂的例子</h5>
+<p>iven 文件：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a target="_blank" rel="noopener" href="http://Sr.No">Sr.No</a></td>
+<td>Product</td>
+<td>Qty</td>
+<td>Unit Price</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Pen</td>
+<td>5</td>
+<td>20.00</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Rubber</td>
+<td>10</td>
+<td>2.00</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Pencil</td>
+<td>3</td>
+<td>3.50</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Cock</td>
+<td>2</td>
+<td>45.50</td>
+</tr>
+</tbody>
+</table>
+<p>编写脚本计算总价：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">$ cat &gt; bill2</span><br><span class="line">BEGIN &#123;</span><br><span class="line">   <span class="built_in">print</span> <span class="string">&quot;---------------------------&quot;</span></span><br><span class="line">   <span class="built_in">print</span> <span class="string">&quot;Bill for the 4-March-2001. &quot;</span></span><br><span class="line">   <span class="built_in">print</span> <span class="string">&quot;By Vivek G Gite. &quot;</span></span><br><span class="line">   <span class="built_in">print</span> <span class="string">&quot;---------------------------&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">   total = <span class="variable">$3</span> * <span class="variable">$4</span></span><br><span class="line">   recno = <span class="variable">$1</span></span><br><span class="line">   item = <span class="variable">$2</span></span><br><span class="line">   gtotal += total</span><br><span class="line">   <span class="built_in">print</span> recno item <span class="string">&quot; Rs.&quot;</span> total</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">END &#123;</span><br><span class="line">   <span class="built_in">print</span> <span class="string">&quot;---------------------------&quot;</span></span><br><span class="line">   <span class="built_in">print</span> <span class="string">&quot;Total Rs.&quot;</span> gtotal</span><br><span class="line">   <span class="built_in">print</span> <span class="string">&quot;===========================&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$awk</span> -f bill2 inven </span><br><span class="line">---------------------------</span><br><span class="line">Bill <span class="keyword">for</span> the 4-March-2001.</span><br><span class="line">By Vivek G Gite.</span><br><span class="line">---------------------------</span><br><span class="line">1.Pen Rs.100</span><br><span class="line">2.Pencil Rs.20</span><br><span class="line">3.Rubber Rs.10.5</span><br><span class="line">4.Cock Rs.91</span><br><span class="line">---------------------------</span><br><span class="line">Total Rs.221.5</span><br><span class="line">===============</span><br></pre></td></tr></table></figure>
+<h3 id="条件判断">条件判断</h3>
+<p>除了利用 condition ，awk 还支持更高级的条件判断：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">if ( condition )</span><br><span class="line">&#123;</span><br><span class="line">       Statement 1</span><br><span class="line">       Statement 2</span><br><span class="line">       Statement N</span><br><span class="line">       if condition is TRUE</span><br><span class="line">&#125;</span><br><span class="line">else</span><br><span class="line">&#123;</span><br><span class="line">       Statement 1</span><br><span class="line">       Statement 2</span><br><span class="line">       Statement N</span><br><span class="line">      if condition is FALSE</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="示例-v6">示例</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">$ awk &gt; math2</span><br><span class="line">BEGIN &#123;</span><br><span class="line">  myprompt = <span class="string">&quot;(To Stop press CTRL+D) &gt; &quot;</span></span><br><span class="line">  <span class="built_in">printf</span> <span class="string">&quot;Welcome to MyAddtion calculation awk program v0.1\n&quot;</span></span><br><span class="line">  <span class="built_in">printf</span> <span class="string">&quot;%s&quot;</span> ,myprompt</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">no1 = <span class="variable">$1</span></span><br><span class="line">op = <span class="variable">$2</span></span><br><span class="line">no2 = <span class="variable">$3</span></span><br><span class="line">ans = 0</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ( op == <span class="string">&quot;+&quot;</span> )</span><br><span class="line">&#123;</span><br><span class="line">     ans = <span class="variable">$1</span> + <span class="variable">$3</span></span><br><span class="line">     <span class="built_in">printf</span> <span class="string">&quot;%d %c %d = %d\n&quot;</span> ,no1,op,no2,ans</span><br><span class="line">     <span class="built_in">printf</span> <span class="string">&quot;%s&quot;</span> ,myprompt</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">else</span></span><br><span class="line"> &#123;</span><br><span class="line">     <span class="built_in">printf</span> <span class="string">&quot;Opps!Error I only know how to add.\nSyntax: number1 + number2\n&quot;</span></span><br><span class="line">     <span class="built_in">printf</span> <span class="string">&quot;%s&quot;</span> ,myprompt</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">END &#123;</span><br><span class="line">    <span class="built_in">printf</span> <span class="string">&quot;\nGoodbuy %s\n&quot;</span> , ENVIRON[<span class="string">&quot;USER&quot;</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$awk</span> -f math2</span><br><span class="line">Welcome to MyAddtion calculation awk program v0.1</span><br><span class="line">(To Stop press CTRL+D) &gt; 5 + 2 </span><br><span class="line">5 + 2 = 7</span><br><span class="line">(To Stop press CTRL+D) &gt; 3 - 1 </span><br><span class="line">Opps!Error I only know how to add.</span><br><span class="line">Syntax: number1 + number2</span><br><span class="line">(To Stop press CTRL+D) &gt;</span><br><span class="line">Goodbuy vivek</span><br></pre></td></tr></table></figure>
+<h3 id="循环">循环</h3>
+<p>awk 也支持循环语句。</p>
+<h4 id="for-循环">for 循环</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (expr1; condition; expr2)</span><br><span class="line">&#123;</span><br><span class="line">     Statement 1</span><br><span class="line">     Statement 2</span><br><span class="line">     Statement N</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="示例-v7">示例</h5>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">$ cat &gt; while01.awk</span><br><span class="line">BEGIN&#123;</span><br><span class="line">   <span class="built_in">printf</span> <span class="string">&quot;Press ENTER to continue with for loop example from LSST v1.05r3\n&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">sum = 0</span><br><span class="line">i = 1</span><br><span class="line"><span class="keyword">for</span> (i=1; i&lt;=10; i++)</span><br><span class="line">&#123;</span><br><span class="line">  sum += i; <span class="comment"># sum = sum + i</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">printf</span> <span class="string">&quot;Sum for 1 to 10 numbers = %d \nGoodbuy!\n\n&quot;</span>, sum</span><br><span class="line"><span class="built_in">exit</span> 1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$ awk -f while01.awk</span><br><span class="line">Press ENTER to <span class="built_in">continue</span> with <span class="keyword">for</span> loop example from LSST v1.05r3</span><br><span class="line">Sum <span class="keyword">for</span> 1 to 10 numbers = 55</span><br><span class="line">Goodbuy</span><br></pre></td></tr></table></figure>
+<h4 id="while-循环">while 循环</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (condition)</span><br><span class="line">&#123;</span><br><span class="line">      statement1</span><br><span class="line">      statement2</span><br><span class="line">      statementN</span><br><span class="line">      Continue as long as given condition is TRUE</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="示例-v8">示例</h5>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">$ cat &gt; while_loop</span><br><span class="line">&#123;</span><br><span class="line">no = <span class="variable">$1</span></span><br><span class="line">remn = 0</span><br><span class="line"><span class="keyword">while</span> ( no &gt; 1 )</span><br><span class="line"> &#123;</span><br><span class="line">    remn = no % 10</span><br><span class="line">    no /= 10</span><br><span class="line">    <span class="built_in">printf</span> <span class="string">&quot;%d&quot;</span> ,remn</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="built_in">printf</span> <span class="string">&quot;\nNext number please (CTRL+D to stop):&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="variable">$awk</span> -f while_loop </span><br><span class="line">654</span><br><span class="line">456</span><br><span class="line">Next number please(CTRL+D to stop):587</span><br><span class="line">785</span><br><span class="line">Next number please(CTRL+D to stop):</span><br></pre></td></tr></table></figure>
+<h2 id="uniq">uniq</h2>
+<div class="alert alert-info">
+<strong>功能</strong>： 移除冗余的行。
+</div>
+<h3 id="用法-v7">用法</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uniq &#123;file-name&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="示例-v9">示例</h3>
+<p>当前目录有一文件 personame ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Hello I am vivek</span><br><span class="line">12333</span><br><span class="line">12333</span><br><span class="line">welcome</span><br><span class="line">to</span><br><span class="line">sai computer academy, a&#39;bad.</span><br><span class="line">what still I remeber that name.</span><br><span class="line">oaky! how are u luser?</span><br><span class="line">what still I remeber that name.</span><br></pre></td></tr></table></figure>
+<p>之后</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ uniq personame</span><br><span class="line">Hello I am vivek</span><br><span class="line">12333</span><br><span class="line">welcome</span><br><span class="line">to</span><br><span class="line">sai computer academy, a&#39;bad.</span><br><span class="line">what still I remeber that name.</span><br><span class="line">oaky! how are u luser?</span><br><span class="line">what still I remeber that name.</span><br></pre></td></tr></table></figure>
+<p>可以看到原来相邻的两句 <code>12333</code> 在调用 <code>uniq</code> 命令之后只剩下一句，而相同的两句 <code>what still I remeber that name.</code> 因为没有相邻，所以 ‘uniq’ 命令认为它们不冗余，因而没有删除其中一句。如果需要删除即使不相邻的重复句子，可以结合 <code>sort</code> 命令：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sort personame | uniq</span><br></pre></td></tr></table></figure>
+<h2 id="grep">grep</h2>
+<div class="alert alert-info">
+<strong>功能</strong>： 根据匹配规则过滤文件内容。
+</div>
+<h3 id="用法-v8">用法</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep &quot;word-to-find&quot; &#123;file-name&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="示例-v10">示例</h3>
+<p>当前目录有一文件  demo-file ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">hello world!</span><br><span class="line">cartoons are good</span><br><span class="line">especially toon like tom (cat)</span><br><span class="line">what</span><br><span class="line">the number one song</span><br><span class="line">12221</span><br><span class="line">they love us</span><br><span class="line">I too</span><br></pre></td></tr></table></figure>
+<p>之后</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ grep <span class="string">&quot;too&quot;</span> demofile</span><br><span class="line">cartoons are good</span><br><span class="line">especially toon like tom (cat)</span><br><span class="line">I too</span><br></pre></td></tr></table></figure>
+<h3 id="egrep">egrep</h3>
+<p>grep的正则表达式有Basic和Extended两种规范。egrep相当于<code>grep -E</code>，表示采用<a href="/wiki/sundries-regexp.html">Extended正则表达式语法</a>。</p>
+<h3 id="fgrep">fgrep</h3>
+<p>另外还有fgrep命令，相当于<code>grep -F</code>，表示只搜索固定字符串而不搜索正则表达式模式，不会按正则表达式的语法解释后面的参数。</p>
+<h2 id="深入阅读">深入阅读</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://www.freeos.com/guides/lsst/ch07.html">awk - Revisited</a></li>
+</ol>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+			
+			
+			
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/shell-debug.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/shell-function.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '文件操纵'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>
