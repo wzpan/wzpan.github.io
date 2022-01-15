@@ -1,0 +1,1168 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Emacs | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="ctags
+
+
+
+快捷键
+说明
+
+
+
+
+M-. &amp;lt;RET&amp;gt;
+跳转到光标所指的标签
+
+
+M-. &amp;lt;tag&amp;gt; &amp;lt;RET&amp;gt;
+查找一个特定的标签
+
+
+C-u M-.
+查找最近一个标签的下一个定义
+
+
+M-*
+跳回上次使用 M-. 的地方
+
+
+
+ido-mode
+
+
+
+快捷">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Emacs"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: 'Emacs'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> Emacs</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="ctags">ctags</h2>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>M-. &lt;RET&gt;</code></td>
+<td>跳转到光标所指的标签</td>
+</tr>
+<tr>
+<td><code>M-. &lt;tag&gt; &lt;RET&gt;</code></td>
+<td>查找一个特定的标签</td>
+</tr>
+<tr>
+<td><code>C-u M-.</code></td>
+<td>查找最近一个标签的下一个定义</td>
+</tr>
+<tr>
+<td><code>M-*</code></td>
+<td>跳回上次使用 <code>M-.</code> 的地方</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ido-mode">ido-mode</h2>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>C-s</code></td>
+<td>next</td>
+</tr>
+<tr>
+<td><code>C-r</code></td>
+<td>previous</td>
+</tr>
+<tr>
+<td><code>C-f</code></td>
+<td>直接退出到打开文件的环境</td>
+</tr>
+</tbody>
+</table>
+<p>这些是最基本的用法，在使用中，如果记不清楚如何用keys的地方，就用老方法查：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">M-x describe-function RET ido-find-file RET</span><br><span class="line">C-h f ido-find-file RET</span><br></pre></td></tr></table></figure>
+<h2 id="Prelude">Prelude</h2>
+<p>Prelude里定义的一些快捷键：</p>
+<h3 id="全局">全局</h3>
+<table>
+<thead>
+<tr>
+<th>按键绑定</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>C-M-h</code></td>
+<td>删除前一个单词(<code>backward-kill-word</code>)。（和 Bash/Zsh 一致的风格）</td>
+</tr>
+<tr>
+<td><code>C-x \</code></td>
+<td><code>align-regexp</code></td>
+</tr>
+<tr>
+<td><code>C-+</code></td>
+<td>增大字号(<code>text-scale-increase</code>)</td>
+</tr>
+<tr>
+<td><code>C--</code></td>
+<td>减小字号(<code>text-scale-decrease</code>)</td>
+</tr>
+<tr>
+<td><code>C-x O</code></td>
+<td>回到上一个窗口 (与 <code>other-window</code> (<code>C-x o</code>) 相反的顺序)</td>
+</tr>
+<tr>
+<td><code>C-^</code></td>
+<td>合并两行为一行 (<code>prelude-top-join-line</code>)</td>
+</tr>
+<tr>
+<td><code>C-x p</code></td>
+<td>启动 <code>proced</code> (在Emacs下管理进程。只能工作在Linux下)</td>
+</tr>
+<tr>
+<td><code>C-x m</code></td>
+<td>启动 <code>eshell</code></td>
+</tr>
+<tr>
+<td><code>C-x M-m</code></td>
+<td>启动默认的 shell</td>
+</tr>
+<tr>
+<td><code>C-x C-m</code></td>
+<td>和 <code>M-x</code> 相同</td>
+</tr>
+<tr>
+<td><code>C-h A</code></td>
+<td>执行 <code>apropos</code> (在所有Emacs符号中搜索)</td>
+</tr>
+<tr>
+<td><code>M-/</code></td>
+<td>执行 <code>hippie-expand</code> (<code>dabbrev-expand</code> 的替代品)</td>
+</tr>
+<tr>
+<td><code>C-x C-b</code></td>
+<td>打开 <code>ibuffer</code> (<code>buffer-list</code> 的替代品)</td>
+</tr>
+<tr>
+<td><code>F12</code></td>
+<td>开/关Emacs菜单</td>
+</tr>
+<tr>
+<td><code>C-x g</code></td>
+<td>打开 Magit 的状态缓冲</td>
+</tr>
+<tr>
+<td><code>C-=</code></td>
+<td>执行 <code>expand-region</code> (递增选择文本)</td>
+</tr>
+<tr>
+<td><code>C-a</code></td>
+<td>执行 <code>prelude-move-beginning-of-line</code>。关于这个命令的详细信息请查阅 <a target="_blank" rel="noopener" href="http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/">这里</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="Prelude-Mode">Prelude Mode</h3>
+<table>
+<thead>
+<tr>
+<th>按键绑定</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>C-c o</code></td>
+<td>用一个外部程序打开当前访问的文件</td>
+</tr>
+<tr>
+<td><code>C-c g</code></td>
+<td>进入Google搜索 (默认搜索当前光标所在的文本)</td>
+</tr>
+<tr>
+<td><code>C-S-RET</code> 或 <code>M-o</code></td>
+<td>在当前行下方插入一个空行并适当的缩进</td>
+</tr>
+<tr>
+<td><code>S-RET</code> 或 <code>M-O</code></td>
+<td>插入一个空行并适当的缩进 (和大多数 IDE 一致)</td>
+</tr>
+<tr>
+<td><code>C-S-up</code></td>
+<td>将当前行上移（和上一行交换）</td>
+</tr>
+<tr>
+<td><code>C-S-down</code></td>
+<td>将当前行下移（和下一行交换）</td>
+</tr>
+<tr>
+<td><code>C-c n</code></td>
+<td>修正缓冲区里的缩进，并去除多余空格</td>
+</tr>
+<tr>
+<td><code>C-c f</code></td>
+<td>打开最近访问文件列表</td>
+</tr>
+<tr>
+<td><code>C-M-\</code></td>
+<td>缩进选区（如果有选择文本）或整个缓冲区</td>
+</tr>
+<tr>
+<td><code>C-c u</code></td>
+<td>在默认浏览器中打开URL</td>
+</tr>
+<tr>
+<td><code>C-c e</code></td>
+<td>执行一段 Emacs Lisp 代码并用结果代替它</td>
+</tr>
+<tr>
+<td><code>C-c s</code></td>
+<td>交换两个活动窗口</td>
+</tr>
+<tr>
+<td><code>C-c d</code></td>
+<td>重制当前行（或选区）</td>
+</tr>
+<tr>
+<td><code>C-c r</code></td>
+<td>重命名当前访问的文件或缓冲</td>
+</tr>
+<tr>
+<td><code>C-c t</code></td>
+<td>打开一个终端模拟器 (<code>ansi-term</code>).</td>
+</tr>
+<tr>
+<td><code>C-c k</code></td>
+<td>关闭除了当前缓冲区外所有打开的缓冲区</td>
+</tr>
+<tr>
+<td><code>C-c h</code></td>
+<td>打开 Helm (一个实用的buffer和工程文件导航工具)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Projectile">Projectile</h3>
+<p>下面是一系列由 <a target="_blank" rel="noopener" href="https://github.com/bbatsov/projectile">Projectile</a> 提供的功能：</p>
+<table>
+<thead>
+<tr>
+<th>按键绑定</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>C-c p f</code></td>
+<td>列举工程里的所有文件。如果带上一个前缀参数，则会首先清空缓存。</td>
+</tr>
+<tr>
+<td><code>C-c p d</code></td>
+<td>列举工程里的所有目录。如果带上一个前缀参数，则会首先清空缓存。</td>
+</tr>
+<tr>
+<td><code>C-c p T</code></td>
+<td>列举工程里所有测试文档（specs, features, etc）</td>
+</tr>
+<tr>
+<td><code>C-c p g</code></td>
+<td>在工程里运行 grep</td>
+</tr>
+<tr>
+<td><code>C-c p o</code></td>
+<td>在当前打开的所有工程缓冲里执行 <code>multi-occur</code></td>
+</tr>
+<tr>
+<td><code>C-c p r</code></td>
+<td>对工程里的所有文件执行交互式查找-替换</td>
+</tr>
+<tr>
+<td><code>C-c p i</code></td>
+<td>使当前项目的缓冲无效（如果存在的话）.</td>
+</tr>
+<tr>
+<td><code>C-c p R</code></td>
+<td>重新生成项目的 <code>TAGS</code> 文件</td>
+</tr>
+<tr>
+<td><code>C-c p k</code></td>
+<td>关闭所有工程的缓冲</td>
+</tr>
+<tr>
+<td><code>C-c p D</code></td>
+<td>在 <code>dired</code> 打开当前工程的根目录</td>
+</tr>
+<tr>
+<td><code>C-c p e</code></td>
+<td>列举工程里最近访问的文件</td>
+</tr>
+<tr>
+<td><code>C-c p a</code></td>
+<td>在工程里执行 <code>ack</code> 命令，需要 <code>ack-and-a-half</code></td>
+</tr>
+<tr>
+<td><code>C-c p c</code></td>
+<td>根据你的工程类型执行一个标准的编译命令</td>
+</tr>
+<tr>
+<td><code>C-c p p</code></td>
+<td>根据你的工程类型执行一个标准的测试命令</td>
+</tr>
+<tr>
+<td><code>C-c p z</code></td>
+<td>增加当前访问的内容到缓存</td>
+</tr>
+<tr>
+<td><code>C-c p s</code></td>
+<td>列举所有已知的工程项目，以方便快速切换</td>
+</tr>
+</tbody>
+</table>
+<p><span class="label label-important">Important</span> 如果忘记了 Projectile 的快捷键，只需要按下这个组合键：</p>
+<p><code>C-c p C-h</code></p>
+<h3 id="组合键">组合键</h3>
+<table>
+<thead>
+<tr>
+<th>按键绑定</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>jj</code></td>
+<td>跳转到单词的开头(<code>ace-jump-word-mode</code>)</td>
+</tr>
+<tr>
+<td><code>jk</code></td>
+<td>跳转到某一字符(<code>ace-jump-char-mode</code>)</td>
+</tr>
+<tr>
+<td><code>jl</code></td>
+<td>跳转到一行的开头(<code>ace-jump-line-mode</code>)</td>
+</tr>
+<tr>
+<td><code>JJ</code></td>
+<td>回退到上一个缓冲(<code>prelude-switch-to-previous-buffer</code>)</td>
+</tr>
+<tr>
+<td><code>uu</code></td>
+<td>用树的方式查看编辑历史(<code>undo-tree-visualize</code>)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="查找替换">查找替换</h2>
+<h3 id="常用快捷键">常用快捷键</h3>
+<table>
+<thead>
+<tr>
+<th>按键绑定</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>C-s</code></td>
+<td>增量式查找</td>
+</tr>
+<tr>
+<td><code>C-r</code></td>
+<td>向后增量式查找</td>
+</tr>
+<tr>
+<td><code>M-%</code></td>
+<td>查找替换</td>
+</tr>
+<tr>
+<td><code>C-M-%</code></td>
+<td>支持<a href="/wiki/sundries-regexp.html">正则表达式</a>的查找替换</td>
+</tr>
+</tbody>
+</table>
+<p>Emacs的正则表达式符合BASIC正则表达式规范。使用正则表达式进行查找替换时有一个很有用的技巧：如果需要保留原来与pattern匹配的字符，可以使用<code>\&amp;</code>代替，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">C-M-%</span><br><span class="line">^bc$</span><br><span class="line">-&amp;-</span><br></pre></td></tr></table></figure>
+<p>将会把内容为“bc”的行替换成“-bc-”。</p>
+<h2 id="宏">宏</h2>
+<h3 id="常用快捷键-v2">常用快捷键</h3>
+<table>
+<thead>
+<tr>
+<th>按键绑定</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>C-x (</code></td>
+<td>开始录制宏</td>
+</tr>
+<tr>
+<td><code>C-x )</code></td>
+<td>结束录制宏</td>
+</tr>
+<tr>
+<td><code>C-x e</code></td>
+<td>执行宏，如果已经选中一个选区，则只在选区中执行宏</td>
+</tr>
+</tbody>
+</table>
+<h3 id="两个有用的命令">两个有用的命令</h3>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>M-x name-last-kbd-macro</code></td>
+<td>命名上次定义的宏，之后可以直接<code>M-x 宏名</code>执行它</td>
+</tr>
+<tr>
+<td><code>M-x insert-kbd-macro</code></td>
+<td>插入一个已命名的宏，通常是在你的initialization文件里插入该宏，这样下次打开emacs后仍可用</td>
+</tr>
+</tbody>
+</table>
+<h2 id="有用的链接">有用的链接</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://www.emacswiki.org/emacs/EmacsNiftyTricks">Emacs Ninty Tricks</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.nongnu.org/emacs-tiny-tools/keybindings/">Emacs Keybindings</a></li>
+<li><a target="_blank" rel="noopener" href="http://doc.norang.ca/org-mode.html">Org Mode - Organize Your Life In Plain Text!</a></li>
+</ol>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/tools-manpage.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/tools-subl.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: 'Emacs'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

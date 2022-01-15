@@ -1,0 +1,705 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2020 蒙太奇（上） | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="以 montage 的形式，回顾我的 2020 年。本文所有内容仅代表个人观点，与雇主无关。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="2020 蒙太奇（上）"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '2020 蒙太奇（上）'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 2020 蒙太奇（上）</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>以 montage 的形式，回顾我的 2020 年。本文所有内容仅代表个人观点，与雇主无关。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <p>这大概是全世界最后一篇 2020 年的年度总结了吧？（而且还是上篇~）</p>
+<p>首先要跟各位催更的朋友道个歉。由于年初需要全力准备晋级答辩，所以一切其他不紧急的事务都尽量被我延后了，包括这篇年度总结。今年的客户端组答辩是定在了春节后，所以整个春节我几乎也没有休息，一直在优化和排练我的 slides 。一直拖到答辩结束，这才开始能腾出时间来完成这篇总结。</p>
+<p>总的而言，2020 年是非常特殊的一年，对我而言更是如此。这一年有很多的酸楚和困惑，但也迎来了很多新的转机和希望。</p>
+<p>特殊的年份要有特殊的总结方式。按照惯例，这次的总结依然会分几个主题来回顾：正经事（工作、开源、博客），不正经事（居家、旅行、游戏、健康、看书、感情）。但因为我再过几天就要去做个近视激光手术，预计术后会有一段时间不能盯着屏幕，而直到现在我的总结都还没赶完。所以为了避免这篇总结被拖到 2022 年，我把这次的总结拆成两篇🐶。</p>
+<p>本篇是上部分：正经事部分。</p>
+<span id="more"></span>
+<h2 id="工作">工作</h2>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2020-montage-1/montage1.jpg" alt="2020，千里之行" />
+        <figcaption>2020，千里之行</figcaption>
+      </figure>
+    </p>
+<p>2020 年最让我感慨万千的就是工作部分。因为各方面的原因，在这一年我的职场生活经历了一场大变动，我也因为这场大变动成长了很多。</p>
+<p><strong>先说下疫情期间做的事情吧。</strong> 因为春节期间疫情加剧，所以课堂在春节期间就打响了 “停课不停学” 的战斗：紧急开发课堂极速版和课堂 iPad 版。作为兄弟团队，我和组里的另外两名高工也参与了这一场战役，现学现卖 Flutter ，协同完成了课堂 iPad 版第一个版本的开发上线。</p>
+<p>那段期间，虽然我们是在家办公，省去了很多通勤时间，但是因为时间很紧（iPad 版半个月内上线，开发时间只有不到一周），所以我们每天几乎都过着接近通宵的爆肝生活。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2020-montage-1/fighting.png" alt="奋战到天明" />
+        <figcaption>奋战到天明</figcaption>
+      </figure>
+    </p>
+<p>近半个月的奋战虽然艰苦，但现在回想起来，却又多了一种革命情感：每个人都觉得自己正在做的事情充满了意义。所以虽然很累，但是大家一起咬着牙坚持到了最后。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2020-montage-1/pan.png" alt="职业接锅" />
+        <figcaption>职业接锅</figcaption>
+      </figure>
+    </p>
+<p>也因为那段期间的付出，我们一起拿下了公司级的 “卓越研发奖”、“腾讯战役特别贡献奖”、“腾讯‘同心战役’特别贡献奖” 等多个奖项。<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/2020-montage-1/mask_penguin.jpg alt=' “同心战役”纪念企鹅'></img><b>附图 1</b>  “同心战役”纪念企鹅</span></span></span></p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2020-montage-1/prizes.jpg" alt="抗疫期间获得的奖项" />
+        <figcaption>抗疫期间获得的奖项</figcaption>
+      </figure>
+    </p>
+<p><strong>疫情固然严峻，但在那段期间，组里的成员的流失给我带来了更大的打击。</strong> 在 3 月份，我们组立马有 4 个成员因为各种原因提出了离职或者转岗。还有一个同事因为家里发生了一些事情，所以休了两个月。在最困难的时候，我们组从年前的 10 个人缩减到了只剩 5 个人，其中 iOS 开发更是一个都不剩。</p>
+<p>坦白来说，自从工作以来，这是最让我感到沮丧难过的一段时间，不仅惊慌失措，还深深陷入了自我的怀疑和否定中。这段期间我甚至因为焦虑而开始失眠。为了对抗焦虑，我脑海里不断回想起卡耐基的《人性的优点》里的办法：</p>
+<ol>
+<li>事情的最坏后果是什么？</li>
+<li>做好接受最坏的后果的思想准备。</li>
+<li>想办法改善最坏的情况，立刻采取行动。</li>
+</ol>
+<p>也在 jolt 的建议下，我诚恳地跟 4 个成员进行了交谈，了解了他们想离开的真正原因。通过与他们的交谈，我也意识到了自己在管理上依然存在一些不足：</p>
+<ol>
+<li>没有充分沟通绩效结果，并让每个员工都认同绩效评定结果。这是造成其中 2 个成员离开的主要原因。</li>
+<li>缺乏倾听，因而对员工的情绪缺乏感知。这是造成另一个成员离开的主要原因。也是我在 <a href="/life/2019-montage">19 年的回顾</a>中自我检讨的问题。</li>
+<li>没有做好梯队管理，iOS 成员全数流失给团队带来了沉重打击。</li>
+</ol>
+<p>事情既然已经无可避免地发生，我就做好了心理上的准备。当务之急就是做好交接工作，并且在这些人正式离开之前招到人。于是我为每个人安排好具体的交接事务和时间点，并且把我几乎所有其他空余时间都用在了捞简历和面试上。让人崩溃的是，那段期间正好碰上我们正在从 Cocos Creator 1.10 升级到 Cocos Creator 2.2，升级后遇到了非常多的兼容性 bug ，而且在系统测试期间各种新发现的 bug 层出不穷。在一个个成员相继离开的情况下，剩下的人要顶着越来越大的压力去跟进修复新增问题，整个项目是否能如期上线充满了不确定性；另外，因为疫情的原因，招聘在这个时候也充满了各种变数：有因为疫情家人不让来深圳发展所以放弃 offer 的，有因为疫情上家公司一直拖着没法办理离职导致无法尽快入职的，有技术面表现优秀但卡在背调没过的，有拿了 offer 后被其他公司截胡的 …… 回想起来，那段期间我的生活几乎像是笼罩着一层雾霾。</p>
+<p>不管怎么样日子还是得过下去。因为思维的项目马上要开展了，所以为了解决 iOS 人员紧缺的问题，我从企鹅辅导团队里借了 jaelin 过来支援，拉上 galio 一起研究起了 Cocos + Unity 混合开发的可行性。在最困难的时候，我也承担起了修复 iOS 端 crash 的任务。直到 ez 的加入，慢慢接手了项目里的 iOS 模块，我们才总算度过了没有 iOS 开发的难关 <span class="margin-note-marker"><sup>1</sup></span><span class="block margin-div-outer"><span class="block margin-div-inner"><span class="block margin-note"><span class="margin-note-marker">1</span>后来在年底企鹅辅导也在上线使用 Cocos Creator 开发的 6 人小班课功能的时候遇到了一些技术问题，我们反过来也帮助了辅导解决了这些问题 ，颇有一种报恩的感觉 😄
+</span></span></span> 。</p>
+<p>当然，这样的惨痛经历从长远来看未必是一件坏事，它让我深刻意识到了我在管理方面还存在哪些阿克琉斯之踵，然后痛定思痛去改善这些缺陷。之后我在管理方面做了很大调整：</p>
+<h3 id="1-更加重视与每个组员的-OKR-制定、绩效结果沟通">1. 更加重视与每个组员的 OKR 制定、绩效结果沟通</h3>
+<p>OKR 制定和绩效结果沟通是每一个考核周期的开头和结尾的两件大事。只有 OKR 制定和绩效结果沟通两个都做好了，组员才能感觉到被重视。这在很大幅度上能减少人员流失的情况。</p>
+<p>在 OKR 制定上，除了要能为组员定 “任务” 之外，要充分考虑 ta 的职级发展，当前的工作是否有意义，是否有足够挑战。因此从这一年开始，我会先制定整个团队的 OKR 初稿并公开给全组的人，然后让每个组员在这份初稿的基础上，自己去思考能参与其中哪些事务，自己还想做哪些事情。然后我再组织 1v1 面谈。在面谈的时候，我会重点关注 “产出” 和 “挑战” 两大方面，一方面希望组员能保证有足够的产出，另一方面也希望每个组员的工作也有一些挑战性，这有助于他们的职业发展。</p>
+<p>在绩效考核上，这一年我也下了很大一番心思去调整。以往的绩效考核比较依赖主观评定，虽然 leader 对孰优孰劣已经有一把秤，但这个感受对于组员而言是信息不对称的。所以我开始尝试用更加量化的方式来评定每个人的绩效表现。具体而言，我将每个组员的绩效按照需求分（分数占比80%）、全面反馈分以及 leader 考虑因素（是否做出技术突破，是否要申请晋升，人员梯队，当期是否有工作上的重大失误酌情给分）来考量。其中，需求分又围绕需求价值、贡献度、完成质量，并结合工作量、难度、效率来综合计分。虽然这样打分非常地累，但是这样的量化调整，可以在团队里释放一个信号：大家是公开平等地接受同一个标准进行考核；同时在分数评定完后，还可以清晰地看出每个人在这次考核周期里的亮点和不足，并以此作为绩效沟通的内容。目前来看，组员们对这样的考评方式接受度挺高。</p>
+<h3 id="2-注重倾听，权力下放">2. 注重倾听，权力下放</h3>
+<p>在这一年我所做的另一大改变，就是在处理一些任务的时候，也多向组员请教，或者将权利下放给更适合的人。</p>
+<p>在具体落实某个工作的时候，我会更加积极地问自己两个问题：“这件事情怎么才能做得更好？有没有能把这件事做得更好的人？”。</p>
+<p>比如，在推动团队申请专利和双周技术分享制度建设方面，我授权给了 driver 来组织，而我需要做的事情是在经费等资源方面尽力给到支持。再比如，团建则交给了 yujie 和 cool 来组织，我则尽力避免做出任何决策。具体执行下来，发现效果比我预想的还要更好，大家也都非常满意。</p>
+<p>与组员的 1v1 沟通也成为我非常重视的环节。尤其是新人刚来的前三个月，一旦新人收到要跟上级沟通的邮件，我都会非常乐意约他去喝杯咖啡聊聊他的工作感受甚至生活近况。</p>
+<p>说到倾听，去年参与了公司组织的一个培训《教练式领导》，这个课程提倡使用 GROW 模型来展开辅导：</p>
+<ol>
+<li><strong>G</strong>oal：你的目标是什么？</li>
+<li><strong>R</strong>eality：现状是什么？</li>
+<li><strong>O</strong>ptions：目前有哪些可选方案？</li>
+<li><strong>W</strong>ill：你想怎么做？</li>
+</ol>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2020-montage-1/grow.jpg" alt="GROW 模型" />
+        <figcaption>GROW 模型</figcaption>
+      </figure>
+    </p>
+<p>这种理念给我带来了比较大的启发：一直以来我比较喜欢深入到方案细节，对组员提出的方案指点较多。但实际上这并不是好的授权：责任又落回到了我身上。不仅限制了他们的发挥，我也会很累。所以在这一年我在许多方案的决策上，我也尽力使用教练的方式来辅导，让组员能够更大地发挥他的才能。</p>
+<h3 id="3-加强技术氛围建设">3. 加强技术氛围建设</h3>
+<p>技术氛围建设也是去年我在团队管理中重点投入的部分。</p>
+<p>前面提到我把专利事务和双周技术分享制度授权给了 driver 来组织。以双周分享制度为例，在征求大家的同意的基础上，driver 制定了一个半强制性的分享制度：要提晋升，需要有 1 到 2 次技术分享。同时，每次分享都会提供零食和饮料，以确保大家有充足的能量可以聆听。</p>
+<p>从去年下半年开始施行至今，我们已经进行了 12 次分享。分享的主题涵盖了工作中用到的 Cocos Creator 开发、Native 端通用技术、Git、GPU 编程等，也有个人创业、游学经历、专利撰写、脑机开发等等方向的心得体会，题材五花八门。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2020-montage-1/courses.jpg" alt="组内技术分享" />
+        <figcaption>组内技术分享</figcaption>
+      </figure>
+    </p>
+<p>除了内部分享，去年我也在思考怎么加强和外部团队的联系和交流。因为公司里也有其他不少使用 Cocos Creator 开发的团队，所以我建了个内部企微群，把这些团队里的人拉到了大群里互相交流。后来我转念一想也许可以把大家拉到一起做点事情，因为既然大家都用 Cocos Creator 进行开发，难免会遇到很多共性的问题。所以，与其烟囱式踩坑，还不如中台化，我们做一套可以给多个科目、业务复用的架构，这样就能提高每个科目或者业务的质量和效率。于是，我拉上群里的大多数人搞了个线下面基，号召大家一起成立了一个 oteam ，一起做一套 Cocos Creator 的通用组件库 ABCKit 。现在这个 oteam 已经进入孵化阶段，而且第一个版本已经在公司内部开源。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2020-montage-1/ABCKit.png" alt="ABCKit 通用组件库" />
+        <figcaption>ABCKit 通用组件库</figcaption>
+      </figure>
+    </p>
+<p>在这一年我们跟 Cocos 社区也有更加密切的互动。先是 <a target="_blank" rel="noopener" href="https://forum.cocos.org/u/bigbear/summary">BigBear</a> 过来我们这做了一次技术交流；之后我也以 Cocos 社区 KOL 的身份参与了 Cocos 十周年的庆祝活动，并在 Cocos 开发者沙龙上分享了我们所做的<a target="_blank" rel="noopener" href="https://www.sohu.com/a/441416911_120052091?spm=smpc.author.fd-d.2.1615110006144vWHnETZ">基于 Cocos Creator 和 ABCKit 的高性能、高效能的在线教育应用解决方案</a>。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2020-montage-1/interaction.jpg" alt="与 Cocos 社区的互动" />
+        <figcaption>与 Cocos 社区的互动</figcaption>
+      </figure>
+    </p>
+<p>跟 Cocos 社区的互动带来的一大好处是拓宽了团队的技术视野，能够更加清楚整个业界大家都在做什么，都有哪些大佬，最近又有哪些值得关注的技术。</p>
+<p>以上就是去年一年下来我在工作上比较大的一些感悟。现在我的团队已经从最困难的时候的 5 人小组发展成了一支拥有 16 个正式员工的大军。在这 16 个人中，高工占了将近一半；另外还有另外三位 Cocos 社区 KOL 加入了我们团队，战斗力爆表。我也终于在工作生涯的这第 6 年获得了正式任命。现在回想起来，颇有一种 “拨云见日” 的感觉。</p>
+<p>Bruce Tuckman 在 1965 年将团队发展模式归为 <a target="_blank" rel="noopener" href="https://www.businessballs.com/team-management/tuckman-forming-storming-norming-performing-model/">4 个阶段</a>：</p>
+<ol>
+<li>形成期（Forming）</li>
+<li>风暴期（Storming）</li>
+<li>规范期（Norming）</li>
+<li>表现期（Performing）</li>
+</ol>
+<p>目前来看，我的团队在去年已经经历了风暴期和规范期两个阶段。今年预计将会进入表现期，值得期待。</p>
+<h2 id="开源">开源</h2>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2020-montage-1/contribution.png" alt="2020 年的格子图" />
+        <figcaption>2020 年的格子图</figcaption>
+      </figure>
+    </p>
+<p>今年主要参与了几个项目：</p>
+<table>
+<thead>
+<tr>
+<th>项目名</th>
+<th>简介</th>
+<th>去年的工作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/wzpan/rhubarb-lip-sync-ccc">rhubarb-lip-sync-ccc</a></td>
+<td>一款专用于 Cocos Creator 的嘴型动画生成插件，它可以根据一段语音生成嘴型动画的 Animation Clip 。适合用于制作游戏角色的说话动画。</td>
+<td>新开源</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/FedML-AI/FedML">FedML</a></td>
+<td>主要用于学术研究的联邦学习（Federated Learning）库</td>
+<td>新开源</td>
+</tr>
+</tbody>
+</table>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2020-montage-1/lipsync.png" alt="rhubarb-lip-sync-ccc" />
+        <figcaption>rhubarb-lip-sync-ccc</figcaption>
+      </figure>
+    </p>
+<p>Lip Sync 技术是指根据语音生成嘴型动画的一种技术，通常用在游戏或者动漫的角色制作上。与 Unity 上有很多 Lip Sync 的插件的情况相比，Cocos Creator 生态中似乎还缺少 Lip Sync 的方案。所以我在 <a target="_blank" rel="noopener" href="https://github.com/DanielSWolf/rhubarb-lip-sync">DanielSWolf /rhubarb-lip-sync</a> 的基础上添加了对自动生成 Cocos Creator 的 Animation Clip 的支持，为 Cocos Creator 社区贡献了第一个 Lip Sync 插件 <a target="_blank" rel="noopener" href="https://github.com/wzpan/rhubarb-lip-sync-ccc">rhubarb-lip-sync-ccc</a> 。</p>
+<center>
+<iframe src="//player.bilibili.com/player.html?aid=458012711&bvid=BV1V5411G7cm&cid=263901047&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="80%" height="460px"> </iframe>
+</center>
+<p>去年 7 月份的时候 <a target="_blank" rel="noopener" href="https://chaoyanghe.com/">Chaoyang</a> 找上我，希望我能够参与到他的 <a target="_blank" rel="noopener" href="https://github.com/FedML-AI">FedML</a> 项目中，帮助他一起推广和维护这套联邦学习库。在了解了联邦学习的特点后，我觉得它将会是未来一个非常重要的机器学习技术方向，所以接受了他的邀请，在业余时间参与了 FedML 的一些维护工作。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2020-montage-1/fedml.jpg" alt="FedML" />
+        <figcaption>FedML</figcaption>
+      </figure>
+    </p>
+<p>因为那段期间也是我非常忙碌的时候，所以实际上我的贡献并不多，只是帮忙从规范化运营开源项目上给了一些建议和支持。例如帮忙搭建了<a target="_blank" rel="noopener" href="http://doc.fedml.ai/#/">文档站点</a>、选用 License、设置代码质量 CI 以及<a target="_blank" rel="noopener" href="https://opencollective.com/fedml">设置捐赠信息</a>（我也给这个项目捐赠了 25 刀 🎅 ）。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2020-montage-1/best-paper.jpg" alt="FedML 拿到了 NeurIPS 2020 的 Best Paper Award" />
+        <figcaption>FedML 拿到了 NeurIPS 2020 的 Best Paper Award</figcaption>
+      </figure>
+    </p>
+<h2 id="博客">博客</h2>
+<p>整个 2020 年基本没发过博客，我已经可以预计这个博客站点将会彻底沦落为我的年度总结站点……至于去年提到的写书计划，也因为去年的人力变动以及 Cocos Creator 版本升级被暂时搁置了。我已经开始跟出版社取得了联系，等 ABCKit 对外开源后，我们就会重启这个写书计划。希望最迟在明年我们就能够完成这个小梦想。</p>
+<p>关于博客还有一个非常让我不满意的事情，就是 hexo server 在文章数量多了之后渲染速度非常的慢，这还是在我已经把 <code>cache</code> 模式打开的情况下。每次改一点东西，等站点重新 render 要接近 20 秒的时间。这大幅影响了我写作时候的流畅感（嗯，这也是我一直不发总结的借口🐶）。我需要在这篇总结完成后去优化一下这糟糕的体验。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2020-montage-1/stalled.png" alt="现在改一次东西需要等待 Hexo 近 20 秒的渲染" />
+        <figcaption>现在改一次东西需要等待 Hexo 近 20 秒的渲染</figcaption>
+      </figure>
+    </p>
+<p>（下篇待续）</p>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+		
+          <li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+        
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/codes/rhubarb-lip-sync/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '2020 蒙太奇（上）'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/2020-montage-1.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2021-02-27 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/life/">life<span>9</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/summary/">summary<span>3</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%B7%A5%E4%BD%9C"><span class="toc-article-text">工作</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#1-%E6%9B%B4%E5%8A%A0%E9%87%8D%E8%A7%86%E4%B8%8E%E6%AF%8F%E4%B8%AA%E7%BB%84%E5%91%98%E7%9A%84-OKR-%E5%88%B6%E5%AE%9A%E3%80%81%E7%BB%A9%E6%95%88%E7%BB%93%E6%9E%9C%E6%B2%9F%E9%80%9A"><span class="toc-article-text">1. 更加重视与每个组员的 OKR 制定、绩效结果沟通</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-%E6%B3%A8%E9%87%8D%E5%80%BE%E5%90%AC%EF%BC%8C%E6%9D%83%E5%8A%9B%E4%B8%8B%E6%94%BE"><span class="toc-article-text">2. 注重倾听，权力下放</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-%E5%8A%A0%E5%BC%BA%E6%8A%80%E6%9C%AF%E6%B0%9B%E5%9B%B4%E5%BB%BA%E8%AE%BE"><span class="toc-article-text">3. 加强技术氛围建设</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%BC%80%E6%BA%90"><span class="toc-article-text">开源</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8D%9A%E5%AE%A2"><span class="toc-article-text">博客</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

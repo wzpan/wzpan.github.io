@@ -1,0 +1,714 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>化繁为简的企业级 Git 管理实战（五）：二进制大文件的版本控制 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="二进制大文件的版本控制是 Git 的一个弱项，也是很多团队难免会遇到的一个让人头痛的问题。本文将介绍我们使用 Git 进行二进制文件的版本控制的多种方案，以及相关的踩坑之旅。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="化繁为简的企业级 Git 管理实战（五）：二进制大文件的版本控制"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '化繁为简的企业级 Git 管理实战（五）：二进制大文件的版本控制'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 化繁为简的企业级 Git 管理实战（五）：二进制大文件的版本控制</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>二进制大文件的版本控制是 Git 的一个弱项，也是很多团队难免会遇到的一个让人头痛的问题。本文将介绍我们使用 Git 进行二进制文件的版本控制的多种方案，以及相关的踩坑之旅。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <p>毫无疑问，Git 非常适合用于代码文件的版本控制。对于纯代码仓库，由于每次实际提交都是增量内容，即使仓库经历了几十次提交，整个仓库的大小往往都不会大幅增加。</p>
+<p>而对于存在二进制文件的仓库，情况就变了：Git 并不能很好地支持二进制文件的增量提交，每次更新一个二进制文件，就相当于把这份文件的完整内容再往仓库里扔。久而久之，这个仓库就会变得非常大，影响代码拉取速度。</p>
+<p>举一个实际的例子，为了加快应用的构建速度，我们团队的框架先会编译成 SDK ，再交由上层构建应用。框架 SDK 也是一个独立的 Git 仓库，里头包含了大量的二进制包：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-5/framework.png" alt="Framework SDK" />
+        <figcaption>Framework SDK</figcaption>
+      </figure>
+    </p>
+<p>由于框架也有多个分支，每个分支的迭代速度比较快，SDK 仓库的体积在三个月的时间内就膨胀到了 1G 。<span id="more"></span></p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-5/before.png" alt="改造前的framework仓库" />
+        <figcaption>改造前的framework仓库</figcaption>
+      </figure>
+    </p>
+<p>如此庞大的仓库体积让第一次拉代码的同事叫苦不迭。一次全新的 clone ，即使拉取速度达到了 5.01 MB/s，在 framework 这个模块上就需要花上大约 7 分钟的时间：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-5/http-clone.png" alt="HTTP拉取仓库" />
+        <figcaption>HTTP拉取仓库</figcaption>
+      </figure>
+    </p>
+<p>当很多人同时拉代码时，还有很大概率因为 HTTP 超时而拉取失败：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-5/fail.png" alt="HTTP超时" />
+        <figcaption>HTTP超时</figcaption>
+      </figure>
+    </p>
+<p>为了解决这个问题，我先后尝试了几种方案。</p>
+<h2 id="方案一：改用-SSH">方案一：改用 SSH</h2>
+<p>第一个思路非常 intuitive ：既然 HTTP 的拉取不稳定，那改成 SSH 如何呢？SSH 的长连接总比 HTTP 稳定吧？</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git remote remove origin  <span class="comment"># 删除原来的http仓库地址</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git remote add origin git@your-site.com:your-group/your-repo.git  <span class="comment"># 改成新的ssh仓库地址</span></span></span><br></pre></td></tr></table></figure>
+<p>这个思路被证实是有效的。通过修改这几个模块的仓库地址为 SSH ，仓库的拉取成功率提升了很多，出现 RPC Failed 的情况也变少了。</p>
+<p>然而，这种方案依然无法解决拉取速度慢的问题，完整的拉取该模块的耗时并不比 HTTP 方式快（甚至可能更慢）：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-5/ssh-clone.png" alt="SSH拉取仓库" />
+        <figcaption>SSH拉取仓库</figcaption>
+      </figure>
+    </p>
+<p>另外，这种方式要求每个人都配好 SSH Keys ，否则拉取仓库时也会直接报错。这对于刚接触 Git 的同事而言又增加了一点 cognitive load 。</p>
+<h2 id="方案二：单分支克隆">方案二：单分支克隆</h2>
+<p>第二个思路是在初次拉取的时候不完整克隆整个工程，而是只克隆一个分支，这样也能减少 N 倍的时间。Git 允许带上 <code>--single-branch -b &lt;分支名&gt;</code> 选项，指定只拉取某一分支：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git <span class="built_in">clone</span> --single-branch -b &lt;分支名&gt; http://your-site.com/your-group/your-repo.git</span></span><br></pre></td></tr></table></figure>
+<p>用这种方法确实减少了一定的时间，但耗时依然可能很长。以我们的框架 SDK 仓库为例，单纯拉一个 master_dev 分支也要 3 分钟左右的时间。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-5/single-branch-clone.png" alt="单分支克隆" />
+        <figcaption>单分支克隆</figcaption>
+      </figure>
+    </p>
+<p>没有数量级别的减少，也就意味着不久之后单个分支的拉取时间也会超过现在整个仓库的完整克隆时间。</p>
+<h2 id="方案三：浅克隆">方案三：浅克隆</h2>
+<p>大部分人使用 SDK 时并不需要检出历史版本，对这些人而言，只需要拿到需要的一个快照就可以满足构建需求了。因此方案三就是限定克隆时的深度来加快拉取速度。Git 允许带上 <code>--depth &lt;深度&gt;</code> 来指定拉取深度。例如只拉取分支最新的快照：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git <span class="built_in">clone</span> --single-branch -b &lt;分支名&gt; --depth 1 http://your-site.com/your-group/your-repo.git</span></span><br></pre></td></tr></table></figure>
+<p>由于只拉取最新快照，用这种方式的拉取速度就快了很多。以我们的框架 SDK 仓库为例，拉 master_dev 最新的快照只需要不到 6 秒的时间。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-5/shallow-clone.png" alt="浅克隆" />
+        <figcaption>浅克隆</figcaption>
+      </figure>
+    </p>
+<p>浅克隆虽然能够解决代码拉取的问题，但可想而知这样拉取下来的仓库是不完整的，它缺失了所有历史记录，也不能在这个仓库上提交新的内容。对于框架的开发人员，为了能够提交新内容，依然需要花长时间去克隆完整的仓库。因此浅克隆依然不是一个完美的方案。</p>
+<h2 id="方案四：使用-Git-LFS">方案四：使用 Git-LFS</h2>
+<p>虽然 Git 本身并不能很好地支持二进制大文件的版本控制，但幸运的是已经出现了一些扩展能够帮助 Git 胜任这些工作。我所选择的扩展就是由 Github 团队开发的 <a target="_blank" rel="noopener" href="https://git-lfs.github.com">Git-LFS</a> 。</p>
+<p>Git-LFS 的原理并不复杂：大文件不再支持添加到仓库中，而是存储到另外的 LFS 服务器上。仓库中只保留这些文件的文本链接。当拉取仓库时，Git-LFS 的钩子将自动把这些文本链接恢复成 LFS 中的实际内容。一图胜千言：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-5/git-lfs.png" alt="Git-LFS原理" />
+        <figcaption>Git-LFS原理</figcaption>
+      </figure>
+    </p>
+<h3 id="服务端配置">服务端配置</h3>
+<p>选择 Git-LFS 的一个首要原因是 Gitlab 原生提供了对 Git-LFS 的支持（有趣的是，就在我写这篇文章的时候，<a target="_blank" rel="noopener" href="https://git-lfs.coding.me/">Coding 也宣布了对 Git LFS 的支持</a>）。要在 Gitlab 中开启 Git-LFS 非常简单：</p>
+<ol>
+<li>编辑 /opt/gitlab/gitlab.rb 文件，找到 <code>Git LFS</code> 项目；</li>
+<li>将 <code>gitlab_rails['lfs_enabled']</code> 项目设置成 <code>true</code>；</li>
+<li>将 <code>gitlab_rails['lfs_storage_path']</code> 项目设置为本地的一个已存在目录。这个目录就是实际的 LFS 存储目录。</li>
+<li>执行 <code>gitlab-ctl reconfigure</code> 重新配置 Gitlab；</li>
+<li>执行 <code>gitlab-ctl restart</code> 重启 Gitlab ，使配置生效。</li>
+</ol>
+<p>至此服务端就配置完成了。</p>
+<h3 id="工具安装">工具安装</h3>
+<p><a target="_blank" rel="noopener" href="https://github.com/git-lfs/git-lfs/releases/latest?utm_source=gitlfs_site&amp;utm_medium=downloads_link&amp;utm_campaign=gitlfs">下载</a> Git LFS 。解压完后执行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git lfs install</span></span><br></pre></td></tr></table></figure>
+<p>完成工具的安装。这步骤只需要做一次。这个步骤实际做的事情是给 git 加上 lfs 命令，另外还创建了 post-checkout、post-commit、post-merge、pre-push 几个全局钩子。当我们在一个使用 LFS 的仓库执行诸如 <code>checkout</code>、<code>commit</code>、<code>merge</code>、<code>push</code> 的 Git 操作时，将触发这些钩子自动地维护用 LFS 管理的文件。</p>
+<h3 id="仓库改造">仓库改造</h3>
+<p>接下来就可以开始改造仓库，把大文件都改用 LFS 来管理。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git lfs track <span class="string">&quot;*.jar&quot;</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git lfs track <span class="string">&quot;*.so&quot;</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git lfs track <span class="string">&quot;*.aar&quot;</span></span></span><br></pre></td></tr></table></figure>
+<p>这几步执行完会在仓库中创建一个 .gitattribute 文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> cat .gitattributes</span></span><br><span class="line">*.jar filter=lfs diff=lfs merge=lfs -text</span><br><span class="line">*.so filter=lfs diff=lfs merge=lfs -text</span><br><span class="line">*.aar filter=lfs diff=lfs merge=lfs -text</span><br></pre></td></tr></table></figure>
+<p>Git 的钩子就是根据这个文件来确定当前仓库是否有使用 LFS 管理的文件的。所以这个文件一定要确保添加进仓库中：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git add .gitattributes</span></span><br></pre></td></tr></table></figure>
+<p>完成后像往常一样暂存和提交文件即可：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git add foo.jar</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> commit -m <span class="string">&quot;Add jar file&quot;</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git push origin master</span></span><br></pre></td></tr></table></figure>
+<p>要注意的是，这个改造过程只会把当前这次 commit 的指定类型文件改成用 LFS 才存储，而不会影响所有历史记录。对于我们的 SDK 仓库，仓库本身已经非常庞大，直接这么改造是没有任何瘦身效果的。所以最好的做法就是重新创建一个仓库，把各个分支最新的快照同步过来。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-5/after.png" alt="改造后的SDK仓库" />
+        <figcaption>改造后的SDK仓库</figcaption>
+      </figure>
+    </p>
+<p>由图可以看出，重新创建的这个仓库，把大部分的二进制大文件都改用了 LFS 来存储，整个仓库的大小从 1G 减小到 3M 不到！</p>
+<p>测试对这个新的仓库进行克隆，由于本身仓库很小，一下子就克隆下来了。之后 Git LFS 的全局钩子将自动将当前仓库里的 LFS 链接文件恢复成真正的文件：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-5/lfs-clone.png" alt="克隆 Git LFS 仓库" />
+        <figcaption>克隆 Git LFS 仓库</figcaption>
+      </figure>
+    </p>
+<p>由于这个仓库的二进制包多达64个，整个克隆过程的时间主要花在下载这些二进制包，总耗时约为 43 秒。虽然没有浅克隆快，但这样的方式拉下来的仓库是完整的仓库，而且对普通开发者而言是完全透明的操作（他们甚至不需要知道 LFS 是什么），因此是更加理想的方案。</p>
+<h3 id="Git-LFS-的踩坑之旅">Git-LFS 的踩坑之旅</h3>
+<p>虽然 Git-LFS 很好地解决了大文件的版本控制问题，但实际应用到实际团队中时也不见得能顺风顺水。在我将它推广到团队的项目中时，就遇到了几个水土不服的问题。下面整理一下，方便后来人。</p>
+<h4 id="1-警惕钩子覆盖">1. 警惕钩子覆盖</h4>
+<p>第一个遇到的问题就是钩子的覆盖问题。前面我们提到 Git-LFS 其实是利用全局钩子来关联 Git 与 LFS 的。当你的工程中也加了钩子时，这时候就要格外小心了。</p>
+<p>以我们的工程为例，我给每个子模块都加了个 pre-push 钩子用来做 push 前检查：</p>
+<ol>
+<li>如果子模块接入了 Code Review，检查要 push 的提交是否都经过了 Code Review；</li>
+<li>如果是 React Native 子模块，检查本地的 React Native 打包是否成功；</li>
+<li>检查如果要推送到一个新分支，检查目标分支名是否包含非 ASCII 字符。</li>
+</ol>
+<p>问题来了，这个 pre-push 钩子的优先级会高于全局的那个 Git LFS 钩子，因此使得 Git LFS 的 pre-push 失去作用。而这个钩子非常重要：它的作用是在 push 的时候把用 Git LFS 跟踪管理的文件上传到 LFS 服务器上。如果这些文件没有上传成功，别人拉取仓库就会报如下错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Downloading hotfix&#x2F;plugin&#x2F;commons-io-2.4.jar (180.80 KB)</span><br><span class="line">Error downloading object: hotfix&#x2F;plugin&#x2F;commons-io-2.4.jar (cc6a41dc3eaacc9e440a6bd0d2890b20d36b4ee408fe2d67122f328bb6e01581)</span><br><span class="line"></span><br><span class="line">Errors logged to &#x2F;Users&#x2F;xxxx&#x2F;Desktop&#x2F;App_Android_master_dev&#x2F;.git&#x2F;modules&#x2F;framework&#x2F;xxxx&#x2F;xxxx&#x2F;lfs&#x2F;objects&#x2F;logs&#x2F;20170417T212952.282306976.log</span><br><span class="line">Use &#96;git lfs logs last&#96; to view the log.</span><br><span class="line">error: external filter git-lfs smudge -- %f failed 2</span><br><span class="line">error: external filter git-lfs smudge -- %f failed</span><br><span class="line">fatal: hotfix&#x2F;plugin&#x2F;commons-io-2.4.jar: smudge filter lfs failed</span><br></pre></td></tr></table></figure>
+<p>解决办法就是将 Git LFS 钩子的内容与自定义钩子相结合。这是我对 Git LFS 的 pre-push 钩子的改写：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line"></span><br><span class="line">basepath=$(cd `dirname $0`; pwd)</span><br><span class="line">command -v git-lfs &gt;/dev/null 2&gt;&amp;1 || &#123; echo &gt;&amp;2 &quot;\nThis repository is configured for Git LFS but &#x27;git-lfs&#x27; was not found on your path. If you no longer wish to use Git LFS, remove this hook by deleting .git/hooks/pre-push.\n&quot;; exit 2; &#125;</span><br><span class="line">git lfs pre-push &quot;$@&quot; &amp;&amp; $basepath/pre-push-custom</span><br></pre></td></tr></table></figure>
+<p>最后一行的作用就是先执行 git lfs pre-push 确保正确上传 LFS tracking 的文件，然后再执行 hooks 中的 pre-push-custom 钩子进行其他自定义的检查。</p>
+<h4 id="2-zip-包下载的-bug">2. zip 包下载的 bug</h4>
+<p>Gitlab 对 Git-LFS 也存在着不足。当我完成了几个大仓库的改造之后，我发现新的仓库在本地可以顺利编译，但在构建站却死活编译不了，报了类找不到的错误：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-5/compile-problem.jpeg" alt="编译问题" />
+        <figcaption>编译问题</figcaption>
+      </figure>
+    </p>
+<p>本地构建和构建站构建在代码拉取上面有一个区别：为了加快代码拉取速度，我们在构建站并不使用克隆仓库的方式来拉取代码，而是采用下载 Zip 包的方式。所以我把这个仓库的 Zip 包下载了下来：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-5/download-zip.png" alt="下载zip包" />
+        <figcaption>下载zip包</figcaption>
+      </figure>
+    </p>
+<p>这个类是在其中一个 jar 包里定义的，而解压发现 jar 包明明已经下载下来了：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-5/problem-file.png" alt="问题jar包" />
+        <figcaption>问题jar包</figcaption>
+      </figure>
+    </p>
+<p>尝试使用 JD-Gui 打开这个 jar 包，发现这个包打不开。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-5/open-failed.png" alt="jar包无法打开" />
+        <figcaption>jar包无法打开</figcaption>
+      </figure>
+    </p>
+<p>那这个文件究竟是什么东西？打印它的内容，真相浮出水面：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-5/whats-this.png" alt="jar包只是个链接文本" />
+        <figcaption>jar包只是个链接文本</figcaption>
+      </figure>
+    </p>
+<p>这是个链接文件！说明 Gitlab 并没有将它恢复成实际的文件内容！仔细观察这些二进制文件，我发现它们的大小全部都在 130 字节左右，这意味着这些文件全都没有被恢复。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-5/file-size.png" alt="全部文件都是链接" />
+        <figcaption>全部文件都是链接</figcaption>
+      </figure>
+    </p>
+<p>不幸的是，由于下载下来的内容不再是个 Git 仓库，这些链接文件已无法恢复成实际的文件内容。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-5/cannot-restore.png" alt="文件无法恢复" />
+        <figcaption>文件无法恢复</figcaption>
+      </figure>
+    </p>
+<p>我认为这个是 Gitlab 的问题，于是给 Gitlab 提了一个 <a target="_blank" rel="noopener" href="https://gitlab.com/gitlab-org/gitlab-ce/issues/31082">bug</a> ，而一个开发人员告诉我类似的问题在去年 3 月份<a target="_blank" rel="noopener" href="https://gitlab.com/gitlab-org/gitlab-ce/issues/14261">已经有人提过</a>，而目前还未修复 <code>--bb</code> （Coding 也有相同的问题，哈哈）。</p>
+<p>找到这个原因后，对症下药就简单了：既然下载 Zip 包的方式没法恢复大文件的内容，那就改成用浅克隆。于是我改写了下构建站的代码拉取脚本，将使用 Git LFS 管理大文件的几个模块由下载 zip 的方式改成浅克隆，终于解决了编译问题！</p>
+<h2 id="总结">总结</h2>
+<p>本文列举了几种二进制大文件导致仓库过大的解决方案。其中，使用 Git-LFS 的方案是一种比较理想的选择。但在实际使用中，一定要小心处理 Git-LFS 可能带来的问题，希望本文的若干踩坑总结也能对读者有所帮助。</p>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/codes/dingdang-robot-intro/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/work/enterprise-class-git-version-control-4/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '化繁为简的企业级 Git 管理实战（五）：二进制大文件的版本控制'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/enterprise-class-git-version-control-5.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2017-04-19 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/work/">work<span>7</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Git/">Git<span>5</span></a></li> <li><a href="/tags/Gitlab/">Gitlab<span>2</span></a></li> <li><a href="/tags/LFS/">LFS<span>1</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%96%B9%E6%A1%88%E4%B8%80%EF%BC%9A%E6%94%B9%E7%94%A8-SSH"><span class="toc-article-text">方案一：改用 SSH</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%96%B9%E6%A1%88%E4%BA%8C%EF%BC%9A%E5%8D%95%E5%88%86%E6%94%AF%E5%85%8B%E9%9A%86"><span class="toc-article-text">方案二：单分支克隆</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%96%B9%E6%A1%88%E4%B8%89%EF%BC%9A%E6%B5%85%E5%85%8B%E9%9A%86"><span class="toc-article-text">方案三：浅克隆</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%96%B9%E6%A1%88%E5%9B%9B%EF%BC%9A%E4%BD%BF%E7%94%A8-Git-LFS"><span class="toc-article-text">方案四：使用 Git-LFS</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E9%85%8D%E7%BD%AE"><span class="toc-article-text">服务端配置</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85"><span class="toc-article-text">工具安装</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%BB%93%E5%BA%93%E6%94%B9%E9%80%A0"><span class="toc-article-text">仓库改造</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#Git-LFS-%E7%9A%84%E8%B8%A9%E5%9D%91%E4%B9%8B%E6%97%85"><span class="toc-article-text">Git-LFS 的踩坑之旅</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#1-%E8%AD%A6%E6%83%95%E9%92%A9%E5%AD%90%E8%A6%86%E7%9B%96"><span class="toc-article-text">1. 警惕钩子覆盖</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#2-zip-%E5%8C%85%E4%B8%8B%E8%BD%BD%E7%9A%84-bug"><span class="toc-article-text">2. zip 包下载的 bug</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-article-text">总结</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

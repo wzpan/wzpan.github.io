@@ -1,0 +1,836 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>预处理和头文件 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="预处理
+#include
+文件包含指令，即 #include 指令，使我们比较容易处理一组 #define 指令以及说明等。在源程序文件中，任何形如:
+1#include &amp;quot;文件名&amp;quot;
+或
+1#include &amp;lt;文件名&amp;gt;
+的行都被替换成由文件名所指定的文件的内容。如果文">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="预处理和头文件"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '预处理和头文件'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 预处理和头文件</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="预处理">预处理</h2>
+<h3 id="include">#include</h3>
+<p>文件包含指令，即 #include 指令，使我们比较容易处理一组 #define 指令以及说明等。在源程序文件中，任何形如:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;文件名&quot;</span></span></span><br></pre></td></tr></table></figure>
+<p>或</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;文件名&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>的行都被替换成由文件名所指定的文件的内容。如果文件名用引号括起来，那么就在源程序所在位置查找该文件；如果在这个位置没有找到该文件，或者如果文件名用尖括号<code>&lt;</code>与<code>&gt;</code>括起来，那么就按实现定义的规则来查找该文件。被包含的文件本身也可包含 #include 指令。</p>
+<p>在源文件的开始处一般都要有一些 #include 指令，或包含 #define 语句与 extern 说明，或访问诸如 <code>&lt;stdio.h&gt;</code> 等头文件中库函数的函数原型说明。(严格地说，这些没有必要做成文件。访问头文件的细节依赖于实现。)</p>
+<p>对于比较大的程序， #include 指令是把各个说明捆在一起的优选方法。它使所有源文件都被提供以相同的定义与变量说明，从而可避免发生一些特别讨厌的错误。自然地，如果一个被包含的文件的内容做了修改，那么所有依赖于这个被包含文件的源文件都必须重新编译。</p>
+<h3 id="define">#define</h3>
+<h4 id="变量式宏定义">变量式宏定义</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> 名字 替换文本</span></span><br></pre></td></tr></table></figure>
+<p>它是一种最简单的宏替换——出现各个的名字都将被替换文本替换。 #define 指令中的名字与变量名具有相同的形式，替换文本可以是任意字符串。正常情况下，替换文本是 #define 指令所在行的剩余部分，但也可以把一个比较长的宏定义分成若干行，这时只需在尚待延续的行后加上一个反斜杠 <code>\</code> 即可。 #define 指令所定义的名字的作用域从其定义点开始到被编译的源文件的结束。在宏定义中也可以使用前面的宏定义。替换只对单词进行，对括在引号中的字符串不起作用。例如，如果 YES 是一个被定义的名字，那么在 printf ( “YES” ) 或 YESMAN 中不能进行替换。</p>
+<h4 id="函数式宏定义">函数式宏定义</h4>
+<p>例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX(a, b) ((a)&gt;(b)?(a):(b))</span></span><br><span class="line">k = MAX(i&amp;<span class="number">0x0f</span>, j&amp;<span class="number">0x0f</span>)</span><br></pre></td></tr></table></figure>
+<p>但这种做法往往会有潜在的问题，通常不推荐这么做。</p>
+<p>我们想看第二行的表达式展开成什么样，可以用gcc的<code>-E</code>选项或<code>cpp</code>命令：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ cpp main.c</span><br><span class="line"># <span class="number">1</span> <span class="string">&quot;main.c&quot;</span></span><br><span class="line"># <span class="number">1</span> <span class="string">&quot;&lt;built-in&gt;&quot;</span></span><br><span class="line"># <span class="number">1</span> <span class="string">&quot;&lt;command-line&gt;&quot;</span></span><br><span class="line"># <span class="number">1</span> <span class="string">&quot;main.c&quot;</span></span><br><span class="line"></span><br><span class="line">k = ((i&amp;<span class="number">0x0f</span>)&gt;(j&amp;<span class="number">0x0f</span>)?(i&amp;<span class="number">0x0f</span>):(j&amp;<span class="number">0x0f</span>))</span><br></pre></td></tr></table></figure>
+<h3 id="undef">#undef</h3>
+<p>可以用 #undef 指令取消对宏名字的定义，这样做通常是为了保证一个调用所调用的是一个实际函数而不是宏：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">undef</span> getchar</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getchar</span><span class="params">( <span class="keyword">void</span> )</span> </span>&#123; ... &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="宏替换的规则">宏替换的规则</h3>
+<p>下面给出的用法模式可以避免使用宏带来的问题; 如果你要使用宏, 尽可能遵守：</p>
+<ul>
+<li>不要在 .h 文件中定义宏；</li>
+<li>在马上要使用时才进行 #define, 使用后要立即 #undef；</li>
+<li>不要只是对已经存在的宏使用#undef，选择一个不会冲突的名称；</li>
+<li>不要试图使用展开后会导致 C++ 构造不稳定的宏, 不然也至少要附上文档说明其行为.</li>
+</ul>
+<h3 id="、-运算符和可变参数">#、##运算符和可变参数</h3>
+<h4 id="运算符">#运算符</h4>
+<p>在函数式宏定义中，#运算符用于创建字符串，#运算符后面应该跟一个形参（中间可以有空格或Tab），例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> STR(s) # s</span></span><br><span class="line">STR(hello 	world)</span><br></pre></td></tr></table></figure>
+<p>用cpp命令预处理之后是&quot;hello␣world&quot;，自动用&quot;号把实参括起来成为一个字符串，并且实参中的连续多个空白字符被替换成一个空格。</p>
+<h4 id="使用-连接参数">使用##连接参数</h4>
+<p>预处理运算符 ##为宏扩展提供了一种连接实际参数的手段。如果替换文本中的参数用 ## 相连，那么参数就被实际参数替换， ## 与前后的空白符被删除，并对替换后的结果重新扫描。例如，下面定义的宏 paste 用于连接两个参数:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> paste( front, back ) front ## back</span></span><br></pre></td></tr></table></figure>
+<p>从而宏调用 <code>paste(name, 1)</code> 的结果是建立单词 <code>name1</code> 。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  使用宏时要非常谨慎，尽量以枚举和常量代替之。
+</div>
+<h3 id="if">#if</h3>
+<p>在预处理语句中还有一种条件语句，用于在预处理中进行条件控制。这提供了一种在编译过程中可以根据所求条件的值有选择地包含不同代码的手段。</p>
+<p><code>#if</code>语句中包含一个常量整数表达式(其中不得包含 sizeof、类型强制转换运算符或枚举常量)，若该表达式的求值结果不等于 0时，则执行其后的各行，直到遇到 <code>#endif</code>、<code>#elif</code> 或 <code>#else</code> 语句为止(预处理语句 <code>#elif</code> 类似于 <code>if</code> 语句的 <code>else if</code> 结构)。在 <code>#if</code> 语句中可以使用一个特殊的表达式 <code>defined (名字)</code>：当名字已经定义时，其值为 1;否则，其值为 0。</p>
+<p>例如，为了保证 hdr.h 文件的内容只被包含一次，可以像下面这样用条件语句把该文件的内容包围起来:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#if !defined(HDR) #define HDR &#x2F;* hdr.h文件的内容*&#x2F;</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+<p>被 <code>#if</code> 与 <code>#endif</code> 包含的第一行定义了名字 HDR，其后的各行将会发现该名字已有定义并跳到 <code>#endif</code>。还可以用类似的样式来避免多次重复包含同一文件。如果连续使用这种，那么每一个头文件中都可以包含它所依赖的其他头文件，而不需要它的用户去处理这种依赖关系。</p>
+<p>下面的预处理语句序列用于测试名字 SYSTEM 以确定要包含进哪一个版本的头文件:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">if</span> SYSTEM == SYSV</span></span><br><span class="line">    <span class="meta">#<span class="meta-keyword">define</span> HDR <span class="meta-string">&quot;sysv.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">elif</span> SYSTEM == BSD</span></span><br><span class="line">    <span class="meta">#<span class="meta-keyword">define</span> HDR <span class="meta-string">&quot;bsd.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">elif</span> SYSTEM == MSDOS</span></span><br><span class="line">    <span class="meta">#<span class="meta-keyword">define</span> HDR <span class="meta-string">&quot;msdos.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">    <span class="meta">#<span class="meta-keyword">define</span> HDR <span class="meta-string">&quot;default.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span> HDR</span></span><br></pre></td></tr></table></figure>
+<p>当需要测试一个名字是否已经定义时，可以使用两个特殊的预处理语句: <code>#ifdef</code> 与 <code>#ifndef</code>。可以使用 <code>#ifdef</code> 将上面第一个关于 <code>#if</code> 的例子改写如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> HDR</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> HDR</span></span><br><span class="line"><span class="comment">/* hdr.h文件的内容 */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<p>最后通过下面的例子说一下#if后面的表达式：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> VERSION  2</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> defined x || y || VERSION &lt; 3</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li>首先处理defined运算符，defined运算符一般用作表达式中的一部分，如果单独使用，<code>#if defined x</code>相当于<code>#ifdef x</code>，而<code>#if !defined x</code>相当于<code>#ifndef x</code>。在这个例子中，如果x这个宏有定义，则把defined x替换为1，否则替换为0，因此变成<code>#if 0 || y || VERSION &lt; 3</code>。</li>
+<li>然后把有定义的宏展开，变成<code>#if 0 || y || 2 &lt; 3</code>。</li>
+<li>把没有定义的宏替换成0，变成<code>#if 0 || 0 || 2 &lt; 3</code>，注意，即使前面定义了一个变量名是y，在这一步也还是替换成0，因为#if的表达式必须在编译时求值，其中包含的名字只能是宏定义。</li>
+<li>把得到的表达式<code>0 || 0 || 2 &lt; 3</code>像C表达式一样求值，求值的结果是#if 1，因此条件成立。</li>
+</ol>
+<h2 id="头文件">头文件</h2>
+<h3 id="头文件的作用">头文件的作用</h3>
+<ol>
+<li>通过头文件来调用库功能。在很多场合，源代码不便(或不准)向用户公布，只要向用户提供头文件和二进制的库即可。用户只需要按照头文件中的接口声明来调用库功能，而不必关心接口怎么实现的。编译器会从库中提取相应的代码。</li>
+<li>头文件能加强类型安全检查。如果某个接口被实现或被使用时，其方式与头文件中的声明不一致，编译器就会指出错误，这一简单的规则能大大减轻程序员调试、改错的负担。</li>
+</ol>
+<h3 id="规则">规则</h3>
+<ul>
+<li>为了防止头文件被重复引用,应当用 ifndef/define/endif 结构产生预处理块。</li>
+<li>用 <code>#include &lt;filename.h&gt;</code> 格式来引用标准库的头文件(编译器将从标准库目录开始搜索)。</li>
+<li>用 <code>#include &quot;filename.h&quot;</code> 格式来引用非标准库的头文件(编译器将从用户的工作目录开始搜索)。</li>
+<li>头文件中只存放“声明”而不存放“定义”。</li>
+<li>不提倡使用全局变量，尽量不要在头文件中出现象 <code>extern int value</code> 这类声明。</li>
+</ul>
+<h3 id="示例">示例</h3>
+<h4 id="头文件示例">头文件示例</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> *  kernel/sched.c</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  Kernel scheduler and related syscalls</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  Copyright (C) 1991-2002  Linus Torvalds</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  1996-12-23  Modified by Dave Grothe to fix bugs in semaphores and</span></span><br><span class="line"><span class="comment"> *              make semaphores SMP safe</span></span><br><span class="line"><span class="comment"> *  1998-11-19  Implemented schedule_timeout() and related stuff</span></span><br><span class="line"><span class="comment"> *              by Andrea Arcangeli</span></span><br><span class="line"><span class="comment"> *  2002-01-04  New ultra-scalable O(1) scheduler by Ingo Molnar:</span></span><br><span class="line"><span class="comment"> *              hybrid priority-list and round-robin design with</span></span><br><span class="line"><span class="comment"> *              an array-switch method of distributing timeslices</span></span><br><span class="line"><span class="comment"> *              and per-CPU runqueues.  Cleanups and useful suggestions</span></span><br><span class="line"><span class="comment"> *              by Davide Libenzi, preemptible kernel bits by Robert Love.</span></span><br><span class="line"><span class="comment"> *  2003-09-03  Interactivity tuning by Con Kolivas.</span></span><br><span class="line"><span class="comment"> *  2004-04-02  Scheduler domains code by Nick Piggin</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> GRAPHICS_H <span class="comment">/* 防止 graphics.h 被重复引用 */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> GRAPHICS_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;math.h&gt;</span></span></span><br><span class="line"><span class="comment">/* 引用标准库的头文件 */</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> “myheader.h”</span></span><br><span class="line"><span class="comment">/* 引用非标准库的头文件 */</span> </span><br><span class="line">...</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Function1</span><span class="params">(...)</span></span>; <span class="comment">/* 全局函数声明 */</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<h4 id="定义文件示例">定义文件示例</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> *  kernel/sched.c</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  Kernel scheduler and related syscalls</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  Copyright (C) 1991-2002  Linus Torvalds</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  1996-12-23  Modified by Dave Grothe to fix bugs in semaphores and</span></span><br><span class="line"><span class="comment"> *              make semaphores SMP safe</span></span><br><span class="line"><span class="comment"> *  1998-11-19  Implemented schedule_timeout() and related stuff</span></span><br><span class="line"><span class="comment"> *              by Andrea Arcangeli</span></span><br><span class="line"><span class="comment"> *  2002-01-04  New ultra-scalable O(1) scheduler by Ingo Molnar:</span></span><br><span class="line"><span class="comment"> *              hybrid priority-list and round-robin design with</span></span><br><span class="line"><span class="comment"> *              an array-switch method of distributing timeslices</span></span><br><span class="line"><span class="comment"> *              and per-CPU runqueues.  Cleanups and useful suggestions</span></span><br><span class="line"><span class="comment"> *              by Davide Libenzi, preemptible kernel bits by Robert Love.</span></span><br><span class="line"><span class="comment"> *  2003-09-03  Interactivity tuning by Con Kolivas.</span></span><br><span class="line"><span class="comment"> *  2004-04-02  Scheduler domains code by Nick Piggin</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> “graphics.h” <span class="comment">/* 引用头文件 */</span></span></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 全局函数的实现体 */</span> </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Function1</span><span class="params">(...)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 类成员函数的实现体 */</span> </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Box::Draw</span><span class="params">(...)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+			
+			
+			
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/c-pointer.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/c-snippets.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '预处理和头文件'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

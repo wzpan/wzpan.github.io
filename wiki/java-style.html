@@ -1,0 +1,1095 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>代码风格 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="前言
+这份文档是Google Java编程风格规范的完整定义。当且仅当一个Java源文件符合此文档中的规则，
+我们才认为它符合Google的Java编程风格。
+与其它的编程风格指南一样，这里所讨论的不仅仅是编码格式美不美观的问题，
+同时也讨论一些约定及编码标准。然而，这份文档主要侧重于我们所普遍遵循">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="代码风格"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '代码风格'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 代码风格</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc', 2, 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="前言">前言</h2>
+<p>这份文档是Google Java编程风格规范的完整定义。当且仅当一个Java源文件符合此文档中的规则，
+我们才认为它符合Google的Java编程风格。</p>
+<p>与其它的编程风格指南一样，这里所讨论的不仅仅是编码格式美不美观的问题，
+同时也讨论一些约定及编码标准。然而，这份文档主要侧重于我们所普遍遵循的规则，
+对于那些不是明确强制要求的，我们尽量避免提供意见。</p>
+<h3 id="1-1-术语说明">1.1 术语说明</h3>
+<p>在本文档中，除非另有说明：</p>
+<ol>
+<li>术语class可表示一个普通类，枚举类，接口或是annotation类型(<code>@interface</code>)</li>
+<li>术语comment只用来指代实现的注释(implementation comments)，我们不使用“documentation comments”一词，而是用Javadoc。</li>
+</ol>
+<p>其他的术语说明会偶尔在后面的文档出现。</p>
+<h3 id="1-2-指南说明">1.2 指南说明</h3>
+<p>本文档中的示例代码并不作为规范。也就是说，虽然示例代码是遵循Google编程风格，但并不意味着这是展现这些代码的唯一方式。
+示例中的格式选择不应该被强制定为规则。</p>
+<h2 id="源文件基础">源文件基础</h2>
+<h3 id="2-1-文件名">2.1 文件名</h3>
+<p>源文件以其最顶层的类名来命名，大小写敏感，文件扩展名为<code>.java</code>。</p>
+<h3 id="2-2-文件编码：UTF-8">2.2 文件编码：UTF-8</h3>
+<p>源文件编码格式为UTF-8。</p>
+<h3 id="2-3-特殊字符">2.3 特殊字符</h3>
+<h4 id="2-3-1-空白字符">2.3.1 空白字符</h4>
+<p>除了行结束符序列，ASCII水平空格字符(0x20，即空格)是源文件中唯一允许出现的空白字符，这意味着：</p>
+<ol>
+<li>所有其它字符串中的空白字符都要进行转义。</li>
+<li>制表符不用于缩进。</li>
+</ol>
+<h4 id="2-3-2-特殊转义序列">2.3.2 特殊转义序列</h4>
+<p>对于具有特殊<a target="_blank" rel="noopener" href="http://zh.wikipedia.org/wiki/%E8%BD%AC%E4%B9%89%E5%BA%8F%E5%88%97">转义序列</a>的任何字符(\b, \t, \n, \f, \r, &quot;, '及\)，我们使用它的转义序列，而不是相应的八进制(比如<code>\012</code>)或Unicode(比如<code>\u000a</code>)转义。</p>
+<h4 id="2-3-3-非ASCII字符">2.3.3 非ASCII字符</h4>
+<p>对于剩余的非ASCII字符，是使用实际的Unicode字符(比如∞)，还是使用等价的Unicode转义符(比如\u221e)，取决于哪个能让代码更易于阅读和理解。</p>
+<blockquote>
+<p>Tip: 在使用Unicode转义符或是一些实际的Unicode字符时，建议做些注释给出解释，这有助于别人阅读和理解。</p>
+</blockquote>
+<p>例如：</p>
+<pre><code>String unitAbbrev = &quot;μs&quot;;                                 | 赞，即使没有注释也非常清晰
+String unitAbbrev = &quot;\u03bcs&quot;; // &quot;μs&quot;                    | 允许，但没有理由要这样做
+String unitAbbrev = &quot;\u03bcs&quot;; // Greek letter mu, &quot;s&quot;    | 允许，但这样做显得笨拙还容易出错
+String unitAbbrev = &quot;\u03bcs&quot;;                            | 很糟，读者根本看不出这是什么
+return '\ufeff' + content; // byte order mark             | Good，对于非打印字符，使用转义，并在必要时写上注释
+</code></pre>
+<blockquote>
+<p>Tip: 永远不要由于害怕某些程序可能无法正确处理非ASCII字符而让你的代码可读性变差。当程序无法正确处理非ASCII字符时，它自然无法正确运行，
+你就会去fix这些问题的了。(言下之意就是大胆去用非ASCII字符，如果真的有需要的话)</p>
+</blockquote>
+<h2 id="源文件结构">源文件结构</h2>
+<p>一个源文件包含(按顺序地)：</p>
+<ol>
+<li>许可证或版权信息(如有需要)</li>
+<li>package语句</li>
+<li>import语句</li>
+<li>一个顶级类(<strong>只有一个</strong>)</li>
+</ol>
+<p>以上每个部分之间用一个空行隔开。</p>
+<h3 id="3-1-许可证或版权信息">3.1 许可证或版权信息</h3>
+<p>如果一个文件包含许可证或版权信息，那么它应当被放在文件最前面。</p>
+<h3 id="3-2-package语句">3.2 package语句</h3>
+<p>package语句不换行，列限制(4.4节)并不适用于package语句。(即package语句写在一行里)</p>
+<h3 id="3-3-import语句">3.3 import语句</h3>
+<h4 id="3-3-1-import不要使用通配符">3.3.1 import不要使用通配符</h4>
+<p>即，不要出现类似这样的import语句：<code>import java.util.*;</code></p>
+<h4 id="3-3-2-不要换行">3.3.2 不要换行</h4>
+<p>import语句不换行，列限制(4.4节)并不适用于import语句。(每个import语句独立成行)</p>
+<h4 id="3-3-3-顺序和间距">3.3.3 顺序和间距</h4>
+<p>import语句可分为以下几组，按照这个顺序，每组由一个空行分隔：</p>
+<ol>
+<li>所有的静态导入独立成组</li>
+<li><code>com.google</code> imports(仅当这个源文件是在<code>com.google</code>包下)</li>
+<li>第三方的包。每个顶级包为一组，字典序。例如：android, com, junit, org, sun</li>
+<li><code>java</code> imports</li>
+<li><code>javax</code> imports</li>
+</ol>
+<p>组内不空行，按字典序排列。</p>
+<h3 id="3-4-类声明">3.4 类声明</h3>
+<h4 id="3-4-1-只有一个顶级类声明">3.4.1 只有一个顶级类声明</h4>
+<p>每个顶级类都在一个与它同名的源文件中(当然，还包含<code>.java</code>后缀)。</p>
+<p>例外：<code>package-info.java</code>，该文件中可没有<code>package-info</code>类。</p>
+<h4 id="3-4-2-类成员顺序">3.4.2 类成员顺序</h4>
+<p>类的成员顺序对易学性有很大的影响，但这也不存在唯一的通用法则。不同的类对成员的排序可能是不同的。
+最重要的一点，每个类应该以某种逻辑去排序它的成员，维护者应该要能解释这种排序逻辑。比如，
+新的方法不能总是习惯性地添加到类的结尾，因为这样就是按时间顺序而非某种逻辑来排序的。</p>
+<h5 id="3-4-2-1-重载：永不分离">3.4.2.1 重载：永不分离</h5>
+<p>当一个类有多个构造函数，或是多个同名方法，这些函数/方法应该按顺序出现在一起，中间不要放进其它函数/方法。</p>
+<h2 id="格式">格式</h2>
+<p><strong>术语说明</strong>：块状结构(block-like construct)指的是一个类，方法或构造函数的主体。需要注意的是，数组初始化中的初始值可被选择性地视为块状结构(4.8.3.1节)。</p>
+<h3 id="4-1-大括号">4.1 大括号</h3>
+<h4 id="4-1-1-使用大括号-即使是可选的">4.1.1 使用大括号(即使是可选的)</h4>
+<p>大括号与<code>if, else, for, do, while</code>语句一起使用，即使只有一条语句(或是空)，也应该把大括号写上。</p>
+<h4 id="4-1-2-非空块：K-R-风格">4.1.2 非空块：K &amp; R 风格</h4>
+<p>对于非空块和块状结构，大括号遵循Kernighan和Ritchie风格
+(<a target="_blank" rel="noopener" href="http://www.codinghorror.com/blog/2012/07/new-programming-jargon.html">Egyptian brackets</a>):</p>
+<ul>
+<li>左大括号前不换行</li>
+<li>左大括号后换行</li>
+<li>右大括号前换行</li>
+<li>如果右大括号是一个语句、函数体或类的终止，则右大括号后换行; 否则不换行。例如，如果右大括号后面是else或逗号，则不换行。</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight plain"><figcaption><span>java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">return new MyClass() &#123;</span><br><span class="line">  @Override public void method() &#123;</span><br><span class="line">    if (condition()) &#123;</span><br><span class="line">      try &#123;</span><br><span class="line">        something();</span><br><span class="line">      &#125; catch (ProblemException e) &#123;</span><br><span class="line">        recover();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>4.8.1节给出了enum类的一些例外。</p>
+<h4 id="4-1-3-空块：可以用简洁版本">4.1.3 空块：可以用简洁版本</h4>
+<p>一个空的块状结构里什么也不包含，大括号可以简洁地写成<code>&#123;&#125;</code>，不需要换行。例外：如果它是一个多块语句的一部分(if/else 或 try/catch/finally)
+，即使大括号内没内容，右大括号也要换行。</p>
+<p>示例：</p>
+<figure class="highlight plain"><figcaption><span>java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void doNothing() &#123;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="4-2-块缩进：2个空格">4.2 块缩进：2个空格</h3>
+<p>每当开始一个新的块，缩进增加2个空格，当块结束时，缩进返回先前的缩进级别。缩进级别适用于代码和注释。(见4.1.2节中的代码示例)</p>
+<h3 id="4-3-一行一个语句">4.3 一行一个语句</h3>
+<p>每个语句后要换行。</p>
+<h3 id="4-4-列限制：80或100">4.4 列限制：80或100</h3>
+<p>一个项目可以选择一行80个字符或100个字符的列限制，除了下述例外，任何一行如果超过这个字符数限制，必须自动换行。</p>
+<p>例外：</p>
+<ol>
+<li>不可能满足列限制的行(例如，Javadoc中的一个长URL，或是一个长的JSNI方法参考)。</li>
+<li><code>package</code>和<code>import</code>语句(见3.2节和3.3节)。</li>
+<li>注释中那些可能被剪切并粘贴到shell中的命令行。</li>
+</ol>
+<h3 id="4-5-自动换行">4.5 自动换行</h3>
+<p><strong>术语说明</strong>：一般情况下，一行长代码为了避免超出列限制(80或100个字符)而被分为多行，我们称之为自动换行(line-wrapping)。</p>
+<p>我们并没有全面，确定性的准则来决定在每一种情况下如何自动换行。很多时候，对于同一段代码会有好几种有效的自动换行方式。</p>
+<blockquote>
+<p>Tip: 提取方法或局部变量可以在不换行的情况下解决代码过长的问题(是合理缩短命名长度吧)</p>
+</blockquote>
+<h4 id="4-5-1-从哪里断开">4.5.1 从哪里断开</h4>
+<p>自动换行的基本准则是：更倾向于在更高的语法级别处断开。</p>
+<ol>
+<li>如果在<code>非赋值运算符</code>处断开，那么在该符号前断开(比如+，它将位于下一行)。注意：这一点与Google其它语言的编程风格不同(如C++和JavaScript)。
+这条规则也适用于以下“类运算符”符号：点分隔符(.)，类型界限中的&amp;（<code>&lt;T extends Foo &amp; Bar&gt;</code>)，catch块中的管道符号(<code>catch (FooException | BarException e</code>)</li>
+<li>如果在<code>赋值运算符</code>处断开，通常的做法是在该符号后断开(比如=，它与前面的内容留在同一行)。这条规则也适用于<code>foreach</code>语句中的分号。</li>
+<li>方法名或构造函数名与左括号留在同一行。</li>
+<li>逗号(,)与其前面的内容留在同一行。</li>
+</ol>
+<h4 id="4-5-2-自动换行时缩进至少-4个空格">4.5.2 自动换行时缩进至少+4个空格</h4>
+<p>自动换行时，第一行后的每一行至少比第一行多缩进4个空格(注意：制表符不用于缩进。见2.3.1节)。</p>
+<p>当存在连续自动换行时，缩进可能会多缩进不只4个空格(语法元素存在多级时)。一般而言，两个连续行使用相同的缩进当且仅当它们开始于同级语法元素。</p>
+<p>第4.6.3水平对齐一节中指出，不鼓励使用可变数目的空格来对齐前面行的符号。</p>
+<h3 id="4-6-空白">4.6 空白</h3>
+<h4 id="4-6-1-垂直空白">4.6.1 垂直空白</h4>
+<p>以下情况需要使用一个空行：</p>
+<ol>
+<li>类内连续的成员之间：字段，构造函数，方法，嵌套类，静态初始化块，实例初始化块。
+<ul>
+<li><strong>例外</strong>：两个连续字段之间的空行是可选的，用于字段的空行主要用来对字段进行逻辑分组。</li>
+</ul>
+</li>
+<li>在函数体内，语句的逻辑分组间使用空行。</li>
+<li>类内的第一个成员前或最后一个成员后的空行是可选的(既不鼓励也不反对这样做，视个人喜好而定)。</li>
+<li>要满足本文档中其他节的空行要求(比如3.3节：import语句)</li>
+</ol>
+<p>多个连续的空行是允许的，但没有必要这样做(我们也不鼓励这样做)。</p>
+<h4 id="4-6-2-水平空白">4.6.2 水平空白</h4>
+<p>除了语言需求和其它规则，并且除了文字，注释和Javadoc用到单个空格，单个ASCII空格也出现在以下几个地方：</p>
+<ol>
+<li>分隔任何保留字与紧随其后的左括号(<code>(</code>)(如<code>if, for catch</code>等)。</li>
+<li>分隔任何保留字与其前面的右大括号(<code>&#125;</code>)(如<code>else, catch</code>)。</li>
+<li>在任何左大括号前(<code>&#123;</code>)，两个例外：
+<ul>
+<li><code>@SomeAnnotation(&#123;a, b&#125;)</code>(不使用空格)。</li>
+<li><code>String[][] x = &#123;&#123;"foo"&#125;&#125;;</code>(大括号间没有空格，见下面的Note)。</li>
+</ul>
+</li>
+<li>在任何二元或三元运算符的两侧。这也适用于以下“类运算符”符号：
+<ul>
+<li>类型界限中的&amp;(<code>&lt;T extends Foo &amp; Bar&gt;</code>)。</li>
+<li>catch块中的管道符号(<code>catch (FooException | BarException e</code>)。</li>
+<li><code>foreach</code>语句中的分号。</li>
+</ul>
+</li>
+<li>在<code>, : ;</code>及右括号(<code>)</code>)后</li>
+<li>如果在一条语句后做注释，则双斜杠(//)两边都要空格。这里可以允许多个空格，但没有必要。</li>
+<li>类型和变量之间：List<String> list。</li>
+<li>数组初始化中，大括号内的空格是可选的，即<code>new int[] &#123;5, 6&#125;</code>和<code>new int[] &#123; 5, 6 &#125;</code>都是可以的。</li>
+</ol>
+<blockquote>
+<p>Note：这个规则并不要求或禁止一行的开关或结尾需要额外的空格，只对内部空格做要求。</p>
+</blockquote>
+<h4 id="4-6-3-水平对齐：不做要求">4.6.3 水平对齐：不做要求</h4>
+<p><strong>术语说明</strong>：水平对齐指的是通过增加可变数量的空格来使某一行的字符与上一行的相应字符对齐。</p>
+<p>这是允许的(而且在不少地方可以看到这样的代码)，但Google编程风格对此不做要求。即使对于已经使用水平对齐的代码，我们也不需要去保持这种风格。</p>
+<p>以下示例先展示未对齐的代码，然后是对齐的代码：</p>
+<figure class="highlight plain"><figcaption><span>java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">private int x; &#x2F;&#x2F; this is fine</span><br><span class="line">private Color color; &#x2F;&#x2F; this too</span><br><span class="line"></span><br><span class="line">private int   x;      &#x2F;&#x2F; permitted, but future edits</span><br><span class="line">private Color color;  &#x2F;&#x2F; may leave it unaligned</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Tip：对齐可增加代码可读性，但它为日后的维护带来问题。考虑未来某个时候，我们需要修改一堆对齐的代码中的一行。
+这可能导致原本很漂亮的对齐代码变得错位。很可能它会提示你调整周围代码的空白来使这一堆代码重新水平对齐(比如程序员想保持这种水平对齐的风格)，
+这就会让你做许多的无用功，增加了reviewer的工作并且可能导致更多的合并冲突。</p>
+</blockquote>
+<h3 id="4-7-用小括号来限定组：推荐">4.7 用小括号来限定组：推荐</h3>
+<p>除非作者和reviewer都认为去掉小括号也不会使代码被误解，或是去掉小括号能让代码更易于阅读，否则我们不应该去掉小括号。
+我们没有理由假设读者能记住整个Java运算符优先级表。</p>
+<h3 id="4-8-具体结构">4.8 具体结构</h3>
+<h4 id="4-8-1-枚举类">4.8.1 枚举类</h4>
+<p>枚举常量间用逗号隔开，换行可选。</p>
+<p>没有方法和文档的枚举类可写成数组初始化的格式：</p>
+<figure class="highlight plain"><figcaption><span>java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private enum Suit &#123; CLUBS, HEARTS, SPADES, DIAMONDS &#125;</span><br></pre></td></tr></table></figure>
+<p>由于枚举类也是一个类，因此所有适用于其它类的格式规则也适用于枚举类。</p>
+<h4 id="4-8-2-变量声明">4.8.2 变量声明</h4>
+<h5 id="4-8-2-1-每次只声明一个变量">4.8.2.1 每次只声明一个变量</h5>
+<p>不要使用组合声明，比如<code>int a, b;</code>。</p>
+<h5 id="4-8-2-2-需要时才声明，并尽快进行初始化">4.8.2.2 需要时才声明，并尽快进行初始化</h5>
+<p>不要在一个代码块的开头把局部变量一次性都声明了(这是c语言的做法)，而是在第一次需要使用它时才声明。
+局部变量在声明时最好就进行初始化，或者声明后尽快进行初始化。</p>
+<h4 id="4-8-3-数组">4.8.3 数组</h4>
+<h5 id="4-8-3-1-数组初始化：可写成块状结构">4.8.3.1 数组初始化：可写成块状结构</h5>
+<p>数组初始化可以写成块状结构，比如，下面的写法都是OK的：</p>
+<figure class="highlight plain"><figcaption><span>java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">new int[] &#123;</span><br><span class="line">  0, 1, 2, 3 </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">new int[] &#123;</span><br><span class="line">  0,</span><br><span class="line">  1,</span><br><span class="line">  2,</span><br><span class="line">  3</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">new int[] &#123;</span><br><span class="line">  0, 1,</span><br><span class="line">  2, 3</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">new int[]</span><br><span class="line">    &#123;0, 1, 2, 3&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="4-8-3-2-非C风格的数组声明">4.8.3.2 非C风格的数组声明</h5>
+<p>中括号是类型的一部分：<code>String[] args</code>， 而非<code>String args[]</code>。</p>
+<h4 id="4-8-4-switch语句">4.8.4 switch语句</h4>
+<p><strong>术语说明</strong>：switch块的大括号内是一个或多个语句组。每个语句组包含一个或多个switch标签(<code>case FOO:</code>或<code>default:</code>)，后面跟着一条或多条语句。</p>
+<h5 id="4-8-4-1-缩进">4.8.4.1 缩进</h5>
+<p>与其它块状结构一致，switch块中的内容缩进为2个空格。</p>
+<p>每个switch标签后新起一行，再缩进2个空格，写下一条或多条语句。</p>
+<h5 id="4-8-4-2-Fall-through：注释">4.8.4.2 Fall-through：注释</h5>
+<p>在一个switch块内，每个语句组要么通过<code>break, continue, return</code>或抛出异常来终止，要么通过一条注释来说明程序将继续执行到下一个语句组，
+任何能表达这个意思的注释都是OK的(典型的是用<code>// fall through</code>)。这个特殊的注释并不需要在最后一个语句组(一般是<code>default</code>)中出现。示例：</p>
+<figure class="highlight plain"><figcaption><span>java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">switch (input) &#123;</span><br><span class="line">  case 1:</span><br><span class="line">  case 2:</span><br><span class="line">    prepareOneOrTwo();</span><br><span class="line">    &#x2F;&#x2F; fall through</span><br><span class="line">  case 3:</span><br><span class="line">    handleOneTwoOrThree();</span><br><span class="line">    break;</span><br><span class="line">  default:</span><br><span class="line">    handleLargeNumber(input);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="4-8-4-3-default的情况要写出来">4.8.4.3 default的情况要写出来</h5>
+<p>每个switch语句都包含一个<code>default</code>语句组，即使它什么代码也不包含。</p>
+<h4 id="4-8-5-注解-Annotations">4.8.5 注解(Annotations)</h4>
+<p>注解紧跟在文档块后面，应用于类、方法和构造函数，一个注解独占一行。这些换行不属于自动换行(第4.5节，自动换行)，因此缩进级别不变。例如：</p>
+<figure class="highlight plain"><figcaption><span>java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">@Nullable</span><br><span class="line">public String getNameIfPresent() &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>例外</strong>：单个的注解可以和签名的第一行出现在同一行。例如：</p>
+<figure class="highlight plain"><figcaption><span>java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Override public int hashCode() &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+<p>应用于字段的注解紧随文档块出现，应用于字段的多个注解允许与字段出现在同一行。例如：</p>
+<figure class="highlight plain"><figcaption><span>java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Partial @Mock DataLoader loader;</span><br></pre></td></tr></table></figure>
+<p>参数和局部变量注解没有特定规则。</p>
+<h4 id="4-8-6-注释">4.8.6 注释</h4>
+<h5 id="4-8-6-1-块注释风格">4.8.6.1 块注释风格</h5>
+<p>块注释与其周围的代码在同一缩进级别。它们可以是<code>/* ... */</code>风格，也可以是<code>// ...</code>风格。对于多行的<code>/* ... */</code>注释，后续行必须从<code>*</code>开始，
+并且与前一行的<code>*</code>对齐。以下示例注释都是OK的。</p>
+<figure class="highlight plain"><figcaption><span>java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;*</span><br><span class="line"> * This is          &#x2F;&#x2F; And so           &#x2F;* Or you can</span><br><span class="line"> * okay.            &#x2F;&#x2F; is this.          * even do this. *&#x2F;</span><br><span class="line"> *&#x2F;</span><br></pre></td></tr></table></figure>
+<p>注释不要封闭在由星号或其它字符绘制的框架里。</p>
+<blockquote>
+<p>Tip：在写多行注释时，如果你希望在必要时能重新换行(即注释像段落风格一样)，那么使用<code>/* ... */</code>。</p>
+</blockquote>
+<h4 id="4-8-7-Modifiers">4.8.7 Modifiers</h4>
+<p>类和成员的modifiers如果存在，则按Java语言规范中推荐的顺序出现。</p>
+<figure class="highlight plain"><figcaption><span>java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public protected private abstract static final transient volatile synchronized native strictfp</span><br></pre></td></tr></table></figure>
+<h2 id="命名约定">命名约定</h2>
+<h3 id="5-1-对所有标识符都通用的规则">5.1 对所有标识符都通用的规则</h3>
+<p>标识符只能使用ASCII字母和数字，因此每个有效的标识符名称都能匹配正则表达式<code>\w+</code>。</p>
+<p>在Google其它编程语言风格中使用的特殊前缀或后缀，如<code>name_</code>, <code>mName</code>, <code>s_name</code>和<code>kName</code>，在Java编程风格中都不再使用。</p>
+<h3 id="5-2-标识符类型的规则">5.2 标识符类型的规则</h3>
+<h4 id="5-2-1-包名">5.2.1 包名</h4>
+<p>包名全部小写，连续的单词只是简单地连接起来，不使用下划线。</p>
+<h4 id="5-2-2-类名">5.2.2 类名</h4>
+<p>类名都以<code>UpperCamelCase</code>风格编写。</p>
+<p>类名通常是名词或名词短语，接口名称有时可能是形容词或形容词短语。现在还没有特定的规则或行之有效的约定来命名注解类型。</p>
+<p>测试类的命名以它要测试的类的名称开始，以<code>Test</code>结束。例如，<code>HashTest</code>或<code>HashIntegrationTest</code>。</p>
+<h4 id="5-2-3-方法名">5.2.3 方法名</h4>
+<p>方法名都以<code>lowerCamelCase</code>风格编写。</p>
+<p>方法名通常是动词或动词短语。</p>
+<p>下划线可能出现在JUnit测试方法名称中用以分隔名称的逻辑组件。一个典型的模式是：<code>test&lt;MethodUnderTest&gt;_&lt;state&gt;</code>，例如<code>testPop_emptyStack</code>。
+并不存在唯一正确的方式来命名测试方法。</p>
+<h4 id="5-2-4-常量名">5.2.4 常量名</h4>
+<p>常量名命名模式为<code>CONSTANT_CASE</code>，全部字母大写，用下划线分隔单词。那，到底什么算是一个常量？</p>
+<p>每个常量都是一个静态final字段，但不是所有静态final字段都是常量。在决定一个字段是否是一个常量时，
+考虑它是否真的感觉像是一个常量。例如，如果任何一个该实例的观测状态是可变的，则它几乎肯定不会是一个常量。
+只是永远不<code>打算</code>改变对象一般是不够的，它要真的一直不变才能将它示为常量。</p>
+<figure class="highlight plain"><figcaption><span>java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Constants</span><br><span class="line">static final int NUMBER &#x3D; 5;</span><br><span class="line">static final ImmutableList&lt;String&gt; NAMES &#x3D; ImmutableList.of(&quot;Ed&quot;, &quot;Ann&quot;);</span><br><span class="line">static final Joiner COMMA_JOINER &#x3D; Joiner.on(&#39;,&#39;);  &#x2F;&#x2F; because Joiner is immutable</span><br><span class="line">static final SomeMutableType[] EMPTY_ARRAY &#x3D; &#123;&#125;;</span><br><span class="line">enum SomeEnum &#123; ENUM_CONSTANT &#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Not constants</span><br><span class="line">static String nonFinal &#x3D; &quot;non-final&quot;;</span><br><span class="line">final String nonStatic &#x3D; &quot;non-static&quot;;</span><br><span class="line">static final Set&lt;String&gt; mutableCollection &#x3D; new HashSet&lt;String&gt;();</span><br><span class="line">static final ImmutableSet&lt;SomeMutableType&gt; mutableElements &#x3D; ImmutableSet.of(mutable);</span><br><span class="line">static final Logger logger &#x3D; Logger.getLogger(MyClass.getName());</span><br><span class="line">static final String[] nonEmptyArray &#x3D; &#123;&quot;these&quot;, &quot;can&quot;, &quot;change&quot;&#125;;</span><br></pre></td></tr></table></figure>
+<p>这些名字通常是名词或名词短语。</p>
+<h4 id="5-2-5-非常量字段名">5.2.5 非常量字段名</h4>
+<p>非常量字段名以<code>lowerCamelCase</code>风格编写。</p>
+<p>这些名字通常是名词或名词短语。</p>
+<h4 id="5-2-6-参数名">5.2.6 参数名</h4>
+<p>参数名以<code>lowerCamelCase</code>风格编写。</p>
+<p>参数应该避免用单个字符命名。</p>
+<h4 id="5-2-7-局部变量名">5.2.7 局部变量名</h4>
+<p>局部变量名以<code>lowerCamelCase</code>风格编写，比起其它类型的名称，局部变量名可以有更为宽松的缩写。</p>
+<p>虽然缩写更宽松，但还是要避免用单字符进行命名，除了临时变量和循环变量。</p>
+<p>即使局部变量是final和不可改变的，也不应该把它示为常量，自然也不能用常量的规则去命名它。</p>
+<h4 id="5-2-8-类型变量名">5.2.8 类型变量名</h4>
+<p>类型变量可用以下两种风格之一进行命名：</p>
+<ul>
+<li>单个的大写字母，后面可以跟一个数字(如：E, T, X, T2)。</li>
+<li>以类命名方式(5.2.2节)，后面加个大写的T(如：RequestT, FooBarT)。</li>
+</ul>
+<h3 id="5-3-驼峰式命名法-CamelCase">5.3 驼峰式命名法(CamelCase)</h3>
+<p><a target="_blank" rel="noopener" href="http://zh.wikipedia.org/wiki/%E9%A7%9D%E5%B3%B0%E5%BC%8F%E5%A4%A7%E5%B0%8F%E5%AF%AB">驼峰式命名法</a>分大驼峰式命名法(<code>UpperCamelCase</code>)和小驼峰式命名法(<code>lowerCamelCase</code>)。
+有时，我们有不只一种合理的方式将一个英语词组转换成驼峰形式，如缩略语或不寻常的结构(例如&quot;IPv6&quot;或&quot;iOS&quot;)。Google指定了以下的转换方案。</p>
+<p>名字从<code>散文形式</code>(prose form)开始:</p>
+<ol>
+<li>把短语转换为纯ASCII码，并且移除任何单引号。例如：“Müller’s algorithm&quot;将变成&quot;Muellers algorithm”。</li>
+<li>把这个结果切分成单词，在空格或其它标点符号(通常是连字符)处分割开。
+<ul>
+<li>推荐：如果某个单词已经有了常用的驼峰表示形式，按它的组成将它分割开(如&quot;AdWords&quot;将分割成&quot;ad words&quot;)。
+需要注意的是&quot;iOS&quot;并不是一个真正的驼峰表示形式，因此该推荐对它并不适用。</li>
+</ul>
+</li>
+<li>现在将所有字母都小写(包括缩写)，然后将单词的第一个字母大写：
+<ul>
+<li>每个单词的第一个字母都大写，来得到大驼峰式命名。</li>
+<li>除了第一个单词，每个单词的第一个字母都大写，来得到小驼峰式命名。</li>
+</ul>
+</li>
+<li>最后将所有的单词连接起来得到一个标识符。</li>
+</ol>
+<p>示例：</p>
+<pre><code>Prose form                Correct               Incorrect
+------------------------------------------------------------------
+&quot;XML HTTP request&quot;        XmlHttpRequest        XMLHTTPRequest
+&quot;new customer ID&quot;         newCustomerId         newCustomerID
+&quot;inner stopwatch&quot;         innerStopwatch        innerStopWatch
+&quot;supports IPv6 on iOS?&quot;   supportsIpv6OnIos     supportsIPv6OnIOS
+&quot;YouTube importer&quot;        YouTubeImporter
+                          YoutubeImporter*
+</code></pre>
+<p>加星号处表示可以，但不推荐。</p>
+<blockquote>
+<p>Note：在英语中，某些带有连字符的单词形式不唯一。例如：&quot;nonempty&quot;和&quot;non-empty&quot;都是正确的，因此方法名<code>checkNonempty</code>和<code>checkNonEmpty</code>也都是正确的。</p>
+</blockquote>
+<h2 id="编程实践">编程实践</h2>
+<h3 id="6-1-Override：能用则用">6.1 @Override：能用则用</h3>
+<p>只要是合法的，就把<code>@Override</code>注解给用上。</p>
+<h3 id="6-2-捕获的异常：不能忽视">6.2 捕获的异常：不能忽视</h3>
+<p>除了下面的例子，对捕获的异常不做响应是极少正确的。(典型的响应方式是打印日志，或者如果它被认为是不可能的，则把它当作一个<code>AssertionError</code>重新抛出。)</p>
+<p>如果它确实是不需要在catch块中做任何响应，需要做注释加以说明(如下面的例子)。</p>
+<figure class="highlight plain"><figcaption><span>java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">try &#123;</span><br><span class="line">  int i &#x3D; Integer.parseInt(response);</span><br><span class="line">  return handleNumericResponse(i);</span><br><span class="line">&#125; catch (NumberFormatException ok) &#123;</span><br><span class="line">  &#x2F;&#x2F; it&#39;s not numeric; that&#39;s fine, just continue</span><br><span class="line">&#125;</span><br><span class="line">return handleTextResponse(response);</span><br></pre></td></tr></table></figure>
+<p><strong>例外</strong>：在测试中，如果一个捕获的异常被命名为<code>expected</code>，则它可以被不加注释地忽略。下面是一种非常常见的情形，用以确保所测试的方法会抛出一个期望中的异常，
+因此在这里就没有必要加注释。</p>
+<figure class="highlight plain"><figcaption><span>java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">try &#123;</span><br><span class="line">  emptyStack.pop();</span><br><span class="line">  fail();</span><br><span class="line">&#125; catch (NoSuchElementException expected) &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="6-3-静态成员：使用类进行调用">6.3 静态成员：使用类进行调用</h3>
+<p>使用类名调用静态的类成员，而不是具体某个对象或表达式。</p>
+<figure class="highlight plain"><figcaption><span>java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Foo aFoo &#x3D; ...;</span><br><span class="line">Foo.aStaticMethod(); &#x2F;&#x2F; good</span><br><span class="line">aFoo.aStaticMethod(); &#x2F;&#x2F; bad</span><br><span class="line">somethingThatYieldsAFoo().aStaticMethod(); &#x2F;&#x2F; very bad</span><br></pre></td></tr></table></figure>
+<h3 id="6-4-Finalizers-禁用">6.4 Finalizers: 禁用</h3>
+<p>极少会去重载<code>Object.finalize</code>。</p>
+<blockquote>
+<p>Tip：不要使用finalize。如果你非要使用它，请先仔细阅读和理解<a target="_blank" rel="noopener" href="http://books.google.com/books?isbn=8131726592">Effective Java</a>
+第7条款：“Avoid Finalizers”，然后不要使用它。</p>
+</blockquote>
+<h2 id="Javadoc">Javadoc</h2>
+<h3 id="7-1-格式">7.1 格式</h3>
+<h4 id="7-1-1-一般形式">7.1.1 一般形式</h4>
+<p>Javadoc块的基本格式如下所示：</p>
+<figure class="highlight plain"><figcaption><span>java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * Multiple lines of Javadoc text are written here,</span><br><span class="line"> * wrapped normally...</span><br><span class="line"> *&#x2F;</span><br><span class="line">public int method(String p1) &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+<p>或者是以下单行形式：</p>
+<figure class="highlight plain"><figcaption><span>java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;** An especially short bit of Javadoc. *&#x2F;</span><br></pre></td></tr></table></figure>
+<p>基本格式总是OK的。当整个Javadoc块能容纳于一行时(且没有Javadoc标记@XXX)，可以使用单行形式。</p>
+<h4 id="7-1-2-段落">7.1.2 段落</h4>
+<p>空行(即，只包含最左侧星号的行)会出现在段落之间和Javadoc标记(@XXX)之前(如果有的话)。
+除了第一个段落，每个段落第一个单词前都有标签<code>&lt;p&gt;</code>，并且它和第一个单词间没有空格。</p>
+<h4 id="7-1-3-Javadoc标记">7.1.3 Javadoc标记</h4>
+<p>标准的Javadoc标记按以下顺序出现：<code>@param</code>, <code>@return</code>, <code>@throws</code>, <code>@deprecated</code>, 前面这4种标记如果出现，描述都不能为空。
+当描述无法在一行中容纳，连续行需要至少再缩进4个空格。</p>
+<h3 id="7-2-摘要片段">7.2 摘要片段</h3>
+<p>每个类或成员的Javadoc以一个简短的摘要片段开始。这个片段是非常重要的，在某些情况下，它是唯一出现的文本，比如在类和方法索引中。</p>
+<p>这只是一个小片段，可以是一个名词短语或动词短语，但不是一个完整的句子。它不会以<code>A &#123;@code Foo&#125; is a...</code>或<code>This method returns...</code>开头,
+它也不会是一个完整的祈使句，如<code>Save the record...</code>。然而，由于开头大写及被加了标点，它看起来就像是个完整的句子。</p>
+<blockquote>
+<p>Tip：一个常见的错误是把简单的Javadoc写成<code>/** @return the customer ID */</code>，这是不正确的。它应该写成<code>/** Returns the customer ID. */</code>。</p>
+</blockquote>
+<h3 id="7-3-哪里需要使用Javadoc">7.3 哪里需要使用Javadoc</h3>
+<p>至少在每个public类及它的每个public和protected成员处使用Javadoc，以下是一些例外：</p>
+<h4 id="7-3-1-例外：不言自明的方法">7.3.1 例外：不言自明的方法</h4>
+<p>对于简单明显的方法如<code>getFoo</code>，Javadoc是可选的(即，是可以不写的)。这种情况下除了写“Returns the foo”，确实也没有什么值得写了。</p>
+<p>单元测试类中的测试方法可能是不言自明的最常见例子了，我们通常可以从这些方法的描述性命名中知道它是干什么的，因此不需要额外的文档说明。</p>
+<blockquote>
+<p>Tip：如果有一些相关信息是需要读者了解的，那么以上的例外不应作为忽视这些信息的理由。例如，对于方法名<code>getCanonicalName</code>，
+就不应该忽视文档说明，因为读者很可能不知道词语<code>canonical name</code>指的是什么。</p>
+</blockquote>
+<h4 id="7-3-2-例外：重载">7.3.2 例外：重载</h4>
+<p>如果一个方法重载了超类中的方法，那么Javadoc并非必需的。</p>
+<h4 id="7-3-3-可选的Javadoc">7.3.3 可选的Javadoc</h4>
+<p>对于包外不可见的类和方法，如有需要，也是要使用Javadoc的。如果一个注释是用来定义一个类，方法，字段的整体目的或行为，
+那么这个注释应该写成Javadoc，这样更统一更友好。</p>
+<h2 id="后记">后记</h2>
+<p>本文档翻译自<a target="_blank" rel="noopener" href="http://google-styleguide.googlecode.com/svn/trunk/javaguide.html">Google Java Style</a>，译者 @<a target="_blank" rel="noopener" href="http://weibo.com/hawstein">Hawstein</a> 。</p>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next disabled"><a>Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '代码风格'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

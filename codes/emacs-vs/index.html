@@ -1,0 +1,653 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Emacs 编译 Visual Studio (C++) 工程项目 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="介绍了三种在 Emacs 编译 VS 项目的方案。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Emacs 编译 Visual Studio (C++) 工程项目"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: 'Emacs 编译 Visual Studio (C++) 工程项目'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> Emacs 编译 Visual Studio (C++) 工程项目</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>介绍了三种在 Emacs 编译 VS 项目的方案。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <p>在 Windows 开发比较大型的 C/C++ 项目，往往还是得借助微软的 Visual Studio
+(C++)，但对于重度 Emacs 使用者，离开了用起 VC 来总是各种蹩脚。关于如何在
+Emacs 中搭建 VC
+的开发环境，<a target="_blank" rel="noopener" href="http://emacser.com/author/fangzhzh/">fangzhzh</a> 的一篇博文
+《<a target="_blank" rel="noopener" href="http://emacser.com/dev-vc.htm">Emacs 中开发 VC 程序</a>》
+已经做了比较好的讨论。唯一不足的地方是对 Emacs 调用 VC
+编译缺乏更深入的探讨。编译 VC
+基本上还是要靠微软自家的工具，经过我的摸索，一共有三种不同的方案，针对不同的需要，用户可以自行选择。</p>
+<p>总体说来，这三种方案各自的特点比较如下：<span id="more"></span></p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>调用工具</th>
+<th>读取文件格式</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>envdev</td>
+<td><code>*.sln</code></td>
+<td>可以编译整个VS的解决方案。缺点在于编译后没有给出错误提示。</td>
+</tr>
+<tr>
+<td>2</td>
+<td>nmake</td>
+<td><code>*.mak</code></td>
+<td>使用微软自家的 make 工具来编译单个工程。缺点在于生成 *.mak 文件比较麻烦。</td>
+</tr>
+<tr>
+<td>3</td>
+<td>msdev</td>
+<td><code>*.dsw</code></td>
+<td>VC 6.0 提供的单个工程编译工具。在VS 2005之后就被 envdev 取代了。</td>
+</tr>
+</tbody>
+</table>
+<p>现在就让我们来深入探讨一下如何在 Emacs 中编译 Visual Studio (C++)</p>
+<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/emacs-vs/emacs_logo.png alt=' Emacs'></img><b>附图 1</b>  Emacs</span></span></span>的项目。
+<h2 id="1-方案一：envdev-sln">1 方案一：envdev + .sln</h2>
+<p>在Visual Studio中，可以把所有的项目看作一个解决方案，这个解决方案就用
+<code>*.sln</code> 文件来记录，并通过 devenv 工具来读取、分析和编译。它位于VS目录下的
+<code>Common7IDE</code> 目录中。</p>
+<p>为了方便直接在 Emacs 下调用 envdev ，可以先把 devenv 所在的目录加进系统
+环境变量。例如，我的 devenv 所在的目录为“D:/Program Files/Microsoft
+Visual Studio 9.0/Common7/IDE”，则可以将该路径添加到 PATH 环境变量中。</p>
+<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/emacs-vs/vs_logo.jpg alt=' Visual Studio'></img><b>附图 2</b>  Visual Studio</span></span></span>
+<p>完成后，打开cmd，执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ devenv -h</span><br></pre></td></tr></table></figure>
+<p>将可以看到如下的提示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">e://josephcodesCV_01CV_01&gt;devenv -h</span><br><span class="line">devenv -h</span><br><span class="line"></span><br><span class="line">Microsoft (R) Visual Studio Version 9.0.30729.1.</span><br><span class="line">Copyright (C) Microsoft Corp. All rights reserved.</span><br><span class="line"></span><br><span class="line">Invalid Command Line. Unknown Switch : h.</span><br><span class="line"></span><br><span class="line">Use:</span><br><span class="line">devenv  [solutionfile | projectfile | anyfile.ext]  [switches]</span><br><span class="line"></span><br><span class="line">The first argument <span class="keyword">for</span> devenv is usually a solution file or project</span><br><span class="line">file.  You can also use any other file as the first argument <span class="keyword">if</span> you</span><br><span class="line">want to have the file open automatically <span class="keyword">in</span> an editor. When you enter</span><br><span class="line">a project file, the IDE looks <span class="keyword">for</span> an .sln file with the same base name</span><br><span class="line">as the project file <span class="keyword">in</span> the parent directory <span class="keyword">for</span> the project file. If</span><br><span class="line">no such .sln file exists, <span class="keyword">then</span> the IDE looks <span class="keyword">for</span> a single .sln file</span><br><span class="line">that references the project. If no such single .sln file exists, <span class="keyword">then</span></span><br><span class="line">the IDE creates an unsaved solution with a default .sln file name that</span><br><span class="line">has the same base name as the project file.</span><br><span class="line"></span><br><span class="line">Command line builds:</span><br><span class="line">devenv solutionfile.sln /build [ solutionconfig ] [ /project</span><br><span class="line">    projectnameorfile [ /projectconfig name ] ]</span><br><span class="line">Available <span class="built_in">command</span> line switches:</span><br><span class="line"></span><br><span class="line">/Build	Builds the solution or project with the specified solution</span><br><span class="line">            configuration. For example <span class="string">&quot;Debug&quot;</span>. If multiple</span><br><span class="line">            platforms are possible, the configuration name must be</span><br><span class="line">            enclosed <span class="keyword">in</span> quotes and contain platform name. For</span><br><span class="line">            example: <span class="string">&quot;Debug|Win32&quot;</span>.</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">To attach the debugger from the <span class="built_in">command</span> line, use:</span><br><span class="line">        VsJITDebugger.exe -p &lt;pid&gt;</span><br></pre></td></tr></table></figure>
+<p>按照提示，在VS中创建一个sln工程文件后，使用devenv编译的命令为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ devenv solutionfile.sln /build [ solutionconfig ] [ /project projectnameorfile [ /projectconfig name ] ]</span><br></pre></td></tr></table></figure>
+<p>其中的 <code>/build</code> 等选项可以替换成 <code>/run</code> 等其他选项。</p>
+<p>之后可以配置 Emacs，让我们在按下 <code>F7</code> 键后选择各种编译选项。在 .emacs 文件中加入以下内容：</p>
+<script src="https://gist.github.com/wzpan/9408473.js"></script>
+<p>然后将 <code>dev-studio-build</code> 绑定到 <code>F7</code> 键上，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(defun my-c-mode-common-hook()</span><br><span class="line">    (define-key c-mode-base-map [(f7)] &#39;dev-studio-build)</span><br><span class="line"></span><br><span class="line">(add-hook &#39;c-mode-common-hook &#39;my-c-mode-common-hook)</span><br></pre></td></tr></table></figure>
+<h2 id="2-方案二：nmake-mak">2 方案二：nmake + .mak</h2>
+<p>直接编译*.sln文件的缺点在于编译后只会给出结果，而没有错误提示，这样不利于调试。除了直接编译*.sln文件之外，另外的选择是使用微软自家的
+make 工具 —— nmake 来编译 Makefile <span class='margin-note-marker'><sup>1</sup></span> <span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><span class='margin-note-marker'>1</span>这里指的 Makefile 是指适用于微软的 nmake 的 Makefile
+文件。微软的 nmake 使用了自己的一套标准。如果需要得到适用于GNU Linux 的 Makefile，可以试试
+<a target="_blank" rel="noopener" href="http://www.codeproject.com/Articles/28908/Tool-for-Converting-VC-2005-Project-to-Linux-Makef">sln2mak</a>
+工具。
+</span></span></span>  或者 .mak 文件。但 VS
+使用 *.sln 和 *.vcproj 来管理工程项目，并不提供 .mak
+文件。为了得到这个文件，可以使用一个 python 脚本
+<a target="_blank" rel="noopener" href="http://inet-lab.googlecode.com/svn/trunk/utils/Misc/vcproj2mak.py">vcproj2mak.py</a>
+。使用命令为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python vcproj2mak.py 工程文件.vcproj -O makefile文件.mak</span><br></pre></td></tr></table></figure>
+<p>执行这个脚本需要满足两个条件：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://www.python.org/">Python</a> 2.x 或
+3.x，安装的时候注意选择注册环境变量，省得自己添加；</li>
+<li>生成的 .mak 文件需要调用 mkdir 指令来创建文件夹，而这个指令是 Unix
+下的工具。所以建议装一个
+<a target="_blank" rel="noopener" href="https://sourceforge.net/projects/gnuwin32/">GnuWin</a>
+套件，这个套件提供了大量有用的 Unix 工具。</li>
+</ol>
+<p>在脚本执行过程中可能会报“unknown encoding”错误，这个原因是 vcproj 文件在
+Windows 下的默认编码是 gb2312 的，而 python 似乎不支持 gb2312
+。解决的方法是使用 Emacs 打开那个 vcproj 文件，然后 <code>C-x Ret r</code> ，选择
+<code>UTF-8</code> 将文件编码改为 UTF-8 格式，并将第一行</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;gb2312&quot;?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>中的 “gb2312” 改为 “utf-8” 即可。完成后可以调用 nmake
+来执行编译，调用格式为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nmake -f mak文件名 编译选项</span><br></pre></td></tr></table></figure>
+<p>其中 <code>编译选项</code> 是你的编译方案，一般可以选择 <code>Debug</code> 或者 <code>Release</code> 。</p>
+<p>另外一个问题是当调用过一次 nmake 后，nmake 就会在当前目录下创建 Debug
+或者 Release 目录，此时再调用一次 nmake 会提示文件夹创建错误。例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir Debug</span><br><span class="line"><span class="string">&quot;d:/Program Files/Git/bin/mkdir.EXE&quot;</span>: cannot create directory `Debug<span class="string">&#x27;: File exists</span></span><br></pre></td></tr></table></figure>
+<p>解决这个问题的方法是修改生成的 .mak 文件，在其中的 “mkdir Debug” 和
+“mkdir Release” 两行语句的前面加一个减号 “-” ，表示无论 mkdir
+过程中出现什么错误，都不要报错继续执行。更一劳永逸的做法是修改那个 python
+脚本，将第207行</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkwrite ( fh, <span class="string">&quot;tmkdir %s&quot;</span> % cfname )</span><br></pre></td></tr></table></figure>
+<p>改为</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkwrite ( fh, <span class="string">&quot;t-mkdir %s&quot;</span> % cfname )</span><br></pre></td></tr></table></figure>
+<p>即可。</p>
+<p>到这里还没结束，为了让 Emacs 更方便的调用 nmake，可以将 nmake
+作为主要的编译工具。在 .emacs 文件中加入这一行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">;; Set up for Visual C++ compiling</span><br><span class="line">(setq compile-command &quot;nmake -f &quot;)</span><br></pre></td></tr></table></figure>
+<p>还有一个更好的做法是再写一个总的 Makefile ，以便于选择编译选项：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">PROJECT=MyProject</span><br><span class="line"><span class="section">all: debug</span></span><br><span class="line"><span class="section">debug: FORCE</span></span><br><span class="line">nmake /f <span class="variable">$(PROJECT)</span>.mak CFG=<span class="string">&quot;<span class="variable">$(PROJECT)</span> - Win32 Debug&quot;</span></span><br><span class="line"><span class="section">release: FORCE</span></span><br><span class="line">nmake /f <span class="variable">$(PROJECT)</span>.mak CFG=<span class="string">&quot;<span class="variable">$(PROJECT)</span> - Win32 Release&quot;</span></span><br><span class="line"><span class="section">FORCE:</span></span><br></pre></td></tr></table></figure>
+<h2 id="3-方案三：msdev-dsw">3 方案三：msdev + .dsw</h2>
+<p>VC 6.0 使用一个更古老的工具 msdev.exe
+来编译VC的工程文件。直接调用msdev.exe，即启动Visual
+studio的UI界面，同时msdev.exe也接受命令行调用。我们看其帮助。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">msdev &#x2F;?</span><br><span class="line">msdev &#x2F;?</span><br><span class="line">Usage:</span><br><span class="line">MSDEV [myprj.dsp|mywksp.dsw]    - load project&#x2F;workspace</span><br><span class="line">[]        - load source file</span><br><span class="line">&#x2F;?            - display usage information</span><br><span class="line">&#x2F;EX         - execute a vs.ript macro</span><br><span class="line">&#x2F;OUT         - redirect command line output to a file</span><br><span class="line">&#x2F;USEENV            - ignore tools.options.directories settings</span><br><span class="line">&#x2F;MAKE [] [...]    - build specified target(s)</span><br><span class="line">[</span><br><span class="line">-</span><br><span class="line">]</span><br><span class="line">[[</span><br><span class="line">|ALL] - [DEBUG|RELEASE|ALL]]</span><br><span class="line">&#x2F;CLEAN        - delete intermediate files but don&#39;t build</span><br><span class="line">&#x2F;REBUILD        - clean and build</span><br><span class="line">&#x2F;NORECURSE    - don&#39;t build dependent projects</span><br></pre></td></tr></table></figure>
+<p>示例语句：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:Program Files/Microsoft Visual Studio/VC98binmsdev.exe test2.dsw /Make  /NORECURSE</span><br></pre></td></tr></table></figure>
+<p>同样，使用clean，rebuild可以清除、重编译该工程。将test2
+改为test21，test23，即改变编译对象。
+总这样写也很麻烦，而且为了在Emacs中调用 ，我们将其写成一个批处理。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">d:</span><br><span class="line"><span class="built_in">cd</span> d:Mydocumentsworkbench</span><br><span class="line"><span class="built_in">set</span> project=%1</span><br><span class="line"><span class="built_in">set</span> target=%2</span><br><span class="line"><span class="keyword">if</span> project == <span class="built_in">set</span> project=test2</span><br><span class="line">    <span class="keyword">if</span> target == <span class="built_in">set</span> target=/NORECURSE</span><br><span class="line">        msdev test2.dsw /Make %target%</span><br></pre></td></tr></table></figure>
+<p>保存为makTest2.bat。调用方式为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ makeTest2 [工程 [目标]]</span><br></pre></td></tr></table></figure>
+<p>默认为编译test2 的 /NORECURSE。如果要编译test23的rebuild，调用方式为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ makeTest2 test23 /REBUILD</span><br></pre></td></tr></table></figure>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/life/evogeo-video/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/tools/a-fantastic-usage/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: 'Emacs 编译 Visual Studio (C++) 工程项目'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/emacs-vs.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2012-12-31 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/codes/">codes<span>38</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/emacs/">emacs<span>6</span></a></li> <li><a href="/tags/VS/">VS<span>1</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#1-%E6%96%B9%E6%A1%88%E4%B8%80%EF%BC%9Aenvdev-sln"><span class="toc-article-text">1 方案一：envdev + .sln</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#2-%E6%96%B9%E6%A1%88%E4%BA%8C%EF%BC%9Anmake-mak"><span class="toc-article-text">2 方案二：nmake + .mak</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#3-%E6%96%B9%E6%A1%88%E4%B8%89%EF%BC%9Amsdev-dsw"><span class="toc-article-text">3 方案三：msdev + .dsw</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

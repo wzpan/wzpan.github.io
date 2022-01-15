@@ -1,0 +1,674 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Learning UTF-8 From A Bug | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="从一个 bug ，引出 UTF-8 编码的讨论。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Learning UTF-8 From A Bug"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: 'Learning UTF-8 From A Bug'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> Learning UTF-8 From A Bug</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>从一个 bug ，引出 UTF-8 编码的讨论。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <p>去年 8 月份，我尝试自己写代码解析 <a target="_blank" rel="noopener" href="https://www.kernel.org/doc/man-pages/">Linux Man-Pages</a> 的页面。</p>
+<p>Man-Pages 使用的是 <a target="_blank" rel="noopener" href="http://web.cecs.pdx.edu/~trent/gnu/groff/groff_toc.html">groff</a> 文本标记语言，其最大的特色就是格式标记宏置于行首，例如 man(7) 第 35~48 的内容为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">.SH NAME</span><br><span class="line">man \- macros to format man pages</span><br><span class="line">.SH SYNOPSIS</span><br><span class="line">.B groff \-Tascii \-man</span><br><span class="line">.I file</span><br><span class="line">\&amp;...</span><br><span class="line">.LP</span><br><span class="line">.B groff \-Tps \-man</span><br><span class="line">.I file</span><br><span class="line">\&amp;...</span><br><span class="line">.LP</span><br><span class="line">.B man</span><br></pre></td></tr></table></figure>
+<span id="more"></span>
+<p>每一行开头出现的字段就是标记宏，依次的含义为：</p>
+<table>
+<thead>
+<tr>
+<th>宏</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.SH</code></td>
+<td>标题</td>
+</tr>
+<tr>
+<td><code>.B</code></td>
+<td>加粗</td>
+</tr>
+<tr>
+<td><code>.I</code></td>
+<td>斜体</td>
+</tr>
+<tr>
+<td><code>.LP</code></td>
+<td>开始段落</td>
+</tr>
+</tbody>
+</table>
+<p>经过解析后，这段文本在 man 程序里看起来会是这个样子。当然，<code>.B</code>、<code>.I</code> 的效果在代码框里无法显示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">NAME</span><br><span class="line">    man [section] title</span><br><span class="line"></span><br><span class="line">SYNOPSIS</span><br><span class="line">    groff -Tascii -man file ...</span><br><span class="line"></span><br><span class="line">    groff -Tps -man file ...</span><br></pre></td></tr></table></figure>
+<p>既然是 *nix 的产物，我在写代码解析这些文件的时候，第一反应就是使用 UTF-8 编码。<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/learning-utf-8-from-a-bug/unicode.png alt=' Unicode Logo'></img><b>附图 1</b>  Unicode Logo</span></span></span></p>
+<p>什么是 UTF-8 编码？这得从计算机如何表达文本说起。当人们说起“文本”，他们通常指显示在屏幕上的字符或者其他的记号；但是计算机不能直接处理这些字符和标记；它们只认识位（bit）和字节（byte）。</p>
+<p>实际上，从屏幕上的每一块文本都是以某种字符编码（character encoding）的方式保存的。粗略地说就是，字符编码提供一种映射，使屏幕上显示的内容和内存、磁盘内存储的内容对应起来。有许多种不同的字符编码，有一些是为特定的语言，比如俄语、中文或者英语，设计、优化的，另外一些则可以用于多种语言的编码。</p>
+<p>早在 1963 年，ANSI 发布了基于电报码的 ASCII 字符编码，它用 7 位 (bit) 表示了 27 = 128 个字符，只能勉强覆盖英文字符。后来随着电脑技术的传播，人们呼吁把字符编码扩充到 8 位也就是一个字节 (byte) ，可以涵盖 28 = 256 个字符。于是 ISO 在 1980 年代中期推出了 ISO 8859，256 个字符显然也不能满足需要，所以 8859 被分为十几个部分：从 8859-1 (西欧语言) 、8859-2 (中欧语言) ，直到 8859-16 (东南欧语言) ，覆盖了大部分使用拉丁字母的语言文字。</p>
+<p>但人类的语言文字种类实在复杂，即使是 ISO 8859-16 也无法表达很多地区的文字。在这前后还出现了很多编码，例如 IBM 的 OEM 代码页、微软的 ANSI 代码页，还有中国大陆的 GB2312 和 GBK ，等等。人们也逐渐认识到编码不统一带来的种种不便。于是 ISO 和 统一码联盟合作推出了 Unicode 编码，Unicode 编码系统为表达任意语言的任意字符而设计。Unicode 编码一共提出了三种版本：</p>
+<ul>
+<li>最早的版本是 <strong>UTF-32</strong>，它使用 4 字节的数字来表达每个字母、符号，或者表意文字(ideograph)。虽然这种编码方式可以在常数时间内定位字符串里的第 N 个字符，但每个字符都要用 4 个字节来表示，实在有些浪费；</li>
+<li>之后提出了 <strong>UTF-16</strong> ，将最常用的 65535 个字符用 2 个字节表示，其他 Unicode 字符则使用另外一种映射方式。UTF-16 编码最明显的优点是它在空间效率上比 UTF-32 高两倍。不过，最常用的字符用 2 个字节来表示，还是有些浪费，特别是要处理许多 ASCII 字符时（如果仔细想想，一个中文网页也会包含许多的 ASCII 字符）。</li>
+<li>于是人们又提出了 <strong>UTF-8</strong> 。UTF-8 是一种为 Unicode 设计的变长（variable-length）编码系统。即，不同的字符可使用不同数量的字节编码。对于 ASCII 字符，utf-8 仅使用 1 个字节来编码（事实上，UTF-8 中前 128 个字符（0–127）使用的是跟 ASCII 一样的编码方式）。像 ñ 和 ö 这样的扩展拉丁字符则使用 2 个字节来编码。中文字符比如“中”则占用了 3 个字节。很少使用的“星芒层字符”则占用 4 个字节。</li>
+</ul>
+<p>IETF 要求所有网络协议都支持 UTF-8，互联网电子邮件联盟 (Internet Mail Consortium，IMC) 也建议所有电子邮件软件都支持 UTF-8，所以它已成为互联网上的事实标准。*nix 系统中的默认文件编码也是 UTF-8。这也是为什么我第一反应是使用 UTF-8 编码来解析所有 Man-Pages 文件。</p>
+<p>然而，出乎我意料的是，我的代码在对这些文件的解析过程中会间歇性遇到 <code>UnicodeDecodeError</code> 错误。很快我就确定这些导致出错的文件一定是使用了其他的编码方式。导致这个情况的原因也可想而知 —— 这些文档的编写者遍布世界各地，可能使用了不同的本地化编码方案，从而编码方式也参差不齐。然而，这种情况并不是一件好事。文档编码的混乱会给文档解析带来不便。</p>
+<p>发现了这个问题后，我访问了 Linux Man-Pages 项目的 <a target="_blank" rel="noopener" href="http://bugzilla.kernel.org/enter_bug.cgi?product=Documentation">bugzilla</a> 页面。通过搜索，并没有人提出过类似的问题。于是我决定给该项目提交 bug 。</p>
+<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/learning-utf-8-from-a-bug/linux-man-pages.png alt=' Linux Man Pages'></img><b>附图 2</b>  Linux Man Pages</span></span></span>
+<p>我写了个 Python 脚本，用于找出所有不是使用 UTF-8 编码的文档：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/bin/python3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> os.path</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">mdata</span>(<span class="params">folder</span>):</span></span><br><span class="line">    file_list = os.listdir(folder)</span><br><span class="line">    <span class="keyword">for</span> a_file <span class="keyword">in</span> file_list:</span><br><span class="line">        a_file = os.path.join(folder, a_file)</span><br><span class="line">        <span class="keyword">if</span> os.path.isdir(a_file):</span><br><span class="line">            mdata(a_file)  <span class="comment"># 递归遍历所有目录</span></span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(a_file, encoding=<span class="string">&quot;utf-8&quot;</span>) <span class="keyword">as</span> fread:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">                   line = fread.readline()</span><br><span class="line">                   <span class="keyword">if</span> <span class="keyword">not</span> line:</span><br><span class="line">                        <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">except</span> UnicodeDecodeError:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;&#123;0&#125;\n&quot;</span>.<span class="built_in">format</span>(a_file))</span><br><span class="line"></span><br><span class="line">mdata(<span class="string">&#x27;man-pages&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>我的方法是直接使用 UTF-8 编码来递归遍历所有文档，如果遇到无法使用 Unicode 解析的字符，则将该文件打印出来。</p>
+<p>得到这类文件的列表后，我就将这个列表连同说明 <a target="_blank" rel="noopener" href="https://bugzilla.kernel.org/show_bug.cgi?id=60807">提交了上去</a>：</p>
+<blockquote>
+
+<p>I found that not all the pages are encoded using utf-8. It may cause problems once we try to parse them.</p>
+<p>These files are:</p>
+<ul>
+<li>man3/fflush.3</li>
+<li>man3/toupper.3</li>
+<li>man3/updwtmp.3</li>
+<li>man3/encrypt.3</li>
+<li>man3/lockf.3</li>
+<li>man3/rand.3</li>
+<li>man3/fclose.3</li>
+<li>man3/strtok.3</li>
+<li>man2/close.2</li>
+<li>man2/getdomainname.2</li>
+<li>man2/madvise.2</li>
+<li>man2/umask.2</li>
+<li>man2/sysinfo.2</li>
+<li>man2/getrlimit.2</li>
+<li>man5/utmp.5</li>
+<li>man7/cp1251.7</li>
+<li>man7/iso_8859-2.7</li>
+<li>man7/armscii-8.7</li>
+<li>man7/suffixes.7</li>
+<li>man7/iso_8859-4.7</li>
+<li>man7/iso_8859-8.7</li>
+<li>man7/iso_8859-16.7</li>
+<li>man7/hier.7</li>
+<li>man7/iso_8859-13.7</li>
+<li>man7/koi8-u.7</li>
+<li>man7/environ.7</li>
+<li>man7/iso_8859-15.7</li>
+<li>man7/iso_8859-9.7</li>
+<li>man7/iso_8859-11.7</li>
+<li>man7/iso_8859-14.7</li>
+<li>man7/iso_8859-10.7</li>
+<li>man7/iso_8859-6.7</li>
+<li>man7/iso_8859-1.7</li>
+<li>man7/iso_8859-7.7</li>
+<li>man7/koi8-r.7</li>
+<li>man7/iso_8859-5.7</li>
+<li>man7/iso_8859-3.7</li>
+</ul>
+
+
+<footer><strong>Weizhou Pan</strong></footer></blockquote>
+
+<p>大概过了三个月，Man-Pages 的一位名为 Peter Schiffer 的 Contributor 写了两个脚本作为回复：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://bugzilla.kernel.org/attachment.cgi?id=117641">print_encoding.sh</a> - 一个可以打印出所有 Man-Pages 文件的编码的 bash 脚本；</li>
+<li><a target="_blank" rel="noopener" href="https://bugzilla.kernel.org/attachment.cgi?id=117651">convert_to_utf_8.sh</a> - 一个可以将所有非 ASCII 编码的 Man Pages 文件转成 UTF-8 的 bash 脚本。</li>
+</ol>
+<p>Peter 的第一个脚本只有寥寥几行：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> [[ <span class="variable">$#</span> -lt 1 ]]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;Usage: <span class="variable">$&#123;0&#125;</span> man?/*&quot;</span> 1&gt;&amp;2</span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span> <span class="string">&quot;\n   %-23s%-19s%s\n\n&quot;</span> <span class="string">&quot;Man Page&quot;</span> <span class="string">&quot;Encoding by file&quot;</span> \</span><br><span class="line">    <span class="string">&quot;Encoding by first line&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> f <span class="keyword">in</span> <span class="string">&quot;<span class="variable">$@</span>&quot;</span>; <span class="keyword">do</span></span><br><span class="line">    <span class="keyword">if</span> [[ ! -f <span class="string">&quot;<span class="variable">$f</span>&quot;</span> ]]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">continue</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">    enc=$(file -bi <span class="string">&quot;<span class="variable">$f</span>&quot;</span> | cut -d = -f 2)</span><br><span class="line">    <span class="keyword">if</span> [[ <span class="variable">$enc</span> != <span class="string">&quot;us-ascii&quot;</span> ]]; <span class="keyword">then</span></span><br><span class="line">        lenc=$(head -n 1 <span class="string">&quot;<span class="variable">$f</span>&quot;</span> | sed -n <span class="string">&quot;s/.*coding: \([^ ]*\).*/\1/p&quot;</span>)</span><br><span class="line">        <span class="built_in">printf</span> <span class="string">&quot; * %-23s%-19s%s\n&quot;</span> <span class="string">&quot;<span class="variable">$f</span>&quot;</span> <span class="string">&quot;<span class="variable">$enc</span>&quot;</span> <span class="string">&quot;<span class="variable">$lenc</span>&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">exit</span> 0</span><br></pre></td></tr></table></figure>
+<p>其中，获取文件编码用到了 <code>file</code> 命令：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">enc=$(file -bi &lt;文件名&gt; | cut -d = -f 2)  <span class="comment"># 获取文件的编码类型，并赋给 enc 变量</span></span><br></pre></td></tr></table></figure>
+<p>如果 <code>enc</code> 变量不为 ASCII 的话，那么将文件的编码格式和首行的编码信息打印出来（如果有的话）：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 获取文件首行的编码信息（如果有的话）</span></span><br><span class="line">lenc=$(head -n 1 <span class="string">&quot;<span class="variable">$f</span>&quot;</span> | sed -n <span class="string">&quot;s/.*coding: \([^ ]*\).*/\1/p&quot;</span>)</span><br><span class="line"><span class="comment"># 打印这两个信息</span></span><br><span class="line"><span class="built_in">printf</span> <span class="string">&quot; * %-23s%-19s%s\n&quot;</span> <span class="string">&quot;<span class="variable">$f</span>&quot;</span> <span class="string">&quot;<span class="variable">$enc</span>&quot;</span> <span class="string">&quot;<span class="variable">$lenc</span>&quot;</span></span><br></pre></td></tr></table></figure>
+<p>Peter 的脚本可以得到更加丰富的信息，由于检测的是非 ASCII 文件，得到的文件数量也比我的结果多一些：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">$ ./print_encoding.sh man?/*</span><br><span class="line"></span><br><span class="line">   Man Page               Encoding by file   Encoding by first line</span><br><span class="line"></span><br><span class="line"> * man2/close.2           iso-8859-1         </span><br><span class="line"> * man2/getdomainname.2   iso-8859-1         </span><br><span class="line"> * man2/getrlimit.2       iso-8859-1         </span><br><span class="line"> * man2/madvise.2         iso-8859-1         </span><br><span class="line"> * man2/mount.2           utf-8              </span><br><span class="line"> * man2/sysinfo.2         iso-8859-1         </span><br><span class="line"> * man2/umask.2           iso-8859-1         </span><br><span class="line"> * man3/encrypt.3         iso-8859-1         </span><br><span class="line"> * man3/fclose.3          iso-8859-1         </span><br><span class="line"> * man3/fflush.3          iso-8859-1         </span><br><span class="line"> * man3/lockf.3           iso-8859-1         </span><br><span class="line"> * man3/rand.3            iso-8859-1         </span><br><span class="line"> * man3/strtok.3          iso-8859-1         </span><br><span class="line"> * man3/toupper.3         iso-8859-1         </span><br><span class="line"> * man3/updwtmp.3         iso-8859-1         </span><br><span class="line"> * man4/st.4              utf-8              </span><br><span class="line"> * man5/utmp.5            iso-8859-1         </span><br><span class="line"> * man7/armscii-8.7       iso-8859-1         ARMSCII-8</span><br><span class="line"> * man7/cp1251.7          unknown-8bit       CP1251</span><br><span class="line"> * man7/environ.7         iso-8859-1         </span><br><span class="line"> * man7/hier.7            iso-8859-1         </span><br><span class="line"> * man7/iso_8859-10.7     iso-8859-1         ISO-8859-10</span><br><span class="line"> * man7/iso_8859-11.7     iso-8859-1         ISO-8859-11</span><br><span class="line"> * man7/iso_8859-13.7     iso-8859-1         ISO-8859-7</span><br><span class="line"> * man7/iso_8859-14.7     iso-8859-1         ISO-8859-14</span><br><span class="line"> * man7/iso_8859-15.7     iso-8859-1         ISO-8859-15</span><br><span class="line"> * man7/iso_8859-16.7     iso-8859-1         ISO-8859-16</span><br><span class="line"> * man7/iso_8859-1.7      iso-8859-1         </span><br><span class="line"> * man7/iso_8859-2.7      iso-8859-1         ISO-8859-2</span><br><span class="line"> * man7/iso_8859-3.7      iso-8859-1         ISO-8859-3</span><br><span class="line"> * man7/iso_8859-4.7      iso-8859-1         ISO-8859-4</span><br><span class="line"> * man7/iso_8859-5.7      iso-8859-1         ISO-8859-5</span><br><span class="line"> * man7/iso_8859-6.7      iso-8859-1         ISO-8859-6</span><br><span class="line"> * man7/iso_8859-7.7      iso-8859-1         ISO-8859-7</span><br><span class="line"> * man7/iso_8859-8.7      iso-8859-1         ISO-8859-8</span><br><span class="line"> * man7/iso_8859-9.7      iso-8859-1         ISO-8859-9</span><br><span class="line"> * man7/koi8-r.7          unknown-8bit       KOI8-R</span><br><span class="line"> * man7/koi8-u.7          unknown-8bit       </span><br><span class="line"> * man7/suffixes.7        iso-8859-1         </span><br></pre></td></tr></table></figure>
+<p>Peter 的第二个脚本也很好理解，找出所有非 ASCII 编码文件，使用 <code>iconv</code> 命令转换到 UTF-8 编码：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> [[ <span class="variable">$#</span> -lt 2 ]]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;Usage: <span class="variable">$&#123;0&#125;</span> &lt;output_dir&gt; man?/*&quot;</span> 1&gt;&amp;2</span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">out_dir=<span class="string">&quot;<span class="variable">$1</span>&quot;</span></span><br><span class="line"><span class="built_in">shift</span></span><br><span class="line"></span><br><span class="line">enc_line=<span class="string">&quot;&#x27;\\\&quot; t -*- coding: UTF-8 -*-&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> f <span class="keyword">in</span> <span class="string">&quot;<span class="variable">$@</span>&quot;</span>; <span class="keyword">do</span></span><br><span class="line">    enc=$(file -bi <span class="string">&quot;<span class="variable">$f</span>&quot;</span> | cut -d = -f 2)</span><br><span class="line">    <span class="keyword">if</span> [[ <span class="variable">$enc</span> != <span class="string">&quot;us-ascii&quot;</span> ]]; <span class="keyword">then</span></span><br><span class="line">        dirn=$(dirname <span class="string">&quot;<span class="variable">$f</span>&quot;</span>)</span><br><span class="line">        basen=$(basename <span class="string">&quot;<span class="variable">$f</span>&quot;</span>)</span><br><span class="line">        new_dir=<span class="string">&quot;<span class="variable">$&#123;out_dir&#125;</span>/<span class="variable">$&#123;dirn&#125;</span>&quot;</span></span><br><span class="line">        <span class="keyword">if</span> [[ ! -e <span class="string">&quot;<span class="variable">$new_dir</span>&quot;</span> ]]; <span class="keyword">then</span></span><br><span class="line">            mkdir -p <span class="string">&quot;<span class="variable">$new_dir</span>&quot;</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line">        <span class="keyword">case</span> <span class="string">&quot;<span class="variable">$basen</span>&quot;</span> <span class="keyword">in</span></span><br><span class="line">            iso_8859-11.7 | iso_8859-13.7)</span><br><span class="line">                from_enc=<span class="variable">$enc</span></span><br><span class="line">                ;;</span><br><span class="line">            armscii-8.7 | cp1251.7 | iso_8859-*.7 | koi8-?.7)</span><br><span class="line">                from_enc=<span class="string">&quot;<span class="variable">$&#123;basen%.7&#125;</span>&quot;</span></span><br><span class="line">                ;;</span><br><span class="line">            *)</span><br><span class="line">                from_enc=<span class="variable">$enc</span></span><br><span class="line">                ;;</span><br><span class="line">        <span class="keyword">esac</span></span><br><span class="line">        <span class="built_in">printf</span> <span class="string">&quot;Converting %-23s from %s\n&quot;</span> <span class="string">&quot;<span class="variable">$f</span>&quot;</span> <span class="string">&quot;<span class="variable">$from_enc</span>&quot;</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$enc_line</span>&quot;</span> &gt; <span class="string">&quot;<span class="variable">$&#123;new_dir&#125;</span>/<span class="variable">$&#123;basen&#125;</span>&quot;</span></span><br><span class="line">        iconv -f <span class="string">&quot;<span class="variable">$from_enc</span>&quot;</span> -t utf-8 <span class="string">&quot;<span class="variable">$f</span>&quot;</span> \</span><br><span class="line">            | sed <span class="string">&quot;/.*-\*- coding:.*/d;/.\\\&quot; t$/d&quot;</span> &gt;&gt; <span class="string">&quot;<span class="variable">$&#123;new_dir&#125;</span>/<span class="variable">$&#123;basen&#125;</span>&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">exit</span> 0</span><br></pre></td></tr></table></figure>
+<p>Peter 的两个脚本看起来已经足以解决编码问题了。不过这个 bug 却一直拖到了今年的情人节&amp;元宵节（也有人说是缘消节？<code>&gt;_&lt;</code>）才有了进一步进展。Man-Pages 项目的主要维护者 Michael Kerrisk 现身提出了两个疑问：</p>
+<blockquote>
+
+<p>Peter,</p>
+<p>Sorry to be slow following up on this. Thanks for the scripts.</p>
+<p>As some background, I’ll just note that the current encoding markers in the iso_8859* pages were added in response to this 2009 bug report:
+<a target="_blank" rel="noopener" href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=519209">https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=519209</a></p>
+<p>It seems a reasonable idea to convert everything to UTF-8, but I have some concerns/questions.</p>
+<ol>
+<li>
+<p>Is the encoding line: <code>'\&quot; t -*- coding: UTF-8 -*-</code> really needed, or does modern groff just work this out?</p>
+</li>
+<li>
+<p>I’m concerned about backward compatibility issues. As in: what if someone loads the man pages onto a system with old groff. Now, as far as I can work out, groff added input unicode support in v1.20, 2009
+( <a target="_blank" rel="noopener" href="http://lists.gnu.org/archive/html/groff/2009-01/msg00011.html">http://lists.gnu.org/archive/html/groff/2009-01/msg00011.html</a> ). So, perhaps that’s long enough ago that we don’t need to worry too much about these issues.</p>
+</li>
+</ol>
+<p>Any thoughts?</p>
+
+
+<footer><strong>Michael Kerrisk</strong></footer></blockquote>
+
+<p>Michael 的主要疑问有两点：</p>
+<ol>
+<li>Peter 在每个转换后的文件开头都加入了一行编码说明行 <code>'\&quot; t -*- coding: UTF-8 -*-</code> ，这一行是否真的有必要，还是 groff 本身就可以自己判断编码？</li>
+<li>对于老版本的 groff ，是否存在向下兼容问题。</li>
+</ol>
+<p>Michael 的疑虑不无道理。转换整个项目的编码不是一件太 trivial 的事情，小心使得万年船。他于是又在 <a target="_blank" rel="noopener" href="http://thread.gmane.org/gmane.linux.man/5069">linux-man</a> 邮件列表里发帖征求其他维护者的意见。</p>
+<p>经过大家的讨论，后来大家达成了以下意见：</p>
+<ol>
+<li>编码说明行只添加进存在 UTF-8 字符的文件；</li>
+<li>由于各主流操作系统都早已经更新了支持 UTF-8 编码的 groff ，因此出现兼容性问题的情况应该比较少见。</li>
+</ol>
+<p>两天后我收到了 Michael 发来的邮件，这个 bug 随着新版本的推出，在 2014 年 2 月 16 日被成功关闭。最新的 3.59 和 3.60 两个版本就是对针对这个 bug 的解决和后期完善。这也是我作为一个多年 Linux 用户，对这个社区所做的一个小贡献。这个过程中，我看到了这些 contributors 的严谨和负责。今后会继续努力，向他们看齐！<code>:-p</code></p>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/codes/openframeworks-intro/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/codes/opencv-and-mvc/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: 'Learning UTF-8 From A Bug'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/learning-utf-8-from-a-bug.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2014-02-20 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/codes/">codes<span>38</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Linux/">Linux<span>3</span></a></li> <li><a href="/tags/utf-8/">utf-8<span>1</span></a></li> <li><a href="/tags/shell/">shell<span>2</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

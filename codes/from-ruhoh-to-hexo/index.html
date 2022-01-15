@@ -1,0 +1,604 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>From Ruhoh to Hexo | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="介绍使用 Hexo 搭建博客的经验。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="From Ruhoh to Hexo"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: 'From Ruhoh to Hexo'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> From Ruhoh to Hexo</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>介绍使用 Hexo 搭建博客的经验。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <p>我在年初把博客<a href="/codes/from-wordpress-to-ruhoh">迁移到了 ruhoh</a>，用了一段时间之后，也开始感觉到各种不满意的地方。</p>
+<p>就我个人的感受，ruhoh 有以下几个不足：</p>
+<ol>
+<li>页面生成速度太慢。到目前为止我的整个站点总共写了100来篇文章，在生成的时候花了将近半分钟的时间。</li>
+<li>定制性有限。由于作者一开始就把 ruhoh 定位在 language agnostic 的目标，因此在采用的模板语言也选用了最平台无关的 mustache。但 mustache 的语法能力实在有限，只支持简单的逻辑判断。像传参、循环之类的特性都不支持。比如我想实现类似 octopress 这样的 tag 插件，直接用 mustache 是不可能的，只能动 ruhoh 的 ruby 源码，而这样又和作者的设计目标相反了。</li>
+<li>太小众。用 ruhoh 的人太少，插件相应也少，不像 Jekyll 或 octopress 那样有丰富的扩展。</li>
+<li>不跨平台。ruhoh 在 Windows 下总会遇到一些奇怪的问题而无法运行。如果我因为特殊原因而需要在 Windows 下写文章的话就会很不方便。</li>
+<li>更新缓慢。在我写这篇博客之前，ruhoh 的已经半年没有什么重大更新了。我在 4 个月前给作者提交了一个<a target="_blank" rel="noopener" href="https://github.com/ruhoh/ruhoh.rb/issues/198">给文章生成 postid 的功能性建议</a>，到现在的标签依然还停留在 <span class="label label-success">next-release
+</span> 阶段。</li>
+<li>最致命的一个问题是，是连作者自己都很少用 ruhoh！在<a target="_blank" rel="noopener" href="https://github.com/ruhoh/ruhoh.rb/issues/203">一个 issue 页面</a>里，作者跟我们承认他自己平常也很少使用 ruhoh 。可想而知，如果一个产品连开发者自己都不用的话，很难保证这个产品会做得好。</li>
+</ol>
+ <span id="more"></span>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/from-ruhoh-to-hexo/issue.png" alt="作者自己也很少用 ruhoh" />
+        <figcaption>作者自己也很少用 ruhoh</figcaption>
+      </figure>
+    </p>
+<p>出于以上种种原因，我决定弃用 ruhoh ，改用其他的博客系统。</p>
+<p>我第一个尝试的是 Jekyll</p>
+<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/from-ruhoh-to-hexo/jekyll.png alt=' Jekyll'></img><b>附图 1</b>  Jekyll</span></span></span> ，因为它本身也是基于 Ruby on Rails 框架，符合我的习惯，并且它的确很受欢迎。相比 ruhoh 而言，Jekyll 就显得非常原始了。刚开始启动服务器后，整个页面几乎啥都没有。所幸用 Jekyll 的用户很多，有很多现成的案例可供参考。加上自身使用 Liquid 模板语言，扩展起来也挺方便。但正当我基本移植了原来的主题，开始预览原来写的文章后，我发现了一个问题：Jekyll 的刷新居然是每更新一篇文章就要重新编译整个网站！于是我对 Jekyll 彻底失去了使用的兴趣。之后我又尝试了 Python 系的 pelican，总体感觉也很不习惯。
+<p>后来在微博上 <a target="_blank" rel="noopener" href="http://weibo.com/popozhu">popozhu</a> 向我推荐了 <a target="_blank" rel="noopener" href="http://zespia.tw/hexo/">hexo</a> ，一个基于 node.js 的博客系统。本来我就对 node.js 非常感兴趣，于是立马去 hexo 的主页了解更多它的特性。在看了它的文档之后，我立马把它列为我的 first choice 。与 Ruhoh 相比，hexo 有以下几个优点：</p>
+<ol>
+<li>页面生成速度超快。我的100来篇文章只用了不到两秒就生成完毕。</li>
+<li>使用 ejs 作为模板驱动，本身保留了 Javascript 语法的特性，所以定制性很强。</li>
+<li>用户数量多，插件丰富。也许是因为作者是台北同胞的原因，项目的<a target="_blank" rel="noopener" href="https://github.com/tommy351/hexo/issues?state=open">issue页</a>可以看到很多中文的issue，于是就吸引了广大祖国同胞的使用（不过这也带来了一个国际化的问题。作者提倡尽量使用英文来提交bug和建议，但为了照顾英文能力较弱的朋友，只好用中文和英文各写一遍。<code>–bb</code>）。加上作者的项目管理非常合理，不仅有比较完善的项目主页和文档，也有很好的插件wiki，然后又有 node.js 的 npm 社区支持，感觉非常 promising 。</li>
+<li>跨平台。javascript的跨平台特性还是相当不错的，虽然我暂时还没尝试在 Windows 下跑 hexo，但从用户反馈来看应该不存在太大的问题。</li>
+<li>更新频繁。</li>
+<li>作者自己也用 hexo，可以看看<a target="_blank" rel="noopener" href="http://zespia.tw/">他的博客</a>。</li>
+</ol>
+<p>虽然 hexo 看起来很不错，但由于 Ruby on Rails 和 node.js 毕竟是两个不同的平台，加上两个博客系统本身设计的不同，我在试图进行移植的时候也遇到了不少困难：</p>
+<h2 id="更换-pandoc-renderer">更换 pandoc renderer</h2>
+<p>第一件我急着要解决的事情是将 hexo 原来的 Markdown renderer 改成用 <a target="_blank" rel="noopener" href="http://johnmacfarlane.net/pandoc/">pandoc</a>。由于我原先的所有文章都是用 pandoc-markdown
+来实现的，而自带的 renderer 则只支持最原始的 Markdown，也就是
+<a target="_blank" rel="noopener" href="http://daringfireball.net/">John Gruber</a> 定义的版本。因此直接使用自带
+的 renderer 就会产生很多格式上的错误。但后来证明最急着要完成的事情往往是最难以完成的事情。在摸清楚了插件的编写方法后，我在 npm 社区上找到了一个 <a target="_blank" rel="noopener" href="https://github.com/pvorb/node-pdc">pandoc 的 wrapper</a>，然后写插件调用它。但最初实现的版本工作起来很不稳定，总会随机性的出现部分页面没有渲染完整的问题。不过起码先有一个 work 的版本了，就暂时先用着它，等最后主题也移植完成了，我再回过头来解决它。于是我先给 hexo 提交了<a target="_blank" rel="noopener" href="https://github.com/tommy351/hexo/issues/377">一个 issue</a> 看看有没有人能够在我之前先解决了这个问题。</p>
+<p>等真到了这个时候，我才发现事情没有那么简单。首先我怀疑是 hexo 的多线程编译跟 pandoc 的子进程发生了冲突，于是试着关闭 hexo 的多线程功能，并且将最大同时打开文件数设为1，但重启后发现问题依旧。之后我怀疑数据在传参过程中发生丢失，就试着把每一步都用 <code>console.log</code> 打印出来，发现也没有问题，只在我用回调函数返回的时候才出现随机的数据未处理情况。后来我一怒之下将原来的 wrapper 直接重写到我的插件里，也顺手把原来只能通过两层回调函数才能实现的调用改成了一层，问题终于解决了。我也就自己 close 了那个 issue，并在 npm 社区发布了一个 <a target="_blank" rel="noopener" href="https://npmjs.org/package/hexo-renderer-pandoc">hexo-renderer-pandoc</a> 插件。</p>
+<h2 id="wiki-页面">wiki 页面</h2>
+<p>另外一个让我在迁移过程中感到水土不服的地方是 hexo 没有 collection 的概念。ruhoh 的一大特色是为文章提供了 collection 的抽象，每个 collection 是彼此独立的，各自提供了 categories，tags，paginations 等。因此可以很容易在同一个站点划分不同的板块。</p>
+<p>例如，<a target="_blank" rel="noopener" href="http://hahack.com">我的博客</a> 和 <a target="_blank" rel="noopener" href="http://hahack.com/wiki">我的wiki</a> 实际上共享了同一个 ruhoh 的站点，只不过博客里的文章属于 <code>posts</code> 这个 collection ，而 wiki 里的文章则属于 <code>wiki</code> 这个 collection ，两个板块的文章可以各自有相应的分类和标签，但不会有交叉。</p>
+<p>而 hexo 并没有 collection 这样的概念。虽然 hexo 支持在 source 目录里放多个目录，但只有  <code>_posts</code> 目录的文章可以通过 <code>site.posts</code> 获取，其他目录的只能是一些 page。看样子只能新建一个站点用来处理 wiki ，但这样我又得为其专门写主题，而且两个站点各自都得用 <code>hexo server</code> 来预览 ，并占用不同的端口。更麻烦的是由于两个站点共享同一个导航栏（navigation），但两个站点在本地预览的时候不是同一个端口号，那么我还得根据当前的工作模式以及当前站点的端口号写一堆代码来实现导航栏。总而言之我非常崩溃。不过后来我想了一个workaround，因为只有我的 wiki 里的文章才有 categories 变量，其他 pages 没有这个变量。所以可以根据这个把 wiki 里的文章和其他 pages 区分开，再根据 categories 属性分类。于是我便写了段简单粗暴的代码，总算搞定了 wiki 页面。另外，原来我在 ruhoh 一直无法解决的自定义文章排序问题也在 hexo 里完美解决了。</p>
+<h2 id="主题">主题</h2>
+<p>主题的移植相对来说就只是个体力活了。hexo 本身自带的 light 主题已经非常完善，但出于对 twitter-bootstrap 的好感，以及对我原来花心思写好的主题的不舍，我决定还是大刀动斧，重写了整个主题的方方面面。相比 ruhoh 而言，hexo 的主题非常模块化，由于ejs允许在不同模板间传参，所以代码的冗余度可以降低（当然如果一味追求低耦合，又会带来模板文件数量太多而难以定位的缺点），完全不像 ruhoh 那样，partial 和主题各自属于不同的文件夹，但是逻辑上又难以完全分离，总让我感觉很诡异。</p>
+<p>再说说 <code>cache</code> 变量吧，大部分的服务器都会提供 <code>development</code> 和 <code>production</code> 两种工作模式，比如如果当前是属于本地开发预览状态，还没有发布到远程服务器上的话，这个状态就是 <code>development</code> 模式，如果正在编译产生最终要发布到远程服务器的版本，系统就会把当前工作模式认定为 <code>production</code> 模式。利用这两个模式可以做很多有意思的事情。比如，如果我想在本地开发预览的时候使用未压缩的样式文件，而在正式编译的时候改用预先用 YUICompressor 压缩后的版本， 在 ruhoh 中可以这么做：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;# env.production &#125;&#125;</span><br><span class="line">    bootstrap.min.css</span><br><span class="line">    bootstrap-responsive.min.css</span><br><span class="line">    style.min.css</span><br><span class="line">    responsive.min.css</span><br><span class="line">&#123;&#123;&#x2F; env.production &#125;&#125;</span><br><span class="line">&#123;&#123;^ env.production &#125;&#125;</span><br><span class="line">    bootstrap.css</span><br><span class="line">    bootstrap-responsive.css</span><br><span class="line">    style.css</span><br><span class="line">    responsive.css</span><br><span class="line">&#123;&#123;&#x2F; env.production &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而 hexo 虽然没有开放类似 ruhoh 的 <code>env</code> 接口，但由于它使用的是 <a target="_blank" rel="noopener" href="http://expressjs.com/">express</a> 作为服务器，可以通过 <code>cache</code> 变量来获取当前的模式——如果 <code>cache</code> 为 <code>true</code> ，则表示当前处于 <code>production</code> 模式，否则则处于 <code>development</code> 模式。因此可以这么写：</p>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;% <span class="keyword">if</span> (cache) &#123; %&gt;</span><br><span class="line">        bootstrap.min.css</span><br><span class="line">        bootstrap-responsive.min.css</span><br><span class="line">        style.min.css</span><br><span class="line">        responsive.min.css        </span><br><span class="line">&lt;% &#125; <span class="keyword">else</span> &#123;%&gt;</span><br><span class="line">        bootstrap.css</span><br><span class="line">        bootstrap-responsive.css</span><br><span class="line">        style.css</span><br><span class="line">        responsive.css    </span><br><span class="line">&lt;% &#125; %&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="代码高亮">代码高亮</h2>
+<p>hexo 本身是自带代码高亮的，但 hexo 自带的代码高亮功能似乎不能完全高亮我原先用 google-prettify 高亮的代码。于是我只好写了个 google-prettify 的高亮插件，并继续沿用我稍微定制过的 tomorrow-night 主题。但这个主题和 gist 的样式会有冲突，而 gist 的样式又无法修改，无奈之下，我想通过 jquery 来动态将 gist 的样式也设为与 tomorrow-night 一致的风格，后来我发现原来已经有人写过这样的插件，叫做 <a target="_blank" rel="noopener" href="https://github.com/Joe8Bit/pretty-gist">pretty-gist</a> （完美主义者大有人在呀，哈哈），并且自身也集成了代码高亮，看了它的代码后，我稍微修改了下，让它改为使用 google-prettify 样式，最终的效果非常和谐，见上一节 <a href="#%E4%B8%BB%E9%A2%98">#主题</a> 的两段 gist 代码。</p>
+<h2 id="tag-plugins">tag plugins</h2>
+<p>hexo 号称支持 Octopress 的所有 tag plugins，我仔细阅读代码后发现作者不过是用 javascript 移植了原本用 ruby 写的代码。仔细阅读了每个 tag plugin 的写法后，我发现这样的插件写起来也不难。比如，我的文章右侧的注解是自己实现的一个插件，可以通过下面的语法来调用：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;% mnote index %&#125;</span><br><span class="line">   Margin note string</span><br><span class="line">&#123;% endmnote %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>因为我使用 Emacs 作为主要编辑器，为了进一步减少工作量，还可以编写一个 snippet：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># name: margin-note</span><br><span class="line"># key: mnote</span><br><span class="line"># --</span><br><span class="line">&#123;% mnote $&#123;2:index&#125; %&#125; $&#123;1:text&#125; &#123;% endmnote %&#125;$0</span><br></pre></td></tr></table></figure>
+
+<p>这样我每次要写注解的时候，只需要输入 <code>mnote</code> 然后敲一下空格，就可以补全成上面的插件代码，这个代码再经过编译就会展开成最终的 html 代码。关于 tag plugins 和 yasnippet 的结合可以参考<a target="_blank" rel="noopener" href="http://mad4a.me/2012/08/02/emacs-summary-cont/">这篇文章</a>。plugin + snippet的结合非常爽快，所以我自己又写了不少插件，见<a target="_blank" rel="noopener" href="https://gist.github.com/wzpan/7823621">这里</a>。我打算在接下来把 twittter-bootstrap 常用的组件都写成插件，方便我使用。</p>
+<h2 id="后续计划">后续计划</h2>
+<p>上面罗列了大大小小的各种定制，感觉都有点不务正业了。接下来就想赶紧回到正轨，开始我的毕业论文的工作，在同时把新博客用上，不断地总结我学到的新东西。当然，现在的博客还有一些不完美的地方，接下来也想试着去完成：</p>
+<ol>
+<li><i class="fa fa-square-o"></i> 优化我的 mathjax 插件，在 development 模式下加载本地的 mathjax 脚本，在 production 模式下加载 CDN 上的版本（这个计划被迫放弃了。Mathjax太大了，试图本地加载它会导致hexo的服务器启动半天，实在划不来）。</li></li>
+<li><i class="fa fa-check-square-o"></i> 这次博客的迁移我顺便改用了一个更好的 permalink，因此文章的 url 都发生了改变。因此我又得迁移 disqus 上的评论了 <code>--bb</code>； </li></li>
+<li><i class="fa fa-check-square-o"></i> hexo 会在使用过程中产生 db.json 文件，记录整个站点中的所有文章的信息。理论上可以使用 ajax 和 jquery 这个文件来检索，实现一个比 google 更好的本站搜索引擎；</li></li>
+<li><i class="fa fa-check-square-o"></i> 用 livereload 在我编辑文章的时候自动刷新页面。</li></li>
+</ol>
+</ul>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/slides/zen-history/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/codes/make-scrollspy-supports-chinese-id/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: 'From Ruhoh to Hexo'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/from-ruhoh-to-hexo.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2013-12-05 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/codes/">codes<span>38</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Hexo/">Hexo<span>8</span></a></li> <li><a href="/tags/ruhoh/">ruhoh<span>3</span></a></li> <li><a href="/tags/ejs/">ejs<span>1</span></a></li> <li><a href="/tags/Javascript/">Javascript<span>5</span></a></li> <li><a href="/tags/node-js/">node.js<span>2</span></a></li> <li><a href="/tags/npm/">npm<span>1</span></a></li> <li><a href="/tags/pandoc/">pandoc<span>1</span></a></li> <li><a href="/tags/HaHack/">HaHack<span>3</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%9B%B4%E6%8D%A2-pandoc-renderer"><span class="toc-article-text">更换 pandoc renderer</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#wiki-%E9%A1%B5%E9%9D%A2"><span class="toc-article-text">wiki 页面</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%BB%E9%A2%98"><span class="toc-article-text">主题</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BB%A3%E7%A0%81%E9%AB%98%E4%BA%AE"><span class="toc-article-text">代码高亮</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#tag-plugins"><span class="toc-article-text">tag plugins</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%90%8E%E7%BB%AD%E8%AE%A1%E5%88%92"><span class="toc-article-text">后续计划</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

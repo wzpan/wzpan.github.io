@@ -1,0 +1,851 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>解析XML | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="方案一：ElementTree
+解析XML
+Python可以使用几种不同的方式解析xml文档（一个实例XML文档）。它包含了DOM和SAX解析器，但是我们焦点将放在另外一个叫做ElementTree的库上边。
+示例
+12345&amp;gt;&amp;gt;&amp;gt; import xml.etree.Element">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="解析XML"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '解析XML'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 解析XML</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc', 2, 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="方案一：ElementTree">方案一：ElementTree</h2>
+<h3 id="解析XML">解析XML</h3>
+<p>Python可以使用几种不同的方式解析xml文档（<a target="_blank" rel="noopener" href="http://woodpecker.org.cn/diveintopython3/examples/feed.xml">一个实例XML文档</a>）。它包含了DOM和SAX解析器，但是我们焦点将放在另外一个叫做<code>ElementTree</code>的库上边。</p>
+<h4 id="示例">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> xml.etree.ElementTree <span class="keyword">as</span> etree</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tree = etree.parse(<span class="string">&#x27;examples/feed.xml&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>root = tree.getroot()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>root</span><br><span class="line">&lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;feed at cd1eb0&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="说明">说明</h4>
+<ul>
+<li><code>ElementTree</code>属于<code>Python</code>标准库的一部分，它的位置为<code>xml.etree.ElementTree</code>。</li>
+<li><code>parse()</code>函数是ElementTree库的主要入口，它使用文件名或者流对象作为参数。<code>parse()</code>函数会立即解析完整个文档。如果内存资源紧张，也可以增量式地解析xml文档</li>
+<li><code>parse()</code>函数会返回一个能代表整篇文档的对象。这不是根元素。要获得根元素的引用可以调用<code>getroot()</code>方法。</li>
+<li>xml元素由名字空间（name space）和本地名(local name)）组成。<code>ElementTree</code>使用``{namespace}localname<code>来表达xml元素。这篇文档中的每个元素都在名字空间Atom中，所以根元素被表示为</code>{<a target="_blank" rel="noopener" href="http://www.w3.org/2005/Atom">http://www.w3.org/2005/Atom</a>}feed`。</li>
+</ul>
+<h2 id="元素即列表">元素即列表</h2>
+<p>在ElementTree API中，元素的行为就像列表一样。列表中的项即该元素的子元素。</p>
+<h4 id="示例-v2">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># continued from the previous example</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>root.tag                        </span><br><span class="line"><span class="string">&#x27;&#123;http://www.w3.org/2005/Atom&#125;feed&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">len</span>(root)                       </span><br><span class="line"><span class="number">8</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> child <span class="keyword">in</span> root:              </span><br><span class="line"><span class="meta">... </span>  <span class="built_in">print</span>(child)                  </span><br><span class="line"><span class="meta">... </span></span><br><span class="line">&lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;title at e2b5d0&gt;</span><br><span class="line">&lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;subtitle at e2b4e0&gt;</span><br><span class="line">&lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;<span class="built_in">id</span> at e2b6c0&gt;</span><br><span class="line">&lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;updated at e2b6f0&gt;</span><br><span class="line">&lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;link at e2b4b0&gt;</span><br><span class="line">&lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;entry at e2b720&gt;</span><br><span class="line">&lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;entry at e2b510&gt;</span><br><span class="line">&lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;entry at e2b750&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="说明-v2">说明</h4>
+<p>根元素的“长度”即子元素的个数。我们可以像使用迭代器一样来遍历其子元素。注意该列表只包含直接子元素，子元素也可能包含再下一级的子元素，但是并没有包括在这个列表中。</p>
+<h3 id="属性即字典">属性即字典</h3>
+<p>xml不只是元素的集合；每一个元素还有其属性集。一旦获取了某个元素的引用，我们可以像操作Python的字典一样轻松获取到其属性。</p>
+<h4 id="示例-v3">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># continuing from the previous example</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>root.attrib                           </span><br><span class="line">&#123;<span class="string">&#x27;&#123;http://www.w3.org/XML/1998/namespace&#125;lang&#x27;</span>: <span class="string">&#x27;en&#x27;</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>root[<span class="number">4</span>]            <span class="comment"># 第五个子元素 link   </span></span><br><span class="line">&lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;link at e181b0&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>root[<span class="number">4</span>].attrib                        </span><br><span class="line">&#123;<span class="string">&#x27;href&#x27;</span>: <span class="string">&#x27;http://diveintomark.org/&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;type&#x27;</span>: <span class="string">&#x27;text/html&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;rel&#x27;</span>: <span class="string">&#x27;alternate&#x27;</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>root[<span class="number">3</span>]                               </span><br><span class="line">&lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;updated at e2b4e0&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>root[<span class="number">3</span>].attrib      <span class="comment"># 元素updated没有子元素，所以为空</span></span><br><span class="line">&#123;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="在XML文档中查找结点">在XML文档中查找结点</h3>
+<p>许多情况下我们需要找到xml中特定的元素。Etree也能完成这项工作。</p>
+<h4 id="示例-v4">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> xml.etree.ElementTree <span class="keyword">as</span> etree</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tree = etree.parse(<span class="string">&#x27;examples/feed.xml&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>root = tree.getroot()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>root.findall(<span class="string">&#x27;&#123;http://www.w3.org/2005/Atom&#125;entry&#x27;</span>)    </span><br><span class="line">[&lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;entry at e2b4e0&gt;,</span><br><span class="line"> &lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;entry at e2b510&gt;,</span><br><span class="line"> &lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;entry at e2b540&gt;]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tree.findall(<span class="string">&#x27;&#123;http://www.w3.org/2005/Atom&#125;entry&#x27;</span>)</span><br><span class="line">[&lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;entry at e2b4e0&gt;,</span><br><span class="line"> &lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;entry at e2b510&gt;,</span><br><span class="line"> &lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;entry at e2b540&gt;]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>root.tag</span><br><span class="line"><span class="string">&#x27;&#123;http://www.w3.org/2005/Atom&#125;feed&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>root.findall(<span class="string">&#x27;&#123;http://www.w3.org/2005/Atom&#125;feed&#x27;</span>) <span class="comment"># 根元素中没有该子元素</span></span><br><span class="line">[]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>root.findall(<span class="string">&#x27;&#123;http://www.w3.org/2005/Atom&#125;author&#x27;</span>) <span class="comment"># author元素不是直接子元素</span></span><br><span class="line">[]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>all_links=tree.findall(<span class="string">&#x27;.//&#123;http://www.w3.org/2005/Atom&#125;author&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>all_links</span><br><span class="line">[&lt;Element <span class="string">&#x27;&#123;http://www.w3.org/2005/Atom&#125;author&#x27;</span> at <span class="number">0x7fb709060838</span>&gt;, &lt;Element <span class="string">&#x27;&#123;http://</span></span><br><span class="line"><span class="string">www.w3.org/2005/Atom&#125;author&#x27;</span> at <span class="number">0x7fb709060f70</span>&gt;, &lt;Element <span class="string">&#x27;&#123;http://www.w3.org/2005/Ato</span></span><br><span class="line"><span class="string">m&#125;author&#x27;</span> at <span class="number">0x7fb7090623c0</span>&gt;]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>entries = tree.findall(<span class="string">&#x27;&#123;http://www.w3.org/2005/Atom&#125;entry&#x27;</span>)          </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">len</span>(entries)</span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>title_element = entries[<span class="number">0</span>].find(<span class="string">&#x27;&#123;http://www.w3.org/2005/Atom&#125;title&#x27;</span>) </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>title_element.text</span><br><span class="line"><span class="string">&#x27;Dive into history, 2009 edition&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo_element = entries[<span class="number">0</span>].find(<span class="string">&#x27;&#123;http://www.w3.org/2005/Atom&#125;foo&#x27;</span>)     </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>foo_element</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">type</span>(foo_element)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">NoneType</span>&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="说明-v3">说明</h4>
+<ul>
+<li><code>findfall()</code>方法查找匹配特定格式的子元素。如果在开头加上<code>.//</code>，则会在所有嵌套层次里查找，否则只会查找直接子元素。</li>
+<li>为了方便，对象<code>tree</code>（调用<code>etree.parse()</code>的返回值）中的一些方法是根元素中这些方法的镜像，因此例子中的<code>tree.findall()</code>等效于<code>tree.getroot().findall()</code></li>
+<li><code>find()</code>方法用来返回第一个匹配到的元素。当我们认为只会有一个匹配，或者有多个匹配但我们只关心第一个的时候，这个方法是很有用的。</li>
+</ul>
+<h3 id="生成XML">生成XML</h3>
+<h4 id="示例-v5">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> xml.etree.ElementTree <span class="keyword">as</span> etree</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>new_feed = etree.Element(<span class="string">&#x27;&#123;http://www.w3.org/2005/Atom&#125;feed&#x27;</span>,     </span><br><span class="line"><span class="meta">... </span>    attrib=&#123;<span class="string">&#x27;&#123;http://www.w3.org/XML/1998/namespace&#125;lang&#x27;</span>: <span class="string">&#x27;en&#x27;</span>&#125;)  </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(etree.tostring(new_feed))                                   </span><br><span class="line">&lt;ns0:feed xmlns:ns0=<span class="string">&#x27;http://www.w3.org/2005/Atom&#x27;</span> xml:lang=<span class="string">&#x27;en&#x27;</span>/&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="说明-v4">说明</h4>
+<p>需要说明的是最后一个命令：在任何时候，我们可以使用ElementTree的<code>tostring()</code>函数序列化任意元素（还有它的子元素）。</p>
+<p>技术上说，ElementTree使用的序列化方法是精确的，但却不是最理想的。在本章开头给出的xml样例文档中定义了一个默认名字空间(default namespace)(<code>xmlns='http://www.w3.org/2005/Atom'</code>)。对于每个元素都在同一个名字空间中的文档 — 比如Atom feeds — 定义默认的名字空间非常有用，因为只需要声明一次名字空间，然后在声明每个元素的时候只需要使用其本地名即可(<feed>，<link>，<entry>)。除非想要定义另外一个名字空间中的元素，否则没有必要使用前缀。</p>
+<p>对于xml解析器来说，它不会“注意”到使用默认名字空间和使用前缀名字空间的xml文档之间有什么不同。当前序列化结果的dom为：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ns0:feed</span> <span class="attr">xmlns:ns0</span>=<span class="string">&#x27;http://www.w3.org/2005/Atom&#x27;</span> <span class="attr">xml:lang</span>=<span class="string">&#x27;en&#x27;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<p>与下列序列化的DOM是一模一样的：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">feed</span> <span class="attr">xmlns</span>=<span class="string">&#x27;http://www.w3.org/2005/Atom&#x27;</span> <span class="attr">xml:lang</span>=<span class="string">&#x27;en&#x27;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<p>明显下面的更简洁一些，对于Atom feed这样的东西，数据越简洁越有利于优化传输速率。</p>
+<h3 id="ElementTree的不足">ElementTree的不足</h3>
+<p>ElementTree只能提供“<a target="_blank" rel="noopener" href="http://effbot.org/zone/element-xpath.htm">有限的XPath支持</a>”，<a target="_blank" rel="noopener" href="http://www.w3.org/TR/xpath">XPath</a>是一种用于查询xml文档的W3C标准。ElementTree与XPath语法上足够相似，但有一些差异。如果需要涉及复杂的操作，建议使用下面的方案。</p>
+<h2 id="方案二：LXML（推荐）">方案二：LXML（推荐）</h2>
+<p><a target="_blank" rel="noopener" href="http://codespeak.net/lxml/">lxml</a> 是一个开源的第三方库，以流行的 <a target="_blank" rel="noopener" href="http://www.xmlsoft.org/">libxml2</a> 解析器为基础开发。提供了与ElementTree完全兼容的api，<strong>并且扩展它以提供了对XPath 1.0的全面支持</strong>，以及改进了一些其他精巧的细节。提供Windows的安装程序；Linux用户推荐使用特定发行版自带的工具比如yum或者apt-get从它们的程序库中安装预编译好了的二进制文件。要不然，你就得手工安装他们了。</p>
+<h3 id="解析XML-v2">解析XML</h3>
+<h4 id="示例-v6">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> lxml <span class="keyword">import</span> etree                   </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tree = etree.parse(<span class="string">&#x27;examples/feed.xml&#x27;</span>)  </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>root = tree.getroot()                    </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>root.findall(<span class="string">&#x27;&#123;http://www.w3.org/2005/Atom&#125;entry&#x27;</span>)  </span><br><span class="line">[&lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;entry at e2b4e0&gt;,</span><br><span class="line"> &lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;entry at e2b510&gt;,</span><br><span class="line"> &lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;entry at e2b540&gt;]</span><br></pre></td></tr></table></figure>
+<h4 id="说明-v5">说明</h4>
+<ul>
+<li>导入lxml以后，可以发现它与内置的ElementTree库提供相同的api。</li>
+<li>parse()函数：与ElementTree相同。</li>
+<li>getroot()方法：相同。</li>
+<li>findall()方法：完全相同。</li>
+</ul>
+<p>对于大型的xml文档，lxml明显比内置的ElementTree快了许多。如果现在只用到了ElementTree的api，并且想要使用其最快的实现(implementation)，我们可以尝试导入lxml，并且将内置的ElementTree作为备用。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line"><span class="keyword">except</span> ImportError:</span><br><span class="line">    <span class="keyword">import</span> xml.etree.ElementTree <span class="keyword">as</span> etree</span><br></pre></td></tr></table></figure>
+<h3 id="更强大的-findall">更强大的 findall()</h3>
+<p>但是lxml不只是一个更快速的ElementTree。它的<code>findall()</code>方法能够支持更加复杂的表达式。</p>
+<h4 id="示例-v7">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> lxml.etree                                                                   </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tree = lxml.etree.parse(<span class="string">&#x27;examples/feed.xml&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tree.findall(<span class="string">&#x27;//&#123;http://www.w3.org/2005/Atom&#125;*[@href]&#x27;</span>)                             </span><br><span class="line">[&lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;link at eeb8a0&gt;,</span><br><span class="line"> &lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;link at eeb990&gt;,</span><br><span class="line"> &lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;link at eeb960&gt;,</span><br><span class="line"> &lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;link at eeb9c0&gt;]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tree.findall(<span class="string">&quot;//&#123;http://www.w3.org/2005/Atom&#125;*[@href=&#x27;http://diveintomark.org/&#x27;]&quot;</span>)  </span><br><span class="line">[&lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;link at eeb930&gt;]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>NS = <span class="string">&#x27;&#123;http://www.w3.org/2005/Atom&#125;&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tree.findall(<span class="string">&#x27;//&#123;NS&#125;author[&#123;NS&#125;uri]&#x27;</span>.<span class="built_in">format</span>(NS=NS)) <span class="comment"># 将名字空间利用format来简化 </span></span><br><span class="line">[&lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;author at eeba80&gt;,</span><br><span class="line"> &lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;author at eebba0&gt;]</span><br></pre></td></tr></table></figure>
+<h4 id="说明-v6">说明</h4>
+<ul>
+<li>第三条命令在整个文档范围内搜索名字空间Atom中具有href属性的所有元素。在查询语句开头的<code>//</code>表示“搜索的范围为整个文档（不只是根元素的子元素）。” <code>&#123;http://www.w3.org/2005/Atom&#125;</code>指示“搜索范围仅在名字空间Atom中。” <code>*</code> 表示“任意本地名(local name)的元素。” <code>[@href]</code>表示“含有href属性。”</li>
+<li>第四条命令找出所有包含href属性并且其值为<code>http://diveintomark.org/</code>的Atom元素。</li>
+<li>第五条命令在简单的字符串格式化后（要不然这条复合查询语句会变得特别长），它搜索名字空间Atom中包含uri元素作为子元素的author元素。</li>
+</ul>
+<h3 id="使用XPath表达式">使用XPath表达式</h3>
+<p>lxml也集成了对任意<a href="www.w3.org/TR/xpath/">XPath 1.0</a>表达式的支持。示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> lxml.etree</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tree = lxml.etree.parse(<span class="string">&#x27;examples/feed.xml&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>NSMAP = &#123;<span class="string">&#x27;atom&#x27;</span>: <span class="string">&#x27;http://www.w3.org/2005/Atom&#x27;</span>&#125;                    </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>entries = tree.xpath(<span class="string">&quot;//atom:category[@term=&#x27;accessibility&#x27;]/..&quot;</span>,  </span><br><span class="line"><span class="meta">... </span>    namespaces=NSMAP)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>entries                                                            </span><br><span class="line">[&lt;Element &#123;http://www.w3.org/<span class="number">2005</span>/Atom&#125;entry at e2b630&gt;]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>entry = entries[<span class="number">0</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>entry.xpath(<span class="string">&#x27;./atom:title/text()&#x27;</span>, namespaces=NSMAP)               </span><br><span class="line">[<span class="string">&#x27;Accessibility is a harsh mistress&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<h3 id="生成xml">生成xml</h3>
+<p>内置的ElementTree库没有提供细粒度地对序列化时名字空间内的元素的控制，但是lxml有这样的功能。</p>
+<h4 id="示例-v8">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> lxml.etree</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>NSMAP = &#123;<span class="literal">None</span>: <span class="string">&#x27;http://www.w3.org/2005/Atom&#x27;</span>&#125;                     </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>new_feed = lxml.etree.Element(<span class="string">&#x27;feed&#x27;</span>, nsmap=NSMAP)                </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(lxml.etree.tounicode(new_feed))                             </span><br><span class="line">&lt;feed xmlns=<span class="string">&#x27;http://www.w3.org/2005/Atom&#x27;</span>/&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>new_feed.<span class="built_in">set</span>(<span class="string">&#x27;&#123;http://www.w3.org/XML/1998/namespace&#125;lang&#x27;</span>, <span class="string">&#x27;en&#x27;</span>) <span class="comment"># 使用set()方法来随时给元素添加所需属性 </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(lxml.etree.tounicode(new_feed))</span><br><span class="line">&lt;feed xmlns=<span class="string">&#x27;http://www.w3.org/2005/Atom&#x27;</span> xml:lang=<span class="string">&#x27;en&#x27;</span>/&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="说明-v7">说明</h4>
+<p>在该样例中，只有nsmap参数是lxml特有的，它用来控制序列化输出时名字空间的前缀。</p>
+<p>难道每个xml文档只能有一个元素吗？当然不了。我们可以创建子元素。</p>
+<h4 id="示例-v9">示例</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>title = lxml.etree.SubElement(new_feed, <span class="string">&#x27;title&#x27;</span>,          </span><br><span class="line"><span class="meta">... </span>    attrib=&#123;<span class="string">&#x27;type&#x27;</span>:<span class="string">&#x27;html&#x27;</span>&#125;)                               </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(lxml.etree.tounicode(new_feed))</span><br><span class="line">&lt;feed xmlns=&#x27;http://www.w3.org/2005/Atom&#x27; xml:lang=&#x27;en&#x27;&gt;&lt;title type=&#x27;html&#x27;/&gt;&lt;/feed&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>title.text = <span class="string">&#x27;dive into &amp;hellip;&#x27;</span>                         </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(lxml.etree.tounicode(new_feed))                     </span><br><span class="line">&lt;feed xmlns=&#x27;http://www.w3.org/2005/Atom&#x27; xml:lang=&#x27;en&#x27;&gt;&lt;title type=&#x27;html&#x27;&gt;dive into &amp;amp;hellip;&lt;/title&gt;&lt;/feed&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(lxml.etree.tounicode(new_feed, pretty_print=<span class="literal">True</span>))  </span><br><span class="line">&lt;feed xmlns=<span class="string">&#x27;http://www.w3.org/2005/Atom&#x27;</span> xml:lang=<span class="string">&#x27;en&#x27;</span>&gt;</span><br><span class="line">&lt;title type=&#x27;html&#x27;&gt;dive into&amp;amp;hellip;&lt;/title&gt;</span><br><span class="line">&lt;/feed&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="说明-v8">说明</h4>
+<ul>
+<li>给已有元素创建子元素，我们需要实例化SubElement类。它只要求两个参数，父元素（即该样例中的new_feed）和子元素的名字。由于该子元素会从父元素那儿继承名字空间的映射关系，所以这里不需要再声明名字空间前缀。</li>
+<li>我们也可以传递属性字典给它。字典的键即属性名；值为属性的值。（如上面的<code>attrib=&#123;'type':'html'&#125;)</code>）</li>
+<li>当前title元素序列化的时候就使用了其文本内容。任何包含了<code>&lt;</code>或者<code>&amp;</code>符号的内容在序列化的时候需要被转义。lxml会自动处理转义。</li>
+</ul>
+<h2 id="其他方案">其他方案</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/galvez/xmlwitch">xmlwitch</a>：一个用于生成xml的另外一个第三方库。它大量地使用了with语句来使生成的xml代码更具可读性。</li>
+</ul>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/python3-unittest.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/python3-packaging.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '解析XML'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

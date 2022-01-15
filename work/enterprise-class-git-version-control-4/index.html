@@ -1,0 +1,676 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>化繁为简的企业级 Git 管理实战（四）：多 Gitlab 数据同步 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="本文将介绍如何利用 Gitlab API 实现一套简单灵活的数据同步机制，从而实现在多个 Gitlab 站点间同步数据。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="化繁为简的企业级 Git 管理实战（四）：多 Gitlab 数据同步"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '化繁为简的企业级 Git 管理实战（四）：多 Gitlab 数据同步'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 化繁为简的企业级 Git 管理实战（四）：多 Gitlab 数据同步</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>本文将介绍如何利用 Gitlab API 实现一套简单灵活的数据同步机制，从而实现在多个 Gitlab 站点间同步数据。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <h2 id="需求描述">需求描述</h2>
+<p>在继续写数学系列前，我想切回去之前的 Git 系列写点东西。我想写系列文章也可以像操作系统的进程调度一样，一个系列暂时写不动了，先 <q>保存现场</q> 跳去另一个 topic 写点东西，同时也给自己留点 buffer 再酝酿一下这个暂时 <q>中断</q> 的系列。等这个系列酝酿够了，再 <q>恢复现场</q> ，继续还这个系列的技术债。</p>
+<p>对于一个规模较大的企业，存在多个 Gitlab 站点是很常见的事情。</p>
+<p>比如，我们团队在公司发布统一的 Gitlab 之前早已经搭了一个团队用的 Gitlab ，当公司开始推 Git 时，由于我们已经对自己团队的 Gitlab 做了大量的定制，因此并不打算迁移到公司的 Gitlab 。</p>
+<p>自己搭建 Gitlab 的好处是可以随心所欲的进行定制，像加远程钩子之类的东西想加就加。但缺点就是平台的维护成本也落到了自己身上。相比之下，公司 Gitlab 则没有什么维护成本，服务的稳定性由更专业的运维人员保证，也不用考虑扩容的问题，但灵活定制就别想了。如果能够实现 Gitlab 间的数据自动同步，我们可以没有顾忌的使用自己的 Gitlab 平台，一旦出现问题，再无痛迁移到公司的 Gitlab 。这样一方面避免了单点问题，节省了维护成本；另一方面也能尽可能保证灵活可定制。本文想讨论的就是多个 Gitlab 站点间的数据同步问题。</p>
+<span id="more"></span>
+<p>要实现数据同步，Gitlab 官方提供了一套 <a target="_blank" rel="noopener" href="https://docs.gitlab.com/omnibus/settings/backups.html">备份恢复机制</a> 。但这套机制并不能很好地满足我们的需求：</p>
+<ol>
+<li>需要两台机器的管理员权限。进行备份和恢复的机器都需要能 SSH 进去执行操作。而我们是不可能拥有公司 Gitlab 的管理员权限的；</li>
+<li>会覆盖目标站点的数据。在恢复数据时，目标站点原有的一切数据都会被覆盖。而公司的 Gitlab 有很多个团队的数据，我们的同步不能影响到其他团队的数据；</li>
+<li>Gitlab 版本兼容问题。Gitlab 的备份机制要求原站点和目标站点的 Gitlab 版本兼容，否则将恢复失败。而我们的 Gitlab 版本和公司的 Gitlab 版本并不相同，日后存在一方升级导致无法同步的可能。</li>
+</ol>
+<p>出于以上的考虑，我们自己设计了一套同步工具。与 Gitlab 官方的备份恢复机制相比，它具有以下一些优点：</p>
+<ol>
+<li>无需 ssh 账户权限。所有操作都通过 Gitlab API 和 Git 操作完成，不用 ssh 登录到机器进行操作；</li>
+<li>同步数据类型灵活。可以选择同步组织、仓库代码、wiki、组织成员关系、权限控制信息等类型的数据；</li>
+<li>不覆盖目标站点数据。只对目标站点相同组织内的数据进行同步，不影响其他团队的数据；</li>
+<li>没有 Gitlab 版本兼容问题。同步过程利用了 Gitlab API ，而 Gitlab API 比 Gitlab 稳定，因此版本兼容问题比较少见。即使出现 API 接口的变更，也可以通过升级工具的接口调用来实现兼容。</li>
+</ol>
+<p>下面将逐步说明整套同步的方案。为了方便描述，我把同步原 Gitlab 站点称为 A Gitlab，把同步目标站点称为 B Gitlab 。</p>
+<p>数据的自动同步主要经历如下几步：</p>
+<ol>
+<li>同步所有组织，如果建立了新组织，将自动给 B Gitlab 添加该组织；</li>
+<li>同步所有组织的所有仓库的代码和 wiki 到 B Gitlab 。</li>
+<li>同步所有用户的组织关系。</li>
+<li>同步所有仓库的权限控制信息。</li>
+</ol>
+<h2 id="组织同步">组织同步</h2>
+<p>利用 Gitlab API 列举出 A Gitlab 中的所有 groups，然后在 B Gitlab 中自动新建不存在的组织。</p>
+<p>列举 Gitlab 的所有组织：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F;groups</span><br></pre></td></tr></table></figure>
+<p>返回示例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">&quot;id&quot;</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;Foobar Group&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;path&quot;</span>: <span class="string">&quot;foo-bar&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;description&quot;</span>: <span class="string">&quot;An interesting group&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>根据这个可以获取组织名（name）、组织路径（path）和组织描述（description）。</p>
+<p>同样使用类似接口获取 B Gitlab 的所有组织。如果发现 A Gitlab 的某个组织在 B Gitlab 里不存在，可以在 B Gitlab 新增一个组织：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;groups</span><br></pre></td></tr></table></figure>
+<p>参数：</p>
+<ul>
+<li>name（必须）- 组织名</li>
+<li>path（必须）- 组织路径</li>
+<li>description（可选）- 可选组织描述</li>
+</ul>
+<h2 id="仓库代码同步">仓库代码同步</h2>
+<p>同步所有组织的所有仓库的代码和 wiki 文档到 B Gitlab 。</p>
+<p>获取一个组织的所有仓库信息接口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F;groups&#x2F;:id&#x2F;projects</span><br></pre></td></tr></table></figure>
+<p>参数：</p>
+<ul>
+<li>archived (可选) - 只找出已被归档的项目</li>
+<li>order_by (可选) - 选择基于 <code>id</code>, <code>name</code>, <code>path</code>, <code>created_at</code>, <code>updated_at</code> 或 <code>last_activity_at</code> 字段来排序。默认使用 <code>created_at</code> 。</li>
+<li>sort (可选) - 选择升序还是降序排列。默认为降序。</li>
+<li>search (可选) - 构造一个搜索条件过滤数据。</li>
+<li>ci_enabled_first (可选) - 将结果根据是否带有 <code>ci_enabled</code> 字段来排序。</li>
+</ul>
+<p>返回示例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">&quot;id&quot;</span>: <span class="number">4</span>,</span><br><span class="line">    <span class="attr">&quot;description&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">&quot;default_branch&quot;</span>: <span class="string">&quot;master&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;public&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">&quot;visibility_level&quot;</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">&quot;ssh_url_to_repo&quot;</span>: <span class="string">&quot;git@example.com:diaspora/diaspora-client.git&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;http_url_to_repo&quot;</span>: <span class="string">&quot;http://example.com/diaspora/diaspora-client.git&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;web_url&quot;</span>: <span class="string">&quot;http://example.com/diaspora/diaspora-client&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;tag_list&quot;</span>: [</span><br><span class="line">      <span class="string">&quot;example&quot;</span>,</span><br><span class="line">      <span class="string">&quot;disapora client&quot;</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">&quot;owner&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;id&quot;</span>: <span class="number">3</span>,</span><br><span class="line">      <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;Diaspora&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;created_at&quot;</span>: <span class="string">&quot;2013-09-30T13: 46: 02Z&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;Diaspora Client&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;name_with_namespace&quot;</span>: <span class="string">&quot;Diaspora / Diaspora Client&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;path&quot;</span>: <span class="string">&quot;diaspora-client&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;path_with_namespace&quot;</span>: <span class="string">&quot;diaspora/diaspora-client&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;issues_enabled&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">&quot;merge_requests_enabled&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">&quot;builds_enabled&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">&quot;wiki_enabled&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">&quot;snippets_enabled&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">&quot;created_at&quot;</span>: <span class="string">&quot;2013-09-30T13: 46: 02Z&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;last_activity_at&quot;</span>: <span class="string">&quot;2013-09-30T13: 46: 02Z&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;creator_id&quot;</span>: <span class="number">3</span>,</span><br><span class="line">    <span class="attr">&quot;namespace&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;created_at&quot;</span>: <span class="string">&quot;2013-09-30T13: 46: 02Z&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;description&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;id&quot;</span>: <span class="number">3</span>,</span><br><span class="line">      <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;Diaspora&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;owner_id&quot;</span>: <span class="number">1</span>,</span><br><span class="line">      <span class="attr">&quot;path&quot;</span>: <span class="string">&quot;diaspora&quot;</span>,</span><br><span class="line">      <span class="attr">&quot;updated_at&quot;</span>: <span class="string">&quot;2013-09-30T13: 46: 02Z&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">&quot;archived&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">&quot;avatar_url&quot;</span>: <span class="string">&quot;http://example.com/uploads/project/avatar/4/uploads/avatar.png&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>之后利用同个接口结合 <code>search</code> 参数判断 B Gitlab 上的该组织是否存在同名项目。</p>
+<p>如果不存在该项目，可以导入该项目：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;projects</span><br></pre></td></tr></table></figure>
+<p>参数：</p>
+<ul>
+<li>name (必须) - 项目名</li>
+<li>path (可选) - 仓库的路径。默认和项目名相同。</li>
+<li>namespace_id (可选) - 新项目的所属的id。这里设为A Gitlab中拥有该项目的id。</li>
+<li>description (可选) - 项目的描述。这里设为A Gitlab中该项目的描述。</li>
+<li>issues_enabled (可选) - 是否开启 issue 。</li>
+<li>merge_requests_enabled (可选)</li>
+<li>builds_enabled (可选)</li>
+<li>wiki_enabled (可选)</li>
+<li>snippets_enabled (可选)</li>
+<li>public (可选) - 如果为 <code>true</code> ，相当于设置 <code>visibility_level</code> 为 20</li>
+<li>visibility_level (可选) - 项目可见度。这里设为A Gitlab中该项目的可见度。</li>
+<li>import_url (optional) - 导入地址。这里设为A Gitlab中该项目的 http 地址。</li>
+</ul>
+<p>完成后 B Gitlab 即会导入 A Gitlab 中的对应仓库。</p>
+<p>如果该项目已存在，可以利用我开源的一个 <a target="_blank" rel="noopener" href="https://github.com/wzpan/git-repo-sync">代码同步工具</a> 来实现两个仓库之间所有分支的同步。</p>
+<h2 id="用户组织关系同步">用户组织关系同步</h2>
+<p>根据 A Gitlab ，将 B Gitlab 的已激活用户添加到组织中。并从 B Gitlab 删除 A Gitlab 中已 block 或者已移除的用户。</p>
+<p>这里要注意的是两个站点间的用户的关联问题。我们的 Gitlab 在一开始就要求使用公司邮箱注册，而公司的 Gitlab 同样也是使用邮箱的 LDAP 账户体系，因此可以利用邮箱来关联两个站点间的账户。</p>
+<p>获取 Gitlab 某个组织的所有用户：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F;groups&#x2F;:id&#x2F;members</span><br></pre></td></tr></table></figure>
+<p>返回结果示例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">&quot;id&quot;</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">&quot;username&quot;</span>: <span class="string">&quot;raymond_smith&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;email&quot;</span>: <span class="string">&quot;ray@smith.org&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;Raymond Smith&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;state&quot;</span>: <span class="string">&quot;active&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;created_at&quot;</span>: <span class="string">&quot;2012-10-22T14:13:35Z&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;access_level&quot;</span>: <span class="number">30</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">&quot;id&quot;</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="attr">&quot;username&quot;</span>: <span class="string">&quot;john_doe&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;email&quot;</span>: <span class="string">&quot;joh@doe.org&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;John Doe&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;state&quot;</span>: <span class="string">&quot;active&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;created_at&quot;</span>: <span class="string">&quot;2012-10-22T14:13:35Z&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;access_level&quot;</span>: <span class="number">30</span></span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>找出两个 Gitlab 上用户的差异，并执行如下操作：</p>
+<ol>
+<li>如果 B Gitlab 比 A Gitlab 多出了一些成员，将该成员删除；</li>
+<li>如果 A Gitlab 的某个用户 <code>state</code> 字段为 <code>blocked</code> ，则该成员可能已离职或 transfer，将该成员从 B Gitlab 中删除；</li>
+<li>如果 A Gitlab 上某个用户在 B Gitlab 上不存在，则可能是新成员，尝试添加该成员。</li>
+<li>如果某一用户在两个 Gitlab 上的权限等级不一样，则该用户的等级可能经过修改，需要同步该权限等级到 B Gitlab 。</li>
+</ol>
+<p>添加组织成员的 API ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;groups&#x2F;:id&#x2F;members</span><br></pre></td></tr></table></figure>
+<p>参数：</p>
+<ul>
+<li>id (必须) - 组织的 id ，也可以是路径；</li>
+<li>user_id (必须) - 用户的 ID ，即 UM 账号</li>
+<li>access_level (必须) - 权限等级</li>
+</ul>
+<p>删除组织成员的 API ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DELETE &#x2F;groups&#x2F;:id&#x2F;members&#x2F;:user_id</span><br></pre></td></tr></table></figure>
+<p>编辑组织成员的 API ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PUT &#x2F;groups&#x2F;:id&#x2F;members&#x2F;:user_id</span><br></pre></td></tr></table></figure>
+<p>另外还需要考虑 B Gitlab 不存在该用户的情况，需做容错处理。</p>
+<h2 id="项目权限控制信息同步">项目权限控制信息同步</h2>
+<p>项目的权限控制信息主要包括项目成员设定及分支保护设定。</p>
+<h3 id="项目成员同步">项目成员同步</h3>
+<p>项目成员的同步与组织成员的同步大同小异。</p>
+<p>获取项目成员的 API ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F;projects&#x2F;:id&#x2F;members</span><br></pre></td></tr></table></figure>
+<p>添加项目成员的 API ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;projects&#x2F;:id&#x2F;members</span><br></pre></td></tr></table></figure>
+<p>删除项目成员的 API ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DELETE &#x2F;projects&#x2F;:id&#x2F;members&#x2F;:user_id</span><br></pre></td></tr></table></figure>
+<p>编辑项目成员的 API ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PUT &#x2F;projects&#x2F;:id&#x2F;members&#x2F;:user_id</span><br></pre></td></tr></table></figure>
+<h3 id="分支保护同步">分支保护同步</h3>
+<p>首先获取 A Gitlab 中一个仓库的所有分支：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET &#x2F;projects&#x2F;:id&#x2F;repository&#x2F;branches</span><br></pre></td></tr></table></figure>
+<p>返回示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;name&quot;: &quot;async&quot;,</span><br><span class="line">    &quot;commit&quot;: &#123;</span><br><span class="line">      &quot;id&quot;: &quot;a2b702edecdf41f07b42653eb1abe30ce98b9fca&quot;,</span><br><span class="line">      &quot;parents&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;id&quot;: &quot;3f94fc7c85061973edc9906ae170cc269b07ca55&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      ],</span><br><span class="line">      &quot;tree&quot;: &quot;c68537c6534a02cc2b176ca1549f4ffa190b58ee&quot;,</span><br><span class="line">      &quot;message&quot;: &quot;give Caolan credit where it&#39;s due (up top)&quot;,</span><br><span class="line">      &quot;author&quot;: &#123;</span><br><span class="line">        &quot;name&quot;: &quot;Jeremy Ashkenas&quot;,</span><br><span class="line">        &quot;email&quot;: &quot;jashkenas@example.com&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;committer&quot;: &#123;</span><br><span class="line">        &quot;name&quot;: &quot;Jeremy Ashkenas&quot;,</span><br><span class="line">        &quot;email&quot;: &quot;jashkenas@example.com&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;authored_date&quot;: &quot;2010-12-08T21:28:50+00:00&quot;,</span><br><span class="line">      &quot;committed_date&quot;: &quot;2010-12-08T21:28:50+00:00&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;protected&quot;: false</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;name&quot;: &quot;gh-pages&quot;,</span><br><span class="line">    &quot;commit&quot;: &#123;</span><br><span class="line">      &quot;id&quot;: &quot;101c10a60019fe870d21868835f65c25d64968fc&quot;,</span><br><span class="line">      &quot;parents&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;id&quot;: &quot;9c15d2e26945a665131af5d7b6d30a06ba338aaa&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      ],</span><br><span class="line">      &quot;tree&quot;: &quot;fb5cc9d45da3014b17a876ad539976a0fb9b352a&quot;,</span><br><span class="line">      &quot;message&quot;: &quot;Underscore.js 1.5.2&quot;,</span><br><span class="line">      &quot;author&quot;: &#123;</span><br><span class="line">        &quot;name&quot;: &quot;Jeremy Ashkenas&quot;,</span><br><span class="line">        &quot;email&quot;: &quot;jashkenas@example.com&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;committer&quot;: &#123;</span><br><span class="line">        &quot;name&quot;: &quot;Jeremy Ashkenas&quot;,</span><br><span class="line">        &quot;email&quot;: &quot;jashkenas@example.com&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;authored_date&quot;: &quot;2013-09-07T12: 58: 21+00: 00&quot;,</span><br><span class="line">      &quot;committed_date&quot;: &quot;2013-09-07T12: 58: 21+00: 00&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;protected&quot;: false</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>其中 <code>protected</code> 表示该分支是否受到保护。</p>
+<p>根据分支的保护情况修改 B Gitlab 上的分支。</p>
+<p>保护某个分支：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PUT &#x2F;projects&#x2F;:id&#x2F;repository&#x2F;branches&#x2F;:branch&#x2F;protect</span><br></pre></td></tr></table></figure>
+<p>取消某个分支的保护：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PUT &#x2F;projects&#x2F;:id&#x2F;repository&#x2F;branches&#x2F;:branch&#x2F;unprotect</span><br></pre></td></tr></table></figure>
+<h2 id="总结">总结</h2>
+<p>对于同时搭建了多个 Gitlab 的团队，多个 Gitlab 间的数据同步是值得去实现的事情。它一方面能避免单点问题，降低小团队的维护成本，一方面也能尽量保证小团队的定制灵活性。因此，文本列举了组织同步、仓库代码和wiki同步、组织关系同步、权限控制信息同步等四大方面的同步的方案。我将这四个类型的同步可以写成了三个工具：</p>
+<ul>
+<li><code>group_sync</code> - 处理组织同步</li>
+<li><code>project_sync</code> - 处理项目代码、wiki同步</li>
+<li><code>member_sync</code> - 处理组织关系、权限控制信息的同步</li>
+</ul>
+<p>设定每天自动按顺序执行这几个工具的同步，完成后邮件汇报同步结果。作为实例，这是我们每天都会收到的同步结果邮件（出于保护隐私的考虑，我修改了部分隐私信息）：</p>
+<iframe src="http://onmw7y6f4.bkt.clouddn.com/log.html" width=100% height=360 frameborder=0></iframe>
+<p>由于项目变动、成员变动比较频繁，当希望在计划任务之前进行某方面同步，仍然可以单独手动运行以上工具完成所需方面的同步。对于一些同步及时性要求更高的仓库，则可以通过加 post-receive 钩子调用 <a target="_blank" rel="noopener" href="https://github.com/wzpan/git-repo-sync">代码同步工具</a> 来实现 push 后即时同步。</p>
+<p>要注意的是，这个同步方案并没有保证 A Gitlab 的所有数据都能被完整地同步。在设计同步策略的时候，我跳过了下述类型的同步：</p>
+<ol>
+<li>用户私有仓库。这些仓库只是个人仓库，不会对组织财产造成影响。且如果要同步私有仓库，则要求两个 Gitlab 站点的账户都为管理员，因为只有管理员才能访问所有用户的私有仓库。</li>
+<li>SSH key。用户添加的所有 SSH key 无法同步。</li>
+<li>头像。组织、用户、仓库的头像未做同步。</li>
+<li>issue。由于我们的 Gitlab 并不用来进行 bug 跟踪管理，所以我跳过了这方面的同步。读者也可以利用 Gitlab API 实现 issue 的同步。</li>
+<li>附件。Wiki 中的附件是独立于仓库之外的，需要单独备份。例如使用 <a target="_blank" rel="noopener" href="http://rsync.samba.org/">rsync</a> 。</li>
+</ol>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/work/enterprise-class-git-version-control-5/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/math/math-linear-algebra-graded/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '化繁为简的企业级 Git 管理实战（四）：多 Gitlab 数据同步'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/enterprise-class-git-version-control-4.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2017-04-12 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/work/">work<span>7</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Git/">Git<span>5</span></a></li> <li><a href="/tags/Gitlab/">Gitlab<span>2</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%9C%80%E6%B1%82%E6%8F%8F%E8%BF%B0"><span class="toc-article-text">需求描述</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%BB%84%E7%BB%87%E5%90%8C%E6%AD%A5"><span class="toc-article-text">组织同步</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BB%93%E5%BA%93%E4%BB%A3%E7%A0%81%E5%90%8C%E6%AD%A5"><span class="toc-article-text">仓库代码同步</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%94%A8%E6%88%B7%E7%BB%84%E7%BB%87%E5%85%B3%E7%B3%BB%E5%90%8C%E6%AD%A5"><span class="toc-article-text">用户组织关系同步</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%A1%B9%E7%9B%AE%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E4%BF%A1%E6%81%AF%E5%90%8C%E6%AD%A5"><span class="toc-article-text">项目权限控制信息同步</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E9%A1%B9%E7%9B%AE%E6%88%90%E5%91%98%E5%90%8C%E6%AD%A5"><span class="toc-article-text">项目成员同步</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%88%86%E6%94%AF%E4%BF%9D%E6%8A%A4%E5%90%8C%E6%AD%A5"><span class="toc-article-text">分支保护同步</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-article-text">总结</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

@@ -1,0 +1,816 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Cocos Creator 最佳实践之注意 JavaScript API 兼容性 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="预告：我们正在撰写《Cocos Creator 最佳实践》一书，本文仅是其中代码规范篇中的一个小点。敬请期待全书。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Cocos Creator 最佳实践之注意 JavaScript API 兼容性"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: 'Cocos Creator 最佳实践之注意 JavaScript API 兼容性'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> Cocos Creator 最佳实践之注意 JavaScript API 兼容性</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>预告：我们正在撰写《Cocos Creator 最佳实践》一书，本文仅是其中代码规范篇中的一个小点。敬请期待全书。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <p>不同的浏览器和移动设备所使用的 JavaScript 虚拟机（VM）千差万别，所支持的 API 也大相径庭。</p>
+<p>我们来了解一下 Cocos Creator 在各个端所使用的 JavaScript VM ：</p>
+<ul>
+<li>对于 iOS 客户端和 Mac 客户端：在 Cocos Creator 1.6 及以前，Cocos Creator 一直是使用非系统原生的 SpiderMonkey 作为 JS VM ；从 1.7 开始，Cocos Creator 引入了 JSB 2.0 ，支持了 V8、JavaScriptCore 等多种 JS VM 。于是 Cocos Creator 便将 iOS 端和 Mac 端的 JS VM 都改为了系统自带的 JavaScriptCore ，以达到节省包体的目的；到了 2.1.3 ，Cocos Creator 又将 Mac 端的 JS VM 切换到了 V8，以提升应用性能。</li>
+<li>对于 Android 客户端和 Windows 客户端：在 Cocos Creator 1.6 及以前，Cocos Creator 同样是使用 SpiderMonkey 作为 JS VM ；从 1.7 开始，得益于 JSB 2.0 ，V8 成了 Android 和 Windows 客户端的 JS VM 。</li>
+<li>对于 Web 端：使用浏览器本身的 JavaScript VM 来解析 JavaScript 代码。</li>
+</ul>
+<span id="more"></span>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/cocos-creator-api-compat/api-compat-jsb2-arch.png" alt="JSB 2.0 架构图" />
+        <figcaption>JSB 2.0 架构图</figcaption>
+      </figure>
+    </p>
+<p>从上可见，由于 JS VM 不同，同一份代码在不同的平台上运行可能会有很大差异。为了让我们的产品能够给尽可能多的用户使用，我们在开发阶段就需要时刻注意 JavaScript 的 API 兼容性。</p>
+<p>举个例子：<code>fetch()</code> 方法是一个用来取代 <code>XMLHTTPRequest</code> 的 API。相比后者，它的优点在于可读性更高，且可以很方便地使用 Promise 写出更优雅的代码。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fetch(</span><br><span class="line">    <span class="string">&#x27;http://domain/service&#x27;</span>,</span><br><span class="line">    &#123; <span class="attr">method</span>: <span class="string">&#x27;GET&#x27;</span> &#125;</span><br><span class="line">  )</span><br><span class="line">  .then( <span class="function"><span class="params">response</span> =&gt;</span> response.json() )</span><br><span class="line">  .then( <span class="function"><span class="params">json</span> =&gt;</span> <span class="built_in">console</span>.log(json) )</span><br><span class="line">  .catch( <span class="function"><span class="params">error</span> =&gt;</span> <span class="built_in">console</span>.error(<span class="string">&#x27;error:&#x27;</span>, error) );</span><br></pre></td></tr></table></figure>
+<p>然而，<code>fetch()</code> 方法不支持所有的 IE 浏览器，也无法在 2017 年以前的 Chrome、Firefox 和 Safari 版本上运行。当你的用户有很大一部分是上述的用户时，你就需要考虑禁止使用 <code>fetch()</code> API ，而重新回到 <code>XMLHTTPRequest</code> 的怀抱。</p>
+<p>在开发阶段，人工保证 API 的兼容性是不可靠的。更可靠的方式是借助工具来自动化扫描。例如下面要介绍的 eslint-plugin-compat 。</p>
+<h2 id="使用-eslint-plugin-compat">使用 eslint-plugin-compat</h2>
+<p>eslint-plugin-compat 是 ESLint 的一个插件，由前 uber 工程师 Amila Welihinda 开发。它可以帮助发现代码中的不兼容 API 。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/cocos-creator-api-compat/api-compat-1.png" alt="使用 eslint-plugin-compat 扫描不兼容 API" />
+        <figcaption>使用 eslint-plugin-compat 扫描不兼容 API</figcaption>
+      </figure>
+    </p>
+<p>下面介绍如何在工程中接入 eslint-plugin-compat 。</p>
+<h3 id="1-安装-eslint-plugin-compat">1. 安装 eslint-plugin-compat</h3>
+<p>安装 eslint-plugin-compat 和安装其他 ESLint 插件类似：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install eslint-plugin-compat --save-dev</span><br></pre></td></tr></table></figure>
+<p>还可以顺便把依赖的 browserslist 和 caniuse-lite 一起安装了：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install browserslist caniuse-lite --save-dev</span><br></pre></td></tr></table></figure>
+<h3 id="2-修改-ESLint-配置">2. 修改 ESLint 配置</h3>
+<p>之后，我们需要修改 ESLint 的配置，加上该插件的使用：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// .eslintrc.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;extends&quot;</span>: <span class="string">&quot;eslint:recommended&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;plugins&quot;</span>: [</span><br><span class="line">    <span class="string">&quot;compat&quot;</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">&quot;rules&quot;</span>: &#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="attr">&quot;compat/compat&quot;</span>: <span class="number">2</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;env&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;browser&quot;</span>: <span class="literal">true</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;,</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-配置目标运行环境">3. 配置目标运行环境</h3>
+<p>通过在 package.json 中增加 <code>browserslist</code> 字段来配置目标运行环境。示例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">&quot;browserslist&quot;</span>: [<span class="string">&quot;chrome 70&quot;</span>, <span class="string">&quot;last 1 versions&quot;</span>, <span class="string">&quot;not ie &lt;= 8&quot;</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的值表示 Chrome 版本 70 以上，或每种浏览器的最近一个版本，或者非 ie 8 及以下。这里的填写格式是遵循 browserslist （<a target="_blank" rel="noopener" href="https://github.com/browserslist/browserslist">https://github.com/browserslist/browserslist</a> ）所定义的一套描述规范。browserslist 是一套描述产品目标运行环境的工具，它被广泛用在各种涉及浏览器/移动端的兼容性支持工具中，例如 eslint-plugin-compat 、babel、Autoprefixer 等。下面我们来详细了解一下 browserslist 的描述规范。</p>
+<p>browserslist 支持指定目标浏览器类型，并且能够灵活组合多种指定条件。</p>
+<h4 id="指定目标浏览器类型">指定目标浏览器类型</h4>
+<p>browserslist 收录了如下一些浏览器，可以在条件中使用（注意大小写敏感）：</p>
+<ul>
+<li><code>Android</code>：用于 Android WebView。</li>
+<li><code>Baidu</code>：用于百度浏览器。</li>
+<li><code>BlackBerry</code> 或 <code>bb</code>：用于黑莓浏览器。</li>
+<li><code>Chrome</code>：用于 Google Chrome。</li>
+<li><code>ChromeAndroid</code> 或 <code>and_chr</code>：用于 Android Chrome。</li>
+<li><code>Edge</code>：用于 Microsoft Edge。</li>
+<li><code>Electron</code>：用于 Electron framework。 将会被转换成 Chrome 版本。</li>
+<li><code>Explorer</code> 或 <code>ie</code>：用于 Internet Explorer。</li>
+<li><code>ExplorerMobile</code> 或 <code>ie_mob</code>：用于 Internet Explorer Mobile。</li>
+<li><code>Firefox</code> 或 <code>ff</code>：用于 Mozilla Firefox。</li>
+<li><code>FirefoxAndroid</code> 或 <code>and_ff</code>：用于 Android Firefox。</li>
+<li><code>iOS</code> 或 <code>ios_saf</code>：用于 iOS Safari。</li>
+<li><code>Node</code>：用于 Node.js。</li>
+<li><code>Opera</code>：用于 Opera。</li>
+<li><code>OperaMini</code> 或 <code>op_mini</code>：用于 Opera Mini。</li>
+<li><code>OperaMobile</code> 或 <code>op_mob</code>：用于 Opera Mobile。</li>
+<li><code>QQAndroid</code> 或 <code>and_qq</code>：用于 Android QQ 浏览器。</li>
+<li><code>Safari</code>：用于 desktop Safari。</li>
+<li><code>Samsung</code>：用于 Samsung Internet。</li>
+<li><code>UCAndroid</code> 或 <code>and_uc</code>：用于 Android 端的 UC 浏览器。</li>
+<li><code>kaios</code>：用于 KaiOS 浏览器。</li>
+</ul>
+<h4 id="browseslist-的条件语法">browseslist 的条件语法</h4>
+<p>browserslist 支持非常灵活的条件语法，下面给出一些例子作为参考（注意大小写敏感），供读者们举一反三。</p>
+<ul>
+<li><code>&gt; 5%</code>：表示要兼容全球用户统计比例 &gt; 5% 的浏览器版本。<code>&gt;=</code>、<code>&lt;</code> 及 <code>&lt;=</code> 也都是可用的。</li>
+<li><code>&gt; 5% in US</code>：表示要兼容美国用户统计比例 &gt; 5% 的浏览器版本。这里的 <code>US</code> 是美国的 Alpha-2 编码 <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>。也可以换成其他国家/地区的 Alpha-2 编码。例如，中国就是 <code>CN</code> 。</li>
+<li><code>&gt; 5% in alt-AS</code>：表示要兼容亚洲用户统计比例 &gt; 5% 的浏览器版本。这里的 <code>alt-AS</code> 表示亚洲地区 <sup class="footnote-ref"><a href="#fn1" id="fnref1:1">[1:1]</a></sup> 。</li>
+<li><code>&gt; 5% in my stats</code>：表示要兼容自定义的用户统计比例 &gt; 5% 的浏览器版本。</li>
+<li><code>cover 99.5%</code>：表示要兼容用户份额累计前 99.5% 的浏览器版本。</li>
+<li><code>cover 99.5% in US</code>：同上，但通过 Alpha-2 编码来加上国家/地区的限定。</li>
+<li><code>cover 99.5% in my stats</code>：使用用户的数据。</li>
+<li><code>maintained node versions</code>：所有官方还在维护的 Node.js 版本。</li>
+<li><code>current node</code>：Browserslist 现在正在使用的 Node.js 版本。</li>
+<li><code>extends browserslist-config-mycompany</code>：表示要兼容 browserslist-config-mycompany 这个 npm 包的查询结果。</li>
+<li><code>ie 6-8</code>：表示要兼容 IE 6 ~ IE 8 的版本（即 IE 6、IE 7 和 IE 8）。</li>
+<li><code>Firefox &gt; 20</code>：表示要兼容 &gt; 20 的 Firefox 版本。<code>&gt;=</code>、<code>&lt;</code> 及 <code>&lt;=</code> 也都是可用的。</li>
+<li><code>iOS 7</code>：表示要兼容 iOS 7 。</li>
+<li><code>Firefox ESR</code>：表示要兼容最新的 Firefox ESR 版本。</li>
+<li><code>PhantomJS 2.1 and PhantomJS 1.9</code>：表示要兼容 PhantomJS 2.1 和 1.9 版本。</li>
+<li><code>unreleased versions</code> 或 <code>unreleased Chrome versions</code>：表示要兼容未发布的开发版本。后者则具体指明是要兼容未发布的 Chrome 版本。</li>
+<li><code>last 2 major versions</code> 或 <code>last 2 iOS major versions</code>：表示要兼容最近两个主要版本所包含的所有小版本。后者则具体指明是要兼容 iOS 的最近两个主要版本所包含的所有小版本。</li>
+<li><code>since 2015</code> 或 <code>last 2 years</code>：自 2015 年或最近两年到现在所发布的所有版本。</li>
+<li><code>dead</code>：官方不再维护或者超过两年没有更新的浏览器版本。</li>
+<li><code>last 2 versions</code>：每种浏览器的最近两个版本。</li>
+<li><code>last 2 Chrome versions</code>：Chrome 浏览器的最近两个版本。</li>
+<li><code>defaults</code>：Browserslist 的默认规则（<code>&gt; 0.5%, last 2 versions, Firefox ESR, not dead</code>）。</li>
+<li><code>not ie &lt;= 8</code>：从前面的条件中再排除掉低于或者等于 IE 8 的浏览器。</li>
+</ul>
+<p>在阅读这些规则的时候，推荐访问 <a target="_blank" rel="noopener" href="http://browsersl.ist">http://browsersl.ist</a> 输入相同的命令进行测试，可以直接得出符合条件的浏览器版本。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/cocos-creator-api-compat/api-compat-browserslist.png" alt="在 browserl.ist 上测试条件" />
+        <figcaption>在 browserl.ist 上测试条件</figcaption>
+      </figure>
+    </p>
+<blockquote>
+<p>细心的读者可能会发现最后一条的查询结果会报错，这是因为 <code>not</code> 操作需要放在一个查询条件之后（下文会介绍）。你可以从其他规则中随意挑一条规则来组合，例如 <code>ie 6-10, not ie &lt;= 8</code> 将会筛出 IE 9 和 IE 10 。</p>
+</blockquote>
+<h4 id="browseslist-的条件组合">browseslist 的条件组合</h4>
+<p>browserslist 支持多种条件的组合，下面我们来了解 browseslist 的条件组合方法。</p>
+<ul>
+<li><code>,</code> 和 <code>or</code> 都可以用来表示逻辑 “或”。例如，<code>last 1 version or &gt; 1%</code> 与 <code>last 1 version, &gt; 1%</code> 等价，都表示每种浏览器的最近 1 个版本，或者 &gt; 1% 的市场份额。“或” 操作相当于集合论中的并集。</li>
+<li><code>and</code> 用来表示逻辑 “与”。例如，<code>last 1 version and &gt; 1%</code> 表示每种浏览器的最近一个版本，且 &gt; 1% 的市场份额。“与” 操作相当于集合论中的交集。</li>
+<li><code>not</code> 用来表示逻辑 “非”。例如 <code>&gt; .5% and not ie &lt;= 8</code> 表示 &gt; 1% 的市场份额且排除 ie 8 及以下的版本。“非” 操作相当于集合论里头的补集，所以 <code>not</code> 不能作为第一个条件，因为你总需要知道“补”的是什么的“集”。</li>
+</ul>
+<p>三种条件组合类型可以用下面的表格来示意：</p>
+<table>
+<thead>
+<tr>
+<th>条件组合类型</th>
+<th>示意图</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>or</code>/<code>,</code> 组合 <br> （并集）</td>
+<td>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/cocos-creator-api-compat/api-compat-union.svg" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </td>
+<td><code>&gt; .5% or last 2 versions</code> <br> <code>&gt; .5%, last 2 versions</code></td>
+</tr>
+<tr>
+<td><code>and</code> 组合 <br>（交集）</td>
+<td>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/cocos-creator-api-compat/api-compat-intersection.svg" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </td>
+<td><code>&gt; .5% and last 2 versions</code></td>
+</tr>
+<tr>
+<td><code>not</code> 组合 <br>（补集）</td>
+<td>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/cocos-creator-api-compat/api-compat-complement.svg" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </td>
+<td><code>&gt; .5% and not last 2 versions</code> <br> <code>&gt; .5% or not last 2 versions</code> <br> <code>&gt; .5%, not last 2 versions</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="配置你的-browserslist">配置你的 browserslist</h4>
+<p>了解了以上规则后，我们可以来配置适用于我们的工程的 browserslist 。</p>
+<p>举个例子：假如我们的项目希望在 iOS 8 及以上，或者版本号 49 及以上且市场份额大于 0.2% 的 Chrome 桌面浏览器运行，那么可以使用如下的规则：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ...</span></span><br><span class="line">&quot;browserslist&quot;: [</span><br><span class="line">  &quot;&gt;.2% and chrome &gt;= 49&quot;,</span><br><span class="line">  <span class="string">&quot;iOS &gt;= 8&quot;</span></span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+<p>完成后，可以使用 <code>npx browserslist</code> 来测试你配置的 browserslist 。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">$ npx browserslist</span><br><span class="line">chrome 78</span><br><span class="line">chrome 77</span><br><span class="line">chrome 76</span><br><span class="line">chrome 75</span><br><span class="line">chrome 74</span><br><span class="line">chrome 73</span><br><span class="line">chrome 72</span><br><span class="line">chrome 63</span><br><span class="line">chrome 49</span><br><span class="line">ios_saf 13.0-13.2</span><br><span class="line">ios_saf 12.2-12.4</span><br><span class="line">ios_saf 12.0-12.1</span><br><span class="line">ios_saf 11.3-11.4</span><br><span class="line">ios_saf 11.0-11.2</span><br><span class="line">ios_saf 10.3</span><br><span class="line">ios_saf 10.0-10.2</span><br><span class="line">ios_saf 9.3</span><br><span class="line">ios_saf 9.0-9.2</span><br><span class="line">ios_saf 8.1-8.4</span><br><span class="line">ios_saf 8</span><br></pre></td></tr></table></figure>
+<p>也可以访问 <a target="_blank" rel="noopener" href="https://browsersl.ist/">https://browsersl.ist/</a> 上输入条件测试结果。</p>
+<h4 id="测试效果">测试效果</h4>
+<p>完成了 browserslist 规则的配置后，我们就可以结合 ESLint 扫描工程中的 API 兼容问题。同时 VS Code 插件也可以即时提示不兼容的 API 调用。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/cocos-creator-api-compat/api-compat-vscode.png" alt="在 VS Code 即时扫描不兼容 API" />
+        <figcaption>在 VS Code 即时扫描不兼容 API</figcaption>
+      </figure>
+    </p>
+<h2 id="使用-eslint-plugin-builtin-compat">使用 eslint-plugin-builtin-compat</h2>
+<p>eslint-plugin-compat 的原理是针对确认的类型和属性，使用 caniuse (<a target="_blank" rel="noopener" href="http://caniuse.com">http://caniuse.com</a>) 的数据集 caniuse-db 以及 MDN（<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/">https://developer.mozilla.org/en-US/</a> ）的数据集 mdn-browser-compat-data 里的数据来确认 API 的兼容性。但对于不确定的实例对象，由于难以判断该实例的方法的兼容性，为了避免误报，eslint-plugin-compat 选择了跳过这类 API 的检查。</p>
+<p>例如，<code>foo.includes</code> 在不确定 <code>foo</code> 是否为数组类型的时候，就无法判断 <code>includes</code> 方法的兼容性。在下图中，我们在使用上面的 browserslint 配置的情况下，<code>includes</code> 方法的兼容问题并没有被扫描出来：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/cocos-creator-api-compat/api-compat-includes-1.png" alt="eslint-plugin-compat 无法检测实例对象的 API" />
+        <figcaption>eslint-plugin-compat 无法检测实例对象的 API</figcaption>
+      </figure>
+    </p>
+<p>然而，从 caniuse 上可以查知，<code>Array.prototype.includes()</code> 方法不能被 iOS 8 兼容：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/cocos-creator-api-compat/api-compat-includes-2.png" alt="Array.prototype.includes() 并不能被 iOS 8 兼容" />
+        <figcaption>Array.prototype.includes() 并不能被 iOS 8 兼容</figcaption>
+      </figure>
+    </p>
+<blockquote>
+<p>实际上，Cocos Creator 的 engine 项目自 2.1.3 版本开始，就已经针对 <code>Array.prototype.includes()</code> 方法加入了 Polyfill ，从而彻底规避了该 API 的兼容问题。在本节后面介绍 Polyfill 的时候我们将介绍如何避免该 API 的误报。</p>
+</blockquote>
+<p>为了避免漏报这种问题，我们可以结合另一个兼容检查插件 eslint-plugin-builtin-compat 。该插件同样借助 mdn-browser-compat-data 来进行兼容扫描，与 eslint-plugin-compat 不同的是，该插件不会放过实例对象，因此它会把所有 <code>foo.includes</code> 的 <code>includes</code> 方法当成是 <code>Array.prototype.includes()</code> 方法来扫描。可想而知，这个插件可能会导致误报。因此建议将其告警级别改为 warning 级别。</p>
+<h3 id="安装-eslint-plugin-builtin-compat">安装 eslint-plugin-builtin-compat</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install eslint-plugin-builtin-compat --save-dev</span><br></pre></td></tr></table></figure>
+<h3 id="修改-ESLint-配置">修改 ESLint 配置</h3>
+<p>与 eslint-plugin-compat 类似，我们可以修改 ESLint 的配置，加上该插件的使用。但由于该插件容易误报，因此只建议将其告警级别改为 warning 级别：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// .eslintrc.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;extends&quot;</span>: <span class="string">&quot;eslint:recommended&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;plugins&quot;</span>: [</span><br><span class="line">    <span class="string">&quot;compat&quot;</span>,</span><br><span class="line">    <span class="string">&quot;builtin-compat&quot;</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">&quot;rules&quot;</span>: &#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="attr">&quot;compat/compat&quot;</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="attr">&quot;builtin-compat/no-incompatible-builtins&quot;</span>: <span class="number">1</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;env&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;browser&quot;</span>: <span class="literal">true</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;,</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>加入该插件后，可以发现 <code>Array.prototype.includes()</code> 方法将会被该插件告警：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/cocos-creator-api-compat/api-compat-includes-3.png" alt="eslint-plugin-builtin-compat 可以检测实例对象的 API" />
+        <figcaption>eslint-plugin-builtin-compat 可以检测实例对象的 API</figcaption>
+      </figure>
+    </p>
+<h2 id="使用-Polyfill-解决兼容问题">使用 Polyfill 解决兼容问题</h2>
+<p>靠 ESLint 在开发阶段扫描出 API 兼容问题固然是一种防治兼容性问题的手段，但如果团队里的同事并不认真注意 ESLint 的扫描结果，甚至没有将 ESLint 作为代码合入扫描的一环的话，就有可能会有漏网之鱼继续肆虐。</p>
+<p>因此，一种更为一劳永逸的方法是为一些常用的 API 补上相应 Polyfill 。这样一方面可以为不兼容的浏览器版本添加上支持，另一方面又可以使得团队成员安心地使用新的 API ，提高开发效率。</p>
+<h3 id="Cocos-Creator-engine-里的-Polyfill">Cocos Creator engine 里的 Polyfill</h3>
+<p>实际上，Cocos Creator 的 engine 项目也内置了很多常见 API 的 Polyfill ：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/cocos-creator-api-compat/api-compat-polyfill.png" alt="cocos-creator/engine 项目内置的 Polyfill" />
+        <figcaption>cocos-creator/engine 项目内置的 Polyfill</figcaption>
+      </figure>
+    </p>
+<p>其中就包括了 <code>Array.prototype.includes()</code> ：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/cocos-creator-api-compat/api-compat-polyfill-array.png" alt="Array.prototype.includes() 的 Polyfill" />
+        <figcaption>Array.prototype.includes() 的 Polyfill</figcaption>
+      </figure>
+    </p>
+<p>因此，如果使用 2.1.3 以上版本的 Cocos Creator 构建带有 <code>Array.prototype.includes()</code> 方法的工程，编译出来的应用将可以顺利在 iOS 8 机器上运行。这是因为 <code>Array.prototype.includes()</code> 在构建时被统一被 “翻译” 成了 engine 项目里提供的方法。</p>
+<p>相应地，为了避免 Polyfill 里的 <code>isArray</code> 、<code>find</code>、<code>includes</code> 等 API 被 eslint-plugin-builtin-compat 误报，可以在 .eslintrc 中将这些 API 加入该插件的排除列表中：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// .eslintrc.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;extends&quot;</span>: <span class="string">&quot;eslint:recommended&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;plugins&quot;</span>: [</span><br><span class="line">    <span class="string">&quot;compat&quot;</span>,</span><br><span class="line">    <span class="string">&quot;builtin-compat&quot;</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">&quot;settings&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;builtin-compat-ignore&quot;</span>: [<span class="string">&quot;ArrayBuffer&quot;</span>, <span class="string">&quot;find&quot;</span>, <span class="string">&quot;log2&quot;</span>, <span class="string">&quot;parseFloat&quot;</span>, <span class="string">&quot;parseInt&quot;</span>, <span class="string">&quot;assign&quot;</span>, <span class="string">&quot;values&quot;</span>, <span class="string">&quot;trimLeft&quot;</span>, <span class="string">&quot;startsWith&quot;</span>, <span class="string">&quot;endsWith&quot;</span>, <span class="string">&quot;repeat&quot;</span>]</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="自行增加-Polyfill">自行增加 Polyfill</h3>
+<p>engine 项目里的 Polyfill 并不能覆盖所有的 API 。如果你希望使用的某个不兼容 API 并没有包含在 engine 项目中，那么就得考虑给你自己的项目补上该 API 的 Polyfill 。</p>
+<p>例如，<code>string.prototype.padStart()</code> 和 <code>string.prototype.padEnd()</code> 两个 API 分别提供了用于字符串的头部和尾部补全的便利方法：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;x&#x27;</span>.padStart(<span class="number">5</span>, <span class="string">&#x27;ab&#x27;</span>)  <span class="comment">// &#x27;ababx&#x27;</span></span><br><span class="line"><span class="string">&#x27;x&#x27;</span>.padStart(<span class="number">4</span>, <span class="string">&#x27;ab&#x27;</span>)  <span class="comment">// &#x27;abax&#x27;</span></span><br><span class="line"><span class="string">&#x27;x&#x27;</span>.padEnd(<span class="number">5</span>, <span class="string">&#x27;ab&#x27;</span>)  <span class="comment">// &#x27;xabab&#x27;</span></span><br><span class="line"><span class="string">&#x27;x&#x27;</span>.padEnd(<span class="number">4</span>, <span class="string">&#x27;ab&#x27;</span>)  <span class="comment">// &#x27;xaba&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>而这两个方法只在 iOS 10 及以上版本才被支持：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/cocos-creator-api-compat/api-compat-padstart.png" alt="string.prototype.padStart() 方法只在 iOS 10 以上才被支持" />
+        <figcaption>string.prototype.padStart() 方法只在 iOS 10 以上才被支持</figcaption>
+      </figure>
+    </p>
+<h4 id="寻找-Polyfill">寻找 Polyfill</h4>
+<p>如何寻找这两个方法的 Polyfill 呢？一个最权威的来源就是 MDN 站点（<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/">https://developer.mozilla.org/en-US/</a> ）。以 <code>string.prototype.padStart()</code> 为例，我们可以在站点右上角的搜索框中输入 <code>padStart</code> ：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/cocos-creator-api-compat/api-compat-padstart-search.png" alt="在 MDN 中搜索 padStart" />
+        <figcaption>在 MDN 中搜索 padStart</figcaption>
+      </figure>
+    </p>
+<p>之后敲回车进入搜索，在搜索结果中点击最匹配的结果：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/cocos-creator-api-compat/api-compat-padstart-search-2.png" alt="padStart 搜索结果" />
+        <figcaption>padStart 搜索结果</figcaption>
+      </figure>
+    </p>
+<p>就进入了 <code>string-prototype-padStart</code> 的文档页，在左侧的导航栏中可以看到有 <code>Polyfill</code> 的栏目：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/cocos-creator-api-compat/api-compat-polyfill-padstart.png" alt="文档页里的 Polyfill 栏目" />
+        <figcaption>文档页里的 Polyfill 栏目</figcaption>
+      </figure>
+    </p>
+<p>点击它即可跳转到对应的 Polyfill 实现：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/cocos-creator-api-compat/api-compat-polyfill-padstart.png" alt="string-prototype-padStart 的 Polyfill" />
+        <figcaption>string-prototype-padStart 的 Polyfill</figcaption>
+      </figure>
+    </p>
+<h4 id="编写自定义的-Polyfill-脚本">编写自定义的 Polyfill 脚本</h4>
+<p>找到了 <code>string.prototype.padStart()</code> 和 <code>string.prototype.padEnd()</code> 两个 API 的 Polyfill 后，我们在自己的工程中编写一个自定义的 Polyfill 脚本。例如叫做 ABCPolyfill.js ：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * ABCPolyfill.js</span></span><br><span class="line"><span class="comment"> * 补一些 polyfill，解决若干兼容问题</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> ABCPolyfill = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;ABC polyfill&#x27;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">String</span>.prototype.padStart) &#123;</span><br><span class="line">        <span class="built_in">String</span>.prototype.padStart = <span class="function"><span class="keyword">function</span> <span class="title">padStart</span>(<span class="params">targetLength, padString</span>) </span>&#123;</span><br><span class="line">            targetLength = targetLength &gt;&gt; <span class="number">0</span>; <span class="comment">//truncate if number, or convert non-number to 0;</span></span><br><span class="line">            padString = <span class="built_in">String</span>(<span class="keyword">typeof</span> padString !== <span class="string">&#x27;undefined&#x27;</span> ? padString : <span class="string">&#x27; &#x27;</span>);</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">this</span>.length &gt;= targetLength) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="built_in">String</span>(<span class="built_in">this</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                targetLength = targetLength - <span class="built_in">this</span>.length;</span><br><span class="line">                <span class="keyword">if</span> (targetLength &gt; padString.length) &#123;</span><br><span class="line">                    padString += padString.repeat(targetLength / padString.length); <span class="comment">//append to original to ensure we are longer than needed</span></span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> padString.slice(<span class="number">0</span>, targetLength) + <span class="built_in">String</span>(<span class="built_in">this</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">String</span>.prototype.padEnd) &#123;</span><br><span class="line">        <span class="built_in">String</span>.prototype.padEnd = <span class="function"><span class="keyword">function</span> <span class="title">padEnd</span>(<span class="params">targetLength,padString</span>) </span>&#123;</span><br><span class="line">            targetLength = targetLength&gt;&gt;<span class="number">0</span>; <span class="comment">//floor if number or convert non-number to 0;</span></span><br><span class="line">            padString = <span class="built_in">String</span>((<span class="keyword">typeof</span> padString !== <span class="string">&#x27;undefined&#x27;</span> ? padString : <span class="string">&#x27; &#x27;</span>));</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">this</span>.length &gt; targetLength) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="built_in">String</span>(<span class="built_in">this</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                targetLength = targetLength-<span class="built_in">this</span>.length;</span><br><span class="line">                <span class="keyword">if</span> (targetLength &gt; padString.length) &#123;</span><br><span class="line">                    padString += padString.repeat(targetLength/padString.length); <span class="comment">//append to original to ensure we are longer than needed</span></span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> <span class="built_in">String</span>(<span class="built_in">this</span>) + padString.slice(<span class="number">0</span>,targetLength);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports.ABCPolyfill = ABCPolyfill;</span><br></pre></td></tr></table></figure>
+<p>接下来，我们要在应用启动后加载执行这个 Polyfill 脚本里的 <code>ABCPolyfill()</code> 方法，自动打上这两个 API 的 Polyfill 。我们可以再编写一个应用初始化脚本，例如叫做 ABCInit.js ，该脚本用于在应用初始化时执行一些指定工作。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * ABCInit.js</span></span><br><span class="line"><span class="comment"> * 应用启动时的一些初始化工作</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">import</span> ABCPolyfill <span class="keyword">from</span> <span class="string">&#x27;ABCPolyfill&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化操作</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">doInit</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  ABCPolyfill.ABCPolyfill();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    doInit();</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<p>之后可以在你的工程的初始场景里脚本组件中引用该脚本即可生效：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 工程的初始场景挂载的脚本组件</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">require</span>(<span class="string">&#x27;ABCInit&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+<p>为了避免 eslint-plugin-builtin-compat 误报，可以将 <code>padStart</code> 和 <code>padEnd</code> 也追加进排除名单中：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// .eslintrc.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;extends&quot;</span>: <span class="string">&quot;eslint:recommended&quot;</span>,</span><br><span class="line">  <span class="attr">&quot;plugins&quot;</span>: [</span><br><span class="line">    <span class="string">&quot;compat&quot;</span>,</span><br><span class="line">    <span class="string">&quot;builtin-compat&quot;</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">&quot;settings&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;builtin-compat-ignore&quot;</span>: [<span class="string">&quot;ArrayBuffer&quot;</span>, <span class="string">&quot;find&quot;</span>, <span class="string">&quot;log2&quot;</span>, <span class="string">&quot;parseFloat&quot;</span>, <span class="string">&quot;parseInt&quot;</span>, <span class="string">&quot;assign&quot;</span>, <span class="string">&quot;values&quot;</span>, <span class="string">&quot;trimLeft&quot;</span>, <span class="string">&quot;startsWith&quot;</span>, <span class="string">&quot;endsWith&quot;</span>, <span class="string">&quot;repeat&quot;</span>, <span class="string">&quot;padStart&quot;</span>, <span class="string">&quot;padEnd&quot;</span>]</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="小结">小结</h2>
+<ol>
+<li>时刻注意 API 兼容性；</li>
+<li>使用 eslint-plugin-compat 检查静态类型的不兼容 API ，并将告警级别设为错误；</li>
+<li>使用 eslint-plugin-builtin-compat 检查动态类型的不兼容 API，并将告警级别设为警告；</li>
+<li>考虑为不兼容 API 增加 Polyfill 。</li>
+</ol>
+<h2 id="脚注">脚注</h2>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>所有国家/地区的 Alpha-2 编码可以在这里查询：<a target="_blank" rel="noopener" href="https://www.iban.com/country-codes">https://www.iban.com/country-codes</a>。所有的国家/地区/洲的编码也可以在 node_modules/caniuse-lite/data/regions 里找到。 <a href="#fnref1" class="footnote-backref">↩︎</a> <a href="#fnref1:1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/life/donation-by-wukong-robot/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/codes/wukong-robot-intro/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: 'Cocos Creator 最佳实践之注意 JavaScript API 兼容性'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/cocos-creator-api-compat.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2020-01-05 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/codes/">codes<span>38</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Cocos/">Cocos<span>2</span></a></li> <li><a href="/tags/browserslist/">browserslist<span>1</span></a></li> <li><a href="/tags/ESLint/">ESLint<span>1</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BD%BF%E7%94%A8-eslint-plugin-compat"><span class="toc-article-text">使用 eslint-plugin-compat</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#1-%E5%AE%89%E8%A3%85-eslint-plugin-compat"><span class="toc-article-text">1. 安装 eslint-plugin-compat</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-%E4%BF%AE%E6%94%B9-ESLint-%E9%85%8D%E7%BD%AE"><span class="toc-article-text">2. 修改 ESLint 配置</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-%E9%85%8D%E7%BD%AE%E7%9B%AE%E6%A0%87%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83"><span class="toc-article-text">3. 配置目标运行环境</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%8C%87%E5%AE%9A%E7%9B%AE%E6%A0%87%E6%B5%8F%E8%A7%88%E5%99%A8%E7%B1%BB%E5%9E%8B"><span class="toc-article-text">指定目标浏览器类型</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#browseslist-%E7%9A%84%E6%9D%A1%E4%BB%B6%E8%AF%AD%E6%B3%95"><span class="toc-article-text">browseslist 的条件语法</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#browseslist-%E7%9A%84%E6%9D%A1%E4%BB%B6%E7%BB%84%E5%90%88"><span class="toc-article-text">browseslist 的条件组合</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E9%85%8D%E7%BD%AE%E4%BD%A0%E7%9A%84-browserslist"><span class="toc-article-text">配置你的 browserslist</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%B5%8B%E8%AF%95%E6%95%88%E6%9E%9C"><span class="toc-article-text">测试效果</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BD%BF%E7%94%A8-eslint-plugin-builtin-compat"><span class="toc-article-text">使用 eslint-plugin-builtin-compat</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85-eslint-plugin-builtin-compat"><span class="toc-article-text">安装 eslint-plugin-builtin-compat</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%BF%AE%E6%94%B9-ESLint-%E9%85%8D%E7%BD%AE"><span class="toc-article-text">修改 ESLint 配置</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BD%BF%E7%94%A8-Polyfill-%E8%A7%A3%E5%86%B3%E5%85%BC%E5%AE%B9%E9%97%AE%E9%A2%98"><span class="toc-article-text">使用 Polyfill 解决兼容问题</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#Cocos-Creator-engine-%E9%87%8C%E7%9A%84-Polyfill"><span class="toc-article-text">Cocos Creator engine 里的 Polyfill</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E8%87%AA%E8%A1%8C%E5%A2%9E%E5%8A%A0-Polyfill"><span class="toc-article-text">自行增加 Polyfill</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E5%AF%BB%E6%89%BE-Polyfill"><span class="toc-article-text">寻找 Polyfill</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E7%BC%96%E5%86%99%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84-Polyfill-%E8%84%9A%E6%9C%AC"><span class="toc-article-text">编写自定义的 Polyfill 脚本</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-article-text">小结</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E8%84%9A%E6%B3%A8"><span class="toc-article-text">脚注</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

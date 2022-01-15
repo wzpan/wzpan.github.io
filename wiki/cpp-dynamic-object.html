@@ -1,0 +1,862 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>动态对象 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="new 和 delete
+new 和 delete 可用于动态创建和释放对象。
+  尽量用 new 和 delete 而不用 malloc 和 free。malloc 和 free(及其变体)会产生问题的原因在于它们太简单：他们不知道构造函数和析构函数。
+
+动态对象
+定义
+动态创建对象时，只需指定其">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="动态对象"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '动态对象'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 动态对象</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="new-和-delete">new 和 delete</h2>
+<p>new 和 delete 可用于动态创建和释放对象。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  尽量用 new 和 delete 而不用 malloc 和 free。malloc 和 free(及其变体)会产生问题的原因在于它们太简单：他们不知道构造函数和析构函数。
+</div>
+<h2 id="动态对象">动态对象</h2>
+<h3 id="定义">定义</h3>
+<p>动态创建对象时，只需指定其数据类型，而不必为该对象命名。取而代之的是，new 表达式返回指向新创建对象的指针，我们通过该指针来访问此对象：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i;              <span class="comment">// named, uninitialized int variable </span></span><br><span class="line"><span class="keyword">int</span> *pi = <span class="keyword">new</span> <span class="keyword">int</span>;  <span class="comment">// pi points to dynamically allocated, </span></span><br><span class="line"><span class="comment">// unnamed, uninitialized int</span></span><br></pre></td></tr></table></figure>
+<p>这个 new 表达式在自由存储区中分配创建了一个整型对象，并返回此对象的地址，并用该地址初始化指针 pi。</p>
+<h3 id="初始化">初始化</h3>
+<h4 id="直接初始化">直接初始化</h4>
+<p>动态创建的对象可用初始化变量的方式实现初始化：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">i</span><span class="params">(<span class="number">1024</span>)</span></span>;              <span class="comment">// value of i is 1024     </span></span><br><span class="line"><span class="keyword">int</span> *pi = <span class="keyword">new</span> <span class="built_in"><span class="keyword">int</span></span>(<span class="number">1024</span>);  <span class="comment">// object to which pi points is 1024 </span></span><br><span class="line"><span class="function">string <span class="title">s</span><span class="params">(<span class="number">10</span>, <span class="string">&#x27;9&#x27;</span>)</span></span>;                   <span class="comment">// value of s is &quot;9999999999&quot; </span></span><br><span class="line">string *ps = <span class="keyword">new</span> <span class="built_in">string</span>(<span class="number">10</span>, <span class="string">&#x27;9&#x27;</span>);    <span class="comment">// *ps is &quot;9999999999&quot;</span></span><br></pre></td></tr></table></figure>
+<h4 id="默认初始化">默认初始化</h4>
+<p>如果不提供显式初始化，动态创建的对象与在函数内定义的变量初始化方式相同。对于类类型的对象，用该类的默认构造函数初始化；而内置类型的对象则无初始化。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">string *ps = <span class="keyword">new</span> string; <span class="comment">// initialized to empty string </span></span><br><span class="line"><span class="keyword">int</span> *pi = <span class="keyword">new</span> <span class="keyword">int</span>;       <span class="comment">// pi points to an uninitialized int     </span></span><br></pre></td></tr></table></figure>
+<p>通常，除了对其赋值之外，对未初始化的对象所关联的值的任何使用都是没有定义的。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  正如我们（几乎）总是要初始化定义为变量的对象一样，在动态创建对象时，（几乎）总是对它做初始化也是一个好办法。
+</div>
+<h4 id="值初始化">值初始化</h4>
+<p>同样也可对动态创建的对象做值初始化（value-initialize）：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">string *ps = <span class="keyword">new</span> <span class="built_in">string</span>();  <span class="comment">// initialized to empty string </span></span><br><span class="line"><span class="keyword">int</span> *pi = <span class="keyword">new</span> <span class="built_in"><span class="keyword">int</span></span>();  <span class="comment">// pi points to an int value-initialized to 0 </span></span><br><span class="line">cls *pc = <span class="keyword">new</span> <span class="built_in">cls</span>();  <span class="comment">// pc points to a value-initialized object of type cls     </span></span><br></pre></td></tr></table></figure>
+<p>对于提供了默认构造函数的类类型（例如 string），没有必要对其对象进行值初始化：无论程序是明确地不初始化还是要求进行值初始化，都会自动调用其默认构造函数初始化该对象。而对于内置类型或没有定义默认构造函数的类型，采用不同初始化方式则有显著的差别：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> *pi = <span class="keyword">new</span> <span class="keyword">int</span>;         <span class="comment">// pi points to an uninitialized int</span></span><br><span class="line"><span class="keyword">int</span> *pi = <span class="keyword">new</span> <span class="built_in"><span class="keyword">int</span></span>();       <span class="comment">// pi points to an int value-initialized to 0 </span></span><br></pre></td></tr></table></figure>
+<p>第一个语句的 int 型变量没有初始化，而第二个语句的 int 型变量则被初始化为 0。</p>
+<h3 id="释放">释放</h3>
+<p>动态创建的对象用完后，程序员必须显式地将该对象占用的内存返回给自由存储区。C++ 提供了 delete 表达式释放指针所指向的地址空间。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">delete</span> pi; </span><br></pre></td></tr></table></figure>
+<p>该命令释放 pi 指向的 int 型对象所占用的内存空间。</p>
+<div class="alert alert-danger"><i class="fas fa-bug"></i>  如果指针指向不是用 new 分配的内存地址，则在该指针上使用 delete 是不合法的。
+</div>
+<p>C++ 没有明确定义如何释放指向不是用 new 分配的内存地址的指针。下面提供了一些安全的和不安全的 delete expressions 表达式。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i;</span><br><span class="line"><span class="keyword">int</span> *pi = &amp;i; </span><br><span class="line">string str = <span class="string">&quot;dwarves&quot;</span>; </span><br><span class="line"><span class="keyword">double</span> *pd = <span class="keyword">new</span> <span class="built_in"><span class="keyword">double</span></span>(<span class="number">33</span>); </span><br><span class="line"><span class="keyword">delete</span> str; <span class="comment">// error: str is not a dynamic object </span></span><br><span class="line"><span class="keyword">delete</span> pi;  <span class="comment">// error: pi refers to a local </span></span><br><span class="line"><span class="keyword">delete</span> pd;  <span class="comment">// ok </span></span><br></pre></td></tr></table></figure>
+<p>值得注意的是：编译器可能会拒绝编译 str 的 delete 语句。编译器知道 str 并不是一个指针，因此会在编译时就能检查出这个错误。第二个错误则比较隐蔽：通常来说，编译器不能断定一个指针指向什么类型的对象，因此尽管这个语句是错误的，但在大部分编译器上仍能通过。</p>
+<h3 id="零值指针的删除">零值指针的删除</h3>
+<p>如果指针的值为 0，则在其上做 delete 操作是合法的：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> *ip = <span class="number">0</span>; </span><br><span class="line"><span class="keyword">delete</span> ip; <span class="comment">// ok: always ok to delete a pointer that is equal to 0     </span></span><br></pre></td></tr></table></figure>
+<p>C++ 保证：删除 0 值的指针是安全的（见 《Effective C++》 条款8）。</p>
+<h3 id="悬垂指针">悬垂指针</h3>
+<p>执行语句</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">delete</span> p; </span><br></pre></td></tr></table></figure>
+<p>后，p 变成没有定义。在很多机器上，尽管 p 没有定义，但 <strong>仍然存放了它之前所指向对象的地址</strong> ，然而 p 所指向的内存已经被释放，因此 p 不再有效。 删除指针后，该指针变成 <strong>悬垂指针</strong> 。悬垂指针指向曾经存放对象的内存，但该对象已经不再存在了。悬垂指针往往导致程序错误，而且很难检测出来。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  一旦删除了指针所指向的对象，立即将指针置为 0，这样就非常清楚地表明指针不再指向任何对象。
+</div>
+<h3 id="const-对象的动态分配和回收">const 对象的动态分配和回收</h3>
+<h4 id="创建">创建</h4>
+<p>C++ 允许动态创建 const 对象：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// allocate and initialize a const object </span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> *pci = <span class="keyword">new</span> <span class="keyword">const</span> <span class="built_in"><span class="keyword">int</span></span>(<span class="number">1024</span>); </span><br></pre></td></tr></table></figure>
+<p>与其他常量一样，动态创建的 const 对象必须在创建时初始化，并且一经初始化，其值就不能再修改。上述 new 表达式返回指向 int 型 const 对象的指针。与其他 const 对象的地址一样，由于 new 返回的地址上存放的是 const 对象，因此该地址只能赋给指向 const 的指针。</p>
+<p>对于类类型的 const 动态对象，如果该类提供了默认的构造函数，则此对象可隐式初始化：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// allocate default initialized const empty string </span></span><br><span class="line"><span class="keyword">const</span> string *pcs = <span class="keyword">new</span> <span class="keyword">const</span> string;</span><br></pre></td></tr></table></figure>
+<p>new 表达式没有显式初始化 pcs 所指向的对象，而是隐式地将 pcs 所指向的对象初始化为空的 string 对象。内置类型对象或未提供默认构造函数的类类型对象必须显式初始化。</p>
+<h4 id="回收">回收</h4>
+<p>尽管程序员不能改变 const 对象的值，但可撤销对象本身。如同其他动态对象一样， const 动态对象也是使用删除指针来释放的：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">delete</span> pci; <span class="comment">// ok: deletes a const object </span></span><br></pre></td></tr></table></figure>
+<p>即使 delete 表达式的操作数是指向 int 型 const
+对象的指针，该语句同样有效地回收 pci 所指向的内容。</p>
+<h3 id="警告：动态内存的管理容易出错">警告：动态内存的管理容易出错</h3>
+<p>下面三种常见的程序错误都与动态内存分配相关：</p>
+<ol>
+<li>删除（delete）指向动态分配内存的指针失败，因而无法将该块内存返还给自由存储区。删除动态分配内存失败称为“内存泄漏（memory leak）”。内存泄漏很难发现，一般需等应用程序运行了一段时间后，耗尽了所有内存空间时，内存泄漏才会显露出来。</li>
+<li>读写已删除的对象。如果删除指针所指向的对象之后，将指针置为 0 值，则比较容易检测出这类错误。</li>
+<li>对同一个内存空间使用两次 delete 表达式。当两个指针指向同一个动态创建的对象，删除时就会发生错误。如果在其中一个指针上做 delete 运算，将该对象的内存空间返还给自由存储区，然后接着 delete 第二个指针，此时则自由存储区可能会被破坏。</li>
+</ol>
+<h2 id="动态数组">动态数组</h2>
+<p>数组类型的变量有三个重要的限制：数组长度固定不变，在编译时必须知道其长度，数组只在定义它的块语句内存在。实际的程序往往不能忍受这样的限制——它们需要在运行时动态地分配数组。虽然数组长度是固定的，但 <em>动态分配的数组不必在编译时知道其长度，可以（通常也是）在运行时才确定数组长度</em> 。与数组变量不同，动态分配的数组将一直存在，直到程序显式释放它为止。</p>
+<h3 id="定义-v2">定义</h3>
+<p>动态分配数组时，只需指定 <strong>类型</strong> 和 <strong>数组长度</strong> ，不必为数组对象命名，<code>new</code> 表达式返回指向新分配数组的第一个元素的指针：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> *pia = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>]; <span class="comment">// array of 10 uninitialized ints </span></span><br></pre></td></tr></table></figure>
+<p>此 new 表达式分配了一个含有 10 个 int 型元素的数组，并返回指向该数组第一个元素的指针，此返回值初始化了指针 pia。</p>
+<p>new 表达式需要指定指针类型以及在方括号中给出的数组维数，该维数可以是任意的复杂表达式。创建数组后，new 将返回指向数组第一个元素的指针。在自由存储区中创建的数组对象是没有名字的，程序员只能通过其地址间接地访问堆中的对象。</p>
+<h3 id="初始化-v2">初始化</h3>
+<h4 id="默认初始化-v2">默认初始化</h4>
+<p>动态分配数组时，如果数组元素具有类类型，将使用该类的默认构造函数实现初始化；如果数组元素是内置类型，则无初始化：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">string *psa = <span class="keyword">new</span> string[<span class="number">10</span>]; <span class="comment">// array of 10 empty strings </span></span><br><span class="line"><span class="keyword">int</span> *pia = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>];       <span class="comment">// array of 10 uninitialized ints</span></span><br></pre></td></tr></table></figure>
+<p>这两个 new 表达式都分配了含有 10 个对象的数组。其中第一个数组是 string 类型，分配了保存对象的内存空间后，将调用 string 类型的默认构造函数依次初始化数组中的每个元素。第二个数组则具有内置类型的元素，分配了存储 10 个 int 对象的内存空间，但这些元素没有初始化。</p>
+<h4 id="值初始化-v2">值初始化</h4>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> *pia2 = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>] (); <span class="comment">// array of 10 uninitialized ints </span></span><br></pre></td></tr></table></figure>
+<p>圆括号要求编译器对数组做值初始化，在本例中即把数组元素都设置为 0。</p>
+<div class="alert alert-warning"><i class="far fa-bell"></i>  对于动态分配的数组，其元素只能初始化为元素类型的默认值，而不能像数组变量一样，用初始化列表为数组元素提供各不相同的初值。
+</div>
+<h3 id="使用">使用</h3>
+<p>之所以要动态分配数组，往往是由于编译时并不知道数组的长度。我们可以编写如下代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i, n;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Nums to be input: &quot;</span> &lt;&lt; endl;</span><br><span class="line">    cin &gt;&gt; n; </span><br><span class="line">    <span class="keyword">int</span> *p = <span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Input nums: &quot;</span> &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        cin &gt;&gt; p[i];</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Nums you input: &quot;</span> &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        cout &lt;&lt; p[i] &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>计算数组长度，然后创建和处理该数组。</p>
+<p>再比如，在程序执行过程中，常常使用 <code>char *</code> 指针指向多个 C 风格字符串，于是必须根据每个字符串的长度实时地动态分配存储空间。采用这种技术要比建立固定大小的数组安全。如果程序员能够准确计算出运行时需要的数组长度，就不必再担心因数组变量具有固定的长度而造成的溢出问题。</p>
+<p>假设有以下 C 风格字符串：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *noerr = <span class="string">&quot;success&quot;</span>; </span><br><span class="line"><span class="comment">// ... </span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *err189 = <span class="string">&quot;Error: a function declaration must &quot;</span> </span><br><span class="line">                     <span class="string">&quot;specify a function return type!&quot;</span>; </span><br></pre></td></tr></table></figure>
+<p>我们想在运行时把这两个字符串中的一个复制给新的字符数组，于是可以用以下程序在运行时计算维数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *errorTxt; </span><br><span class="line"><span class="keyword">if</span> (errorFound) </span><br><span class="line">  errorTxt = err189; </span><br><span class="line"> <span class="keyword">else</span> </span><br><span class="line">   errorTxt = noerr; </span><br><span class="line"><span class="comment">// remember the 1 for the terminating null </span></span><br><span class="line"><span class="keyword">int</span> dimension = <span class="built_in">strlen</span>(errorTxt) + <span class="number">1</span>; </span><br><span class="line"><span class="keyword">char</span> *errMsg = <span class="keyword">new</span> <span class="keyword">char</span>[dimension]; </span><br><span class="line"><span class="comment">// copy the text for the error into errMsg </span></span><br><span class="line"><span class="built_in">strncpy</span> (errMsg, errorTxt, dimension);     </span><br></pre></td></tr></table></figure>
+<h3 id="空数组">空数组</h3>
+<p>C++ 虽然不允许定义长度为 0 的数组变量，但明确指出，调用 new 动态创建长度为 0 的数组是合法的：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> arr[<span class="number">0</span>];            <span class="comment">// error: cannot define zero-length array </span></span><br><span class="line"><span class="keyword">char</span> *cp = <span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">0</span>]; <span class="comment">// ok: but cp can&#x27;t be dereferenced</span></span><br></pre></td></tr></table></figure>
+<p>用 new 动态创建长度为 0 的数组时，new 返回有效的非零指针。该指针与 new 返回的其他指针不同，不能进行解引用操作，因为它毕竟没有指向任何元素。而允许的操作包括：</p>
+<ol>
+<li>比较运算，因此该指针能在循环中使用；</li>
+<li>在该指针上加（减）0；</li>
+<li>减去本身，得 0 值。</li>
+</ol>
+<p>在上述例题中，如果 get~size~ 返回 0，则仍然可以成功调用 new，但是 p
+并没有指向任何对象，数组是空的。因为 n 为 0，所以 for 循环实际比较的是 p
+和 q，而 q 是用 p 初始化的，两者具有相等的值，因此 for
+循环条件不成立，循环体一次都没有执行。</p>
+<h3 id="释放-v2">释放</h3>
+<p><strong>动态分配的内存最后必须进行释放</strong>，否则，内存最终将会逐渐耗尽。如果不再需要使用动态创建的数组，程序员必须显式地将其占用的存储空间返还给程序的自由存储区。C++ 语言为指针提供 <code>delete []</code> 表达式释放指针所指向的数组空间：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">delete</span> [] pia;</span><br></pre></td></tr></table></figure>
+<p>该语句回收了 pia 所指向的数组，把相应的内存返还给自由存储区。在关键字 delete 和指针之间的空方括号对是必不可少的：它告诉编译器该指针指向的是自由存储区中的数组，而并非单个对象（详见 《Effective C++》 条款5）。如果遗漏了空方括号对，这是一个编译器无法发现的错误，将导致程序在运行时出错。</p>
+<p>理论上，回收数组时缺少空方括号对，至少会导致运行时少释放了内存空间，从而产生<strong>内存泄漏（memory leak）</strong>。对于某些系统和/或元素类型，有可能会带来更严重的运行时错误。因此，在释放动态数组时千万别忘了方括号对。</p>
+<h3 id="const-对象的动态数组">const 对象的动态数组</h3>
+<p>如果我们在自由存储区中创建的数组存储了内置类型的 const 对象，则必须为这个数组提供初始化：因为数组元素都是 const 对象，无法赋值。实现这个要求的唯一方法是对数组做值初始化：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// error: uninitialized const array </span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> *pci_bad = <span class="keyword">new</span> <span class="keyword">const</span> <span class="keyword">int</span>[<span class="number">100</span>]; </span><br><span class="line"><span class="comment">// ok: value-initialized const array </span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> *pci_ok = <span class="keyword">new</span> <span class="keyword">const</span> <span class="keyword">int</span>[<span class="number">100</span>](); </span><br></pre></td></tr></table></figure>
+<p>C++ 允许定义类类型的 const 数组，但该类类型必须提供默认构造函数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ok: array of 100 empty strings </span></span><br><span class="line"><span class="keyword">const</span> string *pcs = <span class="keyword">new</span> <span class="keyword">const</span> string[<span class="number">100</span>];</span><br></pre></td></tr></table></figure>
+<p>在这里，将使用 string 类的默认构造函数初始化数组元素。当然，已创建的常量元素不允许修改——因此这样的数组实际上用处不大。</p>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/cpp-oop.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/cpp-overload-operator.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '动态对象'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

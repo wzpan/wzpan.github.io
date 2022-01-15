@@ -1,0 +1,934 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>复合数据类型 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="结构体
+定义结构体
+例如，如果用实部和虚部表示一个复数[1]，我们可以写成由两个double型组成的结构体：
+123struct complex_struct&amp;#123;    double x, y;&amp;#125;;
+这一句定义了标识符complex_struct（同样遵循标识符的命名规则），这种标">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="复合数据类型"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '复合数据类型'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 复合数据类型</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="结构体">结构体</h2>
+<h3 id="定义结构体">定义结构体</h3>
+<p>例如，如果用实部和虚部表示一个复数<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>，我们可以写成由两个double型组成的结构体：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">complex_struct</span>&#123;</span></span><br><span class="line">    <span class="keyword">double</span> x, y;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这一句定义了标识符<code>complex_struct</code>（同样遵循标识符的命名规则），这种标识符在C语言中称为Tag，<code>struct complex_struct &#123; double x, y; &#125;</code>整个可以看作一个类型名，就像int或double一样，只不过它是一个复合类型，如果用这个类型名来定义变量，可以这样写：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">complex_struct</span>&#123;</span></span><br><span class="line">    <span class="keyword">double</span> x, y;</span><br><span class="line">&#125; z1, z2;</span><br></pre></td></tr></table></figure>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  注意后面的<code>;</code>不能少。类型定义也是一种声明，声明都要以<code>;</code>号结尾。
+</div>
+<p>也可以在定义了<code>complex_struct</code>后直接用普通的声明语句来声明 z1 和 z2：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">complex_struct</span> <span class="title">z1</span>, <span class="title">z2</span>;</span></span><br></pre></td></tr></table></figure>
+<h3 id="访问结构体成员">访问结构体成员</h3>
+<p>每个复数变量都有两个成员（Member）x和y，可以用<code>.</code>运算符（<code>.</code>号，Period）来访问，这两个成员的存储空间是相邻的，合在一起组成复数变量的存储空间。看下面的例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">complex_struct</span> &#123;</span> <span class="keyword">double</span> x, y; &#125; z;</span><br><span class="line">    <span class="keyword">double</span> x = <span class="number">3.0</span>;</span><br><span class="line">    z.x = x;</span><br><span class="line">    z.y = <span class="number">4.0</span>;</span><br><span class="line">    <span class="keyword">if</span> (z.y &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;z=%f%fi\n&quot;</span>, z.x, z.y);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;z=%f+%fi\n&quot;</span>, z.x, z.y);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意上例中变量x和变量z的成员x的名字并不冲突，因为变量z的成员x只能通过表达式z.x来访问，编译器可以从语法上区分哪个x是变量x，哪个x是变量z的成员x。</p>
+<h3 id="初始化和赋值">初始化和赋值</h3>
+<p>结构体变量也可以在定义时初始化，例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">complex_struct</span> <span class="title">z</span> =</span> &#123; <span class="number">3.0</span>, <span class="number">4.0</span> &#125;;</span><br></pre></td></tr></table></figure>
+<p>Initializer中的数据依次赋给结构体的各成员。如果Initializer中的数据比结构体的成员多，编译器会报错，但如果只是末尾多个逗号则不算错。如果Initializer中的数据比结构体的成员少，未指定的成员将用0来初始化，就像未初始化的全局变量一样。例如以下几种形式的初始化都是合法的：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">double</span> x = <span class="number">3.0</span>;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">complex_struct</span> <span class="title">z1</span> =</span> &#123; x, <span class="number">4.0</span>, &#125;; <span class="comment">/* z1.x=3.0, z1.y=4.0 */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">complex_struct</span> <span class="title">z2</span> =</span> &#123; <span class="number">3.0</span>, &#125;; <span class="comment">/* z2.x=3.0, z2.y=0.0 */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">complex_struct</span> <span class="title">z3</span> =</span> &#123; <span class="number">0</span> &#125;; <span class="comment">/* z3.x=0.0, z3.y=0.0 */</span></span><br></pre></td></tr></table></figure>
+<p>注意，z1必须是局部变量才能用另一个变量x的值来初始化它的成员，如果是全局变量就只能用常量表达式来初始化。这也是C99的新特性，C89只允许在<code>&#123;&#125;</code>中使用常量表达式来初始化，无论是初始化全局变量还是局部变量。</p>
+<p><code>&#123;&#125;</code>这种语法不能用于结构体的赋值，例如这样是错误的 <sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">complex_struct</span> <span class="title">z1</span>;</span></span><br><span class="line">z1 = &#123; <span class="number">3.0</span>, <span class="number">4.0</span> &#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="实例：构造复数">实例：构造复数</h3>
+<p>现在我们来实现一个完整的复数运算程序。在上一节我们已经定义了复数的结构体类型，现在需要围绕它定义一些函数。复数可以用直角坐标或极坐标表示，直角坐标做加减法比较方便，极坐标做乘除法比较方便。如果我们定义的复数结构体是直角坐标的，那么应该提供极坐标的转换函数，以便在需要的时候可以方便地取它的模和辐角。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;math.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">complex_struct</span> &#123;</span></span><br><span class="line">    <span class="comment">// 定义复数的结构体</span></span><br><span class="line">    <span class="keyword">double</span> x, y;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">real_part</span><span class="params">(struct complex_struct z)</span></span>&#123;</span><br><span class="line">    <span class="comment">// 返回复数的实部</span></span><br><span class="line">    <span class="keyword">return</span> z.x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">img_part</span><span class="params">(struct complex_struct z)</span></span>&#123;</span><br><span class="line">    <span class="comment">// 返回复数的虚部</span></span><br><span class="line">    <span class="keyword">return</span> z.y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">magnitude</span><span class="params">(struct complex_struct z)</span></span>&#123;</span><br><span class="line">    <span class="comment">// 返回复数的模</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sqrt</span>(z.x * z.x + z.y * z.y);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">angle</span><span class="params">(struct complex_struct z)</span></span>&#123;</span><br><span class="line">    <span class="comment">// 返回复数的辐角</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">atan2</span>(z.y, z.x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">struct complex_struct <span class="title">make_from_real_img</span><span class="params">(<span class="keyword">double</span> x, <span class="keyword">double</span> y)</span></span>&#123;</span><br><span class="line">    <span class="comment">// 用实部和虚部构造复数结构体</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">complex_struct</span> <span class="title">z</span>;</span></span><br><span class="line">    z.x = x;</span><br><span class="line">    z.y = y;</span><br><span class="line">    <span class="keyword">return</span> z;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">struct complex_struct <span class="title">make_from_mag_ang</span><span class="params">(<span class="keyword">double</span> r, <span class="keyword">double</span> A)</span></span>&#123;</span><br><span class="line">    <span class="comment">// 用辐角和模构造复数结构体</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">complex_struct</span> <span class="title">z</span>;</span></span><br><span class="line">    z.x = r * <span class="built_in">cos</span>(A);</span><br><span class="line">    z.y = r * <span class="built_in">sin</span>(A);</span><br><span class="line">    <span class="keyword">return</span> z;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义复数的加减乘除运算</span></span><br><span class="line"><span class="function">struct complex_struct <span class="title">add_complex</span><span class="params">(struct complex_struct z1, struct complex_struct z2)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> make_from_real_img(</span><br><span class="line">        real_part(z1) + real_part(z2),</span><br><span class="line">    img_part(z1) + img_part(z2)</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">struct complex_struct <span class="title">sub_complex</span><span class="params">(struct complex_struct z1, struct complex_struct z2)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> make_from_real_img(</span><br><span class="line">        real_part(z1) - real_part(z2),</span><br><span class="line">    img_part(z1) - img_part(z2)</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">struct complex_struct <span class="title">mul_complex</span><span class="params">(struct complex_struct z1, struct complex_struct z2)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> make_from_mag_ang(</span><br><span class="line">        magnitude(z1) * magnitude(z2),</span><br><span class="line">    angle(z1) + angle(z2)</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">struct complex_struct <span class="title">div_complex</span><span class="params">(struct complex_struct z1, struct complex_struct z2)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> make_from_mag_ang(</span><br><span class="line">        magnitude(z1) / magnitude(z2),</span><br><span class="line">    angle(z1) - angle(z2)</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出，复数加减乘除运算的实现并没有直接访问结构体 complex_struct 的成员x和y，而是把它看成一个整体，通过调用相关函数来取它的直角坐标和极坐标。这样就可以非常方便地替换掉结构体 complex_struct 的存储表示，例如改为用极坐标来存储。</p>
+<h3 id="嵌套结构体">嵌套结构体</h3>
+<p>结构体也是一种递归定义：结构体的成员具有某种数据类型，而结构体本身也是一种数据类型。换句话说，结构体的成员可以是另一个结构体，即结构体可以嵌套定义。例如我们在复数的基础上定义复平面上的线段：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Segment</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">complex_struct</span> <span class="title">start</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">complex_struct</span> <span class="title">end</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="初始化">初始化</h4>
+<p>嵌套结构体可以嵌套地初始化，例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Segment</span> <span class="title">s</span> =</span> &#123; &#123;<span class="number">1.0</span>, <span class="number">2.0</span> &#125;, &#123; <span class="number">4.0</span>, <span class="number">6.0</span> &#125; &#125;;</span><br></pre></td></tr></table></figure>
+<p>也可以平坦（Flat）地初始化。例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Segment</span> <span class="title">s</span> =</span> &#123; <span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">4.0</span>, <span class="number">6.0</span> &#125;;</span><br></pre></td></tr></table></figure>
+<p>甚至可以把两种方式混合使用（这样可读性很差，应该避免）：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Segment</span> <span class="title">s</span> =</span> &#123; &#123; <span class="number">1.0</span>, <span class="number">2.0</span> &#125;, <span class="number">4.0</span>, <span class="number">6.0</span> &#125;;</span><br></pre></td></tr></table></figure>
+<p>利用C99的新特性也可以做 Memberwise Initialization，例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Segment</span> <span class="title">s</span> =</span> &#123; .start.x = <span class="number">1.0</span>, .end.x = <span class="number">2.0</span> &#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="访问结构体成员-v2">访问结构体成员</h4>
+<p>访问嵌套结构体的成员要用到多个<code>.</code>运算符，例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">s.start.t = RECTANGULAR;</span><br><span class="line">s.start.a = <span class="number">1.0</span>;</span><br><span class="line">s.start.b = <span class="number">2.0</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="枚举">枚举</h2>
+<h3 id="定义">定义</h3>
+<p>enum关键字的作用和struct关键字类似，例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">coordinate_type</span> &#123;</span> RECTANGULAR, POLAR &#125;;</span><br></pre></td></tr></table></figure>
+<p><code>enum coordinate_type</code> 表示一个枚举（Enumeration）类型。<strong>枚举类型的成员是常量</strong>，它们的值由编译器自动分配，例如定义了上面的枚举类型之后，RECTANGULAR就表示常量0，POLAR表示常量1。如果不希望从0开始分配，可以这样定义：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">coordinate_type</span> &#123;</span> RECTANGULAR = <span class="number">1</span>, POLAR &#125;;</span><br></pre></td></tr></table></figure>
+<p>这样，RECTANGULAR就表示常量1，而POLAR表示常量2。枚举常量也是一种整型，其值在编译时确定，因此也可以出现在常量表达式中，可以用于初始化全局变量或者作为case分支的判断条件。</p>
+<p>有一点需要注意，虽然结构体的成员名和变量名不在同一命名空间中，但枚举的成员名却和变量名在同一命名空间中，所以会出现命名冲突。例如这样是不合法的：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">enum</span> <span class="title">coordinate_type</span> &#123;</span> RECTANGULAR = <span class="number">1</span>, POLAR &#125;;</span><br><span class="line">    <span class="keyword">int</span> RECTANGULAR;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d %d\n&quot;</span>, RECTANGULAR, POLAR);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="赋值">赋值</h3>
+<p>枚举类型的对象的初始化或赋值，只能通过其枚举成员或同一枚举类型的其他对象来进行，例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Points pt3d = point3d;      <span class="comment">//合法</span></span><br><span class="line">Points pt2w = <span class="number">3</span>;            <span class="comment">//不合法：pt2w不能再初始化</span></span><br><span class="line">pt2w = polygon;             <span class="comment">//不合法：polygon不是Points的枚举成员</span></span><br><span class="line">pt2w = pt3d;                <span class="comment">//合法</span></span><br></pre></td></tr></table></figure>
+<p>注意把 3 赋给 Points 对象是非法的，即使 3 与一个 Points 枚举成员相关联。</p>
+<h3 id="实例">实例</h3>
+<p>可以对在上一节中的 complex_struct 进行改进，让其同时支持两种直角坐标和极坐标两种存储格式，方法是为 complex_struct 结构体添加一个枚举常量用作数据类型标志：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">coordinate_type</span> &#123;</span>RECTANGULAR, POLAR&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">complex_struct</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">enum</span> <span class="title">coordinate_type</span> <span class="title">t</span>;</span></span><br><span class="line">    <span class="keyword">double</span> a, b;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">struct complex_struct <span class="title">make_from_real_img</span><span class="params">(<span class="keyword">double</span> x, <span class="keyword">double</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">complex_struct</span> <span class="title">z</span>;</span></span><br><span class="line">    z.t = RECTANGULAR;</span><br><span class="line">    z.a = x;</span><br><span class="line">    z.b = y;</span><br><span class="line">    <span class="keyword">return</span> z;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">struct complex_struct <span class="title">make_from_mag_ang</span><span class="params">(<span class="keyword">double</span> r, <span class="keyword">double</span> A)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">complex_struct</span> <span class="title">z</span>;</span></span><br><span class="line">    z.t = POLAR;</span><br><span class="line">    z.a = r;</span><br><span class="line">    z.b = A;</span><br><span class="line">    <span class="keyword">return</span> z;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 其他的加减乘除运算...</span></span><br></pre></td></tr></table></figure>
+<p>如果数据类型标志为0，那么两个浮点数就表示直角坐标，如果数据类型标志为1，那么两个浮点数就表示极坐标。这样，直角坐标和极坐标的数据都可以适配（Adapt）到 complex_struct 结构体中，无需转换和损失精度。</p>
+<h2 id="数组">数组</h2>
+<p>数组（Array）也是一种复合数据类型，它由一系列相同类型的元素（Element）组成。</p>
+<h3 id="定义数组">定义数组</h3>
+<h4 id="简单数组">简单数组</h4>
+<p>例如定义一个由4个int型元素组成的数组count：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> count[<span class="number">4</span>];</span><br></pre></td></tr></table></figure>
+<p>和<a href="/wiki/c-compound-type.html">结构体</a>成员类似，数组count的4个元素的存储空间也是相邻的。</p>
+<h4 id="定义复合类型数组">定义复合类型数组</h4>
+<p>结构体成员可以是基本数据类型，也可以是复合数据类型，数组中的元素也是如此。根据组合规则，我们可以定义一个由4个结构体元素组成的数组：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">complex_struct</span> &#123;</span></span><br><span class="line">    <span class="keyword">double</span> x, y;</span><br><span class="line">&#125; a[<span class="number">4</span>];</span><br></pre></td></tr></table></figure>
+<h3 id="访问数组元素">访问数组元素</h3>
+<p>数组中的元素通过下标（或者叫索引，Index）来访问。例如前面定义的由4个int型元素组成的数组count图示如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">         0      1      2       3</span><br><span class="line">      +------|------|------|------+</span><br><span class="line">      |      |      |      |      |</span><br><span class="line">count |  0   |  0   |  0   |  0   |</span><br><span class="line">      +------|------|------|------+</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>整个数组占了4个int型的存储单元，存储单元用小方框表示，里面的数字是存储在这个单元中的数据（假设都是0），而框外面的数字是下标，这四个单元分别用count[0]、count[1]、count[2]、count[3]来访问。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  和我们平常数数的习惯不同，数组元素是从“0”开始数的。大多数编程语言都是这么规定的，所以计算机术语中有 Zeroth 这个词。
+</div>
+<p>这种数组下标的表达式不仅可以表示存储单元中的值，也可以表示存储单元本身，也就是说可以做左值，因此以下语句都是正确的：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">count[<span class="number">0</span>] = <span class="number">7</span>;</span><br><span class="line">count[<span class="number">1</span>] = count[<span class="number">0</span>] * <span class="number">2</span>;</span><br><span class="line">++count[<span class="number">2</span>];</span><br></pre></td></tr></table></figure>
+<p>数组下标也可以是表达式，但表达式的值必须是整型的。例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">10</span>;</span><br><span class="line">count[i] = count[i+<span class="number">1</span>];</span><br></pre></td></tr></table></figure>
+<div class="alert alert-danger"><i class="fas fa-bug"></i>  使用数组下标不能超出数组的长度范围，这一点在使用变量做数组下标时尤其要注意。<strong>C编译器并不检查count[-1]或是count[100]这样的访问越界错误</strong>，编译时能顺利通过，所以属于运行时错误。但有时候这种错误很隐蔽，发生访问越界时程序可能并不会立即崩溃，而执行到后面某个正确的语句时却有可能突然崩溃。所以从一开始写代码时就要小心避免出问题，事后依靠调试来解决问题的成本是很高的。
+</div>
+<h3 id="初始化-v2">初始化</h3>
+<p>数组也可以像结构体一样初始化，未赋初值的元素也是用0来初始化，例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> count[<span class="number">4</span>] = &#123; <span class="number">3</span>, <span class="number">2</span>, &#125;;</span><br></pre></td></tr></table></figure>
+<p>则count[0]等于3， count[1]等于2，后面两个元素等于0。如果定义数组的同时初始化它，也可以不指定数组的长度，例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> count[] = &#123; <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>, &#125;;</span><br></pre></td></tr></table></figure>
+<p>编译器会根据Initializer有三个元素确定数组的长度为3。利用C99的新特性也可以做 Memberwise Initialization：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> count[<span class="number">4</span>] = &#123; [<span class="number">2</span>] = <span class="number">3</span> &#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="示例">示例</h3>
+<p>下面举一个完整的例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> count[<span class="number">4</span>] = &#123; <span class="number">3</span>, <span class="number">2</span>, &#125;, i;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;count[%d]=%d\n&quot;</span>, i, count[i]);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="多维数组">多维数组</h3>
+<p>就像结构体可以嵌套一样，数组也可以嵌套，一个数组的元素可以是另外一个数组，这样就构成了多维数组（Multi-dimensional Array）。例如定义并初始化一个二维数组：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">3</span>][<span class="number">2</span>] = &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span> &#125;;</span><br></pre></td></tr></table></figure>
+<p>数组a有3个元素，a[0]、a[1]、a[2]。每个元素也是一个数组，例如a[0]是一个数组，它有两个元素a[0][0]、a[0][1]，这两个元素的类型是int，值分别是1、2，同理，数组a[1]的两个元素是3、4，数组a[2]的两个元素是5、0。如下图所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">        0    1</span><br><span class="line">      +----|----+</span><br><span class="line"> 概 0 | 1  | 2  |</span><br><span class="line"> 念   +----|----+</span><br><span class="line"> 模 1 | 3  | 4  |</span><br><span class="line"> 型   +----|----+</span><br><span class="line">    3 | 5  | 0  |</span><br><span class="line">      +----|----+</span><br><span class="line"></span><br><span class="line">物理模型</span><br><span class="line"> a[0][0]   a[1][0]  a[2][0]</span><br><span class="line"> +----|----|----|----|----|----+</span><br><span class="line"> | 1  | 2  | 3  | 4  | 5  | 0  |</span><br><span class="line"> +----|----|----|----|----|----+</span><br><span class="line">     a[0][1]    a[1][1]   a[2][1]</span><br></pre></td></tr></table></figure>
+<p>从概念模型上看，这个二维数组是三行两列的表格，元素的两个下标分别是行号和列号。从物理模型上看，这六个元素在存储器中仍然是连续存储的，就像一维数组一样，相当于把概念模型的表格一行一行接起来拼成一串，C语言的这种存储方式称为<strong>Row-major</strong>方式，而有些编程语言（例如FORTRAN）是把概念模型的表格一列一列接起来拼成一串存储的，称为<strong>Column-major</strong>方式。</p>
+<p>多维数组也可以像嵌套结构体一样用嵌套Initializer初始化，例如上面的二维数组也可以这样初始化：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[][<span class="number">2</span>] = &#123; &#123; <span class="number">1</span>, <span class="number">2</span> &#125;,</span><br><span class="line">        &#123; <span class="number">3</span>, <span class="number">4</span> &#125;,</span><br><span class="line">        &#123; <span class="number">5</span>, &#125; &#125;;</span><br></pre></td></tr></table></figure>
+<p>注意，<strong>除了第一维的长度可以由编译器自动计算而不需要指定，其余各维都必须明确指定长度</strong>。</p>
+<p>利用C99的新特性也可以做 Memberwise Initialization，例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a[<span class="number">3</span>][<span class="number">2</span>] = &#123; [<span class="number">0</span>][<span class="number">1</span>] = <span class="number">9</span>, [<span class="number">2</span>][<span class="number">1</span>] = <span class="number">8</span> &#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="字符串">字符串</h2>
+<p>字符串可以看作一个数组，它的每个元素是字符型的，例如字符串&quot;Hello, world.\n&quot;图示如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">+----|----|----|----|----|---------|----|----|----|----|----|----|----|----+</span><br><span class="line">| h  | e  | l  | l  | o  | ,  |    | w  | o  | r  | l  | d  | .  | \n | \0 | </span><br><span class="line">+----|----|----|----|----|----|----|----|----|----|----|----|----|----|----+</span><br></pre></td></tr></table></figure>
+<p>注意每个字符串末尾都有一个字符<code>\0</code>做结束符，这里的\0是ASCII码的八进制表示，也就是ASCII码为0的Null字符，在C语言中这种字符串也称为以零结尾的字符串（Null-terminated String）。数组元素可以通过数组名加下标的方式访问，而字符串字面值也可以像数组名一样使用，可以加下标访问其中的字符：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> c = <span class="string">&quot;Hello, world.\n&quot;</span>[<span class="number">0</span>];</span><br></pre></td></tr></table></figure>
+<h3 id="初始化-v3">初始化</h3>
+<p>字符数组也可以用一个字符串字面值来初始化：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> str[<span class="number">10</span>] = <span class="string">&quot;Hello&quot;</span>;</span><br></pre></td></tr></table></figure>
+<p>相当于</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> str[<span class="number">10</span>] = &#123; <span class="string">&#x27;H&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;l&#x27;</span>, <span class="string">&#x27;l&#x27;</span>, <span class="string">&#x27;o&#x27;</span>, <span class="string">&#x27;\0&#x27;</span> &#125;;</span><br></pre></td></tr></table></figure>
+<p>str的后四个元素没有指定，自动初始化为0，即Null字符。注意，虽然字符串字面值&quot;Hello&quot;是只读的，但用它初始化的数组str却是可读可写的。数组str中保存了一串字符，以’\0’结尾，也可以叫字符串。在本书中只要是以Null字符结尾的一串字符都叫字符串，不管是像str这样的数组，还是像&quot;Hello&quot;这样的字符串字面值。</p>
+<p>如果用于初始化的字符串字面值比数组还长，比如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> str[<span class="number">10</span>] = <span class="string">&quot;Hello, world.\n&quot;</span>;</span><br></pre></td></tr></table></figure>
+<p>则数组str只包含字符串的前10个字符，不包含Null字符，这种情况编译器会给出警告。如果要用一个字符串字面值准确地初始化一个字符数组，最好的办法是不指定数组的长度，让编译器自己计算：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> str[] = <span class="string">&quot;Hello, world.\n&quot;</span>;</span><br></pre></td></tr></table></figure>
+<p>字符串字面值的长度包括Null字符在内一共15个字符，编译器会确定数组str的长度为15。</p>
+<p>有一种情况需要特别注意，如果用于初始化的字符串字面值比数组刚好长出一个Null字符的长度，比如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> str[<span class="number">14</span>] = <span class="string">&quot;Hello, world.\n&quot;</span>;</span><br></pre></td></tr></table></figure>
+<p>则数组str不包含Null字符，并且编译器不会给出警告。</p>
+<h3 id="多维字符数组">多维字符数组</h3>
+<p>多维字符数组也可以嵌套使用字符串字面值做Initializer，例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_day</span><span class="params">(<span class="keyword">int</span> day)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> days[<span class="number">8</span>][<span class="number">10</span>] = &#123; <span class="string">&quot;&quot;</span>, <span class="string">&quot;Monday&quot;</span>, <span class="string">&quot;Tuesday&quot;</span>,</span><br><span class="line">                 <span class="string">&quot;Wednesday&quot;</span>, <span class="string">&quot;Thursday&quot;</span>, <span class="string">&quot;Friday&quot;</span>,</span><br><span class="line">                 <span class="string">&quot;Saturday&quot;</span>, <span class="string">&quot;Sunday&quot;</span> &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (day &lt; <span class="number">1</span> || day &gt; <span class="number">7</span>)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Illegal day number!\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, days[day]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    print_day(<span class="number">2</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个程序中定义了一个多维字符数组char days[8][10];，为了使1~7刚好映射到days[1]~days[7]，我们把days[0]空出来不用，所以第一维的长度是8，为了使最长的字符串&quot;Wednesday&quot;能够保存到一行，末尾还能多出一个Null字符的位置，所以第二维的长度是10。</p>
+<h2 id="类型总结">类型总结</h2>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/c-compound-type/pointer.type.gif" alt="C语言类型总结" />
+        <figcaption>C语言类型总结</figcaption>
+      </figure>
+    </p>
+<p>C语言的类型分为函数类型、对象类型和不完全类型三大类。对象类型又分为标量类型和非标量类型。指针类型属于标量类型，因此也可以做逻辑与、或、非运算的操作数和if、for、while的控制表达式，NULL指针表示假，非NULL指针表示真。不完全类型是暂时没有完全定义好的类型，编译器不知道这种类型该占几个字节的存储空间，例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">s</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">union</span> <span class="title">u</span>;</span></span><br><span class="line"><span class="keyword">char</span> str[];</span><br></pre></td></tr></table></figure>
+<p>具有不完全类型的变量可以通过多次声明组合成一个完全类型，比如数组str声明两次：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> str[];</span><br><span class="line"><span class="keyword">char</span> str[<span class="number">10</span>];</span><br></pre></td></tr></table></figure>
+<p>当编译器碰到第一个声明时，认为str是一个不完全类型，碰到第二个声明时str就组合成完全类型了，如果编译器处理到程序文件的末尾仍然无法把str组合成一个完全类型，就会报错。</p>
+<h3 id="不完全的结构体类型">不完全的结构体类型</h3>
+<p>不完全的结构体类型有重要作用：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">s</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">t</span> *<span class="title">pt</span>;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">t</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">s</span> *<span class="title">ps</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>struct s和struct t各有一个指针成员指向另一种类型。编译器从前到后依次处理，当看到<code>struct s &#123; struct t* pt; &#125;;</code>时，认为struct t是一个不完全类型，pt是一个指向不完全类型的指针，尽管如此，这个指针却是完全类型，因为<strong>不管什么指针都占4个字节存储空间</strong>，这一点很明确。然后编译器又看到<code>struct t &#123; struct s *ps; &#125;;</code>，这时struct t有了完整的定义，就组合成一个完全类型了，pt的类型就组合成一个指向完全类型的指针。由于struct s在前面有完整的定义，所以<code>struct s *ps;</code>也定义了一个指向完全类型的指针。</p>
+<p>这样的类型定义是错误的：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">s</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">t</span> <span class="title">ot</span>;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">t</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">s</span> <span class="title">os</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>编译器看到<code>struct s &#123; struct t ot; &#125;;</code>时，认为struct t是一个不完全类型，无法定义成员ot，因为不知道它该占几个字节。所以结构体中可以递归地定义指针成员，但不能递归地定义变量成员，你可以设想一下，假如允许递归地定义变量成员，struct s中有一个struct t，struct t中又有一个struct s，struct s又中有一个struct t，这就成了一个无穷递归的定义。</p>
+<h4 id="一个结构体的递归定义">一个结构体的递归定义</h4>
+<p>以上是两个结构体构成的递归定义，一个结构体也可以递归定义：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">s</span> &#123;</span></span><br><span class="line">    <span class="keyword">char</span> data[<span class="number">6</span>];</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">s</span>* <span class="title">next</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>当编译器处理到第一行struct s {时，认为struct s是一个不完全类型，当处理到第三行struct s *next;时，认为next是一个指向不完全类型的指针，当处理到第四行};时，struct s成了一个完全类型，next也成了一个指向完全类型的指针。类似这样的结构体是很多种数据结构的基本组成单元，如链表、二叉树等。</p>
+<h3 id="分析复杂的类型">分析复杂的类型</h3>
+<p>可以想像得到，如果把指针和数组、函数、结构体层层组合起来可以构成非常复杂的类型。在分析复杂声明时，要<strong>借助typedef把复杂声明分解成几种基本形式</strong>：</p>
+<ul>
+<li><code>T *p;</code>，p是指向T类型的指针。</li>
+<li><code>T a[];</code>，a是由T类型的元素组成的数组，但有一个例外，如果a是函数的形参，则相当于T *a;</li>
+<li><code>T1 f(T2, T3...);</code>，f是一个函数，参数类型是T2、T3等等，返回值类型是T1。</li>
+</ul>
+<p>我们分解一下这个复杂声明：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> (*(*fp)(<span class="keyword">void</span> *))[<span class="number">10</span>];</span><br></pre></td></tr></table></figure>
+<ol>
+<li>fp和*号括在一起，说明fp是一个指针，指向T1类型：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">typedef int (*T1(void *))[10];</span><br><span class="line">T1 *fp;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>T1应该是一个函数类型，参数是void *，返回值是T2类型：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">typedef int (*T2)[10];</span><br><span class="line"><span class="function"><span class="keyword">typedef</span> T2 <span class="title">T1</span><span class="params">(<span class="keyword">void</span> *)</span></span>;</span><br><span class="line">T1 *fp;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>T2和*号括在一起，应该也是个指针，指向T3类型：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> T3[<span class="number">10</span>];</span><br><span class="line"><span class="keyword">typedef</span> T3 *T2;</span><br><span class="line"><span class="function"><span class="keyword">typedef</span> T2 <span class="title">T1</span><span class="params">(<span class="keyword">void</span> *)</span></span>;</span><br><span class="line">T1 *fp;</span><br></pre></td></tr></table></figure>
+<p>显然，T3是一个int数组，由10个元素组成。分解完毕。</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>C99已经定义了复数类型Complex，位于C标准库的头文件complex.h <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>在 C99 后支持使用一种新的语法语法 Compound Literal，例如：<code> z1 = (struct complex_struct)&#123;3.0, 4.0&#125;;</code>。 <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/c-primitive-type.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/c-const.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '复合数据类型'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

@@ -1,0 +1,912 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>WebP | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="什么是 WebP
+WebP (发音 weppy )，是一种同时提供了有损压缩与无损压缩的图片文件格式，是Google新推出的影像技术，它可让网页图档有效进行压缩，同时又不影响图片格式兼容与实际清晰度，进而让整体网页下载速度加快。
+
+WebP 无损压缩的图片可以比同样大小的 PNG 小 26%；
+We">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="WebP"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: 'WebP'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> WebP</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="什么是-WebP">什么是 WebP</h2>
+<p>WebP (发音 <code>weppy</code> )，是一种同时提供了有损压缩与无损压缩的图片文件格式，是Google新推出的影像技术，它可让网页图档有效进行压缩，同时又不影响图片格式兼容与实际清晰度，进而让整体网页下载速度加快。</p>
+<ul>
+<li>WebP 无损压缩的图片可以比同样大小的 PNG 小 26%；</li>
+<li>WebP 有损压缩的图片可以比同样大小的 JPEG 小 25-34%；</li>
+<li>WebP 支持无损的透明图层通道，代价只需增加 22% 的字节存储空间；</li>
+<li>WebP 有损透明图像可以比同样大小的 PNG 图像小3倍。</li>
+</ul>
+<h2 id="原理">原理</h2>
+<p>见 <a target="_blank" rel="noopener" href="https://developers.google.com/speed/webp/">官方描述</a> 。</p>
+<h2 id="支持">支持</h2>
+<ul>
+<li>WebP 有损压缩支持：
+<ul>
+<li>Google Chrome（桌面版） 17+</li>
+<li>Google Chrome（Android版） 25+</li>
+<li>Opera 11.10+</li>
+<li>Native web 浏览器：Android 4.0+（ICS）</li>
+</ul>
+</li>
+<li>WebP 有损、无损和透明度支持（libwebp v0.2.0）
+<ul>
+<li>Google Chrome（桌面版） 23+</li>
+<li>Google Chrome（Android版） 25+</li>
+<li>Google Chrome（iOS版） 29+</li>
+<li>Opera 12.10+</li>
+<li>Native web 浏览器：Android 4.2+（JB-MR1）</li>
+</ul>
+</li>
+<li>开发者也可以在代码中使用轻量级的 <a target="_blank" rel="noopener" href="https://developers.google.com/speed/webp/docs/api">libwebp</a> 库来编码/解码 WebP 图像；</li>
+<li>命令行工具 <a target="_blank" rel="noopener" href="https://developers.google.com/speed/webp/docs/cwebp">cwebp</a> 和 <a target="_blank" rel="noopener" href="https://developers.google.com/speed/webp/docs/dwebp">dwebp</a> 可以实现其他格式与 webp 的互转。</li>
+<li><a target="_blank" rel="noopener" href="https://developers.google.com/speed/webp/download">其他支持工具</a></li>
+</ul>
+<h2 id="性能">性能</h2>
+<p>目前WEBP与JPG相比较，编码速度慢10倍，解码速度慢1.5倍。</p>
+<p>针对1.5倍的解码速度是否影响用户体验的问题，我们可以看看ebay团队的这个测试：<a target="_blank" rel="noopener" href="http://www.webpagetest.org/video/view.php?id=130125_7b15e676f5fa0b736f247ff0ed36517e64d9c9ea">50张同样质量的WEBP与jgp加载的速度对比</a></p>
+<p>此测试表明，webp虽然会增加额外的解码时间，但是由于减少了文件体积，缩短了加载的时间，实际上 <strong>文件的渲染速度反而变快了</strong>。</p>
+<h2 id="应用案例">应用案例</h2>
+<ul>
+<li>Facebook相册</li>
+<li>淘宝的广告图</li>
+<li>QQ空间装扮</li>
+</ul>
+<h2 id="安装">安装</h2>
+<p>下面介绍 libwebp 在 Mac 下的两种安装方法：</p>
+<h3 id="方法一：使用-MacPorts-安装">方法一：使用 MacPorts 安装</h3>
+<p>1、 下载并安装 MacPorts ：到 <a target="_blank" rel="noopener" href="http://distfiles.macports.org/MacPorts/">这里</a> 下载安装 MacPorts 。
+2、 更新 MacPorts ：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo port selfupdate</span><br></pre></td></tr></table></figure>
+<p>3、 安装 libwebp</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo port install webp</span><br></pre></td></tr></table></figure>
+<h3 id="方法二：使用-HomeBrew-安装">方法二：使用 HomeBrew 安装</h3>
+<p>1、 安装 Homebrew</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ruby -e <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>&quot;</span></span><br></pre></td></tr></table></figure>
+<p>2、 安装 libwebp</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install webp</span><br></pre></td></tr></table></figure>
+<p>安装完 libwebp 后，在类 Unix 系统的 <code>/usr/local/include/webp</code> 可以找到如下几个头文件：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">decode.h</span><br><span class="line">encode.h</span><br><span class="line">types.h</span><br></pre></td></tr></table></figure>
+<p><code>/usr/local/lib/</code> 目录则存放着 libwebp 的静态库和动态库。</p>
+<h2 id="格式转换">格式转换</h2>
+<p>安装完 libwebp 后，cwebp 和 dwebp 也跟着安装成功了。可以用这两个命令行工具实现其他图片格式与 webp 格式的互转。</p>
+<ul>
+<li>其他格式图片转 webp</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cwebp [options] input_file -o output_file.webp</span><br></pre></td></tr></table></figure>
+<ul>
+<li>webp 转其他格式</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ dwebp [options] input_file.webp</span><br></pre></td></tr></table></figure>
+<h2 id="Android-开发中使用-WebP">Android 开发中使用 WebP</h2>
+<p>对于 Android 4.0 以上的系统，BitmapFactory 可以原生支持 webp 。下面介绍让 Android 4.0 以下的系统支持 webp 的方法。因为 libwebp 是 C 写的，所以可以通过 NDK 调用 libwebp ：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://developers.google.com/speed/webp/download">下载源码</a> ，放置到 <code>你的工程目录/jni</code> 。</li>
+<li>修改 <code>Android.mk</code> 文件。修改方法见下文。</li>
+<li>将 libwebp.jar 引入到工程的 build path 中。</li>
+<li>创建 <code>jni/src/libwebp_java_wrap.c</code> 文件。内容见下文。</li>
+<li>创建 <code>jni/Application.mk</code> 文件。内容见下文。</li>
+</ol>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://Android.mk">Android.mk</a> 的修改方法：增加 <code>libwebp_java_wrap.c</code>，将 <code>include $(BUILD_STATIC_LIBRARY)</code> 改为 <code>include $(BUILD_SHARED_LIBRARY)</code>。示例：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">LOCAL_PATH:&#x3D; $(call my-dir)</span><br><span class="line"></span><br><span class="line">include $(CLEAR_VARS)</span><br><span class="line">LOCAL_SRC_FILES :&#x3D; \</span><br><span class="line">    src&#x2F;dec&#x2F;alpha.c \</span><br><span class="line">    src&#x2F;dec&#x2F;frame.c \</span><br><span class="line">    src&#x2F;dec&#x2F;idec.c \</span><br><span class="line">    src&#x2F;dec&#x2F;layer.c \</span><br><span class="line">    src&#x2F;dec&#x2F;quant.c \</span><br><span class="line">    src&#x2F;dec&#x2F;tree.c \</span><br><span class="line">    src&#x2F;dec&#x2F;vp8.c \</span><br><span class="line">    src&#x2F;dec&#x2F;webp.c \</span><br><span class="line">    src&#x2F;dec&#x2F;io.c \</span><br><span class="line">    src&#x2F;dec&#x2F;buffer.c \</span><br><span class="line">    src&#x2F;dsp&#x2F;yuv.c \</span><br><span class="line">    src&#x2F;dsp&#x2F;upsampling.c \</span><br><span class="line">    src&#x2F;dsp&#x2F;cpu.c \</span><br><span class="line">    src&#x2F;dsp&#x2F;dec.c \</span><br><span class="line">    src&#x2F;dsp&#x2F;dec_neon.c \</span><br><span class="line">    src&#x2F;dsp&#x2F;enc.c \</span><br><span class="line">    src&#x2F;utils&#x2F;bit_reader.c \</span><br><span class="line">    src&#x2F;utils&#x2F;bit_writer.c \</span><br><span class="line">    src&#x2F;utils&#x2F;thread.c \</span><br><span class="line">    src&#x2F;libwebp_java_wrap.c \</span><br><span class="line"></span><br><span class="line">LOCAL_CFLAGS :&#x3D; -Wall -DANDROID -DHAVE_MALLOC_H -DHAVE_PTHREAD -DWEBP_USE_THREAD \</span><br><span class="line">                -finline-functions -frename-registers -ffast-math \</span><br><span class="line">                -s -fomit-frame-pointer -Isrc&#x2F;webp</span><br><span class="line"></span><br><span class="line">LOCAL_C_INCLUDES +&#x3D; $(LOCAL_PATH)&#x2F;src</span><br><span class="line"></span><br><span class="line">LOCAL_MODULE:&#x3D; webp</span><br><span class="line"></span><br><span class="line">include $(BUILD_SHARED_LIBRARY)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>libwebp_java_wrap.c 的内容见 <a target="_blank" rel="noopener" href="http://pastebin.com/mhxhPeTm">这里</a> 。</p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="http://Application.mk">Application.mk</a> 的内容如下：</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># The ARMv7 is significanly faster due to the use of the hardware FPU</span><br><span class="line">APP_ABI :&#x3D; armeabi armeabi-v7a</span><br><span class="line">APP_PLATFORM :&#x3D; android-8</span><br></pre></td></tr></table></figure>
+<p>其中 <code>APP_PLATFORM</code> 设定为支持的 SDK 最低版本。</p>
+<ul>
+<li>保存后，cd 到工程目录下，执行指令：</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="variable">$NDK</span>/ndk-build</span><br></pre></td></tr></table></figure>
+<p>应用层的开发工程一般如下：</p>
+<h3 id="1-加载-so-包">1. 加载 so 包</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> &#123;  </span><br><span class="line">    System.loadLibrary(<span class="string">&quot;webp&quot;</span>);</span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<h3 id="2-声明与-Native-方法相对应的方法">2. 声明与 Native 方法相对应的方法</h3>
+<p>native 方法是：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">SWIGEXPORT jint JNICALL <span class="title">Java_com_google_webp_libwebpJNI_WebPGetDecoderVersion</span><span class="params">(JNIEnv *jenv,  </span></span></span><br><span class="line"><span class="function"><span class="params">     jclass jcls)</span> </span>&#123;  </span><br><span class="line">  jint jresult = <span class="number">0</span> ;  </span><br><span class="line">  <span class="keyword">int</span> result;  </span><br><span class="line">  </span><br><span class="line">  (<span class="keyword">void</span>)jenv;  </span><br><span class="line">  (<span class="keyword">void</span>)jcls;  </span><br><span class="line">  result = (<span class="keyword">int</span>)WebPGetDecoderVersion();  </span><br><span class="line">  jresult = (jint)result;  </span><br><span class="line">  <span class="keyword">return</span> jresult;  </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<p>native 方法命名为：<code>Java_包名_类名_应用层方法名</code> 。其中包名中的点被下划线替代。</p>
+<p>应用层需要声明的方法为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">WebPGetDecoderVersion</span><span class="params">()</span></span>;  </span><br></pre></td></tr></table></figure>
+<p>应用层只用声明，不用定义，但要加上native关键字。</p>
+<h3 id="3-使用应用层声明的方法">3. 使用应用层声明的方法</h3>
+<p>下面我们按照上述方法来在应用层使用我们刚生成的so库</p>
+<p>记得有一个libwebp.jar文件不，这个jar已经把应用层声明的native方法搞好了，而且帮我们封装了一层，我们只用调用其方法就ok了，但是我们还是要加载so库，因为这个它没有帮我们实现。</p>
+<p>我们写两个方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> &#123;  </span><br><span class="line">    System.loadLibrary(<span class="string">&quot;webp&quot;</span>);  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line"><span class="function"><span class="keyword">private</span> Bitmap <span class="title">webpToBitmap</span><span class="params">(<span class="keyword">byte</span>[] encoded)</span> </span>&#123;  </span><br><span class="line">  </span><br><span class="line">    <span class="keyword">int</span>[] width = <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; <span class="number">0</span> &#125;;  </span><br><span class="line">    <span class="keyword">int</span>[] height = <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; <span class="number">0</span> &#125;;  </span><br><span class="line">    <span class="keyword">byte</span>[] decoded = libwebp.WebPDecodeARGB(encoded, encoded.length, width,  </span><br><span class="line">            height);  </span><br><span class="line">  </span><br><span class="line">    <span class="keyword">int</span>[] pixels = <span class="keyword">new</span> <span class="keyword">int</span>[decoded.length / <span class="number">4</span>];  </span><br><span class="line">    ByteBuffer.wrap(decoded).asIntBuffer().get(pixels);  </span><br><span class="line">  </span><br><span class="line">    <span class="keyword">return</span> Bitmap.createBitmap(pixels, width[<span class="number">0</span>], height[<span class="number">0</span>],  </span><br><span class="line">            Bitmap.Config.ARGB_8888);  </span><br><span class="line">  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isWebp</span><span class="params">(<span class="keyword">byte</span>[] data)</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">return</span> data != <span class="keyword">null</span> &amp;&amp; data.length &gt; <span class="number">12</span> &amp;&amp; data[<span class="number">0</span>] == <span class="string">&#x27;R&#x27;</span>  </span><br><span class="line">            &amp;&amp; data[<span class="number">1</span>] == <span class="string">&#x27;I&#x27;</span> &amp;&amp; data[<span class="number">2</span>] == <span class="string">&#x27;F&#x27;</span> &amp;&amp; data[<span class="number">3</span>] == <span class="string">&#x27;F&#x27;</span>  </span><br><span class="line">            &amp;&amp; data[<span class="number">8</span>] == <span class="string">&#x27;W&#x27;</span> &amp;&amp; data[<span class="number">9</span>] == <span class="string">&#x27;E&#x27;</span> &amp;&amp; data[<span class="number">10</span>] == <span class="string">&#x27;B&#x27;</span>  </span><br><span class="line">            &amp;&amp; data[<span class="number">11</span>] == <span class="string">&#x27;P&#x27;</span>;  </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<p>基于这两个方法，我们可以对webp图片进行解压缩。一个 Demo 工程可以在<a target="_blank" rel="noopener" href="http://download.csdn.net/detail/jiwangkailai02/6637013">这里</a>下载。</p>
+<p>还可以使用另一个封装好的库 <a target="_blank" rel="noopener" href="https://github.com/alexey-pelykh/webp-android-backport">alexey-pelykh/webp-android-backport</a> 。</p>
+<h2 id="iOS-开发中使用-WebP">iOS 开发中使用 WebP</h2>
+<p>可以使用封装好的 <a target="_blank" rel="noopener" href="https://github.com/seanooi/iOS-WebP">seanooi/iOS-WebP</a>。</p>
+<h3 id="准备工作">准备工作</h3>
+<h4 id="方法一：使用CocoaPods">方法一：使用CocoaPods</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod &#39;iOS-WebP&#39;, &#39;0.4&#39;</span><br></pre></td></tr></table></figure>
+<h4 id="方法二：手动的方法">方法二：手动的方法</h4>
+<p>将 iOS-WebP 目录下的如下三个文件引入到你的工程中：</p>
+<ul>
+<li><code>UIImage+WebP.h</code></li>
+<li><code>UIImage+WebP.m</code></li>
+<li><code>WebP.framework</code></li>
+</ul>
+<h3 id="用法">用法</h3>
+<p>如果使用 Cocoapods ，注意先引用头文件 <code>#import &quot;UIImage+WebP.h&quot;</code> 或 <code>#import &lt;UIImage+WebP.h&gt;</code>。</p>
+<h4 id="接口">接口</h4>
+<p>如下三个方法分别实现其他格式转WebP，WebP转其他格式及设置图像透明度。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+ (void)imageToWebP:(UIImage *)image quality:(CGFloat)quality alpha:(CGFloat)alpha preset:(WebPPreset)preset</span><br><span class="line">    completionBlock:(void (^)(NSData *result))completionBlock</span><br><span class="line">       failureBlock:(void (^)(NSError *error))failureBlock;</span><br><span class="line"></span><br><span class="line">+ (void)imageWithWebP:(NSString *)filePath</span><br><span class="line">      completionBlock:(void (^)(UIImage *result))completionBlock</span><br><span class="line">         failureBlock:(void (^)(NSError *error))failureBlock;</span><br><span class="line"></span><br><span class="line">- (UIImage *)imageByApplyingAlpha:(CGFloat)alpha;</span><br></pre></td></tr></table></figure>
+<p>为了避免阻塞主线程，图像的编码和解码将在后台的线程中完成并将结果block传回给主线程。</p>
+<h4 id="WebP-编码">WebP 编码</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; quality value is [0, 100]</span><br><span class="line">&#x2F;&#x2F; alpha value is [0, 1]</span><br><span class="line">[UIImage imageToWebP:[UIImage imageNamed:@&quot;demo.jpg&quot;] quality:quality alpha:alpha preset:WEBP_PRESET_DEFAULT completionBlock:^(NSData *result) &#123;</span><br><span class="line">  NSArray *paths &#x3D; NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);</span><br><span class="line">  NSString *webPPath &#x3D; [paths[0] stringByAppendingPathComponent:@&quot;image.webp&quot;];</span><br><span class="line">  if (![result writeToFile:webPPath atomically:YES]) &#123;</span><br><span class="line">    NSLog(@&quot;Failed to save file&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125; failureBlock:^(NSError *error) &#123;</span><br><span class="line">  NSLog(@&quot;%@&quot;, error.localizedDescription);</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+<p><code>WebPPreset</code> 的可能值包括：</p>
+<ul>
+<li><code>WEBP_PRESET_DEFAULT</code> (默认值，预设)</li>
+<li><code>WEBP_PRESET_PICTURE</code> (适合数字图像，如肖像、室内摄影)</li>
+<li><code>WEBP_PRESET_PHOTO</code> (户外照片，带有自然光照的照片)</li>
+<li><code>WEBP_PRESET_DRAWING</code> (手或者素描，带有高对比度细节的照片)</li>
+<li><code>WEBP_PRESET_ICON</code> (小尺寸彩色图)</li>
+<li><code>WEBP_PRESET_TEXT</code> (类文本图案)</li>
+</ul>
+<h3 id="WebP-解码">WebP 解码</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[UIImage imageWithWebP:@&quot;&#x2F;path&#x2F;to&#x2F;file&quot; completionBlock:^(UIImage *result) &#123;</span><br><span class="line">  UIImageView *myImageView &#x3D; [[UIImageView alloc] initWithImage:result];</span><br><span class="line">&#125;failureBlock:^(NSError *error) &#123;</span><br><span class="line">  NSLog(@&quot;%@&quot;, error.localizedDescription);</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+<h3 id="设置图像透明度">设置图像透明度</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;alpha value is [0, 1]</span><br><span class="line">UIImage *transparencyImage &#x3D; [[UIImage imageNamed:image.jpg] imageByApplyingAlpha:0.5];</span><br></pre></td></tr></table></figure>
+<h2 id="Hybrid-开发中使用-WebP">Hybrid 开发中使用 WebP</h2>
+<p>WebP 在不同版本的浏览器内核的支持程度比较碎片化，要在 WebView 中使用 WebP 格式的图片，并且做到全浏览器兼容，目前主要有三种思路：</p>
+<ol>
+<li>嵌入 flash ，让 flash 解析 WebP 。但这种方式只能将IMG元素一次性转换成Flash元素，而不支持后期的脚本操作。而且超长的参数会消耗大量CPU和内存。</li>
+<li>准备一套 WebP 格式的图片，当判断客户端不支持 WebP 时再转换成其他格式。但这样会影响图片加载性能。</li>
+<li>准备两套格式的图片，然后根据不同的浏览器内核提供不同格式的图片。这样做的代价是服务器存储的数据量将会增加，但牺牲存储成本换来的好处是图片加载性能更高。</li>
+</ol>
+<p>思路 3 根据实现机制的不同，又可以分成在服务端进行和在客户端进行两种。下面介绍这两种方式。</p>
+<h3 id="方案1-服务端方式">方案1. 服务端方式</h3>
+<p>通过 HTTP 的内容协商（Content Negotiation）信息来判断。简单的思路是：</p>
+<ol>
+<li>支持 WebP 的客户端在其 <code>Accept</code> 头部中包含 WebP 的建议，服务器制定 <code>Vary: Accept</code> 的规则。</li>
+<li>服务器和缓存根据 <code>Accept</code> 头部的信息来提供合适的资源。</li>
+</ol>
+<p>具体方案可参考：<a target="_blank" rel="noopener" href="https://github.com/igrigorik/webp-detect">https://github.com/igrigorik/webp-detect</a> 。</p>
+<h3 id="方案2-客户端方式">方案2. 客户端方式</h3>
+<p>JS 判断浏览器是否支持 WebP ，不同的 src 写入 img 中，样式中的图片可以通过检测后添加 class 。</p>
+<p>脚本代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> testWebp = <span class="function"><span class="keyword">function</span>(<span class="params">callback</span>)</span>&#123;  </span><br><span class="line">  <span class="keyword">var</span> image = <span class="keyword">new</span> Image();  </span><br><span class="line">  image.onerror = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;  </span><br><span class="line">    callback(<span class="literal">false</span>);  </span><br><span class="line">  &#125;;  </span><br><span class="line">  image.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;  </span><br><span class="line">    callback(image.width == <span class="number">1</span>);  </span><br><span class="line">  &#125;;  </span><br><span class="line">  image.src = <span class="string">&#x27;data:image/webp;base64,UklGRiwAAABXRUJQVlA4ICAAAAAUAgCdASoBAAEAL/3+/3+CAB/AAAFzrNsAAP5QAAAAAA==&#x27;</span>;  </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<p>src 中的字符串是经过 base64 编码过的一张 WebP 图片。</p>
+<p>完整的页面代码示例：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span> /&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">title</span>&gt;</span>WEBP TEST<span class="tag">&lt;/<span class="name">title</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span> <span class="attr">src</span>=<span class="string">&quot;http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span>&gt;</span>  </span><br><span class="line"><span class="javascript"><span class="keyword">var</span> testWebp = <span class="function"><span class="keyword">function</span>(<span class="params">callback</span>)</span>&#123;  </span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> image = <span class="keyword">new</span> Image();  </span></span><br><span class="line"><span class="javascript">            image.onerror = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;  </span></span><br><span class="line"><span class="javascript">              callback(<span class="literal">false</span>);  </span></span><br><span class="line">            &#125;;  </span><br><span class="line"><span class="javascript">            image.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;  </span></span><br><span class="line">              callback(image.width == 1);  </span><br><span class="line">            &#125;;  </span><br><span class="line"><span class="javascript">            image.src = <span class="string">&#x27;data:image/webp;base64,UklGRiwAAABXRUJQVlA4ICAAAAAUAgCdASoBAAEAL/3+/3+CAB/AAAFzrNsAAP5QAAAAAA==&#x27;</span>;  </span></span><br><span class="line"><span class="javascript">        &#125;,webSrc = <span class="function"><span class="keyword">function</span>(<span class="params">src</span>)</span>&#123;  </span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> suffix = src.lastIndexOf(<span class="string">&#x27;.&#x27;</span>);  </span></span><br><span class="line">            suffix = src.substr(suffix);  </span><br><span class="line"><span class="javascript">            <span class="keyword">if</span> (<span class="regexp">/png|jpg/</span>.test(suffix))&#123;  </span></span><br><span class="line"><span class="javascript">                <span class="keyword">return</span> src.substr(<span class="number">0</span>,(src.length-<span class="number">3</span>))+<span class="string">&#x27;webp&#x27;</span>;  </span></span><br><span class="line"><span class="javascript">            &#125;<span class="keyword">else</span>&#123;  </span></span><br><span class="line"><span class="javascript">                <span class="keyword">return</span> src;  </span></span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;  </span><br><span class="line"><span class="javascript">        $(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;  </span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> $note = $(<span class="string">&#x27;.note&#x27;</span>);  </span></span><br><span class="line"><span class="javascript">            testWebp(<span class="function"><span class="keyword">function</span>(<span class="params">SUP</span>)</span>&#123;  </span></span><br><span class="line"><span class="javascript">                <span class="keyword">var</span> $img = $(<span class="string">&#x27;img[data-img]&#x27;</span>);  </span></span><br><span class="line">                if(SUP)&#123;  </span><br><span class="line"><span class="javascript">                    $(<span class="string">&#x27;body&#x27;</span>).addClass(<span class="string">&#x27;webp&#x27;</span>);  </span></span><br><span class="line"><span class="javascript">                    $img.each(<span class="function"><span class="keyword">function</span>(<span class="params">i,o</span>)</span>&#123;  </span></span><br><span class="line"><span class="javascript">                        <span class="keyword">var</span> $o = $(o),  </span></span><br><span class="line"><span class="javascript">                            src = $o.attr(<span class="string">&#x27;data-img&#x27;</span>);  </span></span><br><span class="line"><span class="javascript">                        $o.attr(<span class="string">&#x27;src&#x27;</span>,webSrc(src));  </span></span><br><span class="line">                    &#125;);  </span><br><span class="line"><span class="handlebars"><span class="xml">                    $note.html(&#x27;你载入的是<span class="tag">&lt;<span class="name">strong</span>&gt;</span>webp<span class="tag">&lt;/<span class="name">strong</span>&gt;</span>格式&#x27;);  </span></span></span><br><span class="line"><span class="javascript">                &#125;<span class="keyword">else</span>&#123;  </span></span><br><span class="line"><span class="javascript">                    $(<span class="string">&#x27;body&#x27;</span>).addClass(<span class="string">&#x27;nowebp&#x27;</span>);  </span></span><br><span class="line"><span class="javascript">                    $img.each(<span class="function"><span class="keyword">function</span>(<span class="params">i,o</span>)</span>&#123;  </span></span><br><span class="line"><span class="javascript">                        <span class="keyword">var</span> $o = $(o),  </span></span><br><span class="line"><span class="javascript">                            src = $o.attr(<span class="string">&#x27;data-img&#x27;</span>);  </span></span><br><span class="line"><span class="javascript">                        $o.attr(<span class="string">&#x27;src&#x27;</span>,src);  </span></span><br><span class="line">                    &#125;);  </span><br><span class="line"><span class="handlebars"><span class="xml">                    $note.html(&#x27;你载入的是<span class="tag">&lt;<span class="name">strong</span>&gt;</span>png、jpg<span class="tag">&lt;/<span class="name">strong</span>&gt;</span>格式&#x27;);  </span></span></span><br><span class="line">                &#125;  </span><br><span class="line">            &#125;);  </span><br><span class="line">        &#125;);  </span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">&quot;text/css&quot;</span>&gt;</span>  </span><br><span class="line"><span class="css">*&#123;<span class="attribute">margin</span>:<span class="number">0</span>;<span class="attribute">padding</span>:<span class="number">0</span>;&#125;  </span></span><br><span class="line"><span class="css"><span class="selector-tag">body</span>&#123;<span class="attribute">font</span>:<span class="number">12px</span>/<span class="number">1.6</span> arial,\<span class="number">5</span>fae\<span class="number">8</span>f6f\<span class="number">96</span>c5\<span class="number">9</span>ed1;<span class="attribute">color</span>:<span class="number">#666</span>;&#125;  </span></span><br><span class="line"><span class="css"><span class="selector-tag">strong</span>&#123;<span class="attribute">color</span>:<span class="number">#000</span>;<span class="attribute">padding</span>:<span class="number">0</span> <span class="number">2px</span>;&#125;  </span></span><br><span class="line"><span class="css"><span class="selector-tag">img</span>&#123;<span class="attribute">width</span>:<span class="number">313px</span>;<span class="attribute">height</span>:<span class="number">219px</span>;&#125;  </span></span><br><span class="line"><span class="css"><span class="selector-class">.img</span>&#123; <span class="attribute">margin-top</span>:<span class="number">20px</span>; <span class="attribute">width</span>:<span class="number">313px</span>;<span class="attribute">height</span>:<span class="number">214px</span>; &#125;  </span></span><br><span class="line"><span class="css"><span class="selector-class">.webp</span> <span class="selector-class">.img</span>&#123; <span class="attribute">background</span>:<span class="built_in">url</span>(<span class="string">http://demo.btorange.com/article/webp/demo2.webp</span>) no-repeat; &#125;</span></span><br><span class="line"><span class="css"><span class="selector-class">.nowebp</span> <span class="selector-class">.img</span>&#123; <span class="attribute">background</span>:<span class="built_in">url</span>(<span class="string">http://demo.btorange.com/article/webp/demo2.png</span>) no-repeat; &#125;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">&quot;note&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span>  </span><br><span class="line"><span class="comment">&lt;!-- img图片 --&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">alt</span>=<span class="string">&quot;&quot;</span> <span class="attr">data-img</span>=<span class="string">&quot;http://demo.btorange.com/article/webp/demo1.jpg&quot;</span> <span class="attr">data-pinit</span>=<span class="string">&quot;registered&quot;</span> /&gt;</span>  </span><br><span class="line"><span class="comment">&lt;!-- 样式中的图片 --&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;img&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span>  </span><br></pre></td></tr></table></figure>
+<h2 id="参考资源">参考资源</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://developers.google.com/speed/webp/">WebP官网</a></li>
+<li><a target="_blank" rel="noopener" href="https://developers.google.com/speed/webp/docs/api">官方API文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://developers.google.com/speed/webp/faq#which_web_browsers_natively_support_webp">官方FAQ</a></li>
+<li><a target="_blank" rel="noopener" href="http://downloads.webmproject.org/releases/webp/libwebp-0.4.3.tar.gz">源码</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.etherdream.com/WebP/">让你的页面支持WebP</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.btorange.com/2013/06/14/webp.html/comment-page-1">WebP</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.igvita.com/2013/05/01/deploying-webp-via-accept-content-negotiation/">Deploying WebP via Accept Content Negotiation</a></li>
+</ul>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/sundries-xml.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/sundries-thoughts.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: 'WebP'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

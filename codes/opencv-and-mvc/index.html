@@ -1,0 +1,624 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>在 OpenCV 程序中实现 MVC 架构 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="介绍如何为 OpenCV 程序搭建 MVC（模型-视图-控制器） 架构。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="在 OpenCV 程序中实现 MVC 架构"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '在 OpenCV 程序中实现 MVC 架构'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 在 OpenCV 程序中实现 MVC 架构</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>介绍如何为 OpenCV 程序搭建 MVC（模型-视图-控制器） 架构。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <p>最近在读《<a target="_blank" rel="noopener" href="http://www.packtpub.com">OpenCV 2 Computer Vision Application Programming Cookbook</a>》，书中的第三章介绍了如何了在进行 OpenCV 开发时常用的几种设计模式，包括策略模式、单例模式，以及如何搭建 MVC（模型-视图-控制器）架构。内容精彩，让人受益良多。</p>
+<p>是否应该在程序中应用设计模式，这一直以来都是一个饱受争议的话题。但这并非本文的讨论重点。笔者的观点是，如果你需要在程序开发中使用面向对象的思想，那就不得不应用设计模式进行设计和重构，以期让自己的程序更加合理。</p>
+<p>应该说，OpenCV 和设计模式并没有什么必然的联系，在 OpenCV 程序中实现 MVC 也没有什么特别的魔法。但在这之前，我已经读完了被称为 <em>Gang of Four</em> 的《<a target="_blank" rel="noopener" href="http://c2.com/cgi/wiki?DesignPatternsBook">设计模式：可复用面向对象软件的基础</a>》，感觉内容有点偏学术，不太好读。而通过 OpenCV 的实际案例来掌握几种设计模式，比起直接去阅读各种设计模式的定义要容易让人接受得多。 <span id="more"></span></p>
+<p>好东西当然要拿出来分享，所以我结合自己的理解，重新组织了这部分的内容（本文源代码可以在 <a target="_blank" rel="noopener" href="https://github.com/wzpan/Qt_Toys/tree/master/ColorDetector">这里</a> 找到）。</p>
+<h2 id="什么是-MVC-架构">什么是 MVC 架构</h2>
+<p>MVC 架构是一种将用户界面和内部逻辑清晰地分离的手段，它由三个部分构成：<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/opencv-and-mvc/837UdX.png alt=' OpenCV 2 Computer Vision Application Programming Cookbook'></img><b>附图 1</b>  OpenCV 2 Computer Vision Application Programming Cookbook</span></span></span></p>
+<ul>
+<li><strong>模型（Model）</strong> 保存着与应用相关的数据信息。模型保存着所有需要交给应用程序处理的数据。当产生新的数据时，模型就通知它的视图，而视图将与模型通信以展示这些新数据。</li>
+<li><strong>视图（View）</strong> 与用户的界面对应。视图由多个不同的窗口元素组成，用于将数据展现给用户，并与用户交互。视图的一个作用是将用户的指令发送给控制器。当有可用的新数据时，视图将得到刷新，并展现新内容给用户。</li>
+<li><strong>控制器（Controller）</strong> 是连接模型和视图的桥梁。控制器接收从视图发送过来的请求，并将之交付给相应的视图进行处理。当模型的状态发生变化时，控制器也会得到通知，并与视图通信以展示新信息。</li>
+</ul>
+<p>下图显示了一个模型和三个视图（姑且可以把中间的线条当做控制器）。模型包含一些数据，视图通过电子表格、柱状图、饼图这些不同的方式来显示这些数据。数据在从模型到视图的过程中是由控制器来控制的，不同的控制器决定着不同的呈现方式。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-and-mvc/mvc.png" alt="MVC架构" />
+        <figcaption>MVC架构</figcaption>
+      </figure>
+    </p>
+<p>下面将通过实际案例，一步步讲解搭建 MVC 架构的方法。</p>
+<h2 id="案例需求">案例需求</h2>
+<p>现在我们需要编写一个程序 ColorDetector ，用于检测一幅图片中是否含有与目标颜色相近的颜色，并生成一幅和源图像一样大的二值图像，用白色填充这些像素所对应的位置，用黑色填充其他位置。如下图所示，左边的图像为源图像，中间的色块为待检测的目标颜色，右边的图像为最终得到的结果图。我们可以很明显的看出源图像中色调稍红的部分都变成了白色：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-and-mvc/montage.png" alt="颜色检测算法" />
+        <figcaption>颜色检测算法</figcaption>
+      </figure>
+    </p>
+<p>颜色检测算法的思路很简单：对图像做一次遍历，并计算每个像素的颜色与目标颜色的欧氏距离，下面给出一个未经重构的简单实现：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * detectColor	-	detect color with target </span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param image		-	the color to be detected</span></span><br><span class="line"><span class="comment"> * @param target	-	the target color</span></span><br><span class="line"><span class="comment"> * @param minDist	-	minimum distance</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @return the detected result</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">cv::Mat <span class="title">detectColor</span><span class="params">(<span class="keyword">const</span> cv::Mat &amp;image,</span></span></span><br><span class="line"><span class="function"><span class="params">                    <span class="keyword">const</span> cv::Vec3b &amp;target,</span></span></span><br><span class="line"><span class="function"><span class="params">                    <span class="keyword">const</span> <span class="keyword">int</span> minDist = <span class="number">100</span>)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// create a Mat container for storing result</span></span><br><span class="line">    cv::Mat result;</span><br><span class="line">    <span class="comment">// same size as input image, but 1-channel</span></span><br><span class="line">    result.<span class="built_in">create</span>(image.rows,</span><br><span class="line">                  image.cols,</span><br><span class="line">                  CV_8U);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// get the iterators</span></span><br><span class="line">    cv::Mat_&lt;cv::Vec3b&gt;::const_iterator it =</span><br><span class="line">            image.begin&lt;cv::Vec3b&gt;();</span><br><span class="line">    cv::Mat_&lt;cv::Vec3b&gt;::const_iterator itend =</span><br><span class="line">            image.end&lt;cv::Vec3b&gt;();</span><br><span class="line">    </span><br><span class="line">    cv::Mat_&lt;uchar&gt;::iterator itout =</span><br><span class="line">            result.begin&lt;uchar&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// for each pixel</span></span><br><span class="line">    <span class="keyword">for</span> ( ; it!=itend; ++it, ++itout) &#123;</span><br><span class="line">        <span class="comment">// process each pixel</span></span><br><span class="line">        <span class="comment">// compute distance from target color</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">getDistance</span>(*it, target) &lt; minDist) &#123;</span><br><span class="line">            *itout = <span class="number">255</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            *itout = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="comment">// end of pixel precessing</span></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="编写模型（Model）">编写模型（Model）</h2>
+<p>对于图像处理程序，模型是若干个算法模块的组合，所有这些算法模块都是模型的一部分。这些模块往往采取 <strong>策略（Strategy）模式</strong> 来实现。<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/opencv-and-mvc/gof.jpg alt=' Design Patterns: Elements of Reusable Object-Oriented Software'></img><b>附图 2</b>  Design Patterns: Elements of Reusable Object-Oriented Software</span></span></span> GoF 将策略模式定义为：</p>
+<blockquote>
+
+<p>Define a family of algorithms, encapsulate each one, and make them interchangeable. Strategy lets the algorithm vary independently from clients that use it.</p>
+
+
+<footer><strong>GoF</strong></footer></blockquote>
+
+<p>策略模式的目标是将一个算法封装成类。应用这种模式后，我们可以很方便的将一个算法替换成另一个算法，或将几个算法串起来以形成一个更加复杂的流程。另外，通过只暴露程序接口而隐藏算法实现细节，应用该模式可以很有效的降低算法的使用难度。</p>
+<p>下面使用策略模式，将原始的 <code>detectColor()</code> 函数封装成类：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ColorDetector</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="comment">// empty constructor</span></span><br><span class="line">    <span class="built_in">ColorDetector</span>() : <span class="built_in">minDist</span>(<span class="number">100</span>) &#123;</span><br><span class="line">      <span class="comment">// default parameter initialization here</span></span><br><span class="line">      target[<span class="number">0</span>] = target[<span class="number">1</span>] = target[<span class="number">2</span>] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Set the color distance threshold.</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setColorDistanceThreshold</span><span class="params">(<span class="keyword">int</span> distance)</span></span>;</span><br><span class="line">    <span class="comment">// Get the color distance threshold.</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getColorDistanceThreshold</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line">    <span class="comment">// Set the target color.</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setTargetColor</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">char</span> red,</span></span></span><br><span class="line"><span class="function"><span class="params">                        <span class="keyword">unsigned</span> <span class="keyword">char</span> green,</span></span></span><br><span class="line"><span class="function"><span class="params">                        <span class="keyword">unsigned</span> <span class="keyword">char</span> blue)</span></span>;</span><br><span class="line">    <span class="comment">// Get the target color.</span></span><br><span class="line">    <span class="function"><span class="keyword">const</span> cv::Vec3b <span class="title">getTargetColor</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="comment">// Core process of color detect algorithm.</span></span><br><span class="line">    <span class="function">cv::Mat <span class="title">process</span><span class="params">(<span class="keyword">const</span> cv::Mat &amp;image)</span></span>;    </span><br><span class="line">   </span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    <span class="comment">// minimum acceptable distance</span></span><br><span class="line">    <span class="keyword">int</span> minDist;</span><br><span class="line">    <span class="comment">// target color</span></span><br><span class="line">    cv::Vec3b target;</span><br><span class="line">    <span class="comment">// image containing resulting binary map</span></span><br><span class="line">    cv::Mat result;</span><br><span class="line">    <span class="comment">// Computes the distance from target color</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getDistance</span><span class="params">(<span class="keyword">const</span> cv::Vec3b &amp;color)</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * getDistance	-	 Computes the distance from target color.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param color		-	the color to be compared to</span></span><br><span class="line"><span class="comment"> * @param target	-	target color</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @return the Euclidean distance</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">ColorDetector::getDistance</span><span class="params">(<span class="keyword">const</span> cv::Vec3b &amp;color)</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">abs</span>(color[<span class="number">0</span>] - target[<span class="number">0</span>]) +</span><br><span class="line">            <span class="built_in">abs</span>(color[<span class="number">1</span>] - target[<span class="number">1</span>]) +</span><br><span class="line">            <span class="built_in">abs</span>(color[<span class="number">2</span>] - target[<span class="number">2</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * setColorDistanceThreshold	-	Set the color distance threshold.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Threshold must be positive.</span></span><br><span class="line"><span class="comment"> * otherwise distance threshold is set to 0.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param distance	-	threshold.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ColorDetector::setColorDistanceThreshold</span><span class="params">(<span class="keyword">int</span> distance)</span></span></span><br><span class="line"><span class="function"></span>&#123;    </span><br><span class="line">    <span class="keyword">if</span> (distance &lt; <span class="number">0</span>)</span><br><span class="line">        distance = <span class="number">0</span>;</span><br><span class="line">    minDist = distance;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * getColorDistanceThreshold	-	Get the color distance threshold.</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * @return the color distance</span></span><br><span class="line"><span class="comment"> */</span> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">ColorDetector::getColorDistanceThreshold</span><span class="params">()</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> minDist;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * setTargetColor	-	Set the target color.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param red	-	value of red channel</span></span><br><span class="line"><span class="comment"> * @param green	-	value of green channel</span></span><br><span class="line"><span class="comment"> * @param blue	-	value of blue channel</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ColorDetector::setTargetColor</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">char</span> red,</span></span></span><br><span class="line"><span class="function"><span class="params">                    <span class="keyword">unsigned</span> <span class="keyword">char</span> green,</span></span></span><br><span class="line"><span class="function"><span class="params">                    <span class="keyword">unsigned</span> <span class="keyword">char</span> blue)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// BGR order</span></span><br><span class="line">    target[<span class="number">2</span>] = red;</span><br><span class="line">    target[<span class="number">1</span>] = green;</span><br><span class="line">    target[<span class="number">0</span>] = blue;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * getTargetColor	-	Get the target color.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @return the target color</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">const</span> cv::Vec3b <span class="title">ColorDetector::getTargetColor</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> target;    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * process		-	Core process of color detect algorithm.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param image	-	image for detecting color</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @return		-	detect result</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">cv::Mat <span class="title">ColorDetector::process</span><span class="params">(<span class="keyword">const</span> cv::Mat &amp;image)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// re-allocate binary map if neccessary</span></span><br><span class="line">    <span class="comment">// same size as input image, but 1-channel</span></span><br><span class="line">    result.<span class="built_in">create</span>(image.rows, image.cols, CV_8U);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// get the iterators</span></span><br><span class="line">    cv::Mat_&lt;cv::Vec3b&gt;::const_iterator it =</span><br><span class="line">            image.begin&lt;cv::Vec3b&gt;();</span><br><span class="line">    cv::Mat_&lt;cv::Vec3b&gt;::const_iterator itend =</span><br><span class="line">            image.end&lt;cv::Vec3b&gt;();</span><br><span class="line">    cv::Mat_&lt;uchar&gt;::iterator itout =</span><br><span class="line">            result.begin&lt;uchar&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// for each pixel</span></span><br><span class="line">    <span class="keyword">for</span> ( ; it!=itend; ++it, ++itout) &#123;</span><br><span class="line">        <span class="comment">// process each pixel</span></span><br><span class="line">        <span class="comment">// compute distance from target color</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">getDistance</span>(*it) &lt; minDist) &#123;</span><br><span class="line">            *itout = <span class="number">255</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            *itout = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="comment">// end of pixel precessing</span></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中：</p>
+<ul>
+<li><code>process()</code> 函数是核心的处理函数，和 <code>detectColor()</code> 函数作用相同；</li>
+<li><code>setColorDistanceThreshold()</code> 和 <code>getColorDistanceThreshold()</code> 函数分别用于设置和获取颜色阈值，即 minDist ；</li>
+<li><code>setTargetColor()</code> 和 <code>getTargetColor()</code> 函数分别用于设置和获取目标颜色；</li>
+<li><code>getDistance()</code> 函数用于计算两个颜色向量的欧氏距离。</li>
+</ul>
+<p>至此，模型所需要用到的算法已经编写完成。我们可以写程序测试使用这个类：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cv::Mat img = cv::<span class="built_in">imread</span>(<span class="string">&quot;./lena.png&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!img.data) &#123;</span><br><span class="line">        <span class="built_in">perror</span>(<span class="string">&quot;Open file failed!&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    cv::<span class="built_in">namedWindow</span>(<span class="string">&quot;image&quot;</span>, CV_WINDOW_AUTOSIZE);</span><br><span class="line">    cv::<span class="built_in">imshow</span>(<span class="string">&quot;image&quot;</span>, img);</span><br><span class="line"></span><br><span class="line">    ColorDetector *processor = <span class="keyword">new</span> <span class="built_in">ColorDetector</span>();</span><br><span class="line">    processor-&gt;<span class="built_in">setTargetColor</span>(<span class="number">190</span>, <span class="number">80</span>, <span class="number">80</span>);</span><br><span class="line">    cv::Mat result = processor-&gt;<span class="built_in">process</span>(img);</span><br><span class="line"></span><br><span class="line">    cv::<span class="built_in">namedWindow</span>(<span class="string">&quot;result&quot;</span>, CV_WINDOW_AUTOSIZE);</span><br><span class="line">    cv::<span class="built_in">imshow</span>(<span class="string">&quot;result&quot;</span>, result);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span> k;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        k = cv::<span class="built_in">waitKey</span>(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">if</span> (k == <span class="number">27</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过这样的封装，原来对算法函数 <code>detectColor()</code> 的调用被抽象成了更加清晰可读的 <code>ColorDetector</code> 类，调用该算法只需要实例化该类，并调用 <code>process()</code> 函数，而具体的参数则可以通过一系列的 get 、set 函数来设置。这种接口风格可以被其他算法函数沿用，从而减少应用开发者的记忆负担，有利于提高可用性。</p>
+<h2 id="编写控制器（Controller）">编写控制器（Controller）</h2>
+<p>编写 ColorDetectController 如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ColorDetectController</span> &#123;</span></span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    <span class="comment">// pointer to the singleton</span></span><br><span class="line">    <span class="keyword">static</span> ColorDetectController *singleton;</span><br><span class="line">    <span class="comment">// the algorithm class</span></span><br><span class="line">    ColorDetector *cdetect;</span><br><span class="line">    <span class="comment">// private constructor</span></span><br><span class="line">    <span class="built_in">ColorDetectController</span>() &#123;</span><br><span class="line">        <span class="comment">// setting up the application</span></span><br><span class="line">        cdetect = <span class="keyword">new</span> <span class="built_in">ColorDetector</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    cv::Mat image;	<span class="comment">// The image to be processed</span></span><br><span class="line">    cv::Mat result;	<span class="comment">// The image result</span></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// Deletes processor objects created by the controller.</span></span><br><span class="line">    ~<span class="built_in">ColorDetectController</span>() &#123;</span><br><span class="line">        <span class="keyword">delete</span> cdetect;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Gets access to Singleton instance</span></span><br><span class="line">    <span class="function"><span class="keyword">static</span> ColorDetectController *<span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Creates the instance at first call</span></span><br><span class="line">        <span class="keyword">if</span> (singleton == <span class="number">0</span>)</span><br><span class="line">            singleton = <span class="keyword">new</span> ColorDetectController;</span><br><span class="line">        <span class="keyword">return</span> singleton;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Release the singleton instance of this controller.</span></span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (singleton != <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">delete</span> singleton;</span><br><span class="line">            singleton = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Sets the color distance threshold</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setColorDistanceThreshold</span><span class="params">(<span class="keyword">int</span> distance)</span> </span>&#123;</span><br><span class="line">        cdetect-&gt;<span class="built_in">setColorDistanceThreshold</span>(distance);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Gets the color distance threshold</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getColorDistanceThreshold</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> cdetect-&gt;<span class="built_in">getColorDistanceThreshold</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Sets the color to be detected</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setTargetColor</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">char</span> red,</span></span></span><br><span class="line"><span class="function"><span class="params">                        <span class="keyword">unsigned</span> <span class="keyword">char</span> green, <span class="keyword">unsigned</span> <span class="keyword">char</span> blue)</span> </span>&#123;</span><br><span class="line">        cdetect-&gt;<span class="built_in">setTargetColor</span>(red,green,blue);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Gets the color to be detected</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">getTargetColor</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">char</span> &amp;red,</span></span></span><br><span class="line"><span class="function"><span class="params">                        <span class="keyword">unsigned</span> <span class="keyword">char</span> &amp;green, <span class="keyword">unsigned</span> <span class="keyword">char</span> &amp;blue)</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">        cv::Vec3b color= cdetect-&gt;<span class="built_in">getTargetColor</span>();</span><br><span class="line">        red= color[<span class="number">2</span>];</span><br><span class="line">        green= color[<span class="number">1</span>];</span><br><span class="line">        blue= color[<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Sets the input image. Reads it from file.</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">setInputImage</span><span class="params">(std::string filename)</span> </span>&#123;</span><br><span class="line">        image = cv::<span class="built_in">imread</span>(filename);</span><br><span class="line">        <span class="keyword">if</span> (!image.data)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Returns the current input image.</span></span><br><span class="line">    <span class="function"><span class="keyword">const</span> cv::Mat <span class="title">getInputImage</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> image;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Performs image processing.</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">process</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        result = cdetect-&gt;<span class="built_in">process</span>(image);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Returns the image result from the latest processing</span></span><br><span class="line">    <span class="function"><span class="keyword">const</span> cv::Mat <span class="title">getLastResult</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>ColorDetectController 将起到一个连接模型和视图的作用。例如，当用户发送处理指令时，可以通过 <code>ColorDetectController::getInstance()-&gt;process()</code> 来执行处理操作。</p>
+<p>实现 ColorDetectController 的过程中用到了 <strong>单例（Singleton）模式</strong> ，让类自身负责保存它的唯一实例，用于确保该控制器类在任何时刻都只能有一个实例，并提供一个用于访问该实例的全局指针。GoF 对单例模式定义如下：</p>
+<blockquote>
+
+<p>Ensure a class only has one instance, and provide a global point of access to it.</p>
+
+
+<footer><strong>GoF</strong></footer></blockquote>
+
+<p>为什么建议控制器使用单例模式来设计呢？其实，像本文这么简单的例子，用不用单例模式都无所谓。然而，对于复杂的系统，可能有多个视图需要访问和使用同一个控制器，比如存在多个对话框以修改同个算法模块的参数，这个时候，单例模式就显得非常有用了——它可以保证这种唯一性和同一性。</p>
+<p>上面的代码中：</p>
+<ul>
+<li>静态指针成员 <code>*singleton</code> 指向类本身的唯一实例；</li>
+<li>构造函数 <code>ColorDetectController()</code> 被设成了私有函数，因此不能供外部直接调用 （出于<a href="/wiki/cpp-oop.html#%E4%BD%95%E6%97%B6%E7%BC%96%E5%86%99%E6%98%BE%E5%BC%8F%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0">三法则</a>，最好也将赋值操作符和复制构造函数定义为私有函数）；</li>
+<li>公有函数 <code>getInstance()</code> 用于创建或获取该唯一实例的指针。调用该函数时，
+如果该类已经被实例化过，则直接返回该实例。否则先创建该实例，然后将其返回（注意这种创建方式并非线程安全的）；</li>
+<li>公有函数 <code>destroy()</code> 用于销毁该实例。由于该实例是动态创建的，当用户不需要用到它时，应该调用这个函数将它销毁。</li>
+</ul>
+<h2 id="编写视图（View）">编写视图（View）</h2>
+<p>完成模型和控制器的编写后，视图的编写就显得轻而易举了。我们可以设计如下的界面：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-and-mvc/view.png" alt="程序界面" />
+        <figcaption>程序界面</figcaption>
+      </figure>
+    </p>
+<p>这个界面包含了如下一些窗口元素：</p>
+<ul>
+<li>“Open Image” 按钮，用于打开图像。点击它将执行 <code>onOpen()</code> 函数，该函数将调用 <code>ColorDetectController</code> 控制器的 <code>setInputImage()</code> 函数；</li>
+<li>“Select Color”按钮，用于选择目标颜色。点击它将执行 <code>onSelectColor()</code> 函数，该函数将调用 <code>ColorDetectController</code> 控制器的 <code>setTargetColor()</code> 函数；</li>
+<li>竖直滑动选择块，用于选择最小距离阈值。滑动它后将执行 <code>onSelectThreshold()</code> 函数，该函数将调用 <code>ColorDetectController</code> 控制器的 <code>setColorDistanceThreshold()</code> 函数；</li>
+<li>“Process”按钮，用于执行颜色检测。点击它将执行 <code>onProcess()</code> 函数，该函数将调用 <code>ColorDetectController</code> 控制器的 <code>process()</code> 函数；</li>
+<li>“Output Image”按钮，用于输出图像。点击它将执行 <code>onSave()</code> 函数。</li>
+</ul>
+<p>相关的代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * showImage	-	display an image on label</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param image	-	image for displaying</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::showImage</span><span class="params">(cv::Mat image)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cv::Mat tmp;</span><br><span class="line">    QImage img;</span><br><span class="line">    <span class="keyword">if</span> (image.<span class="built_in">channels</span>() == <span class="number">3</span>) &#123;    <span class="comment">// color image</span></span><br><span class="line">        cv::<span class="built_in">cvtColor</span>(image, tmp, CV_BGR2RGB);</span><br><span class="line">        img = <span class="built_in">QImage</span>((<span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">char</span>*)(tmp.data),</span><br><span class="line">                        tmp.cols, tmp.rows, QImage::Format_RGB888);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (image.<span class="built_in">channels</span>() == <span class="number">1</span>) &#123;     <span class="comment">// gray scale image</span></span><br><span class="line">        cv::<span class="built_in">cvtColor</span>(image, tmp, CV_GRAY2RGB);</span><br><span class="line">        img = <span class="built_in">QImage</span>((<span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">char</span>*)(tmp.data),</span><br><span class="line">                        tmp.cols, tmp.rows, tmp.step, QImage::Format_RGB888);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// display on label</span></span><br><span class="line">    ui-&gt;imageLabel-&gt;<span class="built_in">setPixmap</span>(QPixmap::<span class="built_in">fromImage</span>(img));</span><br><span class="line">    ui-&gt;imageLabel-&gt;<span class="built_in">repaint</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * onOpen()	-	open image</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::onOpen</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// Callback method of &quot;Open&quot; button.</span></span><br><span class="line">    QString fileName = QFileDialog::<span class="built_in">getOpenFileName</span>(</span><br><span class="line">                <span class="keyword">this</span>,</span><br><span class="line">                <span class="built_in">tr</span>(<span class="string">&quot;Open Image&quot;</span>),</span><br><span class="line">                <span class="string">&quot;.&quot;</span>,</span><br><span class="line">                <span class="built_in">tr</span>(<span class="string">&quot;Image Files (</span></span><br><span class="line"><span class="string">				*.png *.jpg *.jpeg *.bmp)&quot;</span>)</span><br><span class="line">                );</span><br><span class="line">    <span class="keyword">if</span>(fileName.<span class="built_in">isEmpty</span>()) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// change the cursor</span></span><br><span class="line">    QApplication::<span class="built_in">setOverrideCursor</span>(Qt::WaitCursor);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// set and display the input image</span></span><br><span class="line">    ColorDetectController::<span class="built_in">getInstance</span>()-&gt;<span class="built_in">setInputImage</span>(</span><br><span class="line">                fileName.<span class="built_in">toStdString</span>());</span><br><span class="line"></span><br><span class="line">    <span class="built_in">showImage</span>(ColorDetectController::<span class="built_in">getInstance</span>()-&gt;<span class="built_in">getInputImage</span>());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// restore the cursor</span></span><br><span class="line">    QApplication::<span class="built_in">restoreOverrideCursor</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// get the file&#x27;s standard location</span></span><br><span class="line">    curFile = <span class="built_in">QFileInfo</span>(fileName).<span class="built_in">canonicalPath</span>();</span><br><span class="line"></span><br><span class="line">    ui-&gt;processBtn-&gt;<span class="built_in">setEnabled</span>(<span class="literal">true</span>);</span><br><span class="line">    ui-&gt;thresholdSlider-&gt;<span class="built_in">setEnabled</span>(<span class="literal">true</span>);</span><br><span class="line">    ui-&gt;colorBtn-&gt;<span class="built_in">setEnabled</span>(<span class="literal">true</span>);</span><br><span class="line">    ui-&gt;saveBtn-&gt;<span class="built_in">setEnabled</span>(<span class="literal">true</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * onSelectColor()	-	select target color</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::onSelectColor</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    QColor color = QColorDialog::<span class="built_in">getColor</span>(Qt::green, <span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">if</span> (color.<span class="built_in">isValid</span>()) &#123;</span><br><span class="line">        ColorDetectController::<span class="built_in">getInstance</span>()</span><br><span class="line">            -&gt;<span class="built_in">setTargetColor</span>(color.<span class="built_in">red</span>(),</span><br><span class="line">                color.<span class="built_in">green</span>(),</span><br><span class="line">                color.<span class="built_in">blue</span>()</span><br><span class="line">                );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * onSelectThreshold	-	select threshold</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::onSelectThreshold</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ui-&gt;thresholdLabel-&gt;<span class="built_in">setText</span>(<span class="built_in">tr</span>(<span class="string">&quot;Color Distance Threshold: %1&quot;</span>)</span><br><span class="line">            .<span class="built_in">arg</span>(ui-&gt;thresholdSlider-&gt;<span class="built_in">value</span>()));</span><br><span class="line">    ColorDetectController::<span class="built_in">getInstance</span>()</span><br><span class="line">            -&gt;<span class="built_in">setColorDistanceThreshold</span>(</span><br><span class="line">                ui-&gt;thresholdSlider-&gt;<span class="built_in">value</span>());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * saveImage	-	Save the file to a specified location</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param fileName	-	the target location</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @return true if the file is successfully saved</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">MainWindow::saveImage</span><span class="params">(<span class="keyword">const</span> QString &amp;fileName)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">QFile <span class="title">file</span><span class="params">(fileName)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!file.<span class="built_in">open</span>(QFile::WriteOnly)) &#123;</span><br><span class="line">        QMessageBox::<span class="built_in">warning</span>(<span class="keyword">this</span>, <span class="built_in">tr</span>(<span class="string">&quot;ImageViewer&quot;</span>),</span><br><span class="line">                <span class="built_in">tr</span>(<span class="string">&quot;Enable to save %1: \n %2&quot;</span>)</span><br><span class="line">                .<span class="built_in">arg</span>(fileName).<span class="built_in">arg</span>(file.<span class="built_in">errorString</span>()));</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// change the cursor</span></span><br><span class="line">    QApplication::<span class="built_in">setOverrideCursor</span>(Qt::WaitCursor);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// save all the contents to file</span></span><br><span class="line">    cv::<span class="built_in">imwrite</span>(fileName.<span class="built_in">toStdString</span>(),</span><br><span class="line">            ColorDetectController::<span class="built_in">getInstance</span>()-&gt;</span><br><span class="line">            <span class="built_in">getLastResult</span>());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// restore the cursor</span></span><br><span class="line">    QApplication::<span class="built_in">restoreOverrideCursor</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * onProcess	-	process image</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::onProcess</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ColorDetectController::<span class="built_in">getInstance</span>()-&gt;<span class="built_in">process</span>();</span><br><span class="line">    cv::Mat resulting =</span><br><span class="line">            ColorDetectController::<span class="built_in">getInstance</span>()-&gt;<span class="built_in">getLastResult</span>();</span><br><span class="line">    <span class="keyword">if</span> (!resulting.<span class="built_in">empty</span>())</span><br><span class="line">        <span class="built_in">showImage</span>(resulting);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * onSave	-	save the image</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::onSave</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    QString fileName = QFileDialog::<span class="built_in">getSaveFileName</span>(<span class="keyword">this</span>,</span><br><span class="line">                                                    <span class="built_in">tr</span>(<span class="string">&quot;Save as&quot;</span>),</span><br><span class="line">                                                    curFile);</span><br><span class="line">    <span class="keyword">if</span> (!fileName.<span class="built_in">isEmpty</span>())</span><br><span class="line">        <span class="built_in">saveImage</span>(fileName);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * onClose	-	destroy the instance</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MainWindow::onClose</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ColorDetectController::<span class="built_in">getInstance</span>()-&gt;<span class="built_in">destroy</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="本文源代码">本文源代码</h2>
+<p><i class="fab fa-github"></i> 本文的源代码可以在 <a target="_blank" rel="noopener" href="https://github.com/wzpan/Qt_Toys/tree/master/ColorDetector">这里</a> 找到。</p>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/codes/learning-utf-8-from-a-bug/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/tools/koding_intro/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '在 OpenCV 程序中实现 MVC 架构'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/opencv-and-mvc.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2014-02-10 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/codes/">codes<span>38</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/OpenCV/">OpenCV<span>3</span></a></li> <li><a href="/tags/MVC/">MVC<span>1</span></a></li> <li><a href="/tags/Design-Patterns/">Design Patterns<span>1</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-MVC-%E6%9E%B6%E6%9E%84"><span class="toc-article-text">什么是 MVC 架构</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%A1%88%E4%BE%8B%E9%9C%80%E6%B1%82"><span class="toc-article-text">案例需求</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%BC%96%E5%86%99%E6%A8%A1%E5%9E%8B%EF%BC%88Model%EF%BC%89"><span class="toc-article-text">编写模型（Model）</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%BC%96%E5%86%99%E6%8E%A7%E5%88%B6%E5%99%A8%EF%BC%88Controller%EF%BC%89"><span class="toc-article-text">编写控制器（Controller）</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%BC%96%E5%86%99%E8%A7%86%E5%9B%BE%EF%BC%88View%EF%BC%89"><span class="toc-article-text">编写视图（View）</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%9C%AC%E6%96%87%E6%BA%90%E4%BB%A3%E7%A0%81"><span class="toc-article-text">本文源代码</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

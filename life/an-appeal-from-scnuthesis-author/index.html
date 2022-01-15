@@ -1,0 +1,614 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>SCNUThesis招募新的维护者 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="为华南师范大学博士/硕士毕业论文 LaTeX 模板 SCNUThesis 招募新的维护者。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="SCNUThesis招募新的维护者"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: 'SCNUThesis招募新的维护者'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> SCNUThesis招募新的维护者</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>为华南师范大学博士/硕士毕业论文 LaTeX 模板 SCNUThesis 招募新的维护者。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <h2 id="缘起">缘起</h2>
+<p>工作大半年，开始感觉不如以前可以花很多时间在业余小项目上了。</p>
+<p>读书的时候，虽然白天有很多课业上的压力，但到了晚上总有精力来做一些小东西。那个时候，熬夜的后果最多就是第二天到课室打下瞌睡。工作之后就完全不同了，白天的时候，需要一直聚精会神的工作，以保证每天的产出，到了晚上就感觉好累好累，不想再碰电脑。</p>
+<p>这半年的时间，如果说我有进步的地方，就是学会了如何保养自己的身体。每天回家，我几乎都是先看半小时书，然后做一会儿简单的运动，再洗个澡，泡个脚，喝杯牛奶去睡觉。周末的时间，由于不放心外面的食物，我学会了下厨，于是周末两天我的大部分时间都是在一堆锅碗瓢盆中度过的。<span id="more"></span></p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/an-appeal-from-scnuthesis-author/food.png" alt="做过的菜" />
+        <figcaption>做过的菜</figcaption>
+      </figure>
+    </p>
+<p>如果说退步的地方，那就是参与开源项目的热度了。现在每当我打开 Github ，看到我的贡献图，我就会感到非常惭愧：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/an-appeal-from-scnuthesis-author/0-commit.jpg" alt="工作后几乎 0 commit" />
+        <figcaption>工作后几乎 0 commit</figcaption>
+      </figure>
+    </p>
+<p>你可以很明显地看出工作前和工作后我的贡献热度的区别。与此类似，也有热心的读者发现我的博客有半年没有更新了。</p>
+<p>总之，上面的文字无非是在说，工作之后，我深感精力有限，无暇维护我需要长期维护的项目。其中， <a target="_blank" rel="noopener" href="https://github.com/scnu/scnuthesis">SCNUThesis</a> 就是我认为必须得转让的长期项目。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/scnu/scnuthesis">SCNUThesis</a> 是一份非官方的，符合华南师范大学硕士/博士学位论文格式要求的 LaTeX 模板。</p>
+<p>写这份模板的缘由要追述到研一的时候。当时出于好奇，我接触了 LaTeX 这个排版系统，一下子就被其 WYTIWYG 的观念深深吸引了。用它来排版论文是如此的方便，以至于我希望毕业的时候也能用它来排版毕业论文。不出意料，我的学校并没有提供这样的模板。虽然很失望，但<strong>与其等别人帮助，不如给别人帮助</strong>。于是，我花了一个月的时间，阅读了很多高校的 LaTeX 模板，最终吸取了几所高校的模板的优点，编写出了第一个版本的模板。我也开始学会使用 svn 做版本控制，并在 google code 上发布了第一个版本。后面这个项目又从 google code 迁移到了 Github 。</p>
+<p>我的模板的第一个用户是王立斌老师的学生潘嘉昕师兄，他当时正赶着要写毕业论文。当时的 SCNUThesis 可以说还只是个半成品，但他对我的项目非常支持，并且愿意放弃使用 Office 而跑来当我的小白鼠。我们就一直保持着邮件联系，他一边使用模板，一边给我的模板提供了很多宝贵的改进建议。在他的帮助下，我的模板基本成型了，而他也顺利的用 SCNUThesis 完成了论文的排版。在他的论文的致谢中，他特意感谢了 SCNUThesis：</p>
+<blockquote>
+
+<p>感谢 XXX 师兄、XXX 师兄、XX、XX、XX、XXX 等同实验室师兄弟，与他们的讨论与交流促进了我的科研工作，也丰富了我的研究生生活。感谢潘伟洲同学提供的 LaTeX 排版模版 SCNUThesis。</p>
+
+
+<footer><strong>潘嘉昕</strong></footer></blockquote>
+
+<p>收到第一个用户的致谢，可想而知当时我的内心多么有成就感。**SCNUThesis 是我的第一份开源作品，而它实实在在地能够帮助到其他人！**在这之后，陆续也其他几位师兄师姐使用我的模板。到了我这一届的时候，因为我的推动，我们整个实验室的人几乎都用它来完成论文的排版，减轻了他们花在格式排版上的负担。而 SCNUThesis 也开始被广东工业大学、首都师范大学等其他高校的学生借鉴，衍生出了更多高校的毕业论文 LaTeX 模板，还被收录在知名 TeX 博客 <a target="_blank" rel="noopener" href="http://www.latexstudio.net/south-china-normal-university-masters-doctorate-thesis-latex-template/">LaTeXStudio</a> 中。</p>
+<h2 id="呼吁">呼吁</h2>
+<p>前话扯了一堆，现在摆出正题：<strong>我希望在这里招募到 SCNUThesis 新的维护者</strong>。</p>
+<p>早在研三的时候，我就已经预料到了我早晚有一天要交出它，就像一个老父亲将自己的爱女交付给靠谱的女婿。当时我就在 Github 上建了一个 <a target="_blank" rel="noopener" href="https://github.com/scnu">scnu</a> 组织，目的就是等以后我无力再维护 SCNUThesis 的时候，将它转移给组织，让其他爱好者共同来维护它。</p>
+<p>为了准备好这个交接，我已经将 SCNUThesis 正式转移给了 scnu 组织，将版本号正式定为 1.0 ，并且公布了自己的毕业论文论文源码以供他人参考。现在它需要的，就是一位（或者多位）愿意花时间维护它的人。</p>
+<h3 id="为什么我要寻找新的维护者">为什么我要寻找新的维护者</h3>
+<p>因为：</p>
+<ol>
+<li>我现在的工作中很少用到 LaTeX ，久了难免生疏；</li>
+<li>我已经毕业离校，也不可能再使用它排版论文；</li>
+<li>需要配合每年格式上的改动做些调整；</li>
+<li>需要花时间帮助新手解决各种排版上的问题。</li>
+</ol>
+<h3 id="如何维护-SCNUThesis-？">如何维护 SCNUThesis ？</h3>
+<p>维护 SCNUThesis 主要有三种方式：</p>
+<ol>
+<li>成为代码贡献者；</li>
+<li>成为项目维护者；</li>
+<li>成为项目管理者。</li>
+</ol>
+<p>第一种方式很简单，你的责任也比较小。就是 fork 我的项目，然后当模板有问题需要维护的时候，对你的本地项目做好修改，然后向 scnu 发 pull request。当我和其他项目管理者会对你的代码进行 code review ，并考虑并入模板中。</p>
+<p>一个合格的 pull request 应该是：</p>
+<ol>
+<li>不仅发送 pro 的分支，还发送 master 分支的 pull request。两个分支的 cls 和 pdf 文件必须一致；</li>
+<li>有良好的 commit 说明。</li>
+</ol>
+<p>第二种方式则可以具备更多的权利。你可以先（邮件或在这里评论）告诉我你希望成为项目维护者。我将邀请你加入 scnu 组并赋予你维护者权限。你将可以直接修改 SCNUThesis 的代码，也可以审核和处理其他人的 pull request。</p>
+<p>第三种方式则具备最高的权限，除了具备所有维护者的权利之外，你还可以添加其他维护者。增加这个角色是为了以后的传承。我希望这个项目能够一直有人在跟进、维护，并由一届维护者传承给下一届的维护者。项目管理者一般不轻易添加，只有贡献突出的维护者可以跟我申请管理者权限。</p>
+<h3 id="成为维护者需要什么条件？">成为维护者需要什么条件？</h3>
+<p>从上一个问题你可以看出，维护SCNUThesis对于能力上的要求并不高。如果真要有硬性条件，那就是：</p>
+<ol>
+<li>你必须是华南师范大学的在读学生，并且愿意在毕业时使用它。我相信一个产品只有作者也在使用时，这个产品才有活力。</li>
+<li>你必须对 LaTeX 技术具有浓厚的兴趣，愿意稍微深入一点了解 LaTeX 的编写技巧，能够积极响应和解决用户提出的问题。</li>
+<li>你必须具备独立解决问题的能力。遇到困难时，你要能沉住气解决它，而不是把问题抛给我。我很乐意在你遇到困难的时候给予帮助，但我只愿意回答聪明的问题。</li>
+</ol>
+<h3 id="为什么你应该参与-SCNUThesis？">为什么你应该参与 SCNUThesis？</h3>
+<p>原因有几个：</p>
+<ol>
+<li>参与开源。SCNUThesis 是我的第一个开源项目，而且它的难度不大。我在这个过程中，学习了 svn、git、Makefile 等方面的知识，并且懂得如何在 Github 上维护项目；</li>
+<li>一份使命。开发这份模板时，我并没有从学校拿到一分钱经费，没有获得任何经济利益。但帮助其他同学顺利完成论文排版，免除他们使用word带来的负担，这是我的一份光荣的使命。我相信这也是你的一份使命；</li>
+<li>证明自己。坦白说， SCNUThesis 并不能证明多少技术的能力。但从对项目的管理情况、对issue的follow程度、遇到问题的应对态度、对排版效果的考究程度等多个方面已经足以让我摸清一个维护者的技术、审美、耐性等方面的情况。如果我遇到一个出色的维护者，我会毫不犹豫的为他推荐就业机会。</li>
+</ol>
+<h2 id="后话">后话</h2>
+<p>Paul Gramham 在《黑客与画家》中谈到了工作与兴趣的问题。他认为黑客可以和音乐家一样，白天可以拥有一分养家糊口的工作，然后在夜间经营一份自己喜欢的工作。对于音乐家而言，喜欢的工作就是演奏。对于黑客而言，喜欢的工作就是参与自己感兴趣的开源项目。</p>
+<blockquote>
+
+<p>I think the answer to this problem, in the case of software, is a concept known to nearly all makers: the day job. This phrase began with musicians, who perform at night. More generally, it means that you have one kind of work you do for money, and another for love.</p>
+<p>Nearly all makers have day jobs early in their careers. Painters and writers notoriously do. If you’re lucky you can get a day job that’s closely related to your real work. Musicians often seem to work in record stores. A hacker working on some programming language or operating system might likewise be able to get a day job using it.</p>
+
+
+<footer><strong>Paul Gramham</strong></footer></blockquote>
+
+<p>也许，我现在的情况似乎越来越不像一个黑客。但如他第二段所说，如果运气好的话，黑客可以找到一份接近自己兴趣的白天工作。从这一点看，我或许是幸运的，因为我的白天工作就是我热爱的行业，这使我在其他时间更愿意去做其他我以前没有做过的事情。我希望，我可以在今后的时间更好的把握工作上的项目和开源项目的分配时间，在开源社区略尽自己的绵薄之力。</p>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/codes/extempore-intro/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/codes/fcevm/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: 'SCNUThesis招募新的维护者'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/an-appeal-from-scnuthesis-author.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2015-01-22 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/life/">life<span>9</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/SCNUThesis/">SCNUThesis<span>1</span></a></li> <li><a href="/tags/LaTeX/">LaTeX<span>4</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%BC%98%E8%B5%B7"><span class="toc-article-text">缘起</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%91%BC%E5%90%81"><span class="toc-article-text">呼吁</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%88%91%E8%A6%81%E5%AF%BB%E6%89%BE%E6%96%B0%E7%9A%84%E7%BB%B4%E6%8A%A4%E8%80%85"><span class="toc-article-text">为什么我要寻找新的维护者</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%A6%82%E4%BD%95%E7%BB%B4%E6%8A%A4-SCNUThesis-%EF%BC%9F"><span class="toc-article-text">如何维护 SCNUThesis ？</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%88%90%E4%B8%BA%E7%BB%B4%E6%8A%A4%E8%80%85%E9%9C%80%E8%A6%81%E4%BB%80%E4%B9%88%E6%9D%A1%E4%BB%B6%EF%BC%9F"><span class="toc-article-text">成为维护者需要什么条件？</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%A0%E5%BA%94%E8%AF%A5%E5%8F%82%E4%B8%8E-SCNUThesis%EF%BC%9F"><span class="toc-article-text">为什么你应该参与 SCNUThesis？</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%90%8E%E8%AF%9D"><span class="toc-article-text">后话</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

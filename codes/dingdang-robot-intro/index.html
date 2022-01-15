@@ -1,0 +1,713 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>叮当：一个开源的中文智能音箱项目 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="介绍我开发的一个开源的智能音箱项目 dingdang-robot 。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="叮当：一个开源的中文智能音箱项目"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '叮当：一个开源的中文智能音箱项目'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 叮当：一个开源的中文智能音箱项目</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>介绍我开发的一个开源的智能音箱项目 dingdang-robot 。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <p>这个项目其实来源于我生活中的一个需求：我每天晚上都会去厨房做一个面包当明天的早餐，当我把用料按顺序准备好放进面包机时，我需要准确预约到明天早上我吃早餐的时间。然而，几乎每次在这个时候我都没有带手机在身边，而是都放在客厅里充电，这时只能跑去客厅看时间。虽然厨房到客厅只有几步之遥，但自己又是懒癌患者，每天都要这么来回奔波就觉得很不方便。要解决这个问题当然有很多种方法，比如直接买个小时钟放在厨房。不过我更希望“连看都不用看”，直接有人告诉我时间。所以，我需要一个像 Amazon Echo 那样的智能音箱。</p>
+<p>然而，不论是 Amazon Echo 、Google Home 还是微软 Cortana 音箱，在国内的使用都是个问题。虽然国内也有类似的智能音箱产品，但我没有用过这些产品，不知道可定制性如何。比如，如果我需要开发个功能让它告诉我某种面包的配方是什么，这些产品就不一定能做到了。考虑再三，我决定自己动手写一个。整个项目用了差不多三个星期的业余零碎时间。</p>
+<p>先放上项目主页：<a target="_blank" rel="noopener" href="http://dingdang.hahack.com">http://dingdang.hahack.com</a></p>
+<p>下面分享一下我在开发这个项目过程中的心得。</p>
+<span id="more"></span>
+<div class="alert alert-warning"><i class="far fa-bell"></i>  如果您在使用微信或者其他客户端程序阅读本文时发现视频无法播放，请改为在浏览器中打开。
+</div>
+<h2 id="硬件">硬件</h2>
+<p>首先要解决的是硬件问题。我选择在 Raspberry Pi 上开发。于是我买了块 Raspberry Pi 三代主板。麦克风和音响方面，出于美观的目的，买了个自带音响的 USB 全向会议麦克风。整套设备看起来就像这样：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/dingdang-robot-intro/devices1.jpg" alt="简化体" />
+        <figcaption>简化体</figcaption>
+      </figure>
+    </p>
+<p>后面觉得这个麦克风自带的音响音质太一般了，所以我又外接了一个小音箱。然后再插了一个摄像头，用来实现拍照功能。最终的完全体进化成了这样：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/dingdang-robot-intro/devices2.jpg" alt="完全体" />
+        <figcaption>完全体</figcaption>
+      </figure>
+    </p>
+<p>硬件有了，接下来就得开始写软件了。主要的框架借鉴了 <a href="jasperproject.github.io">Jasper 项目</a>，并加入了我自己的定制和想法。这里说说一些有意思的部分。</p>
+<h2 id="指令接收">指令接收</h2>
+<p>智能音箱要解决的一个最重要的问题就是如何接收指令。这里头主要涉及两个问题：</p>
+<ol>
+<li>被动唤醒（Passive Listening），即“什么时候开始听”。这个阶段只监听唤醒词。当听到唤醒词时，进入主动聆听。</li>
+<li>主动聆听（Active Listening），即“什么时候结束听”。这个阶段主动聆听用户的任何语音指令，然后对听到的内容进行分析处理。</li>
+</ol>
+<p>被动唤醒阶段的基本策略是：每次以 16000 的采样率录制 1024 个采样作为一个采样集，然后对采样集进行信号强度估计，当某个采样集信号强度大于一个阈值时，就认为可能接受到了指令。然后持续录制多 1 秒时间，再转交给语音识别模块。当语音识别模块认为是唤醒词时，进入主动聆听阶段。</p>
+<p>主动聆听的策略与被动唤醒基本相似，每次以 16000 的采样率录制 1024 个采样作为一个采样集，然后对采样集进行信号强度估计，当某个采样集信号强度低于一个阈值约 1 秒的时间时，就认为用户已说完了指令。当然还要考虑环境吵杂，一直处于聆听的可能。因此可以再加一个超时保护，超过 12 秒就结束聆听。</p>
+<h2 id="语音处理">语音处理</h2>
+<p>说说STT（语音识别）引擎和TTS（文本转文本）引擎的选择。由于被动唤醒会试图识别所有听到的内容，出于隐私保护的目的，应该使用离线的语音识别引擎，因此我选择的是 <a target="_blank" rel="noopener" href="https://github.com/cmusphinx/pocketsphinx">PocketSphinx</a> 。而对于主动聆听，由于是在唤醒阶段才会进行转换，进入主动聆听前会有蜂鸣提示，用户也会清楚此时叮当正在听他们说话，相对来说隐私泄露的可能性就比较低，因此我选择的是在线的百度 STT 语音识别服务，也省下了扩展语音识别模型的工夫，有利于更好地实现插件可扩展。TTS 引擎方面同样也先支持了百度的语音合成。</p>
+<p>在实际测试中，PocketSphinx 的识别出乎意料的好。由于我的离线指令集只有几个候选唤醒词，PocketSphinx 对这些唤醒词的识别非常灵敏，甚至有时候其他声音也可能被误当成唤醒词而唤醒叮当。但即使被意外唤醒了，不去理会叮当就可以了。</p>
+<p>相比之下，百度的语音识别就比较迟钝了。有时候明明我发音很清晰了，还是会识别成另外的含义。通过在百度的语音识别平台<a target="_blank" rel="noopener" href="https://github.com/wzpan/dingdang-robot/wiki/configuration#%E4%BC%98%E5%8C%96%E7%99%BE%E5%BA%A6%E8%AF%AD%E9%9F%B3%E8%AF%86%E5%88%AB%E5%87%86%E7%A1%AE%E5%BA%A6">上传自定义的语音识别词库</a> 可以提高识别的准确率。另外，由于我用的是 Restful API，网速比较差的时候响应也比较慢。我在家用的是 10M 带宽的网络，反应速度还算可以接受。我准备后面尝试接入更多的语音识别平台，看看识别速度和准确度方面能否有所提升。</p>
+<p>下面这个视频是我与叮当对话的演示。我把唤醒词设置成了“小梅”：</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  使用手机阅读本文的用户，如果看不到视频，可以点击<a target="_blank" rel="noopener" href="http://www.miaopai.com/show/-yeEBNJlvrQ-UNZzaglxr2s9JQU8TZNy.htm">这个链接</a>前往观看。
+</div>
+<center>
+<embed src='http://player.youku.com/player.php/sid/XMjg0OTQ1OTkxNg==/v.swf' allowFullScreen='true' quality='high' width='480' height='400' align='middle' allowScriptAccess='always' type='application/x-shockwave-flash'></embed>
+</center><br/>
+<p>一个问题是当回答内容比较长（比如问叮当当天的新闻）时，合成语音的耗时会变得很长，给人的感受是叮当的响应很慢。所以我加了个 <code>read_long_content</code> 的选项。当内容过长时，改成发送到用户的邮箱或者微信。下面这段音频是一个例子：</p>
+<p><i class="fa fa-music"></i><a href="http://onmw7y6f4.bkt.clouddn.com/%E9%95%BF%E5%86%85%E5%AE%B9%E5%8F%91%E5%BE%AE%E4%BF%A1.mp3" target="_blank"> 长内容发微信 (270.37KB) </a></p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/dingdang-robot-intro/long_content.png" alt="微信接收长内容" />
+        <figcaption>微信接收长内容</figcaption>
+      </figure>
+    </p>
+<h2 id="插件">插件</h2>
+<p>叮当最好玩的部分当然就是玩插件了，通过写插件可以让叮当接入各种各样的服务，完成各种各样的事情。我在叮当里也内置了几个插件<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>。为了方便用户扩展，我把 <code>~/.dingdang/contrib</code> 设定为第三方插件目录，允许让用户在里头编写插件并提交到 <a target="_blank" rel="noopener" href="https://github.com/wzpan/dingdang-contrib">dingdang-contrib</a> 项目共享。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/wzpan/dingdang-robot/wiki/plugins#time">Time</a>：顾名思义就是询问时间的，先满足我的个人需求。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/wzpan/dingdang-robot/wiki/plugins#echo">Echo</a>：简单的回声/传话功能。当接入微信时，可以利用这个功能实现远程给家里发语音消息。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/wzpan/dingdang-robot/wiki/plugins#email">Email</a>：询问邮箱中有多少未读邮件。在这之前用户需要先配置好邮箱账户。另外，叮当还有个定期消息检查机制，每 30 秒会执行一次邮件检查，如果有未读邮件，将会在当次运行会话中给用户语音播报一次。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/wzpan/dingdang-robot/wiki/plugins#camera">Camera</a>：用于调起摄像头拍照（如果安装了摄像头的话）。如果接入了邮箱或微信，照片将发送到用户的邮箱或微信中（选择哪种取决于配置中 prefers_email 的值）。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/wzpan/dingdang-robot/wiki/plugins#unclear">Unclear</a>：用于处理未知的问题。如果接入了对话机器人（例如图灵机器人），将转交给对话机器人应答；否则将给予类似 “我没听清楚” 这样的回复。</li>
+</ul>
+<p>下面这个视频是 Camera 插件的演示<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>：</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  使用手机阅读本文的用户，如果看不到视频，可以点击<a target="_blank" rel="noopener" href="http://v.youku.com/v_show/id_XMjc3OTc0MDczMg==.html?spm=a2h3j.8428770.3416059.1">这个链接</a>前往观看。
+</div>
+<center>
+<embed src='http://player.youku.com/player.php/sid/XMjc3OTc0MDczMg==/v.swf' allowFullScreen='true' quality='high' width='480' height='400' align='middle' allowScriptAccess='always' type='application/x-shockwave-flash'></embed>
+</center><br/>
+<p>另外，如果接入了微信，还可以让叮当安静地拍一张家里的照片，而不发出任何声音。下面这个视频演示了如何使用微信与家里的机器人交互，包括远程控制拍照。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  使用手机阅读本文的用户，如果看不到视频，可以点击<a target="_blank" rel="noopener" href="http://v.youku.com/v_show/id_XMjc3OTcyOTE1Mg==.html?spm=a2h3j.8428770.3416059.1">这个链接</a>前往观看。
+</div>
+<center>
+<embed src='http://player.youku.com/player.php/sid/XMjc3OTcyOTE1Mg==/v.swf' allowFullScreen='true' quality='high' width='480' height='400' align='middle' allowScriptAccess='always' type='application/x-shockwave-flash'></embed>
+</center><br/>
+<p>这对于需要远程监控家里的情况的用户而言就非常方便了，比如家里有小孩的情况。</p>
+<h2 id="音乐播放">音乐播放</h2>
+<p>既然是智能音箱，当然少不了播放音乐的功能。所以我额外写了个播放网易云音乐的插件 <a target="_blank" rel="noopener" href="https://github.com/wzpan/dingdang-contrib/wiki/neteasemusic">NetEaseMusic</a> 。出于版权考虑，并不集成进官方插件中，而是放进 dingdang-contrib 里头。</p>
+<p>这个插件的实现比较复杂。普通的插件接受到指令，响应完就退出了。而为了能支持各种指令控制音乐播放，这个插件在接收到播放控制指令后并不退出插件，而是进入一个播放器模式，这个模式主动聆听得到的指令只会在播放控制指令集中匹配，其他的插件指令都不起作用。只有当用户要求退出播放时才回到普通模式。NetEaseMusic 的播放控制指令如下：</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>相同指令</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>播放音乐</td>
+<td>-</td>
+<td>进入音乐播放模式。在音乐播放模式下，其他的插件功能将不可用。</td>
+</tr>
+<tr>
+<td>下一首</td>
+<td>切歌, 下一首歌, 下首歌</td>
+<td>切换到下一首歌。如果没有下一首歌，就回到列表中第一首歌</td>
+</tr>
+<tr>
+<td>上一首</td>
+<td>上一首歌，上首歌</td>
+<td>切换到上一首歌。如果没有上一首歌，就跳到列表中最后一首歌</td>
+</tr>
+<tr>
+<td>大声点</td>
+<td>大点声，大声</td>
+<td>调高播放音量</td>
+</tr>
+<tr>
+<td>小声点</td>
+<td>小点声，小声</td>
+<td>降低播放音量</td>
+</tr>
+<tr>
+<td>随机播放</td>
+<td>-</td>
+<td>随机播放列表中的音乐</td>
+</tr>
+<tr>
+<td>顺序播放</td>
+<td>-</td>
+<td>顺序播放列表中的音乐</td>
+</tr>
+<tr>
+<td>暂停播放</td>
+<td>-</td>
+<td>暂停音乐的播放</td>
+</tr>
+<tr>
+<td>播放</td>
+<td>继续</td>
+<td>继续音乐的播放</td>
+</tr>
+<tr>
+<td>榜单</td>
+<td>-</td>
+<td>播放推荐榜单</td>
+</tr>
+<tr>
+<td>歌单</td>
+<td>-</td>
+<td>播放用户的歌单（如果有多张，将只播放第一张）</td>
+</tr>
+<tr>
+<td>结束播放</td>
+<td>退出播放，停止播放</td>
+<td>退出音乐播放模式。</td>
+</tr>
+<tr>
+<td>搜索</td>
+<td>查找</td>
+<td>搜索歌曲/歌手。将自动播放搜索结果。</td>
+</tr>
+<tr>
+<td>什么歌</td>
+<td>-</td>
+<td>正在播放的是什么歌</td>
+</tr>
+</tbody>
+</table>
+<p>实现这个插件的过程中还参考了 Vellow 的 MusicBox 项目<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup>以及 yaphone 的 <a target="_blank" rel="noopener" href="https://github.com/yaphone/RasWxNeteaseMusic">RasWxNeteaseMusic</a> 。为了方便重用，我把 MusicBox 的核心 API 抽离了出来封成了一个 <a target="_blank" rel="noopener" href="https://github.com/wzpan/MusicBoxApi">MusicBoxApi 库</a> 。比较坑爹的是就在我准备发布叮当的前几天，老的获取音乐地址的方式彻底不能用了，而<a target="_blank" rel="noopener" href="https://github.com/darknessomi/musicbox/wiki/%E7%BD%91%E6%98%93%E4%BA%91%E9%9F%B3%E4%B9%90%E6%96%B0%E7%89%88WebAPI%E5%88%86%E6%9E%90%E3%80%82">新的接口</a>批量获取的地址不知道为什么是乱序的，于是我只能在播放每首歌前都调用一下新版的获取地址的 POST 接口，又增加了一点响应时间<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup>。</p>
+<p>下面这段音频是使用叮当控制音乐播放的演示：</p>
+<p><i class="fa fa-music"></i><a href="http://onmw7y6f4.bkt.clouddn.com/%E6%92%AD%E6%94%BE%E9%9F%B3%E4%B9%90.mp3" target="_blank"> 播放音乐 (2.3MB) </a></p>
+<p>完成了音乐播放功能后，叮当的好玩程度提高了很多。以前要听歌，至少得把电脑或者手机打开。现在只需要喊一声叫叮当播放歌曲就可以了。想换歌、搜索歌曲、调节音量都是说句话就搞定的事情，生活幸福指数大幅提升 <code>^_^</code> 。</p>
+<h2 id="总结和后续">总结和后续</h2>
+<p>对于有 Coding 能力的 Hacker 而言，自己动手做一个智能音箱，不仅可以当做业余练手项目，还可以自由地定制硬件模块，并实现自己需要的各种功能，这远比直接购买一个 Amazon Echo 有趣得多。</p>
+<p>后面我计划做的事情有：</p>
+<ul>
+<li>尝试接入更多的 STT / TTS 服务，优化叮当的响应时间；</li>
+<li>结合 NLP 技术实现更复杂的指令识别，比如提醒功能；</li>
+<li>加入人体感应模块等传感器，把它变得更加智能。</li>
+</ul>
+<p>更重要的，我更希望能有其他有兴趣的朋友参与进来，一同开发完善这个智能音箱项目。我相信，这种个性化服务的产品本身就应该是完全可定制的。而您的加入可以使叮当变得更智能！</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>完整的插件信息可以在<a target="_blank" rel="noopener" href="https://github.com/wzpan/dingdang-robot/wiki/plugins">这里</a>找到。 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>能支持拍照的智能音箱估计没多少吧？这就是自己开发智能音箱的好处，想接什么模块就接什么模块。想实现什么功能就实现什么功能。 <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p>Github 上搜索关键词“musicbox” 可以找到好几个类似的仓库，其实都是基于 Vellow 最初的那个版本的修改。我实际上参考的是 <a target="_blank" rel="noopener" href="https://github.com/darknessomi/musicbox/wiki">darknessomi 的版本</a> ，但我认为最大的功劳还是该给 Vellow 。 <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p>如果您知道如何批量获取播放地址且保持原来的列表顺序，还请告诉我方法。 <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/codes/how-to-write-dingdang-plugin/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/work/enterprise-class-git-version-control-5/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '叮当：一个开源的中文智能音箱项目'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/dingdang-robot-intro.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2017-05-22 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/codes/">codes<span>38</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/dingdang/">dingdang<span>5</span></a></li> <li><a href="/tags/Raspberry-Pi/">Raspberry Pi<span>3</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%A1%AC%E4%BB%B6"><span class="toc-article-text">硬件</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%8C%87%E4%BB%A4%E6%8E%A5%E6%94%B6"><span class="toc-article-text">指令接收</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E8%AF%AD%E9%9F%B3%E5%A4%84%E7%90%86"><span class="toc-article-text">语音处理</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%8F%92%E4%BB%B6"><span class="toc-article-text">插件</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%9F%B3%E4%B9%90%E6%92%AD%E6%94%BE"><span class="toc-article-text">音乐播放</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%80%BB%E7%BB%93%E5%92%8C%E5%90%8E%E7%BB%AD"><span class="toc-article-text">总结和后续</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

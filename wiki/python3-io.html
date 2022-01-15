@@ -1,0 +1,974 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>输入输出 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="得到用户输入
+示例
+123456789101112131415#!/usr/bin/python# user_input.pydef reverse(text):    return text[::-1]def is_palindrome(text):    return text == rever">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="输入输出"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '输入输出'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 输入输出</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc', 2, 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="得到用户输入">得到用户输入</h2>
+<h4 id="示例">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># user_input.py</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">reverse</span>(<span class="params">text</span>):</span></span><br><span class="line">    <span class="keyword">return</span> text[::-<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_palindrome</span>(<span class="params">text</span>):</span></span><br><span class="line">    <span class="keyword">return</span> text == reverse(text)</span><br><span class="line"></span><br><span class="line">something = <span class="built_in">input</span>(<span class="string">&#x27;Enter text: &#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (is_palindrome(something)):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Yes, it is a palindrome&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;No, it is not a palindrome&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="输出">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ python user_input.py</span><br><span class="line">Enter text: sir</span><br><span class="line">No, it is not a palindrome</span><br><span class="line"></span><br><span class="line">$ python user_input.py</span><br><span class="line">Enter text: madam</span><br><span class="line">Yes, it is a palindrome</span><br><span class="line"></span><br><span class="line">$ python user_input.py</span><br><span class="line">Enter text: racecar</span><br><span class="line">Yes, it is a palindrome</span><br></pre></td></tr></table></figure>
+<h4 id="说明">说明</h4>
+<p>input()函数接收一个字符串实参并将其打印给用户，然后函数等待用户输入一些东西，一但用户按下回车键则输入结束，input函数将返回输入的文本。</p>
+<h3 id="练习题">练习题</h3>
+<p>检测一个文本是否为回文应该忽略标点，空格和大小写。</p>
+<p>例如&quot;Rise to vote, sir.&quot;同样是一个回文，但是我们当前的例子无法识别它。你能改善这个例子让它做都这点吗？</p>
+<h4 id="我的解答">我的解答</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/bin/python</span></span><br><span class="line"></span><br><span class="line">denotes = [<span class="string">&#x27;.&#x27;</span>, <span class="string">&#x27;,&#x27;</span>, <span class="string">&#x27;!&#x27;</span>, <span class="string">&#x27;?&#x27;</span>, <span class="string">&#x27; &#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">normalize</span>(<span class="params">string</span>):</span></span><br><span class="line">    <span class="built_in">str</span> = string.strip()</span><br><span class="line">    <span class="built_in">str</span> = <span class="built_in">str</span>.lower()</span><br><span class="line">    <span class="keyword">for</span> note <span class="keyword">in</span> denotes:</span><br><span class="line">        <span class="built_in">str</span> = <span class="built_in">str</span>.replace(note, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">str</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">inverse</span>(<span class="params">string</span>):</span></span><br><span class="line">    <span class="built_in">str</span> = string[::-<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">str</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ispalindrome</span>(<span class="params">string</span>):</span></span><br><span class="line">    <span class="built_in">str</span> = normalize(string)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;String after normalization: &#123;0&#125;&quot;</span>.<span class="built_in">format</span>(<span class="built_in">str</span>))</span><br><span class="line">    str_inversed = inverse(<span class="built_in">str</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;String after inversion: &#123;0&#125;&quot;</span>.<span class="built_in">format</span>(str_inversed))</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">str</span> == str_inversed:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>        </span><br><span class="line"></span><br><span class="line">text = <span class="built_in">input</span>(<span class="string">&quot;Enter text:&quot;</span>)</span><br><span class="line"><span class="keyword">if</span> ispalindrome(text) == <span class="number">0</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;&#123;0&#125; is palindrome.&quot;</span>.<span class="built_in">format</span>(text))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;&#123;0&#125; is not palindrome.&quot;</span>.<span class="built_in">format</span>(text))</span><br></pre></td></tr></table></figure>
+<h2 id="文件">文件</h2>
+<p>通过创建file类对象，使用其<code>read</code>，<code>readline</code>或<code>write</code>方法你可以对文件进行读写。</p>
+<p>具体读或写的方式依赖于你打开文件时指定的<strong>模式</strong>。</p>
+<p>最后当你完成文件操作时调用<code>close</code>关闭文件。</p>
+<h4 id="示例-v2">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: using_file.py</span></span><br><span class="line"></span><br><span class="line">poem = <span class="string">&#x27;&#x27;&#x27;\</span></span><br><span class="line"><span class="string">Programming is fun</span></span><br><span class="line"><span class="string">When the work is done</span></span><br><span class="line"><span class="string">if you wanna make your work also fun:</span></span><br><span class="line"><span class="string">    use Python!</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">f = <span class="built_in">open</span>(<span class="string">&#x27;poem.txt&#x27;</span>, <span class="string">&#x27;w&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="comment"># 写模式打开</span></span><br><span class="line">f.write(poem) <span class="comment"># 写文件</span></span><br><span class="line">f.close() <span class="comment"># 关闭文件</span></span><br><span class="line"></span><br><span class="line">f = <span class="built_in">open</span>(<span class="string">&#x27;poem.txt&#x27;</span>,encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="comment"># 如果没有提供打开模式, 则默认假设为读模式</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    line = f.readline()</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> line: <span class="comment"># 也可以使用 if len(line) == 0</span></span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="built_in">print</span>(line, end=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">f.close() <span class="comment"># 别忘了关闭文件</span></span><br></pre></td></tr></table></figure>
+<h4 id="输出-v2">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ python using_file.py</span><br><span class="line">Programming is fun</span><br><span class="line">When the work is <span class="keyword">done</span></span><br><span class="line"><span class="keyword">if</span> you wanna make your work also fun:</span><br><span class="line">    use Python!</span><br></pre></td></tr></table></figure>
+<h4 id="说明-v2">说明</h4>
+<p>首先，我们通过内建函数<code>open</code>打开一个文件。格式为：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">open</span>(file, mode=<span class="string">&#x27;r&#x27;</span>, buffering=-<span class="number">1</span>, encoding=<span class="literal">None</span>,</span><br><span class="line">         errors=None, newline=None, closefd=True, opener=None) -&gt; file object</span><br></pre></td></tr></table></figure>
+<p><code>open()</code>函数返回一个流对象（stream object），它拥有一些用来获取信息和操作字符流的方法和属性。在函数中我们指定了被打开文件的文件名与希望使用的打开模式。</p>
+<p>其中打开模式包括：</p>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>r</code></td>
+<td>读模式（默认）</td>
+</tr>
+<tr>
+<td><code>w</code></td>
+<td>写模式，将会先把文件清空。</td>
+</tr>
+<tr>
+<td><code>x</code></td>
+<td>创建一个新文件并打开。如果该文件已存在，将引发<code>FileExistsError</code>异常。</td>
+</tr>
+<tr>
+<td><code>a</code></td>
+<td>打开一个文件以写入。如果该文件已存在，则向该文件追加内容。</td>
+</tr>
+<tr>
+<td><code>b</code></td>
+<td>二进制模式</td>
+</tr>
+<tr>
+<td><code>t</code></td>
+<td>文本模式（默认）</td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td>打开一个磁盘文件以更新（读和写）</td>
+</tr>
+<tr>
+<td><code>U</code></td>
+<td>全局newline模式（以向后兼容，新版本的Python不需要用到）</td>
+</tr>
+</tbody>
+</table>
+<p><code>encoding</code>属性反映的是在你调用<code>open()</code>函数时指定的编码方式。如果你在打开文件的时候没有指定编码方式（不好的开发人员！），那么<code>encoding</code>属性反映的是<code>locale.getpreferredencoding()</code>的返回值。注意二进制的流对象没有<code>encoding</code>属性，因为Python不需要做编码转换工作。</p>
+<p>在循环中我们使用<code>readline</code>方法读取文件的每一行。这个方法返回一整行文本其中包括末尾的换行符。当返回一个空字符串时，意味着我们已经来到文件尾，因此使用break跳出循环。</p>
+<p>默认的，print()函数将自动打印一个换行。因为从文件读出的文本行末尾已经包含一个换行，所以我们指定参数<code>end=''</code>抑制换行。</p>
+<p>最后我们关闭文件。</p>
+<p>另外，流对象有几个有用的函数：</p>
+<ul>
+<li><code>read(n)</code>：读取<code>n</code>指定的<strong>字符</strong>个数（可选）。如果不带参数，则读取文件的全部内容；</li>
+<li><code>readline()</code>：读取一行；</li>
+<li><code>seek()</code>：定位到文件流中的特定<strong>字节</strong>；</li>
+<li><code>tell()</code>：返回当前流位置；</li>
+</ul>
+<p>更多内容访问<a target="_blank" rel="noopener" href="http://docs.python.org/3.1/library/io.html">Python 3.0文档: io</a> 或 <code>$ pydoc io</code>。</p>
+<h3 id="检测文件是否已经关闭">检测文件是否已经关闭</h3>
+<p>已经关闭了的流对象有一个有用的属性：closed用来确认文件是否已经被关闭了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>f = <span class="built_in">open</span>(<span class="string">&#x27;poem.txt&#x27;</span>, <span class="string">&#x27;w&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.close()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.read()</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;pyshell#24&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    a.read()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.close() <span class="comment"># 再次关闭不会引发异常，只是一个空操作</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.closed</span><br><span class="line"><span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<h3 id="自动关闭文件">自动关闭文件</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;examples/chinese.txt&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> a_file:</span><br><span class="line">    a_file.seek(<span class="number">17</span>)</span><br><span class="line">    a_character = a_file.read(<span class="number">1</span>)</span><br><span class="line">    <span class="built_in">print</span>(a_character)</span><br></pre></td></tr></table></figure>
+<p>这段代码跟<code>try...finally</code>块等效，但是却非常简洁——甚至连显示调用<code>close()</code>都不需要：当<code>with</code>块结束时，Python自动调用<code>a_file.close()</code>。</p>
+<p>这就是它与众不同的地方：无论你以何种方式跳出<code>with</code>块，Python会自动关闭那个文件，即使是因为未处理的异常而“exit”。是的，即使代码中引发了一个异常，整个程序突然中止了，Python也能够保证那个文件能被关闭掉。</p>
+<h2 id="处理压缩文件">处理压缩文件</h2>
+<p>Python标准库包含支持读写压缩文件的模块。有许多种不同的压缩方案；其中，gzip和bzip2是非Windows操作系统下最流行的两种压缩方式。</p>
+<p>gzip模块允许你创建用来读写gzip压缩文件的流对象。该流对象支持read()方法（如果你以读取模式打开）或者write()方法（如果你以写入模式打开）。这就意味着，你可以使用从普通文件那儿学到的技术来直接读写gzip压缩文件，而不需要创建临时文件来保存解压缩了的数据。</p>
+<h4 id="示例-v3">示例</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> you@localhost:~$ python3</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; import gzip</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; with gzip.open(<span class="string">&#x27;out.log.gz&#x27;</span>, mode=<span class="string">&#x27;wb&#x27;</span>) as z_file:</span></span><br><span class="line">...   z_file.write(&#x27;A nine mile walk is no joke, especially in the rain.&#x27;.encode(&#x27;utf-8&#x27;))</span><br><span class="line">... </span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; <span class="built_in">exit</span>()</span></span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> you@localhost:~$ ls -l out.log.gz</span>                     </span><br><span class="line">-rw-r--r--  1 mark mark    79 2009-07-19 14:29 out.log.gz</span><br><span class="line"><span class="meta">$</span><span class="bash"> you@localhost:~$ gunzip out.log.gz</span>                       </span><br><span class="line"><span class="meta">$</span><span class="bash"> you@localhost:~$ cat out.log</span>                             </span><br><span class="line">A nine mile walk is no joke, especially in the rain.</span><br></pre></td></tr></table></figure>
+<h2 id="Pickle">Pickle</h2>
+<p>Python 提供了一个名为 <code>pickle</code> 的标准模块用于将任意 Python 对象存入文件或从文件中读出 。</p>
+<p>什么东西能用pickle模块存储？</p>
+<ul>
+<li>所有Python支持的 原生类型 : 布尔, 整数, 浮点数, 复数, 字符串, bytes(字节串)对象, 字节数组, 以及 None。</li>
+<li>由任何原生类型组成的列表，元组，字典和集合。</li>
+<li>由任何原生类型组成的列表，元组，字典和集合组成的列表，元组，字典和集合(可以一直嵌套下去，直至Python支持的最大递归层数)。</li>
+<li>函数，类，和类的实例(带警告)。</li>
+</ul>
+<h4 id="示例-v4">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment">#Filename: pickling.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"></span><br><span class="line"><span class="comment"># the name of the file where we will store the object</span></span><br><span class="line">shoplistfile = <span class="string">&#x27;shoplist.pickle&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># the list of things to buy</span></span><br><span class="line">shoplist = [<span class="string">&#x27;apple&#x27;</span>, <span class="string">&#x27;mango&#x27;</span>, <span class="string">&#x27;carrot&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Write to the file</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(shoplistfile, <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    pickle.dump(shoplist, f) <span class="comment"># 转储对象到文件</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">del</span> shoplist <span class="comment"># 销毁shoplist变量</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 从文件找回对象</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(shoplistfile, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    storedlist = pickle.load(f) <span class="comment"># 从文件加载对象</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(storedlist)</span><br></pre></td></tr></table></figure>
+<h4 id="输出-v3">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ python pickling.py</span><br><span class="line">[<span class="string">&#x27;apple&#x27;</span>, <span class="string">&#x27;mango&#x27;</span>, <span class="string">&#x27;carrot&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<h4 id="说明-v3">说明</h4>
+<ul>
+<li>为了将对象存储到文件，我们必须首先 <code>'wb'</code> 写二进制文件模式打开文件然后调用pickle模块的<code>dump</code>函数。这个过程叫做<strong>封藏(pickling)对象</strong>。</li>
+<li>接下来我们使用pickle的<code>load</code>函数重新找回对象。这个过程叫做<strong>解封(unpickling)对象</strong>。</li>
+<li>pickle模块接受一个Python数据结构并将其保存的一个文件。要做到这样，它使用一个被称为“pickle协议”的东西序列化该数据结构。pickle 协议是Python特定的，没有任何跨语言兼容的保证。你很可能不能使用Perl, php, Java, 或者其他语言来对你刚刚创建的<code>shoplist.data</code>文件做任何有用的事情。</li>
+<li>并非所有的Python数据结构都可以通过pickle模块序列化。随着新的数据类型被加入到Python语言中，pickle协议已经被修改过很多次了，但是它还是有一些限制。由于这些变化，不同版本的Python的兼容性也没有保证。新的版本的Python支持旧的序列化格式，但是旧版本的Python不支持新的格式(因为它们不支持新的数据类型)。</li>
+<li>除非你指定，pickle模块中的函数将使用最新版本的pickle协议。这保证了你对可以被序列化的数据类型有最大的灵活度，但这也意味着生成的文件不能被不支持新版pickle协议的旧版本的Python读取。最新版本的pickle协议是二进制格式的。请确认使用二进制模式来打开你的pickle文件，否则当你写入的时候数据会被损坏。</li>
+</ul>
+<h3 id="pickcle-的现有版本">pickcle 的现有版本</h3>
+<p>pickle协议已经存在好多年了，它随着Python本身的成熟也不断成熟。现在存在四个不同版本 的pickle协议。</p>
+<ol>
+<li>Python 1.x 有两个pickle协议，一个基于文本的格式(“版本 0”) 以及一个二进制格式(“版本 1”).</li>
+<li>Python 2.3 引入了一个新的pickle协议(“版本 2”) 来处理Python 类对象的新功能。它是一个二进制格式。</li>
+<li>Python 3.0 引入了另一个pickle 协议 (“版本 3”) ，显式的支持bytes 对象和字节数组。它是一个二进制格式。</li>
+</ol>
+<p>在实践中这意味着，尽管 Python 3 可以读取版本 2 的pickle 协议生成的数据, Python 2 不能读取版本 3的协议生成的数据。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  很多关于pickle模块的文章提到了cPickle。在Python 2中, pickle 模块有两个实现, 一个由纯Python写的而另一个用C写的(但仍然可以在Python中调用)。在Python 3中, <a target="_blank" rel="noopener" href="http://woodpecker.org.cn/diveintopython3/porting-code-to-python-3-with-2to3.html#othermodules">这两个模块已经合并</a>, 所以你总是简单的import pickle就可以。你可能会发现这些文章很有用，但是你应该忽略已过时的关于的cPickle的信息.
+</div>
+<h3 id="调试Pickle-文件">调试Pickle 文件</h3>
+<h4 id="示例-v5">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>shell</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> pickletools</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;entry.pickle&#x27;</span>, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line"><span class="meta">... </span>    pickletools.dis(f)</span><br><span class="line">    <span class="number">0</span>: \x80 PROTO      <span class="number">3</span></span><br><span class="line">    <span class="number">2</span>: &#125;    EMPTY_DICT</span><br><span class="line">    <span class="number">3</span>: q    BINPUT     <span class="number">0</span></span><br><span class="line">    <span class="number">5</span>: (    MARK</span><br><span class="line">    <span class="number">6</span>: X        BINUNICODE <span class="string">&#x27;published_date&#x27;</span></span><br><span class="line">   <span class="number">25</span>: q        BINPUT     <span class="number">1</span></span><br><span class="line">   <span class="number">27</span>: c        GLOBAL     <span class="string">&#x27;time struct_time&#x27;</span></span><br><span class="line">   <span class="number">45</span>: q        BINPUT     <span class="number">2</span></span><br><span class="line">   <span class="number">47</span>: (        MARK</span><br><span class="line">   <span class="number">48</span>: M            BININT2    <span class="number">2009</span></span><br><span class="line">   <span class="number">51</span>: K            BININT1    <span class="number">3</span></span><br><span class="line">   <span class="number">53</span>: K            BININT1    <span class="number">27</span></span><br><span class="line">   <span class="number">55</span>: K            BININT1    <span class="number">22</span></span><br><span class="line">   <span class="number">57</span>: K            BININT1    <span class="number">20</span></span><br><span class="line">   <span class="number">59</span>: K            BININT1    <span class="number">42</span></span><br><span class="line">   <span class="number">61</span>: K            BININT1    <span class="number">4</span></span><br><span class="line">   <span class="number">63</span>: K            BININT1    <span class="number">86</span></span><br><span class="line">   <span class="number">65</span>: J            BININT     -<span class="number">1</span></span><br><span class="line">   <span class="number">70</span>: t            TUPLE      (MARK at <span class="number">47</span>)</span><br><span class="line">   <span class="number">71</span>: q        BINPUT     <span class="number">3</span></span><br><span class="line">   <span class="number">73</span>: &#125;        EMPTY_DICT</span><br><span class="line">   <span class="number">74</span>: q        BINPUT     <span class="number">4</span></span><br><span class="line">   <span class="number">76</span>: \x86     TUPLE2</span><br><span class="line">   <span class="number">77</span>: q        BINPUT     <span class="number">5</span></span><br><span class="line">   <span class="number">79</span>: R        REDUCE</span><br><span class="line">   <span class="number">80</span>: q        BINPUT     <span class="number">6</span></span><br><span class="line">   <span class="number">82</span>: X        BINUNICODE <span class="string">&#x27;comments_link&#x27;</span></span><br><span class="line">  <span class="number">100</span>: q        BINPUT     <span class="number">7</span></span><br><span class="line">  <span class="number">102</span>: N        NONE</span><br><span class="line">  <span class="number">103</span>: X        BINUNICODE <span class="string">&#x27;internal_id&#x27;</span></span><br><span class="line">  <span class="number">119</span>: q        BINPUT     <span class="number">8</span></span><br><span class="line">  <span class="number">121</span>: C        SHORT_BINBYTES <span class="string">&#x27;脼脮麓酶&#x27;</span></span><br><span class="line">  <span class="number">127</span>: q        BINPUT     <span class="number">9</span></span><br><span class="line">  <span class="number">129</span>: X        BINUNICODE <span class="string">&#x27;tags&#x27;</span></span><br><span class="line">  <span class="number">138</span>: q        BINPUT     <span class="number">10</span></span><br><span class="line">  <span class="number">140</span>: X        BINUNICODE <span class="string">&#x27;diveintopython&#x27;</span></span><br><span class="line">  <span class="number">159</span>: q        BINPUT     <span class="number">11</span></span><br><span class="line">  <span class="number">161</span>: X        BINUNICODE <span class="string">&#x27;docbook&#x27;</span></span><br><span class="line">  <span class="number">173</span>: q        BINPUT     <span class="number">12</span></span><br><span class="line">  <span class="number">175</span>: X        BINUNICODE <span class="string">&#x27;html&#x27;</span></span><br><span class="line">  <span class="number">184</span>: q        BINPUT     <span class="number">13</span></span><br><span class="line">  <span class="number">186</span>: \x87     TUPLE3</span><br><span class="line">  <span class="number">187</span>: q        BINPUT     <span class="number">14</span></span><br><span class="line">  <span class="number">189</span>: X        BINUNICODE <span class="string">&#x27;title&#x27;</span></span><br><span class="line">  <span class="number">199</span>: q        BINPUT     <span class="number">15</span></span><br><span class="line">  <span class="number">201</span>: X        BINUNICODE <span class="string">&#x27;Dive into history, 2009 edition&#x27;</span></span><br><span class="line">  <span class="number">237</span>: q        BINPUT     <span class="number">16</span></span><br><span class="line">  <span class="number">239</span>: X        BINUNICODE <span class="string">&#x27;article_link&#x27;</span></span><br><span class="line">  <span class="number">256</span>: q        BINPUT     <span class="number">17</span></span><br><span class="line">  <span class="number">258</span>: X        BINUNICODE <span class="string">&#x27;http://diveintomark.org/archives/2009/03/27/dive-into-history-2009-edition&#x27;</span></span><br><span class="line">  <span class="number">337</span>: q        BINPUT     <span class="number">18</span></span><br><span class="line">  <span class="number">339</span>: X        BINUNICODE <span class="string">&#x27;published&#x27;</span></span><br><span class="line">  <span class="number">353</span>: q        BINPUT     <span class="number">19</span></span><br><span class="line">  <span class="number">355</span>: \x88     NEWTRUE</span><br><span class="line">  <span class="number">356</span>: u        SETITEMS   (MARK at <span class="number">5</span>)</span><br><span class="line">  <span class="number">357</span>: .    STOP</span><br><span class="line">highest protocol among opcodes = <span class="number">3</span></span><br></pre></td></tr></table></figure>
+<h4 id="说明-v4">说明</h4>
+<p>这个反汇编中最有趣的信息是最后一行, 因为它包含了文件保存时使用的pickle协议的版本号。在pickle协议里面没有明确的版本标志。为了确定保存pickle文件时使用的协议版本，你需要查看序列化后的数据的标记(“<code>opcodes</code>”)并且使用硬编码的哪个版本的协议引入了哪些标记的知识(来确定版本号)。<code>pickle.dis()</code>函数正是这么干的，并且它在反汇编的输出的最后一行打印出结果。下面是一个不打印，仅仅返回版本号的函数:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pickletools</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">protocol_version</span>(<span class="params">file_object</span>):</span></span><br><span class="line">    maxproto = -<span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> opcode, arg, pos <span class="keyword">in</span> pickletools.genops(file_object):</span><br><span class="line">        maxproto = <span class="built_in">max</span>(maxproto, opcode.proto)</span><br><span class="line">    <span class="keyword">return</span> maxproto</span><br></pre></td></tr></table></figure>
+<p>实际使用它：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> pickleversion</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;entry.pickle&#x27;</span>, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line"><span class="meta">... </span>    v = pickleversion.protocol_version(f)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>v</span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure>
+<h2 id="JSON">JSON</h2>
+<p>Python 3 在标准库中包含了一个 json模块。同 pickle模块类似， json模块包含一些函数，可以序列化数据结构，保存序列化后的数据至磁盘，从磁盘上读取序列化后的数据，将数据反序列化成新的Pythone对象。但两者也有一些很重要的区别。</p>
+<p>首先，<strong>json数据格式是基于文本的， 不是二进制的</strong>。<a target="_blank" rel="noopener" href="http://www.ietf.org/rfc/rfc4627.txt">RFC 4627</a> 定义了json格式以及怎样将各种类型的数据编码成文本。比如，一个布尔值要么存储为5个字符的字符串’false’，要么存储为4个字符的字符串 ‘true’。 所有的json值都是大小写敏感的。</p>
+<p>第二，由于是文本格式， 存在空白(whitespaces)的问题。 json 允许在值之间有任意数目的空白(空格， 跳格， 回车，换行)。空白是“无关紧要的”，这意味着json编码器可以按它们的喜好添加任意多或任意少的空白， 而json解码器被要求忽略值之间的任意空白。这允许你“美观的打印（pretty-print）” 你的 json 数据， 通过不同的缩进层次嵌套值，这样你就可以在标准浏览器或文本编辑器中阅读它。Python 的 json 模块有在编码时执行美观打印（pretty-printing）的选项。</p>
+<p>第三， 字符编码的问题是长期存在的。json 用纯文本编码数据， 但是你知道， “不存在纯文本这种东西。” json必须以Unicode 编码(UTF-32， UTF-16， 或者默认的， utf-8)方式存储， <a target="_blank" rel="noopener" href="http://www.ietf.org/rfc/rfc4627.txt">RFC 4627的第3节</a> 定义了如何区分使用的是哪种编码。</p>
+<h3 id="写入-json">写入 json</h3>
+<h4 id="示例-v6">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>shell</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>basic_entry = &#123;&#125;                                           </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>basic_entry[<span class="string">&#x27;id&#x27;</span>] = <span class="number">256</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>basic_entry[<span class="string">&#x27;title&#x27;</span>] = <span class="string">&#x27;Dive into history, 2009 edition&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>basic_entry[<span class="string">&#x27;tags&#x27;</span>] = (<span class="string">&#x27;diveintopython&#x27;</span>, <span class="string">&#x27;docbook&#x27;</span>, <span class="string">&#x27;html&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>basic_entry[<span class="string">&#x27;published&#x27;</span>] = <span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>basic_entry[<span class="string">&#x27;comments_link&#x27;</span>] = <span class="literal">None</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> json</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;basic.json&#x27;</span>, mode=<span class="string">&#x27;w&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> f:  </span><br><span class="line"><span class="meta">... </span>    json.dump(basic_entry, f)                              </span><br></pre></td></tr></table></figure>
+<h4 id="输出-v4">输出</h4>
+<p>那么生成的json序列化数据是什么样的呢？</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">you@localhost:~/diveintopython3/examples$ cat basic.json</span><br><span class="line">&#123;<span class="string">&quot;published&quot;</span>: <span class="literal">true</span>, <span class="string">&quot;tags&quot;</span>: [<span class="string">&quot;diveintopython&quot;</span>, <span class="string">&quot;docbook&quot;</span>, <span class="string">&quot;html&quot;</span>], <span class="string">&quot;comments_link&quot;</span>: null,</span><br><span class="line"><span class="string">&quot;id&quot;</span>: 256, <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Dive into history, 2009 edition&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>json 的值之间可以包含任意数目的空把, 并且json模块提供了一个方便的途径来利用这一点生成更可读的json文件。</p>
+<h4 id="示例-v7">示例</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; shell</span><br><span class="line">1</span><br><span class="line">&gt;&gt;&gt; with open(&#39;basic-pretty.json&#39;, mode&#x3D;&#39;w&#39;, encoding&#x3D;&#39;utf-8&#39;) as f:</span><br><span class="line">...     json.dump(basic_entry, f, indent&#x3D;2)</span><br><span class="line">&gt;&gt;&gt; </span><br></pre></td></tr></table></figure>
+<h4 id="说明-v5">说明</h4>
+<p>如果你给json.dump()函数传入indent参数, 它以文件变大为代价使生成的json文件更可读。indent 参数是一个整数。0 意味着“每个值单独一行。” 大于0的数字意味着“每个值单独一行并且使用这个数目的空格来缩进嵌套的数据结构。”</p>
+<h4 id="输出-v5">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">you@localhost:~/diveintopython3/examples$ cat basic-pretty.json</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;published&quot;</span>: <span class="literal">true</span>, </span><br><span class="line">  <span class="string">&quot;tags&quot;</span>: [</span><br><span class="line">    <span class="string">&quot;diveintopython&quot;</span>, </span><br><span class="line">    <span class="string">&quot;docbook&quot;</span>, </span><br><span class="line">    <span class="string">&quot;html&quot;</span></span><br><span class="line">  ], </span><br><span class="line">  <span class="string">&quot;comments_link&quot;</span>: null, </span><br><span class="line">  <span class="string">&quot;id&quot;</span>: 256, </span><br><span class="line">  <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Dive into history, 2009 edition&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="读入JSON">读入JSON</h3>
+<h4 id="示例-v8">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;  <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;entry.json&#x27;</span>, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line"><span class="meta">... </span>    entry = json.load(f)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>entry</span><br><span class="line">&#123;<span class="string">&#x27;comments_link&#x27;</span>: <span class="literal">None</span>,</span><br><span class="line"> <span class="string">&#x27;internal_id&#x27;</span>: &#123;<span class="string">&#x27;__class__&#x27;</span>: <span class="string">&#x27;bytes&#x27;</span>, <span class="string">&#x27;__value__&#x27;</span>: [<span class="number">222</span>, <span class="number">213</span>, <span class="number">180</span>, <span class="number">248</span>]&#125;,</span><br><span class="line"> <span class="string">&#x27;title&#x27;</span>: <span class="string">&#x27;Dive into history, 2009 edition&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;tags&#x27;</span>: [<span class="string">&#x27;diveintopython&#x27;</span>, <span class="string">&#x27;docbook&#x27;</span>, <span class="string">&#x27;html&#x27;</span>],</span><br><span class="line"> <span class="string">&#x27;article_link&#x27;</span>: <span class="string">&#x27;http://diveintomark.org/archives/2009/03/27/dive-into-history-2009-edition&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;published_date&#x27;</span>: &#123;<span class="string">&#x27;__class__&#x27;</span>: <span class="string">&#x27;time.asctime&#x27;</span>, <span class="string">&#x27;__value__&#x27;</span>: <span class="string">&#x27;Fri Mar 27 22:20:42 2009&#x27;</span>&#125;,</span><br><span class="line"> <span class="string">&#x27;published&#x27;</span>: <span class="literal">True</span>&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="JSON-对-Python-数据类型的支持情况">JSON 对 Python 数据类型的支持情况</h3>
+<p>由于json 不是Python特定的，对应到Python的数据类型的时候有很多不匹配。有一些仅仅是名字不同，但是有两个Python数据类型完全缺少：</p>
+<table>
+<thead>
+<tr>
+<th>JSON</th>
+<th>Python 3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>object</td>
+<td>dictionary</td>
+</tr>
+<tr>
+<td>array</td>
+<td>list</td>
+</tr>
+<tr>
+<td>string</td>
+<td>string</td>
+</tr>
+<tr>
+<td>integer</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>real number</td>
+<td>float</td>
+</tr>
+<tr>
+<td>true</td>
+<td>True</td>
+</tr>
+<tr>
+<td>false</td>
+<td>False</td>
+</tr>
+<tr>
+<td>null</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p>而且尽管 json 非常好的支持字符串，但是它没有对 bytes 对象或 bytearray 的支持。另外，json 没有一个单独的类型对应元组。</p>
+<p>即使json没有内建的字节流支持, 并不意味着你不能序列化bytes对象。json模块提供了编解码未知数据类型的扩展接口。(“未知”的意思是“json没有定义”。很显然json 模块认识字节数组, 但是它被json规范的限制束缚住了。) 如果你希望编码字节串或者其它json没有原生支持的数据类型，你需要给这些类型提供定制的编码和解码器。例如，如果保存字节串对你来说很重要，你可以定义自己的“迷你序列化格式。”</p>
+<h4 id="示例-v9">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">to_json</span>(<span class="params">python_object</span>):</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(python_object, time.struct_time):          </span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">&#x27;__class__&#x27;</span>: <span class="string">&#x27;time.asctime&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;__value__&#x27;</span>: time.asctime(python_object)&#125;    </span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(python_object, <span class="built_in">bytes</span>):                                </span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">&#x27;__class__&#x27;</span>: <span class="string">&#x27;bytes&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;__value__&#x27;</span>: <span class="built_in">list</span>(python_object)&#125;                       </span><br><span class="line">    <span class="keyword">raise</span> TypeError(<span class="built_in">repr</span>(python_object) + <span class="string">&#x27; is not JSON serializable&#x27;</span>)  </span><br></pre></td></tr></table></figure>
+<h4 id="说明-v6">说明</h4>
+<p>为了给一个json没有原生支持的数据类型定义你自己的“迷你序列化格式”, 只要定义一个接受一个Python对象为参数的函数。这个对象将会是<code>json.dump()</code>函数无法自己序列化的实际对象。</p>
+<p>你的自定义序列化函数应该检查<code>json.dump()</code>函数传给它的对象的类型。当你的函数只序列化一个类型的时候这不是必须的，但是它使你的函数的覆盖的内容清楚明白，并且在你需要序列化更多类型的时候更容易扩展。</p>
+<p>在这个例子里面, 我将 bytes 对象转换成字典。<code>__class__</code>键持有原始的数据类型(以字符串的形式, ‘bytes’), 而 <code>__value__</code> 键持有实际的数据。当然它不能是bytes对象; 大体的想法是将其转换成某些可以被json序列化的东西! bytes对象就是一个范围在0–255的整数的序列。 我们 <strong>可以使用 <code>list()</code> 函数将bytes对象转换成整数列表</strong> 。例如<code>b'\xDE\xD5\xB4\xF8'</code> 会变成 <code>[222, 213, 180, 248]</code>。(算一下! 这是对的! 16进制的字节 \xDE 是十进制的 222, \xD5 是 213, 以此类推。)</p>
+<p>类似的，将<code>time.struct_time</code>结构转化成一个只包含json可序列化值的字典。在这个例子里, 最简单的将日期时间转换成json可序列化值的方法是使用<code>time.asctime()</code>函数将其转换成字符串。<code>time.asctime()</code> 函数将难看的<code>time.struct_time</code>转换成字符串 ‘Fri Mar 27 22:20:42 2009’。</p>
+<p>最后一行一行很重要。你序列化的数据结构可能包含json内建的可序列化类型和你的定制序列化器支持的类型之外的东西。在这种情况下，你的定制序列化器抛出一个TypeError，那样json.dump() 函数就可以知道你的定制序列化函数不认识该类型。</p>
+<p>就这么多；你不需要其它的东西。特别是, 这个定制序列化函数返回Python字典，不是字符串。你不是自己做所有序列化到json的工作; 你仅仅在做转换成被支持的类型那部分工作。json.dump() 函数做剩下的事情。</p>
+<h4 id="输出-v6">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; shell</span><br><span class="line">1</span><br><span class="line">&gt;&gt;&gt; with open(<span class="string">&#x27;entry.json&#x27;</span>, <span class="string">&#x27;w&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) as f:</span><br><span class="line">...     json.dump(entry, f, default=customserializer.to_json)</span><br><span class="line">...</span><br><span class="line">&gt;&gt;&gt; <span class="built_in">exit</span>()</span><br><span class="line"></span><br><span class="line">you@localhost:~/diveintopython3/examples$ ls -l example.json</span><br><span class="line">-rw-r--r-- 1 you  you  391 Aug  3 13:34 entry.json</span><br><span class="line">you@localhost:~/diveintopython3/examples$ cat example.json</span><br><span class="line">&#123;<span class="string">&quot;published_date&quot;</span>: &#123;<span class="string">&quot;__class__&quot;</span>: <span class="string">&quot;time.asctime&quot;</span>, <span class="string">&quot;__value__&quot;</span>: <span class="string">&quot;Fri Mar 27 22:20:42 2009&quot;</span>&#125;,</span><br><span class="line"><span class="string">&quot;comments_link&quot;</span>: null, <span class="string">&quot;internal_id&quot;</span>: &#123;<span class="string">&quot;__class__&quot;</span>: <span class="string">&quot;bytes&quot;</span>, <span class="string">&quot;__value__&quot;</span>: [222, 213, 180, 248]&#125;,</span><br><span class="line"><span class="string">&quot;tags&quot;</span>: [<span class="string">&quot;diveintopython&quot;</span>, <span class="string">&quot;docbook&quot;</span>, <span class="string">&quot;html&quot;</span>], <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Dive into history, 2009 edition&quot;</span>,</span><br><span class="line"><span class="string">&quot;article_link&quot;</span>: <span class="string">&quot;http://diveintomark.org/archives/2009/03/27/dive-into-history-2009-edition&quot;</span>,</span><br><span class="line"><span class="string">&quot;published&quot;</span>: <span class="literal">true</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>对于读入数据，<code>json.load()</code>并不知道你可能传给json.dump()的任何转换函数的任何信息。你需要的是<code>to_json()</code>函数的逆函数 — 一个接受定制转换出的json 对象并将其转换回原始的Python数据类型。</p>
+<h4 id="示例-v10">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># add this to customserializer.py</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">from_json</span>(<span class="params">json_object</span>):</span>                                   </span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;__class__&#x27;</span> <span class="keyword">in</span> json_object:                            </span><br><span class="line">        <span class="keyword">if</span> json_object[<span class="string">&#x27;__class__&#x27;</span>] == <span class="string">&#x27;time.asctime&#x27;</span>:</span><br><span class="line">            <span class="keyword">return</span> time.strptime(json_object[<span class="string">&#x27;__value__&#x27;</span>])    </span><br><span class="line">        <span class="keyword">if</span> json_object[<span class="string">&#x27;__class__&#x27;</span>] == <span class="string">&#x27;bytes&#x27;</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">bytes</span>(json_object[<span class="string">&#x27;__value__&#x27;</span>])            </span><br><span class="line">    <span class="keyword">return</span> json_object</span><br></pre></td></tr></table></figure>
+<h4 id="输出-v7">输出</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; shell</span><br><span class="line">2</span><br><span class="line">&gt;&gt;&gt; import customserializer</span><br><span class="line">&gt;&gt;&gt; with open(&#39;entry.json&#39;, &#39;r&#39;, encoding&#x3D;&#39;utf-8&#39;) as f:</span><br><span class="line">...     entry &#x3D; json.load(f, object_hook&#x3D;customserializer.from_json)  </span><br><span class="line">... </span><br><span class="line">&gt;&gt;&gt; entry                                                             </span><br><span class="line">&#123;&#39;comments_link&#39;: None,</span><br><span class="line"> &#39;internal_id&#39;: b&#39;\xDE\xD5\xB4\xF8&#39;,</span><br><span class="line"> &#39;title&#39;: &#39;Dive into history, 2009 edition&#39;,</span><br><span class="line"> &#39;tags&#39;: [&#39;diveintopython&#39;, &#39;docbook&#39;, &#39;html&#39;],</span><br><span class="line"> &#39;article_link&#39;: &#39;http:&#x2F;&#x2F;diveintomark.org&#x2F;archives&#x2F;2009&#x2F;03&#x2F;27&#x2F;dive-into-history-2009-edition&#39;,</span><br><span class="line"> &#39;published_date&#39;: time.struct_time(tm_year&#x3D;2009, tm_mon&#x3D;3, tm_mday&#x3D;27, tm_hour&#x3D;22, tm_min&#x3D;20, tm_sec&#x3D;42, tm_wday&#x3D;4, tm_yday&#x3D;86, tm_isdst&#x3D;-1),</span><br><span class="line"> &#39;published&#39;: True&#125;</span><br></pre></td></tr></table></figure>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/python3-oop.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/python3-closure.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '输入输出'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

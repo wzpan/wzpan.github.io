@@ -1,0 +1,1102 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>视频处理 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="参考资料：
+
+《OpenCV 2 Computer Vision Application Programming Cookbook》
+《The OpenCV Reference Manual》
+
+
+读取视频
+使用 CV::VideoCapture 来读取视频序列。
+12345678910111213">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="视频处理"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '视频处理'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 视频处理</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  参考资料：
+<ul>
+<li>《OpenCV 2 Computer Vision Application Programming Cookbook》</li>
+<li>《The OpenCV Reference Manual》</li>
+</ul>
+</div>
+<h2 id="读取视频">读取视频</h2>
+<p>使用 <a target="_blank" rel="noopener" href="http://docs.opencv.org/modules/highgui/doc/reading_and_writing_images_and_video.html#videocapture"><code>CV::VideoCapture</code></a> 来读取视频序列。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/imgproc/imgproc.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/core/core.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/highgui/highgui.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// Open the video file</span></span><br><span class="line">    <span class="function">cv::VideoCapture <span class="title">capture</span><span class="params">(<span class="string">&quot;../stomp.avi&quot;</span>)</span></span>;</span><br><span class="line">    <span class="comment">// check if video successfully opened</span></span><br><span class="line">    <span class="keyword">if</span> (!capture.<span class="built_in">isOpened</span>())</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="comment">// Get the frame rate</span></span><br><span class="line">    <span class="keyword">double</span> rate = capture.<span class="built_in">get</span>(CV_CAP_PROP_FPS);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">stop</span><span class="params">(<span class="literal">false</span>)</span></span>;</span><br><span class="line">    cv::Mat frame;  <span class="comment">// current video frame</span></span><br><span class="line">    cv::<span class="built_in">namedWindow</span>(<span class="string">&quot;Extracted Frame&quot;</span>);</span><br><span class="line">    <span class="comment">// Delay between each frame in ms</span></span><br><span class="line">    <span class="comment">// corresponds to video frame rate</span></span><br><span class="line">    <span class="keyword">int</span> delay = <span class="number">1000</span> / rate;</span><br><span class="line">    <span class="comment">// for all frames in video</span></span><br><span class="line">    <span class="keyword">while</span> (!stop)&#123;</span><br><span class="line">        <span class="comment">// read next frame if any</span></span><br><span class="line">        <span class="keyword">if</span> (!capture.<span class="built_in">read</span>(frame))</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        cv::<span class="built_in">imshow</span>(<span class="string">&quot;Extracted Frame&quot;</span>, frame);</span><br><span class="line">        <span class="comment">// introduce a delay</span></span><br><span class="line">        <span class="comment">// or press key to stop</span></span><br><span class="line">        <span class="keyword">if</span> (cv::<span class="built_in">waitKey</span>(delay) &gt;= <span class="number">0</span>)</span><br><span class="line">            stop = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Close the video file</span></span><br><span class="line">    <span class="comment">// Not required since called by destructor</span></span><br><span class="line">    capture.<span class="built_in">release</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也可以通过类似的方法读入摄像头捕捉的视频，要改动的地方仅仅是将上面的视频文件名改为摄像头的 ID，默认的摄像头 ID 为 0。</p>
+<h2 id="写入视频">写入视频</h2>
+<p>使用 <a target="_blank" rel="noopener" href="http://docs.opencv.org/modules/highgui/doc/reading_and_writing_images_and_video.html#videowriter"><code>CV::VideoWriter</code></a> 来写入视频。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iomanip&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dbg.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/core/core.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/highgui/highgui.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    VideoCapture cap;</span><br><span class="line">    cap.<span class="built_in">open</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">namedWindow</span>(<span class="string">&quot;MyVideo&quot;</span>, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">double</span> dWidth = cap.<span class="built_in">get</span>(CV_CAP_PROP_FRAME_WIDTH);</span><br><span class="line">    <span class="keyword">double</span> dHeight = cap.<span class="built_in">get</span>(CV_CAP_PROP_FRAME_HEIGHT);</span><br><span class="line">    <span class="function">Size <span class="title">frameSize</span><span class="params">(<span class="keyword">static_cast</span>&lt;<span class="keyword">int</span>&gt;(dWidth), <span class="keyword">static_cast</span>&lt;<span class="keyword">int</span>&gt;(dHeight))</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function">VideoWriter <span class="title">oVideoWriter</span><span class="params">(<span class="string">&quot;MyVideo.avi&quot;</span>, CV_FOURCC(<span class="string">&#x27;P&#x27;</span>,<span class="string">&#x27;I&#x27;</span>,<span class="string">&#x27;M&#x27;</span>,<span class="string">&#x27;1&#x27;</span>), <span class="number">20</span>, frameSize, <span class="literal">true</span>)</span></span>;	<span class="comment">// initialize the VideoWriter objetct</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        Mat frame;</span><br><span class="line">        <span class="keyword">bool</span> bSuccess = cap.<span class="built_in">read</span>(frame);</span><br><span class="line">        <span class="keyword">if</span> (!bSuccess)&#123; <span class="comment">// if not success, break loop</span></span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;ERROR: cannot read a frame from video file&quot;</span> &lt;&lt; endl;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        oVideoWriter.<span class="built_in">write</span>(frame);</span><br><span class="line">        <span class="built_in">imshow</span>(<span class="string">&quot;MyVideo&quot;</span>, frame); <span class="comment">// show the frame in &quot;MyVideo&quot; window</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">waitKey</span>(<span class="number">10</span>) == <span class="number">27</span>) &#123;<span class="comment">// wait for ESC key</span></span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;ESC key is pressed by user&quot;</span> &lt;&lt; endl;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="目标检测">目标检测</h2>
+<h3 id="mean-shift-和-camshift">mean-shift 和 camshift</h3>
+<h4 id="均值漂移（mean-shift）">均值漂移（mean-shift）</h4>
+<p>mean-shift 算法是一种在一组数据的密度分布中寻找局部极值的稳定 <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup> 的方法。若分布是连续的，处理过程就比较容易，这种情况下本质上只需要对数据的密度直方图应用爬山算法即可。然而，对于离散的数据集，这个问题在某种程度上是比较麻烦的。</p>
+<p>mean-shift 算法的步骤如下：</p>
+<ol>
+<li>选择搜索窗口。</li>
+<li>计算窗口（可能是带权重的）的重心。</li>
+<li>将窗口的中心设置在计算出的重心处。</li>
+<li>返回第 2 步，直到窗口的位置不再变化（通常会）。</li>
+</ol>
+<p>OpenCV 提供 <code>cv::meanshift()</code> 函数来进行 mean-shift 算法跟踪。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">cv::meanShift</span><span class="params">(InputArray probImage, Rect&amp; window, TermCriteria criteria)</span></span></span><br></pre></td></tr></table></figure>
+<p>其中，</p>
+<ul>
+<li><code>probImage</code> - 图像直方图反投影后的结果；</li>
+<li><code>window</code> - 初始的查找窗口，即要跟踪的区域；</li>
+<li><code>criteria</code> - 迭代搜索算法的终止条件，主要由 mean-shift 移动的最大迭代次数和可视为窗口位置收敛的最小移动距离组成。</li>
+<li>返回的是收敛时算法的迭代次数。</li>
+</ul>
+<p>对于第一个参数 <code>probImage</code> ，可以直接使用 <code>cv::calcBackProject()</code> 得到的结果。但《OpenCV 2 Computer Vision Application Programming Cookbook》建议先把图像转换到 HSV 颜色空间，然后使用 Hue 单通道的直方图的反投影变换结果作为 <code>probImage</code> ；</p>
+<p>获取彩色图像的 Hue 通道的直方图算法实现如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Computes the 1D Hue histogram with a mask.</span></span><br><span class="line"><span class="comment">// BGR source image is converted to HSV</span></span><br><span class="line"><span class="function">cv::MatND <span class="title">getHueHistogram</span><span class="params">(<span class="keyword">const</span> cv::Mat &amp;image,</span></span></span><br><span class="line"><span class="function"><span class="params">                             <span class="keyword">int</span> minSaturation = <span class="number">0</span>)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    cv::MatND hist;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Convert to HSV color space</span></span><br><span class="line">    cv::Mat hsv;</span><br><span class="line">    cv::<span class="built_in">cvtColor</span>(image, hsv, CV_BGR2HSV);</span><br><span class="line"></span><br><span class="line">       <span class="comment">// Mask to be used (or not)</span></span><br><span class="line">       cv::Mat mask;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">if</span> (minSaturation &gt; <span class="number">0</span>) &#123;</span><br><span class="line">           <span class="comment">// Spliting the 3 channels into 3 images</span></span><br><span class="line">           std::vector&lt;cv::Mat&gt; v;</span><br><span class="line">           cv::<span class="built_in">split</span>(hsv, v);</span><br><span class="line">           <span class="comment">// Mask out the low saturated pixels</span></span><br><span class="line">           cv::<span class="built_in">threshold</span>(v[<span class="number">1</span>], mask, minSaturation,</span><br><span class="line">                         <span class="number">255</span>, cv::THRESH_BINARY);</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Prepare arguments for a 1D hue histogram</span></span><br><span class="line">    hranges[<span class="number">0</span>]= <span class="number">0.0</span>;</span><br><span class="line">    hranges[<span class="number">1</span>]= <span class="number">180.0</span>;</span><br><span class="line">    channels[<span class="number">0</span>]= <span class="number">0</span>; <span class="comment">// the hue channel</span></span><br><span class="line"></span><br><span class="line">       <span class="comment">// Compute histogram</span></span><br><span class="line">    cv::<span class="built_in">calcHist</span>(&amp;hsv, </span><br><span class="line">        <span class="number">1</span>,			<span class="comment">// histogram of 1 image only</span></span><br><span class="line">        channels,	<span class="comment">// the channel used</span></span><br><span class="line">        mask,	<span class="comment">// no mask is used</span></span><br><span class="line">        hist,		<span class="comment">// the resulting histogram</span></span><br><span class="line">        <span class="number">1</span>,			<span class="comment">// it is a 1D histogram</span></span><br><span class="line">        histSize,	<span class="comment">// number of bins</span></span><br><span class="line">        ranges		<span class="comment">// pixel value range</span></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> hist;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用 <code>cv::meanshift()</code> 函数在两幅图像间跟踪某一物体的步骤如下：</p>
+<ol>
+<li>读入第一张图像，定义好目标跟踪窗口，即感兴趣区域 ROI 。</li>
+<li>计算这个 ROI 的 Hue 通道的直方图；</li>
+<li>读入第二张图像，转换到 HSV 颜色空间，并对其 Hue 分量进行阈值处理 <code>cv::threshold()</code>，去掉低饱和度的像素，以保证较高的饱和度；</li>
+<li>应用 ROI 的 直方图信息对第 3 步得到的图像进行反投影变换；</li>
+<li>对反投影变换的结果在进行一次按位与操作 <code>cv::bitwise_and()</code> ，去除结果中低饱和度的像素；</li>
+<li>最后，对第 5 步得到的结果进行 meanshift 操作 <code>cv::meanShift()</code>，得到新的跟踪窗口。</li>
+</ol>
+<p>实现如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// Read reference image</span></span><br><span class="line">    cv::Mat image= cv::<span class="built_in">imread</span>(<span class="string">&quot;../baboon1.jpg&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!image.data)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>; </span><br><span class="line"></span><br><span class="line">    <span class="comment">// Define ROI</span></span><br><span class="line">    cv::Mat imageROI= <span class="built_in">image</span>(cv::<span class="built_in">Rect</span>(<span class="number">110</span>,<span class="number">260</span>,<span class="number">35</span>,<span class="number">40</span>));</span><br><span class="line">    cv::<span class="built_in">rectangle</span>(image, cv::<span class="built_in">Rect</span>(<span class="number">110</span>,<span class="number">260</span>,<span class="number">35</span>,<span class="number">40</span>), cv::<span class="built_in">Scalar</span>(<span class="number">0</span>,<span class="number">0</span>,<span class="number">255</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Display image</span></span><br><span class="line">    cv::<span class="built_in">namedWindow</span>(<span class="string">&quot;Image 1&quot;</span>);</span><br><span class="line">    cv::<span class="built_in">imshow</span>(<span class="string">&quot;Image 1&quot;</span>,image);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Get the Hue histogram</span></span><br><span class="line">    <span class="keyword">int</span> minSat=<span class="number">65</span>;</span><br><span class="line">    ColorHistogram hc;</span><br><span class="line">    cv::MatND colorhist= hc.<span class="built_in">getHueHistogram</span>(imageROI, minSat);</span><br><span class="line"></span><br><span class="line">    ObjectFinder finder;</span><br><span class="line">    finder.<span class="built_in">setHistogram</span>(colorhist);</span><br><span class="line">    finder.<span class="built_in">setThreshold</span>(<span class="number">0.2f</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Second image</span></span><br><span class="line">    image= cv::<span class="built_in">imread</span>(<span class="string">&quot;../baboon3.jpg&quot;</span>);</span><br><span class="line"></span><br><span class="line"> 	<span class="comment">// Display image</span></span><br><span class="line">    cv::<span class="built_in">namedWindow</span>(<span class="string">&quot;Image 2&quot;</span>);</span><br><span class="line">    cv::<span class="built_in">imshow</span>(<span class="string">&quot;Image 2&quot;</span>,image);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Convert to HSV space</span></span><br><span class="line">    cv::Mat hsv;</span><br><span class="line">    cv::<span class="built_in">cvtColor</span>(image, hsv, CV_BGR2HSV);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Split the image</span></span><br><span class="line">    vector&lt;cv::Mat&gt; v;</span><br><span class="line">    cv::<span class="built_in">split</span>(hsv,v);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Eliminate pixels with low saturation</span></span><br><span class="line">    cv::<span class="built_in">threshold</span>(v[<span class="number">1</span>],v[<span class="number">1</span>],minSat,<span class="number">255</span>,cv::THRESH_BINARY);</span><br><span class="line">    cv::<span class="built_in">namedWindow</span>(<span class="string">&quot;Saturation&quot;</span>);</span><br><span class="line">    cv::<span class="built_in">imshow</span>(<span class="string">&quot;Saturation&quot;</span>,v[<span class="number">1</span>]);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Get back-projection of hue histogram</span></span><br><span class="line">    <span class="keyword">int</span> ch[<span class="number">1</span>]=&#123;<span class="number">0</span>&#125;;</span><br><span class="line">    cv::Mat result= finder.<span class="built_in">find</span>(hsv,<span class="number">0.0f</span>,<span class="number">180.0f</span>,ch,<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    cv::<span class="built_in">namedWindow</span>(<span class="string">&quot;Result Hue&quot;</span>);</span><br><span class="line">    cv::<span class="built_in">imshow</span>(<span class="string">&quot;Result Hue&quot;</span>,result);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Eliminate low stauration pixels</span></span><br><span class="line">    cv::<span class="built_in">bitwise_and</span>(result,v[<span class="number">1</span>],result);</span><br><span class="line">    cv::<span class="built_in">namedWindow</span>(<span class="string">&quot;Result Hue and raw&quot;</span>);</span><br><span class="line">    cv::<span class="built_in">imshow</span>(<span class="string">&quot;Result Hue and raw&quot;</span>,result);</span><br><span class="line"></span><br><span class="line">    <span class="function">cv::Rect <span class="title">rect</span><span class="params">(<span class="number">110</span>,<span class="number">260</span>,<span class="number">35</span>,<span class="number">40</span>)</span></span>;</span><br><span class="line">    cv::<span class="built_in">rectangle</span>(image, rect, cv::<span class="built_in">Scalar</span>(<span class="number">0</span>,<span class="number">0</span>,<span class="number">255</span>));</span><br><span class="line"></span><br><span class="line">    <span class="function">cv::TermCriteria <span class="title">criteria</span><span class="params">(cv::TermCriteria::MAX_ITER,<span class="number">10</span>,<span class="number">0.01</span>)</span></span>;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;meanshift= &quot;</span> &lt;&lt; cv::<span class="built_in">meanShift</span>(result,rect,criteria) &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    cv::<span class="built_in">rectangle</span>(image, rect, cv::<span class="built_in">Scalar</span>(<span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Display image</span></span><br><span class="line">    cv::<span class="built_in">namedWindow</span>(<span class="string">&quot;Image 2 result&quot;</span>);</span><br><span class="line">    cv::<span class="built_in">imshow</span>(<span class="string">&quot;Image 2 result&quot;</span>,image);</span><br><span class="line"></span><br><span class="line">    cv::<span class="built_in">waitKey</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>《The OpenCV Reference Manual》里还建议再对反投影的结果进行降噪处理。例如，可以先使用 <code>cv::findContours()</code> 检索到一些闭合的轮廓边，使用 <code>cv::contourArea()</code> 去掉一些面积较小的轮廓边，再使用 <code>cv::drawContours()</code> 填充剩下的轮廓边。</p>
+<h4 id="camshift">camshift</h4>
+<p>camshift 是“continuously adaptive mean-shift”的缩写，顾名思义就是 mean-shift 的一个改进版本，它的实现基于 meanshift ，而与 meanshift 的最大区别在于窗口的大小和朝向是可变的。如果有一个易于分割的分布（例如保持紧密的人脸特征），此算法可以根据人在走近或远离摄像机时脸的尺寸而自动调整窗口的尺寸。</p>
+<p>OpenCV 提供 <code>cv::Camshift()</code> 函数来进行 mean-shift 算法跟踪。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">RotatedRect <span class="title">CamShift</span><span class="params">(InputArray probImage, Rect&amp; window, TermCriteria criteria)</span></span></span><br></pre></td></tr></table></figure>
+<p>该函数将返回一个经过旋转的矩形结构体 <code>RotatedRect</code> ，该结构体包含了目标的位置、大小和朝向信息。可以通过 <code>RotatedRect::boundingRect()</code> 函数获得查找窗口的下一个位置。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  OpenCV 自带的示例程序中包含一个应用 camshift 捕捉彩色物体的示例 camshiftdemo.c 。
+</div>
+<h2 id="特征匹配">特征匹配</h2>
+<h3 id="Harris-角点">Harris 角点</h3>
+<h4 id="经典版本">经典版本</h4>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">cornerHarris</span><span class="params">(InputArray src,	<span class="comment">// input</span></span></span></span><br><span class="line"><span class="function"><span class="params">				OutputArray dst,	<span class="comment">// output</span></span></span></span><br><span class="line"><span class="function"><span class="params">				<span class="keyword">int</span> blockSize,	<span class="comment">// neighborhood size</span></span></span></span><br><span class="line"><span class="function"><span class="params">				<span class="keyword">int</span> ksize,		<span class="comment">// aperture size</span></span></span></span><br><span class="line"><span class="function"><span class="params">				<span class="keyword">double</span> k,			<span class="comment">// Harris parameter</span></span></span></span><br><span class="line"><span class="function"><span class="params">				<span class="keyword">int</span> borderType=BORDER_DEFAULT )</span></span></span><br></pre></td></tr></table></figure>
+<p>示例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Detect Harris Corners</span></span><br><span class="line">cv::Mat cornerStrength;</span><br><span class="line">cv::<span class="built_in">cornerHarris</span>(image,cornerStrength,</span><br><span class="line">                <span class="number">3</span>,	<span class="comment">// neighborhood size</span></span><br><span class="line">                <span class="number">3</span>,	<span class="comment">// aperture size</span></span><br><span class="line">                <span class="number">0.01</span>); <span class="comment">// Harris parameter</span></span><br><span class="line"><span class="comment">// threshold the corner strengths</span></span><br><span class="line">cv::Mat harrisCorners;</span><br><span class="line"><span class="keyword">double</span> threshold= <span class="number">0.0001</span>;</span><br><span class="line">cv::<span class="built_in">threshold</span>(cornerStrength,harrisCorners,</span><br><span class="line">            threshold,<span class="number">255</span>,cv::THRESH_BINARY_INV);</span><br></pre></td></tr></table></figure>
+<p>原图：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-video/2818iyC.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>结果图：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-video/2818v8I.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>与原图结合：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-video/2818wvn.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h4 id="改进版本">改进版本</h4>
+<p>用上面的方法得到的 Harris 角点在图像中的分布不是很均匀，一个改进的方法是使用 <code>cv::goodFeaturesToTrack()</code> 方法（听名字就很彪悍），用它可以获得更加 strong 的角点：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">goodFeaturesToTrack</span><span class="params">(InputArray image,	<span class="comment">// input 8-bit or floating-point 32-bit, single-channel image</span></span></span></span><br><span class="line"><span class="function"><span class="params">						OutputArray corners,	<span class="comment">// output vector of detected corners.</span></span></span></span><br><span class="line"><span class="function"><span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">						<span class="keyword">int</span> maxCorners,		<span class="comment">// maximum number of corners to return</span></span></span></span><br><span class="line"><span class="function"><span class="params">						<span class="keyword">double</span> qualityLevel,	<span class="comment">// quality level</span></span></span></span><br><span class="line"><span class="function"><span class="params">						<span class="keyword">double</span> minDistance,	<span class="comment">// minimum allowed distance between points</span></span></span></span><br><span class="line"><span class="function"><span class="params">						InputArray mask=noArray(),<span class="comment">// optional region of interest</span></span></span></span><br><span class="line"><span class="function"><span class="params">						<span class="keyword">int</span> blockSize=<span class="number">3</span>,		<span class="comment">// size of an average block</span></span></span></span><br><span class="line"><span class="function"><span class="params">						<span class="keyword">bool</span> useHarrisDetector=<span class="literal">false</span>, <span class="comment">//  whether to use a classical Harris detector </span></span></span></span><br><span class="line"><span class="function"><span class="params">						<span class="keyword">double</span> k=<span class="number">0.04</span> )</span>		<span class="comment">// free parameter of the Harris detector</span></span></span><br><span class="line"><span class="function"></span></span><br></pre></td></tr></table></figure>
+<p>示例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Compute good features to track</span></span><br><span class="line">std::vector&lt;cv::Point2f&gt; corners;</span><br><span class="line">cv::<span class="built_in">goodFeaturesToTrack</span>(imaeg, corners,</span><br><span class="line">                        <span class="number">500</span>,	<span class="comment">// maximum number of corners to return</span></span><br><span class="line">                        <span class="number">0.01</span>,	<span class="comment">// quality level</span></span><br><span class="line">                        <span class="number">10</span>);	<span class="comment">// minimum allowed distance between points</span></span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-video/281895t.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>这种方法得到的 Harris 角点在分布均匀程度上得到了很明显的改进。不过，这种改进的方案计算复杂度也更高，因为它需要对检测到的特征点按照 Harris 得分进行排序。另外，如果把第 8 个参数 <code>useHarrisDetector</code> 的值设为 true，则用的将是经典的 Harris 检测器。</p>
+<h4 id="通用接口">通用接口</h4>
+<p>为了方便使用这些特征检测算法，OpenCV 2 提供了特征点检测的通用接口，封装在抽象类 <code>cv::FeatureDetector</code> 里：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CV_EXPORTS</span> <span class="title">FeatureDetector</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">FeatureDetector</span>();</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">detect</span><span class="params">( <span class="keyword">const</span> Mat&amp; image, vector&lt;KeyPoint&gt;&amp; keypoints,</span></span></span><br><span class="line"><span class="function"><span class="params">			<span class="keyword">const</span> Mat&amp; mask=Mat() )</span> <span class="keyword">const</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">detect</span><span class="params">( <span class="keyword">const</span> vector&lt;Mat&gt;&amp; images,</span></span></span><br><span class="line"><span class="function"><span class="params">			vector&lt;vector&lt;KeyPoint&gt; &gt;&amp; keypoints,</span></span></span><br><span class="line"><span class="function"><span class="params">			<span class="keyword">const</span> vector&lt;Mat&gt;&amp; masks=vector&lt;Mat&gt;() )</span> <span class="keyword">const</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">read</span><span class="params">(<span class="keyword">const</span> FileNode&amp;)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">write</span><span class="params">(FileStorage&amp;)</span> <span class="keyword">const</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> Ptr&lt;FeatureDetector&gt; <span class="title">create</span><span class="params">( <span class="keyword">const</span> string&amp; detectorType )</span></span>;</span><br><span class="line">  <span class="keyword">protected</span>:</span><br><span class="line">...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>其中：</p>
+<ul>
+<li><code>create()</code> 函数用于创建一个特征检测器，其参数 <code>detectorType</code> 可以是以下几种：
+<ul>
+<li>“FAST” – FastFeatureDetector</li>
+<li>“STAR” – StarFeatureDetector</li>
+<li>“SIFT” – SIFT (nonfree module)</li>
+<li>“SURF” – SURF (nonfree module)</li>
+<li>“ORB” – ORB</li>
+<li>“BRISK” – BRISK</li>
+<li>“MSER” – MSER</li>
+<li>“GFTT” – GoodFeaturesToTrackDetector</li>
+<li>“HARRIS” – GoodFeaturesToTrackDetector with Harris detector enabled</li>
+<li>“Dense” – DenseFeatureDetector</li>
+<li>“SimpleBlob” – SimpleBlobDetector</li>
+</ul>
+</li>
+<li>两个 <code>detect()</code> 函数用于进行特征点检测；</li>
+<li><code>read()</code> 和 <code>write()</code> 函数用于将检测到的特征点进行文件读/写。</li>
+</ul>
+<p>为了方便存储不同的特征点的信息，OpenCV 还为这个接口还定义了一个 <code>Keypoint</code> 类，用于存储特征点的所有相关属性。例如，对于 Harris 角点，该类的实例将会用来储存检测得到的特征点的位置。</p>
+<p>另外，OpenCV 为每种特征点提供了从 <code>cv::FeatureDetector</code> 继承而来的子类。例如，改进的 Harris 角点对应子类 <code>cv::GoodFeatureToTrackDetector</code> 。使用方法如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vector of keypoints</span></span><br><span class="line">std::vector&lt;cv::KeyPoint&gt; keypoints;</span><br><span class="line"><span class="comment">// Construction of the Good Feature to Track detector</span></span><br><span class="line"><span class="function">cv::GoodFeatureToTrackDetector <span class="title">gftt</span> <span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="number">500</span>,	<span class="comment">// maximum number of corners to be returned</span></span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="number">0.01</span>,	<span class="comment">// quality level</span></span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="number">10</span>)</span></span>;	<span class="comment">// minimum allowed distance between points</span></span><br><span class="line"><span class="comment">// point detection using FeatureDetector method</span></span><br><span class="line">gftt.<span class="built_in">detect</span>(image, keypoints);</span><br></pre></td></tr></table></figure>
+<p>OpenCV 还提供了一个通用方法 <code>cv::drawKeyPoints</code> 用于在图像上绘制得到的特征点：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cv::<span class="built_in">drawKeyPoints</span>(image,		<span class="comment">// original image</span></span><br><span class="line">                keypoints,	<span class="comment">// vector of keypoints</span></span><br><span class="line">                image,		<span class="comment">// the output image</span></span><br><span class="line">                cv::<span class="built_in">Scalar</span>(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>), <span class="comment">// keypoint color</span></span><br><span class="line">                cv::DrawMatchesFlags::DRAW_OVER_OUTIMG); <span class="comment">// drawing flag</span></span><br></pre></td></tr></table></figure>
+<p>这些类的使用方法大同小异。</p>
+<h3 id="FAST-特征点">FAST 特征点</h3>
+<p>FAST 特征点是为了提高检测速度而设计的。使用示例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vector of keypoints</span></span><br><span class="line">std::vector&lt;cv::KeyPoint&gt; keypoints;</span><br><span class="line"><span class="comment">// Construction of the Fast feature detector object</span></span><br><span class="line"><span class="function">cv::FastFeatureDetector <span class="title">fast</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="number">40</span>)</span></span>;	<span class="comment">// threshold for detection</span></span><br><span class="line"><span class="comment">// feature point detection</span></span><br><span class="line">fast.<span class="built_in">detect</span>(image, keypoints);</span><br><span class="line"><span class="comment">// Draw key points</span></span><br><span class="line">cv::<span class="built_in">drawKeyPoints</span>(image,		<span class="comment">// original image</span></span><br><span class="line">                keypoints,	<span class="comment">// vector of keypoints</span></span><br><span class="line">                image,		<span class="comment">// the output image</span></span><br><span class="line">                cv::<span class="built_in">Scalar</span>(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>), <span class="comment">// keypoint color</span></span><br><span class="line">                cv::DrawMatchesFlags::DRAW_OVER_OUTIMG); <span class="comment">// drawing flag</span></span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-video/2818KE0.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h3 id="SURF-特征点">SURF 特征点</h3>
+<p>SURF（Speeded Up Robust Features） 特征点是一种尺度不变，且运算效率快的特征点。</p>
+<p>示例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vector of keypoints</span></span><br><span class="line">std::vector&lt;cv::KeyPoint&gt; keypoints;</span><br><span class="line"><span class="comment">// Construct the SURF feature detector object</span></span><br><span class="line"><span class="function">cv::SurfFeatureDetector <span class="title">surf</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="number">2500.</span>)</span></span>;	<span class="comment">// threshold</span></span><br><span class="line"><span class="comment">// Detect the SURF features</span></span><br><span class="line">surf.<span class="built_in">detect</span>(image, keypoints);</span><br><span class="line"><span class="comment">// Draw the keypoints with scale and orientation information</span></span><br><span class="line">cv::<span class="built_in">drawKeypoints</span>(image,	<span class="comment">// original image</span></span><br><span class="line">                keypoints,  <span class="comment">// vector of keypoints</span></span><br><span class="line">                featureImage, <span class="comment">// the resulting image</span></span><br><span class="line">                cv::<span class="built_in">Scalar</span>(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>), <span class="comment">// color of the points</span></span><br><span class="line">                cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS); <span class="comment">//flag</span></span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-video/2818JYJ.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>对另一幅尺度不同的图使用 SURF 特征检测，得到结果如下：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-video/2818WiP.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>仔细对比两幅图，可以发现当图像的尺度发生变化后，两幅图像存在对应的圆圈也会跟着改变大小。尽管不是全部特征点都有对应，但通常存在对应的特征点的数量已经足够用在两幅图像间的比配。</p>
+<h3 id="SIFT-特征点">SIFT 特征点</h3>
+<p>SURF 的一个发展是另一个著名的特征点 —— SIFT (Scale-Invariant Feature Transform) 。</p>
+<p>使用示例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vector of keypoints</span></span><br><span class="line">std::vector&lt;cv::KeyPoint&gt; keypoints;</span><br><span class="line"><span class="comment">// Construct the SURF feature detector object</span></span><br><span class="line">cv::SiftFeatureDetector sift&#123;</span><br><span class="line">    <span class="number">0.03</span>,	<span class="comment">// feature threshold</span></span><br><span class="line">    <span class="number">10.</span>);	<span class="comment">// threshold to reduce</span></span><br><span class="line">            <span class="comment">// sensitivity to lines</span></span><br><span class="line">    <span class="comment">// Detect the SURF features</span></span><br><span class="line">    sift.<span class="built_in">detect</span>(image, keypoints);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果和 SURF 提取的结果很相似：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-video/2818jsV.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>SIFT 特征点比 SURF 更精确，不过速度上也慢一些。</p>
+<h3 id="特征匹配-v2">特征匹配</h3>
+<p>特征点的一大用处是用来进行特征匹配，例如寻找同个场景在两个不同角度的照片的对应关系。</p>
+<p>在特征匹配中，特征描述子（feature descriptors）通常是一个用于描述一个特征点的 N 维向量，且在理想情况下该向量可以对光照的变化和小幅度的形变具有不变性。另外，描述子的好坏还可以通过一个距离方程（例如欧氏距离）来比较和度量。因此，特征描述子是特征匹配算法中的一个强有力的工具。</p>
+<p>同样，OpenCV 2 提供了一个通用的接口类 <code>cv::DescriptorExtractor</code> 用于构造特征描述子：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CV_EXPORTS</span> <span class="title">DescriptorExtractor</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">DescriptorExtractor</span>();</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">compute</span><span class="params">( <span class="keyword">const</span> Mat&amp; image, vector&lt;KeyPoint&gt;&amp; keypoints,</span></span></span><br><span class="line"><span class="function"><span class="params">				Mat&amp; descriptors )</span> <span class="keyword">const</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">compute</span><span class="params">( <span class="keyword">const</span> vector&lt;Mat&gt;&amp; images, vector&lt;vector&lt;KeyPoint&gt; &gt;&amp; keypoints,</span></span></span><br><span class="line"><span class="function"><span class="params">	vector&lt;Mat&gt;&amp; descriptors )</span> <span class="keyword">const</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">read</span><span class="params">( <span class="keyword">const</span> FileNode&amp; )</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">write</span><span class="params">( FileStorage&amp; )</span> <span class="keyword">const</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">int</span> <span class="title">descriptorSize</span><span class="params">()</span> <span class="keyword">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">int</span> <span class="title">descriptorType</span><span class="params">()</span> <span class="keyword">const</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> Ptr&lt;DescriptorExtractor&gt; <span class="title">create</span><span class="params">( <span class="keyword">const</span> string&amp; descriptorExtractorType )</span></span>;</span><br><span class="line">  <span class="keyword">protected</span>:</span><br><span class="line">...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>其中：</p>
+<ul>
+<li><code>create()</code> 函数用于创建一个特征描述子，其参数 <code>detectorType</code> 可以是以下几种：
+<ul>
+<li>“SIFT” – SIFT</li>
+<li>“SURF” – SURF</li>
+<li>“ORB” – ORB</li>
+<li>“BRISK” – BRISK</li>
+<li>“BRIEF” – BriefDescriptorExtractor</li>
+</ul>
+</li>
+<li>两个 <code>compute()</code> 函数用于从一组检测得到的特征点计算特征描述子；</li>
+<li><code>read()</code> 和 <code>write()</code> 函数用于将检测到的特征点进行文件读/写；</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Construction of the SURF descriptor extractor</span></span><br><span class="line">cv::SurfDescriptorExtractor surfDesc;</span><br><span class="line"><span class="comment">// Extraction of the SURF descriptors</span></span><br><span class="line">cv::Mat descriptors1;</span><br><span class="line">surfDesc.<span class="built_in">compute</span>(image1,keypoints1,descriptors1);</span><br></pre></td></tr></table></figure>
+<p>结果是一个行数和特征点数量相同的矩阵，每一行都是一个 N 维 的描述子的 vector （以 SURF 描述子为例，N 默认为 64） 。每个 vector 可以很好的描述一个特征点周围的色值信息。两个特征点越相似，则它们的特征描述子越接近。</p>
+<p>特征描述子在图像匹配中尤其有用。OpenCV 提供了一个最基本的匹配算法 <code>cv::BruteForceMatcher()</code> ，用法如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Construction of the matcher</span></span><br><span class="line">cv::BruteForceMatcher&lt;cv::L2&lt;<span class="keyword">float</span>&gt;&gt; matcher;</span><br><span class="line"><span class="comment">// Match the two image descriptors</span></span><br><span class="line">std::vector&lt;cv::DMatch&gt; matches;</span><br><span class="line">matcher.<span class="built_in">match</span>(descriptors1,descriptors2, matches);</span><br></pre></td></tr></table></figure>
+<p>同样，OpenCV 也提供了一个通用接口类 <code>cv::DescriptorMatcher</code> ，封装了多种匹配方法。</p>
+<p>得到的匹配结果是一个 <code>cv::DMatch</code> 类型的数据结构，这个结构体是一种 <a href="/wiki/cpp-container.html#pair-%E7%B1%BB%E5%9E%8B">pair 类型</a> ，每一个 pair 分别包含第一个 vector 和第二个 vector 的匹配到的元素的序号。</p>
+<p>OpenCV 也提供了函数用于绘制匹配结果 <code>cv::drawMatches</code> ，下面示例将上面的代码得到的结果的前 25 个配对给绘制出来：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">std::<span class="built_in">nth_element</span>(matches.<span class="built_in">begin</span>(),	<span class="comment">// initial position</span></span><br><span class="line">                matches.<span class="built_in">begin</span>()+<span class="number">24</span>, <span class="comment">// position of the sorted element</span></span><br><span class="line">                matches.<span class="built_in">end</span>());	<span class="comment">// end position</span></span><br><span class="line"><span class="comment">// remove all elements after the 25th</span></span><br><span class="line">matches.<span class="built_in">erase</span>(matches.<span class="built_in">begin</span>()+<span class="number">25</span>, matches.<span class="built_in">end</span>());</span><br><span class="line"><span class="comment">// Visualize matches</span></span><br><span class="line">cv::Mat imageMatches;</span><br><span class="line">cv::<span class="built_in">drawMatches</span>(</span><br><span class="line">    image1,keypoints1,	<span class="comment">// 1st image and its keypoints</span></span><br><span class="line">    image2,keypoints2,	<span class="comment">// 2nd image and its keypoints</span></span><br><span class="line">    matches,				<span class="comment">// the matches</span></span><br><span class="line">    imageMatches,			<span class="comment">// the image produced</span></span><br><span class="line">    cv::<span class="built_in">Scalar</span>(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>));   <span class="comment">// color of the lines</span></span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-video/2818w2b.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h2 id="相机校正">相机校正</h2>
+<h3 id="畸变的由来">畸变的由来</h3>
+<p>计算机视觉领域使用的相机模型称为针孔相机模型（pin-hole camera）：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-video/855MKX.png" alt="理想的针孔相机" />
+        <figcaption>理想的针孔相机</figcaption>
+      </figure>
+    </p>
+<p>基本的投影方程如下：</p>
+<p>\[ h_i = f\frac{h_o}{d_o} \]</p>
+<p>其中，图像的大小 （\(h_i\)） 与物体的大小 （\(h_o\)） 沿着与焦点的距离 （\(d_o\)） 成比例关系。</p>
+<p>根据前面所提的背景知识，我们可以清楚地认识到在针孔相机模型里的关键参数就是相机的焦距和它的成像大小。另外，因为我们要处理的是数字图像，相机的像素数量也是一个相机的另一个重要参数。最后，为了计算场景中的一点在像素坐标中的位置，我们还需要一个额外的信息：考虑那条从焦点引出的与成像平面垂直的直线，我们需要知道这条线穿入成像平面的哪个像素点，这个点称为 <strong>主要点</strong> （principal point）。逻辑上，这个主要点应该设在成像平面的中心，但实际上这个点往往会由于机械原因，难免会偏移一些像素，这就是畸变的由来。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-video/855_GF.png" alt="带有畸变的针孔相机" />
+        <figcaption>带有畸变的针孔相机</figcaption>
+      </figure>
+    </p>
+<h3 id="校正方法">校正方法</h3>
+<h4 id="检测棋盘角点">检测棋盘角点</h4>
+<p>对相机进行畸变校正的主要思想是给相机展示一些三维空间间位置已知的点，之后寻找这些点在图像上的相应投影位置，最后根据这些对应关系计算相机的相关信息。OpenCV 建议通过从不同角度获取一个棋盘模板图像来校正相机。在这个情况下，可以利用每张棋盘图像上的角点来获取实际位置和投影位置的对应关系，从而计算相机的相关信息。一个示例棋盘模板：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-video/855ZUd.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>从上面这张图也可以很明显的看出相机存在较严重的径向畸变（radial distortion），这种畸变现象在鱼眼镜头中非常普遍。</p>
+<p>OpenCV 提供了一个自动检测棋盘模板中的角点的函数 <code>cv::findChessboardCorners()</code>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">findChessboardCorners</span><span class="params">(InputArray image,	<span class="comment">// source chessboard view</span></span></span></span><br><span class="line"><span class="function"><span class="params">						Size patternSize,		<span class="comment">// number of inner corners per a chessboard row and column </span></span></span></span><br><span class="line"><span class="function"><span class="params">						OutputArray corners,	<span class="comment">// output array of detected corners</span></span></span></span><br><span class="line"><span class="function"><span class="params">						<span class="keyword">int</span> flags=CALIB_CB_ADAPTIVE_THRESH+CALIB_CB_NORMALIZE_IMAGE</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span></span><br></pre></td></tr></table></figure>
+<p>调用它通常只需要提供一幅图像以及棋盘的大小信息（水平和竖直的内角点的数量，如上图中分别是 6 和 4），该方法会返回这些棋盘角点在图像中的位置：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// output vectors of image points</span></span><br><span class="line">std::vector&lt;cv::Point2f&gt; imageCorners;</span><br><span class="line"><span class="comment">// number of corners on the chessboard</span></span><br><span class="line"><span class="function">cv::Size <span class="title">boardSize</span><span class="params">(<span class="number">6</span>, <span class="number">4</span>)</span></span>;</span><br><span class="line"><span class="comment">// Get the chessboard corners</span></span><br><span class="line"><span class="keyword">bool</span> found = cv::<span class="built_in">findChessboardCorners</span>(image,</span><br><span class="line">                                    boardSize,</span><br><span class="line">                                    imageCorners);</span><br></pre></td></tr></table></figure>
+<h4 id="绘制检测得到的结点">绘制检测得到的结点</h4>
+<p>OpenCV 也提供了一个函数用于将检测到的结点画到棋盘图像上：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Draw the corners</span></span><br><span class="line">cv::<span class="built_in">drawChessboardCorners</span>(image,</span><br><span class="line">                        boardSize, imageCorners,</span><br><span class="line">                        found);	<span class="comment">// corners have been found</span></span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-video/855mej.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>这些角点间的线条可以表示这些角点在 vector 中的顺序。</p>
+<h4 id="校正相机">校正相机</h4>
+<p>当检测足够多不同角度的棋盘图像后（大概 10 ～ 20 张），就可以对相机进行校正了，OpenCV 提供了一个函数 <code>cv::calibrateCamera()</code> 进行校正：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">calibrateCamera</span><span class="params">(InputArrayOfArrays objectPoints,	<span class="comment">// a vector of vectors of calibration pattern points </span></span></span></span><br><span class="line"><span class="function"><span class="params">						InputArrayOfArrays imagePoints,	<span class="comment">// a vector of vectors of the projections of calibration pattern points.</span></span></span></span><br><span class="line"><span class="function"><span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">						Size imageSize,	<span class="comment">// size of the image</span></span></span></span><br><span class="line"><span class="function"><span class="params">						InputOutputArray cameraMatrix,	<span class="comment">// output 3x3 floating-point camera matrix </span></span></span></span><br><span class="line"><span class="function"><span class="params">						InputOutputArray distCoeffs,		<span class="comment">// output vector of distortion coefficients </span></span></span></span><br><span class="line"><span class="function"><span class="params">						OutputArrayOfArrays rvecs,		<span class="comment">// output vector of rotation vectors </span></span></span></span><br><span class="line"><span class="function"><span class="params">						OutputArrayOfArrays tvecs,		<span class="comment">// output vector of translation vectors e</span></span></span></span><br><span class="line"><span class="function"><span class="params">						<span class="keyword">int</span> flags=<span class="number">0</span>,						<span class="comment">// flags</span></span></span></span><br><span class="line"><span class="function"><span class="params">						TermCriteria criteria=TermCriteria( <span class="comment">// termination criteria</span></span></span></span><br><span class="line"><span class="function"><span class="params">							TermCriteria::COUNT+TermCriteria::EPS,</span></span></span><br><span class="line"><span class="function"><span class="params">							<span class="number">30</span>, DBL_EPSILON) )</span></span></span><br></pre></td></tr></table></figure>
+<p>调用该函数将可以得到两个重要的输出：相机矩阵 <code>cameraMatrix</code> 和畸变系数 <code>distCoeffs</code> 。</p>
+<p>为了方便，可以将上面的所有步骤封装成一个类 <a target="_blank" rel="noopener" href="https://gist.github.com/9015477">CameraCalibrator</a> ：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CameraCalibrator</span> &#123;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// input points</span></span><br><span class="line">    std::vector&lt;std::vector&lt;cv::Point3f&gt;&gt; objectPoints;</span><br><span class="line">    std::vector&lt;std::vector&lt;cv::Point2f&gt;&gt; imagePoints;</span><br><span class="line">    <span class="comment">// output Matrices</span></span><br><span class="line">    cv::Mat cameraMatrix;</span><br><span class="line">    cv::Mat distCoeffs;</span><br><span class="line">    <span class="comment">// flag to specify how calibration is done</span></span><br><span class="line">    <span class="keyword">int</span> flag;</span><br><span class="line">    <span class="comment">// used in image undistortion </span></span><br><span class="line">    cv::Mat map1,map2; </span><br><span class="line">    <span class="keyword">bool</span> mustInitUndistort;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">CameraCalibrator</span>() : <span class="built_in">flag</span>(<span class="number">0</span>), <span class="built_in">mustInitUndistort</span>(<span class="literal">true</span>) &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Open the chessboard images and extract corner points</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">addChessboardPoints</span><span class="params">(<span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; filelist, cv::Size &amp; boardSize)</span></span>;</span><br><span class="line">    <span class="comment">// Add scene points and corresponding image points</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">addPoints</span><span class="params">(<span class="keyword">const</span> std::vector&lt;cv::Point2f&gt;&amp; imageCorners, <span class="keyword">const</span> std::vector&lt;cv::Point3f&gt;&amp; objectCorners)</span></span>;</span><br><span class="line">    <span class="comment">// Calibrate the camera</span></span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">calibrate</span><span class="params">(cv::Size &amp;imageSize)</span></span>;</span><br><span class="line">    <span class="comment">// Set the calibration flag</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setCalibrationFlag</span><span class="params">(<span class="keyword">bool</span> radial8CoeffEnabled=<span class="literal">false</span>, <span class="keyword">bool</span> tangentialParamEnabled=<span class="literal">false</span>)</span></span>;</span><br><span class="line">    <span class="comment">// Remove distortion in an image (after calibration)</span></span><br><span class="line">    <span class="function">cv::Mat <span class="title">remap</span><span class="params">(<span class="keyword">const</span> cv::Mat &amp;image)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Getters</span></span><br><span class="line">    <span class="function">cv::Mat <span class="title">getCameraMatrix</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> cameraMatrix; &#125;</span><br><span class="line">    <span class="function">cv::Mat <span class="title">getDistCoeffs</span><span class="params">()</span>   </span>&#123; <span class="keyword">return</span> distCoeffs; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>其中：</p>
+<ul>
+<li><code>addChessboardPoints()</code> 函数 - 用于读入一系列的棋盘图像并检测角点；</li>
+<li><code>calibrate()</code> 函数 - 用于进行相机校正，得到相机的参数矩阵和畸变系数；</li>
+<li><code>remap()</code> 函数 - 用于根据相机校正结果修复图像的畸变；</li>
+<li><code>addPoints()</code> 函数 - <code>addChessboardPoints()</code> 在检测完角点后会调用这个函数。也可自己手动调用这个函数添加已知的角点位置和对应的空间坐标点。</li>
+</ul>
+<p>使用示例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">    cv::<span class="built_in">namedWindow</span>(<span class="string">&quot;Image&quot;</span>);</span><br><span class="line">    cv::Mat image;</span><br><span class="line">    std::vector&lt;std::string&gt; filelist;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// generate list of chessboard image filename</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=<span class="number">20</span>; i++) &#123;</span><br><span class="line"></span><br><span class="line">        std::stringstream str;</span><br><span class="line">        str &lt;&lt; <span class="string">&quot;../chessboards/chessboard&quot;</span> &lt;&lt; std::<span class="built_in">setw</span>(<span class="number">2</span>) &lt;&lt; std::<span class="built_in">setfill</span>(<span class="string">&#x27;0&#x27;</span>) &lt;&lt; i &lt;&lt; <span class="string">&quot;.jpg&quot;</span>;</span><br><span class="line">        std::cout &lt;&lt; str.<span class="built_in">str</span>() &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">        filelist.<span class="built_in">push_back</span>(str.<span class="built_in">str</span>());</span><br><span class="line">        image= cv::<span class="built_in">imread</span>(str.<span class="built_in">str</span>(),<span class="number">0</span>);</span><br><span class="line">        cv::<span class="built_in">imshow</span>(<span class="string">&quot;Image&quot;</span>,image);</span><br><span class="line">    </span><br><span class="line">         cv::<span class="built_in">waitKey</span>(<span class="number">100</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Create calibrator object</span></span><br><span class="line">    CameraCalibrator cameraCalibrator;</span><br><span class="line">    <span class="comment">// add the corners from the chessboard</span></span><br><span class="line">    <span class="function">cv::Size <span class="title">boardSize</span><span class="params">(<span class="number">6</span>,<span class="number">4</span>)</span></span>;</span><br><span class="line">    cameraCalibrator.<span class="built_in">addChessboardPoints</span>(</span><br><span class="line">        filelist,	<span class="comment">// filenames of chessboard image</span></span><br><span class="line">        boardSize);	<span class="comment">// size of chessboard</span></span><br><span class="line">        <span class="comment">// calibrate the camera</span></span><br><span class="line">    <span class="comment">//	cameraCalibrator.setCalibrationFlag(true,true);</span></span><br><span class="line">    cameraCalibrator.<span class="built_in">calibrate</span>(image.<span class="built_in">size</span>());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Image Undistortion</span></span><br><span class="line">    image = cv::<span class="built_in">imread</span>(filelist[<span class="number">6</span>]);</span><br><span class="line">    cv::Mat uImage= cameraCalibrator.<span class="built_in">remap</span>(image);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// display camera matrix</span></span><br><span class="line">    cv::Mat cameraMatrix= cameraCalibrator.<span class="built_in">getCameraMatrix</span>();</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot; Camera intrinsic: &quot;</span> &lt;&lt; cameraMatrix.rows &lt;&lt; <span class="string">&quot;x&quot;</span> &lt;&lt; cameraMatrix.cols &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; cameraMatrix.at&lt;<span class="keyword">double</span>&gt;(<span class="number">0</span>,<span class="number">0</span>) &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; cameraMatrix.at&lt;<span class="keyword">double</span>&gt;(<span class="number">0</span>,<span class="number">1</span>) &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; cameraMatrix.at&lt;<span class="keyword">double</span>&gt;(<span class="number">0</span>,<span class="number">2</span>) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; cameraMatrix.at&lt;<span class="keyword">double</span>&gt;(<span class="number">1</span>,<span class="number">0</span>) &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; cameraMatrix.at&lt;<span class="keyword">double</span>&gt;(<span class="number">1</span>,<span class="number">1</span>) &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; cameraMatrix.at&lt;<span class="keyword">double</span>&gt;(<span class="number">1</span>,<span class="number">2</span>) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; cameraMatrix.at&lt;<span class="keyword">double</span>&gt;(<span class="number">2</span>,<span class="number">0</span>) &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; cameraMatrix.at&lt;<span class="keyword">double</span>&gt;(<span class="number">2</span>,<span class="number">1</span>) &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; cameraMatrix.at&lt;<span class="keyword">double</span>&gt;(<span class="number">2</span>,<span class="number">2</span>) &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">imshow</span>(<span class="string">&quot;Original Image&quot;</span>, image);</span><br><span class="line">    <span class="built_in">imshow</span>(<span class="string">&quot;Undistorted Image&quot;</span>, uImage);</span><br><span class="line"></span><br><span class="line">    cv::<span class="built_in">waitKey</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-video/855N91.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h2 id="双目视觉">双目视觉</h2>
+<h3 id="基本矩阵">基本矩阵</h3>
+<h4 id="背景知识">背景知识</h4>
+<p>通过两个摄像头在不同的角度同时捕获同个场景，可以获得场景的空间信息，这个技术称为双目视觉。</p>
+<p>考虑两个相机观察同一个场景点：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-video/855MRL.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>由图可以看出，我们可以通过直接连接一个三维空间点 X 和左侧相机的中心点来找到其在左侧相机的成像中的位置 x 。反过来考虑，一个成像点 x 所对应的实际三维空间点的位置一定在这条直线上。这意味着，如果我们需要找到点 x 在第二台相机的成像位置 I’，我们需要找到第一条线在第二个相机的投影位置，这条线称为点 x 的 <strong>核线</strong> （epipolar line）。核线的角度取决于两个相机的相对位置。实际上，核线的位置与整个双目视觉系统的几何形状有关。</p>
+<p>另一个可以观察得到的是所有核线都会经过一点 （图中的 e 或 e’），这个点是一个相机中心点在另一个相机的投影位置，这个特殊的点称为 <strong>核点</strong> （epipole）。</p>
+<p>从数学角度上看，一个成像点和其对应的核线可以使用如下的 3x3 的矩阵来表示：</p>
+<p>\[\begin{bmatrix} l'_{1} \\ l'_{2} \\ l'_{3} \end{bmatrix} = F \begin{bmatrix} x \\ y \\ 1 \end{bmatrix} \]</p>
+<p>上面的公式表示一组 2D 点 \((x',y')\) 满足方程 \(l'_{1}x' + l'_{2}y' + l'_{3} = 0\) 。矩阵 F 称为 <strong>基本矩阵</strong> （fundamental matrix），可以将一个视点的 2D 图像点映射到另一个视点的核线上。</p>
+<h4 id="计算方法">计算方法</h4>
+<p>计算基本矩阵将是构建双目视觉系统的基础，方法是从两幅图像之间的若干已知配对点来计算一系列的方程。这些配对点可以使用<a href="#%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D">特征匹配</a>一节得到的配对结果。配对的最小数量是 7 。</p>
+<p>OpenCV 提供了一个函数 <code>cv::findFundamentalMat()</code> 来计算基本矩阵：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Mat <span class="title">findFundamentalMat</span><span class="params">(InputArray points1,	<span class="comment">// array of N points from the first image</span></span></span></span><br><span class="line"><span class="function"><span class="params">					InputArray points2,		<span class="comment">// array of N points from the second image.</span></span></span></span><br><span class="line"><span class="function"><span class="params">					<span class="keyword">int</span> method=FM_RANSAC,		<span class="comment">// method for computing a fundamental matrix</span></span></span></span><br><span class="line"><span class="function"><span class="params">					<span class="keyword">double</span> param1=<span class="number">3.</span>,			<span class="comment">// parameter used for RANSAC</span></span></span></span><br><span class="line"><span class="function"><span class="params">					<span class="keyword">double</span> param2=<span class="number">0.99</span>,		<span class="comment">// parameter used for RANSAC or LMedS methods only</span></span></span></span><br><span class="line"><span class="function"><span class="params">					OutputArray mask=noArray() )</span><span class="comment">// output array of N elements</span></span></span><br></pre></td></tr></table></figure>
+<p>要使用这个函数，需要注意特征点的类型。<code>cv::findFundamentalMat</code> 接收的点的类型是 <code>cv::Point2F</code> ，因此对于通过特征匹配得到的 <code>cv::Keypoint</code> 类型的特征点，我们需要将它们转换成 <code>cv::Point2f</code> 类型：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Convert keypoints into Point2f</span></span><br><span class="line">std::vector&lt;cv::Point2f&gt; selPoints1, selPoints2;</span><br><span class="line">cv::KeyPoint::<span class="built_in">convert</span>(keypoints1, selPoints1, pointIndexes1);</span><br><span class="line">cv::KeyPoint::<span class="built_in">convert</span>(keypoints2, selPoints2, pointIndexes1);</span><br></pre></td></tr></table></figure>
+<p>两个 vector （selPoints1 和 selPoints2） 包含了两张图像中的配对点。之后调用 <code>cv::findFundamentalMat()</code> 函数如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Compute F matrix from 7 matches</span></span><br><span class="line">cv::Mat fundamental = cv::<span class="built_in">findFundamentalMat</span>(</span><br><span class="line">    cv::<span class="built_in">Mat</span> (selPoints1),	<span class="comment">// points in first image</span></span><br><span class="line">    cv::<span class="built_in">Mat</span> (selPoints2),	<span class="comment">// points in second image</span></span><br><span class="line">    );</span><br></pre></td></tr></table></figure>
+<p>可以将核线画出来，以验证基本矩阵的正确性。 OpenCV 提供了一个函数 <code>cv::computeCorrespondEpilines()</code> 来根据一些输入点和基本矩阵得到核线，之后就可以使用 <code>cv::line()</code> 函数将这些核线画出。示例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// draw the left points corresponding epipolar</span></span><br><span class="line"><span class="comment">// lines in right image</span></span><br><span class="line">std::vector&lt;cv::Vec3f&gt; lines1;</span><br><span class="line">cv::<span class="built_in">computeCorrespondEpilines</span>(</span><br><span class="line">    cv::<span class="built_in">Mat</span>(selPoints1), <span class="comment">// image points</span></span><br><span class="line">    <span class="number">1</span>,</span><br><span class="line">    <span class="comment">// in image 1 (can also be 2)</span></span><br><span class="line">    fundemental, <span class="comment">// F matrix</span></span><br><span class="line">    lines1);</span><br><span class="line"><span class="comment">// vector of epipolar lines</span></span><br><span class="line"><span class="comment">// for all epipolar lines</span></span><br><span class="line"><span class="keyword">for</span> (vector&lt;cv::Vec3f&gt;::const_iterator it= lines1.<span class="built_in">begin</span>();</span><br><span class="line">    it!=lines1.<span class="built_in">end</span>(); ++it) &#123;</span><br><span class="line">        <span class="comment">// draw the line between first and last column</span></span><br><span class="line">        cv::<span class="built_in">line</span>(image2,</span><br><span class="line">        cv::<span class="built_in">Point</span>(<span class="number">0</span>,-(*it)[<span class="number">2</span>]/(*it)[<span class="number">1</span>]),</span><br><span class="line">        cv::<span class="built_in">Point</span>(image2.cols,-((*it)[<span class="number">2</span>]+</span><br><span class="line">            (*it)[<span class="number">0</span>]*image2.cols)/(*it)[<span class="number">1</span>]),</span><br><span class="line">            cv::<span class="built_in">Scalar</span>(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-video/855ZbR.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>图像中，所有的核线都会经过一点，这个点如前面所述就是核点，它是另一个相机中心点的投影。有时候，核点会落在图像的外面。</p>
+<h3 id="双目图像匹配">双目图像匹配</h3>
+<p>要进行图像匹配，之前已经给出了若干基于<a href="#%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D">特征匹配</a>的方法。但对于双目系统，存在可靠的特征匹配方法：当在两幅图像间进行特征匹配时，只接受落在对应的核线中的配对点。不过，要进行这个条件判断，先得计算基本矩阵，而基本矩阵又是根据配对点估算出来的。这看起来是一个先有鸡还是先有蛋的问题。下面介绍一种基于 RANSAC（RANdom SAmpling Consensus） 算法的配对算法，可以一边计算基本矩阵，一边寻找一组较优的配对点：</p>
+<ol>
+<li>检测特征点，并提取特征描述子；</li>
+<li>使用K近邻算法配对特征点，先找出其第一幅图中每个特征点在第二幅图中最佳的两个配对，然后找出第二幅图中每个特征点在第一幅图中最佳的两个配对；</li>
+<li>NN 率测试：对于每个特征点，如果其两个最佳配对点的描述子和该特征点的描述子非常接近，则这选择任何一个配对都可能导致错误，两组都不够优，因此将两组配对都移除；</li>
+<li>对称性测试：对于每个特征点，如果它的描述子和第一个配对点的描述子距离很小，而和第二个配对点的描述子距离很大，那么可以判定第一个配对点更优，因此将第二个配对移除；</li>
+<li>RANSAC测试：使用 RANSAC 算法来移除没有落在核线的特征点。RANSAC 是一种用来从一组包含 outliers 的数据中估算参数的迭代算法。在这里，我们每次随机采样 8 对配对点，计算其对应的基本矩阵并测试是否处于核线上，测试剩下的配对点构成了基本矩阵的支撑集。可想而知，如果一次随机取样的配对点包含错误，那么被删除的配对点就比较多，那么最后该支撑集就会比较小。迭代一定的次数后，我们从结果中挑出剩余配对点最多的，即最大的一个支撑集。</li>
+</ol>
+<p>可以使用一个封装好的 <a target="_blank" rel="noopener" href="https://gist.github.com/9017475">RobustMatcher</a> 类。其中：</p>
+<ul>
+<li><code>match()</code> 函数 - 核心匹配函数。返回匹配点、检测到的特征点和求得的基本矩阵；</li>
+<li><code>ratioTest()</code> 函数 - 用于 NN 率测试；</li>
+<li><code>symmetryTest()</code> 函数 - 用于对称性测试；</li>
+<li><code>ransacTest()</code> 函数 - 用于 RANSAC 测试。</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Prepare the matcher</span></span><br><span class="line">RobustMatcher rmatcher;</span><br><span class="line">rmatcher.<span class="built_in">setConfidenceLevel</span>(<span class="number">0.98</span>);</span><br><span class="line">rmatcher.<span class="built_in">setMinDistanceToEpipolar</span>(<span class="number">1.0</span>);</span><br><span class="line">rmatcher.<span class="built_in">setRatio</span>(<span class="number">0.65f</span>);</span><br><span class="line">cv::Ptr&lt;cv::FeatureDetector&gt; pfd=</span><br><span class="line">    <span class="keyword">new</span> cv::<span class="built_in">SurfFeatureDetector</span>(<span class="number">10</span>);</span><br><span class="line">rmatcher.<span class="built_in">setFeatureDetector</span>(pfd);</span><br><span class="line"><span class="comment">// Match the two images</span></span><br><span class="line">std::vector&lt;cv::DMatch&gt; matches;</span><br><span class="line">std::vector&lt;cv::KeyPoint&gt; keypoints1, keypoints2;</span><br><span class="line">cv::Mat fundemental= rmatcher.<span class="built_in">match</span>(image1,image2,</span><br><span class="line">                    matches, keypoints1, keypoints2);</span><br></pre></td></tr></table></figure>
+<p>对示例图片使用该算法后产生了 23 组配对，且这些都落在了核线上：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-video/855mlX.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>值得注意的是，该类默认使用 SURF 特征点，也可以很容易的通过 <code>setFeatureDetector()</code> 函数和 <code>setDescriptorExtractor()</code> 函数扩展其他类型的特征点：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Set the feature detector</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setFeatureDetector</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">	cv::Ptr&lt;cv::FeatureDetector&gt;&amp; detect)</span> </span>&#123;</span><br><span class="line">    detector= detect;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Set the descriptor extractor</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setDescriptorExtractor</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">cv::Ptr&lt;cv::DescriptorExtractor&gt;&amp; desc)</span> </span>&#123;</span><br><span class="line">    extractor= desc;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="单应矩阵">单应矩阵</h3>
+<h4 id="基本知识">基本知识</h4>
+<p>如果一个视点只是另一个视点的旋转，那么此时基本矩阵是无定义的，取而代之的，可以使用单应（Homography）矩阵来进行图像配对。和基本矩阵类似，单应矩阵也是一种可以从一对图像计算得到的矩阵，其大小也是 3x3 。单应矩阵揭示了一个视点的成像中的一点与另一个视点成像中的一点满足如下线性关系：</p>
+<p>\[\begin{bmatrix} sx'\\ sy' \\ s \end{bmatrix} = H \begin{bmatrix} x \\ y \\ l \end{bmatrix} \]</p>
+<p>其中， \(H\) 是该单应矩阵，\(s\) 是尺度因子。若算出了该单应矩阵，那么一个视点的成像中的所有点将可以根据这个式子找到其在另一个视点的成像中的位置。要注意，单应矩阵只在这种特殊情况下才存在。</p>
+<h4 id="计算方法-v2">计算方法</h4>
+<p>OpenCV 提供了 <code>cv::findHomography()</code> 函数用来计算单应矩阵：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Mat <span class="title">findHomography</span><span class="params">(InputArray srcPoints,</span></span></span><br><span class="line"><span class="function"><span class="params">				InputArray dstPoints,</span></span></span><br><span class="line"><span class="function"><span class="params">				<span class="keyword">int</span> method=<span class="number">0</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">				<span class="keyword">double</span> ransacReprojThreshold=<span class="number">3</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">				OutputArray mask=noArray() )</span></span></span><br></pre></td></tr></table></figure>
+<p>在一个视点是另一个视点的旋转的情况下，同样可以使用前面提及的 RobustMatcher 类来进行图像配对，唯一的不同是在 RANSAC 测试中，计算基本矩阵改成了计算单应矩阵：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Find the homography between image 1 and image 2</span></span><br><span class="line"><span class="function">std::vector&lt;uchar&gt; <span class="title">inliers</span><span class="params">(points1.size(),<span class="number">0</span>)</span></span>;</span><br><span class="line">cv::Mat homography= cv::<span class="built_in">findHomography</span>(</span><br><span class="line">    cv::<span class="built_in">Mat</span>(points1),	<span class="comment">// corresponding</span></span><br><span class="line">    cv::<span class="built_in">Mat</span>(points2),	<span class="comment">// points</span></span><br><span class="line">    inliers,			<span class="comment">// outputted inliers matches</span></span><br><span class="line">    CV_RANSAC,		<span class="comment">// RANSAC method</span></span><br><span class="line">    <span class="number">1.</span>);				<span class="comment">// max distance to reprojection point</span></span><br></pre></td></tr></table></figure>
+<p>得到的匹配点：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-video/855zvd.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-video/855A6j.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>一旦得到了单应矩阵，我们可以很容易的确定图像中的一点在另一张图像中的位置。根据这个对应关系，我们可以把一张图从原来的视角变形到另一张图的视角：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Warp image 1 to image 2</span></span><br><span class="line">cv::Mat result;</span><br><span class="line">cv::<span class="built_in">warpPerspective</span>(image1,	<span class="comment">// input image</span></span><br><span class="line">                    result,	<span class="comment">// output image</span></span><br><span class="line">                    homography, <span class="comment">// homography</span></span><br><span class="line">                    cv::<span class="built_in">Size</span>(<span class="number">2</span>*image1.cols,</span><br><span class="line">                               image1.rows));	<span class="comment">// size of output image</span></span><br></pre></td></tr></table></figure>
+<p>值得注意的是，默认得到的单应矩阵如果用来将第一张图的视角变到第二张图的视角，应该使用这个单应矩阵的逆矩阵。因此，<code>cv::warpPerspective()</code> 函数默认会先计算传入的单应矩阵的逆矩阵，然后用这个逆矩阵来变形。如果传入的矩阵已经是单应矩阵的逆矩阵，则可以在调用时指定 flag 参数为 <code>cv::WARP_INVERSE_MAP</code> 。</p>
+<p>之后，可以把另一张图和这张已经处在同一视点的图拼接在一起：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Copy image 1 on the first half of full image</span></span><br><span class="line"><span class="function">cv::Mat <span class="title">half</span><span class="params">(result, cv::Rect(<span class="number">0</span>, <span class="number">0</span>, image2.cols, image2.rows))</span></span>;</span><br><span class="line">image2.<span class="built_in">copyTo</span>(half);	<span class="comment">// copy image2 to image1 roi</span></span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/opencv-video/855nY2.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>这里用“稳定”这个形容词是指统计意义上的稳定，因为 mean-shift 忽略了数据中的 outliers ，即忽略远离数据峰值的点。mean-shift仅对数据局部窗口中的点进行处理，处理完成后再移动窗口。 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/opencv-image.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/opencv-tables.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '视频处理'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

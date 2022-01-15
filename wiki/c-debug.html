@@ -1,0 +1,1062 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>调试 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="跟踪调试：GDB
+gdb 是由 GNU 软件系统社区提供的调试器，同 gcc 配套组成了一套完整的开发环境，可移植性很好，支持非常多的体系结构并被移植到各种系统中（包括各种类 Unix 系统与 Windows 系统里的 MinGW 和 Cygwin ）。此外，除了 C 语言之外，gcc/gdb 还支">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="调试"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '调试'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 调试</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="跟踪调试：GDB">跟踪调试：GDB</h2>
+<p>gdb 是由 GNU 软件系统社区提供的调试器，同 gcc 配套组成了一套完整的开发环境，可移植性很好，支持非常多的体系结构并被移植到各种系统中（包括各种类 Unix 系统与 Windows 系统里的 MinGW 和 Cygwin ）。此外，除了 C 语言之外，gcc/gdb 还支持包括 C++、Objective-C、Ada 和 Pascal 等各种语言后端的编译和调试。 gcc/gdb 是 Linux 和许多类 Unix 系统中的标准开发环境，Linux 内核也是专门针对 gcc 进行编码的。</p>
+<p>gdb 的吉祥物是专门捕杀 bug 的射手鱼:</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/c-debug/archer.jpg" alt="gdb的logo" />
+        <figcaption>gdb的logo</figcaption>
+      </figure>
+    </p>
+<blockquote>
+<p>For a fish, the archer fish is known to shoot down bugs from low hanging plants by spitting water at them.</p>
+</blockquote>
+<h3 id="为调试做好准备">为调试做好准备</h3>
+<p>通常，在为调试而编译时，我们会(在尽量不影响程序行为的情况下)关掉编译器的优化选项(<code>-O</code>)， 并打开调试选项(<code>-g</code>)。另外，<code>-Wall</code> 选项打开所有 warning，也可以发现许多问题，避免一些不必要的 bug:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -g -Wall program.c -o program</span><br></pre></td></tr></table></figure>
+<p><code>-g</code>选项的作用是在可执行文件中加入源代码的信息，比如可执行文件中第几条机器指令对应源代码的第几行，但并不是把整个源文件嵌入到可执行文件中，所以在调试时必须保证gdb能找到源文件。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  如果使用Makefile进行编译，可以在执行make时使用<code>CFLAGS=-g</code>选项，将可以为每次编译都添加<code>-g</code>选项。详见<a href="/wiki/tools-makefile.html#%E5%B8%B8%E7%94%A8%E9%80%89%E9%A1%B9">直接在命令行定义Makefile变量</a>
+</div>
+<h3 id="在-GDB-SHELL-中调试">在 GDB SHELL 中调试</h3>
+<p>编译好之后用 gdb 启动要调试的程序：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gdb program</span><br></pre></td></tr></table></figure>
+<p>之后会出现 gdb 的 shell，输入</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">run args</span><br></pre></td></tr></table></figure>
+<p>即可启动程序，args 是传递给程序的命令行参数。当然，在启动之前，通常会先设置断点，并熟悉一下相关的命令。</p>
+<h3 id="常用命令">常用命令</h3>
+<p>以下列出一些常用的命令(括号里的字符表示缩写，具体语法请参见帮助文档):</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>backtrace（或bt）</td>
+<td>查看各级函数调用及参数，与where命令等效。</td>
+</tr>
+<tr>
+<td>break（或b）</td>
+<td>设置断点。<code>break if</code> 可以设置断点在满足某个条件时才激活，如<code>break 9 if num != 0</code>。</td>
+</tr>
+<tr>
+<td>delete（或d）</td>
+<td>delete 是一系列命令，最常用的是删除断点 <code>delete breakpoints 断点号</code>，不加断点号则提问是否删除所有断点。</td>
+</tr>
+<tr>
+<td>disable</td>
+<td>和 delete 相似，但只是禁用而不是删除。</td>
+</tr>
+<tr>
+<td>condition</td>
+<td>为断点指定条件。例如，<code>cond 1 argc==1</code> 为编号为 1 的断点设置条件 <code>argc==1</code>。</td>
+</tr>
+<tr>
+<td>continue（或c）</td>
+<td>连续运行直到下个断点</td>
+</tr>
+<tr>
+<td>finish</td>
+<td>连续运行到当前函数返回为止，然后停下来等待命令</td>
+</tr>
+<tr>
+<td>frame（或f） 帧编号</td>
+<td>选择栈帧</td>
+</tr>
+<tr>
+<td>info（或i）</td>
+<td>info 是一系列命令，其中最常用的是列出所有断点的 <code>info breakpoints</code> 和查看当前栈帧局部变量的 <code>info locals</code></td>
+</tr>
+<tr>
+<td>list（或l）</td>
+<td>列出源代码，接着上次的位置往下列，每次列10行</td>
+</tr>
+<tr>
+<td>list 行号</td>
+<td>列出从第几行开始的源代码</td>
+</tr>
+<tr>
+<td>list 函数名</td>
+<td>列出某个函数的源代码</td>
+</tr>
+<tr>
+<td>next（或n）</td>
+<td>单步执行下一行语句</td>
+</tr>
+<tr>
+<td>print（或p）</td>
+<td>打印表达式的值，通过表达式可以修改变量的值或者调用函数</td>
+</tr>
+<tr>
+<td>quit（或q）</td>
+<td>退出gdb调试环境</td>
+</tr>
+<tr>
+<td>set var</td>
+<td>修改变量的值</td>
+</tr>
+<tr>
+<td>start</td>
+<td>开始执行程序，停在main函数第一行语句前面等待命令</td>
+</tr>
+<tr>
+<td>step（或s）</td>
+<td>单步执行下一行语句，如果有函数调用则进入到函数中</td>
+</tr>
+<tr>
+<td>quit（或q）</td>
+<td>退出调试器。</td>
+</tr>
+<tr>
+<td>run（或r）</td>
+<td>启动程序，可以给程序传递命令行参数，也支持重定向操作</td>
+</tr>
+<tr>
+<td>display 变量名</td>
+<td>跟踪查看某个变量，每次停下来都显示它的值。</td>
+</tr>
+<tr>
+<td>undisplay 跟踪显示号</td>
+<td>可以取消跟踪显示。</td>
+</tr>
+<tr>
+<td>watch</td>
+<td>设置观察点。</td>
+</tr>
+<tr>
+<td>x</td>
+<td>从某个位置开始打印存储单元的内容，全部当成字节来看，而不区分哪个字节属于哪个变量</td>
+</tr>
+</tbody>
+</table>
+<p>一个典型的 gdb 调试的过程是启动程序，<code>run</code> 运行，程序出错退出，用 <code>where</code> 查到出错的位置，设置断点，重新运行程序，然后在出错的附件使用 <code>next</code> 和 <code>step</code> 单步跟踪，并查出问题所在。</p>
+<h3 id="GDB-之歌">GDB 之歌</h3>
+<p>这是一首改编自经典儿歌 <a target="_blank" rel="noopener" href="http://music.baidu.com/song/8817557">ABC</a> 的歌曲，出自<a target="_blank" rel="noopener" href="http://www.gnu.org/music/gdb-song.html">GNU</a>。不仅有趣，而且还介绍了 run、print、set、quit 几个有用的功能。不过个人觉得D和B两句歌词的后半句应该对换，你觉得呢？😉</p>
+<blockquote>
+
+<p>Let’s start at the very beginning, a very good place to start,</p>
+<p>When you’re learning to sing, its Do, Re, Mi;</p>
+<p>When you’re learning to code, its G, D, B.</p>
+<p>(background) G, D, B.</p>
+<p>The first three letters just happen to be, G, D, B.</p>
+<p>(background) G, D, B.</p>
+<p>(Chorus)</p>
+<p>G!,</p>
+<p>GNU!, it’s Stallman’s hope,</p>
+<p>D,</p>
+<p>a break I set myself.</p>
+<p>B,</p>
+<p>debug that rotten code,</p>
+<p>Run,</p>
+<p>a far, far way to go.</p>
+<p>Print,</p>
+<p>to see what you have done,</p>
+<p>Set,</p>
+<p>a patch that follows print.</p>
+<p>Quit,</p>
+<p>and recompile your code - - -</p>
+<p>That will bring it back to G, D, B,</p>
+<p>(Resume from the Chorus)</p>
+
+
+</blockquote>
+
+<h3 id="高级功能">高级功能</h3>
+<p>gdb 有一些很强大的高级功能，特别是在 7.0 里加入了逆向调试和Python 脚本的支持。</p>
+<p>逆向调试，顾名思义就是逆向地执行程序，相关指令包括 reverse-continue、reverse-next 和 reverse-step 等。逆向执行实际并不是在“执行”程序，而是把程序“回滚”到之前的状态，考虑最简单的情况，一个变量赋值，要逆向执行，就是要恢复其被赋值之前的值，如果对于整个程序而言的话，那么为了能够回滚，程序每执行一步的所有状态都需要记录下来，即便是通过一些增量式的存储技术，也是相当大的数据量，而且程序的执行速度可能会被进一步拖慢。</p>
+<p>逆向调试在某些情况下也许会比较有用，比如一个很难跟踪的 bug，单步执行的时候不小心多按了一下 step，这个时候就希望能够 reverse-step 一下，否则就又要从头跟踪一遍了。另一方面，逆向调试并不是万金油(且不说目前 gdb 的这个技术还处在比较初步的阶段)，设想，如果一条程序语句的功能是发送一封 email，那 reverse-next 一下难道还能把它再撤回来吗？</p>
+<p>关于 Python 脚本支持，指的是可以在 gdb 里写一些 Python 脚本来控制调试过程，例如，考虑一个复杂的断点条件“某个变量等于特定值并且栈的前一帧的函数名是 foobar”之类的，没法用 C 语言表达式表达出来的，就可以写一个Python 函数来测试断点条件是否满足。</p>
+<h3 id="GDB的可视化前端">GDB的可视化前端</h3>
+<p>直接使用 gdb 有一些不太方便的地方，比如查看源代码很麻烦，而且断点的设置也有点痛苦(如果要具体到某一行的话，需要手工输入文件名、行号)。 可以使用可视化的工具来减轻这种痛苦。</p>
+<h4 id="EMACS-中使用-GDB">EMACS 中使用 GDB</h4>
+<p>Emacs是一个功能齐全，可扩展性很好的编辑器，它也对 gdb 有比较好的支持，可以当作一个轻量级的 gdb 前端使用。在 Emacs 使用 M-x gdb 即可启动 gdb 调试器，启动之后工具栏会发生变化，并且菜单栏会出现相应的菜单项，与 Visual Studio 类似。一个典型的 Emacs 调试窗口如下图所示：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/c-debug/emacs-gdb.png" alt="在Emacs中使用 gdb 调试器" />
+        <figcaption>在Emacs中使用 gdb 调试器</figcaption>
+      </figure>
+    </p>
+<p>虽然如此，通常调试时还是直接在图中的 gdb shell 中输入 gdb 命令，而不是使用工具栏。比直接使用 gdb shell 更好的地方在于现在可以直接同步地看到带语法高亮的正在执行的源代码(黑色的小箭头)，并且可以像 Visual Studio 那样通过直接在代码左边点击来添加和删除断点(如果是在不支持鼠标操作的终端中，可以使用 <code>C-x C-a C-b</code> 和 <code>C-x C-a C-d</code> 来做同样的操作)。</p>
+<h3 id="DDD">DDD</h3>
+<p><a target="_blank" rel="noopener" href="http://www.gnu.org/software/ddd/">GNU DDD</a> 也是一个可视化的调试器前端，它支持 GDB，DBX，WDB，Ladebug，JDB，XDB，the Perl debugger，the bash debugger bashdb，the GNU Make debugger remake 以及 Python 的调试器 pydb。相关的用法，可以参考<a target="_blank" rel="noopener" href="http://www.gnu.org/software/ddd/manual/">官方教程</a>。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/c-debug/ddd.png" alt="GNU DDD" />
+        <figcaption>GNU DDD</figcaption>
+      </figure>
+    </p>
+<h2 id="内存调试：valgrind">内存调试：valgrind</h2>
+<p>C 语言的其中一个强大的地方就在于可以直接对内存进行许多底层的操作，同时这个特性也成为了一个相当繁荣的 bug 家族——内存 bug 滋生的温床。常见的内存 bug 通常包括:</p>
+<ul>
+<li>内存泄漏:这是需要长期运行的服务程序的最致命的杀手之一。</li>
+<li>缓冲区溢出:众所周知的安全隐患，非常大一部分系统安全问题(包括入侵、感染等)都是由缓冲区溢出引起的。结果现在 Visual C++编译器对 C标准库里的诸如 gets、 strcpy 等函数一律报 C4996 警告，可见微软对缓冲区溢出的问题也是咬牙切齿啊。</li>
+<li>野指针，或者是非法内存访问。是另一类非常常见的错误，如果运气好，被操作系统及时捕捉到了异常行为，则情况还比较乐观。在 Linux 下通常会表现为程序出现 segmentation fault(段错误)而退出。</li>
+<li>内存未初始化，相比它的前面几位兄弟，这个 bug 似乎名气要小一点，但是绝对也是无孔不入，不太出名是因为它通常没有自己独特的表现形式，但是他善于制造混乱，产生各种其他的诡异问题，并且由于未初始化的内容通常是随机的，因此在不同的时间、地点运行有可能会产生不同的结果，不易重现，很难调试。</li>
+</ul>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/c-debug/st-george-dragon.png" alt="valgrind" />
+        <figcaption>valgrind</figcaption>
+      </figure>
+    </p>
+<p>Valgrind是一套Linux下，开放源代码（GPL V2）的仿真调试工具的集合。Valgrind由内核（core）以及基于内核的其他调试工具组成。内核类似于一个框架（framework），它模拟了一个CPU环境，并提供服务给其他工具；而其他工具则类似于插件 (plug-in)，利用内核提供的服务完成各种特定的内存调试任务。</p>
+<h3 id="Valgrind-体系结构">Valgrind 体系结构</h3>
+<p>Valgrind 的体系结构如下图所示：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/c-debug/valgrind-arch.jpg" alt="Valgrind的体系结构" />
+        <figcaption>Valgrind的体系结构</figcaption>
+      </figure>
+    </p>
+<p>Valgrind 包括如下一些工具：</p>
+<ul>
+<li><strong>Memcheck</strong>。这是valgrind应用最广泛的工具，一个重量级的内存检查器，能够发现开发中绝大多数内存错误使用情况，比如：使用未初始化的内存，使用已经释放了的内存，内存访问越界等。这也是本文将重点介绍的部分。</li>
+<li><strong>Callgrind</strong>。它主要用来检查程序中函数调用过程中出现的问题。</li>
+<li><strong>Cachegrind</strong>。它主要用来检查程序中缓存使用出现的问题。</li>
+<li><strong>Helgrind</strong>。它主要用来检查多线程程序中出现的竞争问题。</li>
+<li><strong>Massif</strong>。它主要用来检查程序中堆栈使用中出现的问题。</li>
+<li><strong>Extension</strong>。可以利用core提供的功能，自己编写特定的内存调试工具。</li>
+</ul>
+<h3 id="使用-Valgrind">使用 Valgrind</h3>
+<p>利用valgrind调试内存问题，不需要重新编译源程序，它的输入就是二进制的可执行程序（需要使用 <code>-g</code> 选项编译）。调用Valgrind的通用格式是：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">valgrind [valgrind-options] your-prog [your-prog-options]</span><br></pre></td></tr></table></figure>
+<p>Valgrind 的参数分为两类，一类是 core 的参数，它对所有的工具都适用；另外一类就是具体某个工具如 memcheck 的参数。Valgrind 默认的工具就是 memcheck，也可以通过“–tool=tool name”指定其他的工具。例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ valgrind --tool=memcheck --leak-check=yes ./program</span><br></pre></td></tr></table></figure>
+<p>valgrind 会运行程序，并把生成的报告打印到终端上，输出类似于这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x3D;&#x3D;19389&#x3D;&#x3D; Invalid write of size 1</span><br><span class="line">&#x3D;&#x3D;19389&#x3D;&#x3D; at 0x4C22F0F: strcpy (in ...)</span><br><span class="line">&#x3D;&#x3D;19389&#x3D;&#x3D; by 0x400692: copy_string (buggy.c:11)</span><br><span class="line">&#x3D;&#x3D;19389&#x3D;&#x3D; by 0x4006B6: main (buggy.c:16)</span><br><span class="line">&#x3D;&#x3D;19389&#x3D;&#x3D; Address 0x5179053 is 0 bytes after a block of size 19 alloc&#39;d</span><br><span class="line">&#x3D;&#x3D;19389&#x3D;&#x3D; at 0x4C21E03: malloc (in ...)</span><br><span class="line">&#x3D;&#x3D;19389&#x3D;&#x3D; by 0x400663: copy_string (buggy.c:6)</span><br><span class="line">&#x3D;&#x3D;19389&#x3D;&#x3D; by 0x4006B6: main (buggy.c:16)</span><br></pre></td></tr></table></figure>
+<p>前面的 19389 是程序的进程标识符(Pid)，在同时跟踪多个程序时可以用于区分，这里可以忽略。输出的内容非常详细，可读性很好，这里的输出大致是说分配了 19 字节的数据，但是却多写了一个字节。同时还给出了出错的源文件以及行号，一般定位之后就很容易查出问题了。</p>
+<p>其他的一些输出就不一一列在这里了，一般都能看得懂，另外，valgrind 的一些高级用法以及如何用来做 profiling，可以参考<a target="_blank" rel="noopener" href="http://valgrind.org/docs/manual/index.html">官方文档</a>。</p>
+<h2 id="无调试器调试">无调试器调试</h2>
+<p>调试器的出现固然极大地改善了可怜的程序员们的生活水平，然而调试器也并不总是扮演救世主的角色，例如，在有复杂竞争条件的多线程程序或者分布式程序中，调试器所能起的作用通常都不大。另外，调试运行和正常运行的程序实际上是有一定的差异的，有些神奇的 bug，当你以正常方式运行程序时，它跑出来作威作福，可以当你以调试模式运行程序的时候，它就躲得无影无踪了。更为极端的情况是没有调试器可以用，如果 gdb 的开发人员需要用 gdb 来调试 gdb 都还可以接受的话，那么 Linux kernel 的开发人员就真的是悲剧了。</p>
+<p>因此，很多时候，我们需要在没有调试器的情况下进行调试，幸运的是，在这样的情况下，也是有一些约定的方法可以遵循的。</p>
+<h3 id="core-dump">core dump</h3>
+<p>在 Linux 下，程序如果出现段错误退出，会产生 core dump 文件，默认情况下被 ulimit 禁用了这个功能，运行下面这个命令：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ulimit -c <span class="number">5000</span></span><br></pre></td></tr></table></figure>
+<p>将允许系统产生 5kB 以内的 core dump 文件，可以根据自己的需求调整大小，并写到 shell 的启动脚本里。系统生成的 core dump 文件通常就是叫做 core，包含了程序出错时的整个状态，用 gdb 加载 core 文件:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gdb program core</span><br></pre></td></tr></table></figure>
+<p>就可以进行一些事后分析，例如，可以通过 backtrace 命令查出出错时的调用栈，并查看一些变量的值等，通常对于定位 bug 有很大的帮助。</p>
+<h3 id="printf-调试">printf 调试</h3>
+<p>printf 调试泛指通过记录程序执行状态来做调试的方法。具体来说，通常我们对于程序的行为和状态都有一些期望的值，通过将程序运行时的实际值打印出来，与期望的情况进行对比，就可以逐渐找到问题的所在。然而这种方法操作起来却有一些相当繁琐的地方:</p>
+<p>首先，由于不知道问题出在哪里，又不能在所有的地方都添加输出语句(输出信息太多的话，要找到问题就变得困难了)，所以通常会在可疑的地方添加输出语句,！如果结果发现猜错了,就需要换一个地方或者扩大范围,修改代码,重新编译,运行,再查看新的输出结果。对于编译时间很长(例如,有很多模版代码的 C++程序)的情况,整个过程会变得相当痛苦,因为可能需要重复很多次,并且许多时间都是在做无聊的等待。 其次,如果找到了问题所在,是不是要删除那些状态输出语句呢？过多的输出是会影响程序运行性能的，特别是打印到终端上。这些输出语句可能遍布代码的各个角落，要全部清除也不容易，而且，万一以后遇到了类似的 bug 呢?可能还要再写一遍这些类似的输出语句。另一个选择就是把他们注释掉。但是，无论如何，代码会被改得越来越乱。</p>
+<p>避免让代码变乱的解决方案是使用标准化的工具，例如，最简单的情况，可以使用下面这样的一个宏:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> DEBUG</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOG(args) printf args</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOG(args) ((void) 0)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* DEBUG */</span></span></span><br></pre></td></tr></table></figure>
+<p>需要记录信息的时候，使用</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LOG((<span class="string">&quot;a = %d, b = %d\n&quot;</span>, a, b));</span><br></pre></td></tr></table></figure>
+<p>就可以了(注意双重括号是必要的)，需要调试的时候，只要定义 DEBUG，就可以得到调试输出， 而调试结束之后可以直接去掉 DEBUG 的定义， 这样 LOG 宏在编译的时候就会变成空语句，也就不会产生任何输出了。即使想要移除这些调试语句，由于它们都有统一的格式，因此也可以方便地进行自动化处理。</p>
+<p>对于更为复杂的项目，可以使用一些第三方的成熟的日志库来满足更复杂的需求，实现更灵活的控制。</p>
+<p>总的来说， printf 调试主要用在两种情况下:</p>
+<ul>
+<li>过于简单的情况：懒得启动调试器了。</li>
+<li>过于复杂的情况：调试器已经无能为力了，例如一些分布式的程序。</li>
+</ul>
+<h3 id="assert-断言">assert 断言</h3>
+<p>程序一般分为 Debug 版本和 Release 版本, Debug 版本用于内部调试, Release 版本发行给用户使用。</p>
+<p>断言 assert 是仅在 Debug 版本起作用的宏，它用于检查“不应该”发生的情况，为程序增加诊断功能。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">assert</span><span class="params">(<span class="keyword">int</span> expression)</span></span></span><br></pre></td></tr></table></figure>
+<p>当<code>assert(expression)</code>执行时，如果表达式的值为0，那么 <code>assert</code> 宏将在标准出错输出流 <code>stderr</code> 输出一条如下所示的信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Assertion failed: 表达式， file 文件名， line nnn</span><br></pre></td></tr></table></figure>
+<p>然后调用 <code>abort</code> 终止执行。其中的源文件名和行号来自于预处理程序宏 <code>__FILE__</code> 和 <code>__LINE__</code> 。</p>
+<p>如果在头文件 assert.h 被包含时定义了宏 <code>NDEBUG</code>，那么宏 <code>assert</code> 将被忽略。</p>
+<p>下例是一个内存复制函数。在运行过程中,如果 assert 的参数为假，那么程序就会中止(一般地还会出现提示对话,说明在什么地方引发了 assert)。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">memcpy</span><span class="params">(<span class="keyword">void</span> *pvTo, <span class="keyword">const</span> <span class="keyword">void</span> *pvFrom, <span class="keyword">size_t</span> size)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    assert((pvTo != <span class="literal">NULL</span>) &amp;&amp; (pvFrom != <span class="literal">NULL</span>)); <span class="comment">// 使用断言</span></span><br><span class="line">    byte *pbTo = (byte *) pvTo; 	<span class="comment">// 防止改变 pvTo 的地址</span></span><br><span class="line">    byte *pbFrom = (byte *) pvFrom; 	<span class="comment">// 防止改变 pvFrom 的地址</span></span><br><span class="line">    <span class="keyword">while</span>(size -- &gt; <span class="number">0</span> )</span><br><span class="line">        *pbTo ++ = *pbFrom ++ ;</span><br><span class="line">    <span class="keyword">return</span> pvTo;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在程序里许多地方插入断言也没有关系，断言在正常的时候并不会产生输出，而且在去掉调试选项之后，断言会编译为空语句，不会影响最终程序的性能。另外，断言通常是对程序状态的一个客观描述，还可以起到注释的作用。因此在代码中保留合适的断言是比较推荐的做法。</p>
+<p>断言出错之后立即退出，而 printf 则需要事后再去分析和寻找问题。然而太过于暴力也算是断言的一个缺点，因为 bug 有大小疾缓，有时候让程序能持续稳定地运行也是很重要的，因此除非特别严重的时候，人们通常会倾向于使用更加温和的记录日志的方式来记录下潜在的 bug，而不是直接结束程序。</p>
+<p>使用断言的规则：</p>
+<ol>
+<li>使用断言捕捉不应该发生的非法情况。不要混淆非法情况与错误情况之间的区别，后者是必然存在的并且是一定要作出处理的。</li>
+<li>在函数的入口处,使用断言检查参数的有效性(合法性)。</li>
+<li>在编写函数时,要进行反复的考查,并且自问：“我打算做哪些假定?”一旦确定了的假定,就要使用断言对假定进行检查。</li>
+<li>一般教科书都鼓励程序员们进行防错设计，但要记住这种编程风格可能会隐瞒错误。当进行防错设计时，如果“不可能发生”的事情的确发生了，则要使用断言进行报警。</li>
+</ol>
+<h4 id="func-变量"><strong>func</strong> 变量</h4>
+<p>在打印调试信息时除了文件名和行号之外还可以打印出当前函数名，C99引入一个特殊的标识符<code>__func__</code>支持这一功能。这个标识符应该是一个变量名而不是宏定义，不属于预处理的范畴，但它的作用和<code>__FILE__</code>、<code>__LINE__</code>类似，所以放在一起讲。例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">myfunc</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, __func__);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    myfunc();</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, __func__);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ gcc main.c</span><br><span class="line">$ ./a.out </span><br><span class="line">myfunc</span><br><span class="line">main</span><br></pre></td></tr></table></figure>
+<h3 id="调试宏">调试宏</h3>
+<p>Mongrel 的作者 Zed A. Shaw 编写了<a target="_blank" rel="noopener" href="http://c.learncodethehardway.org/book/ex20.html">一个更为实用的调试宏</a>，内容只有如下短短几行：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> __dbg_h__</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __dbg_h__</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> NDEBUG</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> debug(M, ...)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> debug(M, ...) fprintf(stderr, <span class="meta-string">&quot;DEBUG %s:%d: &quot;</span> M <span class="meta-string">&quot;\n&quot;</span>, __FILE__, __LINE__, ##__VA_ARGS__)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> clean_errno() (errno == 0 ? <span class="meta-string">&quot;None&quot;</span> : strerror(errno))</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> log_err(M, ...) fprintf(stderr, <span class="meta-string">&quot;[ERROR] (%s:%d: errno: %s) &quot;</span> M <span class="meta-string">&quot;\n&quot;</span>, __FILE__, __LINE__, clean_errno(), ##__VA_ARGS__)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> log_warn(M, ...) fprintf(stderr, <span class="meta-string">&quot;[WARN] (%s:%d: errno: %s) &quot;</span> M <span class="meta-string">&quot;\n&quot;</span>, __FILE__, __LINE__, clean_errno(), ##__VA_ARGS__)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> log_info(M, ...) fprintf(stderr, <span class="meta-string">&quot;[INFO] (%s:%d) &quot;</span> M <span class="meta-string">&quot;\n&quot;</span>, __FILE__, __LINE__, ##__VA_ARGS__)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> check(A, M, ...) <span class="meta-keyword">if</span>(!(A)) &#123; log_err(M, ##__VA_ARGS__); errno=0; goto <span class="meta-keyword">error</span>; &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> sentinel(M, ...)  &#123; log_err(M, ##__VA_ARGS__); errno=0; goto <span class="meta-keyword">error</span>; &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> check_mem(A) check((A), <span class="meta-string">&quot;Out of memory.&quot;</span>)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> check_debug(A, M, ...) <span class="meta-keyword">if</span>(!(A)) &#123; debug(M, ##__VA_ARGS__); errno=0; goto <span class="meta-keyword">error</span>; &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<p>将它保存为 dbg.h 就可以在需要调试的地方引入该文件然后调用预定义的几个调试函数：</p>
+<ul>
+<li><code>debug</code>：当没有预定义 <code>NDEBUG</code> 宏时，调用形如 <code>debug(&quot;format&quot;, arg1, arg2)</code> 的语句将可以像 <code>fprintf</code> 一样输出内容到 stderr。如果预定义了 <code>NDEBUG</code> ，则调用 <code>debug</code> 函数将不会产生任何输出；</li>
+<li><code>clean_errno</code>：获得一个更安全且可读的 errno 版本。通常作为其他几个调试函数的参数；</li>
+<li><code>log_err</code>、<code>log_warn</code>、<code>log_info</code>：产生日志输出。和 <code>debug</code> 函数类似，但是不能通过设置 <code>NDEBUG</code> 来跳过执行；</li>
+<li><code>check</code>：非常有用的宏，可以检查条件 <code>A</code> 是否成立。如果不成立，将错误 <code>M</code> 输出到日志（利用 <code>log_err</code> 宏），并跳转到函数的错误处理部分（使用 <code>error:</code> 标号标记的语句段）。</li>
+<li><code>sentinel</code>：另一个实用的宏。用于放到一个不该被执行的函数里面。如果该函数被执行，则会打印一个错误信息，并跳转到函数的错误处理部分 <code>error:</code> 。常用的用法是将它放到 <code>if</code> 语句或 <code>switch</code> 语句中不该执行的边界条件里，例如 <code>default:</code> 语句段中；</li>
+<li><code>check_mem</code>：确保一个指针是有效的指针（不是空指针），如果该指针为空，则提示“Out of memory.”错误信息；</li>
+<li><code>check_debug</code>：和 <code>check</code> 类似，但是底层执行的是 <code>debug</code> 宏而非 <code>log_err</code> 宏，因此可以通过设置 <code>NDEBUG</code> 来禁用这些输出，但仍然会进行错误检查和处理。</li>
+</ul>
+<h2 id="总结">总结</h2>
+<ol>
+<li>在绝大多数的情况下，使用<a href="#%E8%B0%83%E8%AF%95%E5%AE%8F">调试宏</a>来诊断和修复跟逻辑语句相关的错误。</li>
+<li>使用 <a href="#%E5%86%85%E5%AD%98%E8%B0%83%E8%AF%95valgrind">Valgrind</a> 来捕捉所有跟内存相关的错误；</li>
+<li>对于上面两个工具无法解决的诡异问题，或者在某些紧急的场合被逼尽可能多的获取错误相关信息的时候，才使用 <a href="#%E8%B7%9F%E8%B8%AA%E8%B0%83%E8%AF%95gdb">gdb</a> 。</li>
+</ol>
+<h2 id="深入阅读">深入阅读</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://pluskid.org/data/mstc/2009.11.29-booklet.pdf%E2%80%8E">[PDF]Pluskid：C语言调试技巧</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.gnu.org/software/gdb/documentation/">GDB: The GNU Project Debugger</a></li>
+<li><a target="_blank" rel="noopener" href="http://lldb.llvm.org/lldb-gdb.html">The LLDB Debugger</a></li>
+<li><a target="_blank" rel="noopener" href="http://valgrind.org/docs/manual/index.html">Valgrind Documentation</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.ibm.com/developerworks/cn/linux/l-cn-valgrind/">应用 Valgrind 发现 Linux 程序的内存问题</a></li>
+<li><a target="_blank" rel="noopener" href="http://c.learncodethehardway.org/book/ex20.html">Zed’s Awesome Debug Macros</a></li>
+<li><a target="_blank" rel="noopener" href="http://c.learncodethehardway.org/book/ex31.html">Debugging Code</a></li>
+<li><a target="_blank" rel="noopener" href="http://c.learncodethehardway.org/book/ex41.html">使用 Cachegrind 和 Callgrind 进行性能调优</a></li>
+</ol>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+			
+			
+			
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/c-standard-libs.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/c-io.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '调试'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

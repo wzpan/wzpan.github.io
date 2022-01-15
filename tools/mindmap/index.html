@@ -1,0 +1,671 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>心智图（Mindmap） | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="心智图相关科普。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="心智图（Mindmap）"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '心智图（Mindmap）'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 心智图（Mindmap）</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>心智图相关科普。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <h2 id="什么是心智图（Mindmap）？">什么是心智图（Mindmap）？</h2>
+<p>心智图（Mind
+Map），又称脑图、心智地图、脑力激荡图、思维导图、灵感触发图、概念地图、树状图、树枝图或思维地图，是一种图像式思维的工具与及一种利用图像式思考辅助工具来表达思维的工具。</p>
+<p>心智图是使用一个中央关键词或想法引起形象化的构造和分类的想法;
+它用一个中央关键词或想法以辐射线形连接所有的代表字词、想法、任务或其它关联项目的图解方式。它可以利用不同的方式去表现人们的想法，如引题式，可见形象化式，建构系统式和分类式。它是普遍地用作在研究、组织、解决问题和政策制定中。</p>
+<p>心智图是一张集中了所有关连资讯的语义网路或认知体系图像。所有关连资讯都是被辐射线形及非线性图解方式接连在一起，以头脑风暴（激发灵感）方法为本去建立一个适当或相关的概念性组织任务框架。但脑力激荡（激发灵感）方法，语义网路
+或
+认知体系是没有一个既定制式链去互相连接使用，亦即是可以自由相连接使用的。元素是直觉地以概念的重要性而被安排及组织入分组、分支，或区域中。会集知识方法是能够支援现有的记忆，去思考语义的结构资讯。<span id="more"></span></p>
+<h2 id="心智图的用途">心智图的用途</h2>
+<h3 id="我用心智图来…">我用心智图来…</h3>
+<ol>
+<li>做笔记。在阅读的时候，我喜欢同时开着 Docear 画心智图，将这篇文章的大体结构画出来；</li>
+<li>复习、记忆。我喜欢通过画心智图来回顾我一段时间的学习，这通常是在实验室的白板上完成的；</li>
+<li>沟通、组织。和别人合作的时候，我喜欢用心智图表达我的想法，然后发给他看；</li>
+<li>做报告。对于平常的一些不太正式的学术交流，我都是用心智图来整理成报告材料，然后在讲解的时候投影给其他人看；</li>
+<li>写论文。构思论文的结构；</li>
+<li>演讲准备。构思演讲的流程，据此准备课件。</li>
+</ol>
+<h3 id="它还可以…">它还可以…</h3>
+<p>GTD，计划，项目管理，会议，培训，谈判，面试，评估，头脑风暴…</p>
+<h2 id="常用的几个心智图工具">常用的几个心智图工具</h2>
+<h3 id="Docear">Docear</h3>
+<p>官方网站： <a target="_blank" rel="noopener" href="http://www.docear.org/">http://www.docear.org/</a></p>
+<p>Docear <span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/mindmap/docear_logo.png alt=' Docear'></img><b>附图 1</b>  Docear</span></span></span> 不仅是一个心智图工具，它更是一个无比强大的科研套件。它完美结合了文件管理器 + 心智图工具 + Jabref + LaTeX 公式编辑。我在试用了它五分钟后，就立马淘汰了之前一直在使用的 XMind 。并且给这个项目打了五颗星：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/mindmap/docear2.png" alt="我的评价" />
+        <figcaption>我的评价</figcaption>
+      </figure>
+    </p>
+<p>Docear 拥有很多非常出色的特性，我准备找时间专门写一篇对它的介绍。这里只贴一张截图，“一图胜千言”，让你先领略一下 Docear 的强大：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/mindmap/docear1.png" alt="Docear Screenshot" />
+        <figcaption>Docear Screenshot</figcaption>
+      </figure>
+    </p>
+<h3 id="XMind">XMind</h3>
+<p>官方网站： <a target="_blank" rel="noopener" href="http://www.xmind.net/">http://www.xmind.net/</a></p>
+<p>XMind <span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/mindmap/xmind-logo.png alt=' XMind'></img><b>附图 2</b>  XMind</span></span></span> 是使用Java开发的跨平台心智图工具。XMind
+绘制的的心智图、鱼骨图、二维图、树形图、逻辑图、组织结构图等以结构化的方式来展示具体的内容，人们在用XMind绘制图形的时候，可以时刻保持头脑清晰，随时把握计划或任务的全局，它可以帮助人们在学习和工作用提高效率。值得一提的是，它还是中国人开发的。</p>
+<p>XMind的优点在于：</p>
+<ol>
+<li>界面美观，操作很人性化，支持多种主题风格，支持导入新的图标，因此画出的心智图要比Freemind美观得多；</li>
+<li>支持插图和附件，商业版本还拥有独特的演示模式；</li>
+<li>大多数功能开源免费提供，只有少数功能商业化（这点很慷慨）；</li>
+<li>支持将你的心智图作品同步到XMind的服务器上。</li>
+</ol>
+<p>不足：</p>
+<ol>
+<li>商业软件，部分功能收费；</li>
+<li>与Ubuntu的Unity风格界面不太兼容；</li>
+<li>支持导出的格式较少；</li>
+<li>缺乏其他同类工具对它的文件格式的支持。</li>
+</ol>
+<h3 id="Freemind">Freemind</h3>
+<p>官方网站： <a target="_blank" rel="noopener" href="http://freemind.sourceforge.net/">http://freemind.sourceforge.net/</a> <span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/mindmap/freemind.gif alt=' Freemind'></img><b>附图 3</b>  Freemind</span></span></span></p>
+<p>Freemind 是一个开源的Mindmap工具，在这么多个心智图工具中，它的格式 *.mm 是最受支持的心智图格式，其他很多工具都支持导入这种格式。事实上，如果你用文本编辑器打开 *.mm 文件，你就会发现这个文件其实就是标准的xml格式文件。</p>
+<p>Freemind的优点在于：</p>
+<ol>
+<li>完全开源，免费使用；</li>
+<li>生成的文件很小，而且格式最通用；</li>
+<li>支持导出的格式较多。</li>
+</ol>
+<p>不足：</p>
+<ol>
+<li>界面比较简陋，操作不是很人性化，绘制的心智图效果难以和XMind比肩；</li>
+<li>不支持附件、插图功能。<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/mindmap/th.jpg alt=' VYM'></img><b>附图 4</b>  VYM</span></span></span></li>
+</ol>
+<h3 id="VYM">VYM</h3>
+<p>官方网站： <a target="_blank" rel="noopener" href="http://www.insilmaril.de/vym/">http://www.insilmaril.de/vym/</a></p>
+<p>VYM (View your
+mind)同样也是一款开源的心智图工具，它与Freemind相比的一个优势是可以导出为PostScript代码，另外，借助于<a target="_blank" rel="noopener" href="http://blog.lindoze.net/software/convert-vym-mindmap-pgftikz/">Vym2TikZ</a>还可以将VYM的绘图导出为TikZ代码。我使用它也主要是冲着它的这两个特性。</p>
+<h3 id="Mind42">Mind42</h3>
+<p>官方网站： <a target="_blank" rel="noopener" href="http://mind42.com/">http://mind42.com/</a> <span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/mindmap/mind42.gif alt=' Mind42'></img><b>附图 5</b>  Mind42</span></span></span></p>
+<p>一款在线心智图工具，最大优点是支持 iframe 内嵌，因此可以轻松的将画好的心智图发布到博客上。</p>
+<h3 id="Graphviz">Graphviz</h3>
+<p>Graphviz <span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/mindmap/graphviz.jpg alt=' Graphviz'></img><b>附图 6</b>  Graphviz</span></span></span> 也可以用来绘制心智图，甚至有人拿它做成了一个酷酷的主页（<a target="_blank" rel="noopener" href="http://zoomquiet.org/">http://zoomquiet.org/</a>）。Graphviz使用的是dot语言，这个语言还是挺简单的，可以看看官方的<a target="_blank" rel="noopener" href="http://www.graphviz.org/Gallery.php">Gallery</a>。</p>
+<h2 id="Emacs与心智图">Emacs与心智图</h2>
+<h3 id="org-mode导出为freemind">org-mode导出为freemind</h3>
+<p>Emacs 的 org-mode 可以直接导出为 freemind 格式。按 C-c C-e m 即可。</p>
+<h3 id="freemind转为outline文件">freemind转为outline文件</h3>
+<p>如果要将freemind文件转换为 Emacs的
+outline-mode文件（org-mode的前身，其格式可以和org-mode兼容）， Christian
+Lemburg写了一个perl脚本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;usr&#x2F;bin&#x2F;perl -w</span><br><span class="line">use strict;</span><br><span class="line"></span><br><span class="line">use Getopt::Std;</span><br><span class="line">use XML::Simple;</span><br><span class="line">use Data::Dumper qw(Dumper);</span><br><span class="line"></span><br><span class="line"># Copyright (c) 2004 Christian Lemburg.</span><br><span class="line">#</span><br><span class="line"># All rights reserved. This program is free software;</span><br><span class="line"># you can redistribute it and&#x2F;or modify it under the</span><br><span class="line"># same terms as Perl itself.</span><br><span class="line"></span><br><span class="line"># usage</span><br><span class="line"></span><br><span class="line">my $usage &#x3D; &lt;&lt;&#39;EOU&#39;;</span><br><span class="line"></span><br><span class="line">Usage: $0 &lt; freemind.mm &gt; emacs-outline.txt</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line"></span><br><span class="line">    h: print help</span><br><span class="line">    p: outline mode heading indicator pattern atom (default &quot;*&quot;)</span><br><span class="line">    s: suppress topic of mind map as title in outline output (default off)</span><br><span class="line"></span><br><span class="line">EOU</span><br><span class="line"></span><br><span class="line"># setup</span><br><span class="line"></span><br><span class="line">my %opts;</span><br><span class="line">getopts(&#39;hsp:&#39;, \%opts);</span><br><span class="line"></span><br><span class="line">die $usage if $opts&#123;h&#125;;</span><br><span class="line"></span><br><span class="line">my $heading_pattern_atom &#x3D; $opts&#123;p&#125; || &quot;*&quot;;</span><br><span class="line">my $suppress_title &#x3D; $opts&#123;&#39;s&#39;&#125;;</span><br><span class="line"></span><br><span class="line">my $QUOTE &#x3D; &quot;&quot;&quot;;</span><br><span class="line">my $LESS_THAN &#x3D; &quot;&lt;&quot;;</span><br><span class="line">my $GREATER_THAN &#x3D; &quot;&gt;&quot;;</span><br><span class="line">my $NEWLINE &#x3D; &quot;&amp;#xa;&quot;;</span><br><span class="line"></span><br><span class="line"># action</span><br><span class="line"></span><br><span class="line">my $xs &#x3D; new XML::Simple();</span><br><span class="line">my $ref &#x3D; $xs-&gt;XMLin(\*STDIN);</span><br><span class="line"></span><br><span class="line">die &quot;Could not find mind map in input&quot; unless exists $ref-&gt;&#123;node&#125;;</span><br><span class="line"></span><br><span class="line">my $start &#x3D; $ref-&gt;&#123;node&#125;;</span><br><span class="line">print unquote($start-&gt;&#123;TEXT&#125;), &quot;\n\n&quot; unless $suppress_title;</span><br><span class="line"></span><br><span class="line">my $level &#x3D; 0;</span><br><span class="line">process_children($start);</span><br><span class="line"></span><br><span class="line"># subs</span><br><span class="line"></span><br><span class="line">sub process_node &#123;</span><br><span class="line">    my ($node) &#x3D; @_;</span><br><span class="line">    process_node_text($node, $level);</span><br><span class="line">    if (not is_leaf($node)) &#123;</span><br><span class="line">        process_children($node);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sub process_children &#123;</span><br><span class="line">    my ($node) &#x3D; @_;</span><br><span class="line">    $level++;</span><br><span class="line">    if (ref($node-&gt;&#123;node&#125;) eq &quot;ARRAY&quot;) &#123;</span><br><span class="line">        for my $child (@&#123;$node-&gt;&#123;node&#125;&#125;) &#123;</span><br><span class="line">            process_node($child);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        my $child &#x3D; $node-&gt;&#123;node&#125;;</span><br><span class="line">        process_node($child);</span><br><span class="line">    &#125;</span><br><span class="line">    $level--;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sub process_node_text &#123;</span><br><span class="line">    my ($node, $level) &#x3D; @_;</span><br><span class="line">    if (is_paragraph_leaf($node)) &#123;</span><br><span class="line">        print unquote($node-&gt;&#123;TEXT&#125;), &quot;\n\n&quot;;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        print make_heading($level), &quot; &quot;, unquote($node-&gt;&#123;TEXT&#125;), &quot;\n\n&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sub is_leaf &#123;</span><br><span class="line">    my ($node) &#x3D; @_;</span><br><span class="line">    return not exists $node-&gt;&#123;node&#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sub is_paragraph_leaf &#123;</span><br><span class="line">    my ($node) &#x3D; @_;</span><br><span class="line">    # define: paragraph leaf &#x3D; leaf with text that contains newlines</span><br><span class="line">    return is_leaf($node) &amp;&amp; $node-&gt;&#123;TEXT&#125; &#x3D;~ &#x2F;$NEWLINE&#x2F;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sub make_heading &#123;</span><br><span class="line">    my ($level) &#x3D; @_;</span><br><span class="line">    return $heading_pattern_atom x $level;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sub unquote &#123;</span><br><span class="line">    my ($s) &#x3D; @_;</span><br><span class="line">    $s &#x3D;~ s&#x2F;$QUOTE&#x2F;&quot;&#x2F;g;</span><br><span class="line">    $s &#x3D;~ s&#x2F;$LESS_THAN&#x2F;&lt;&#x2F;g;</span><br><span class="line">    $s &#x3D;~ s&#x2F;$GREATER_THAN&#x2F;&gt;&#x2F;g;</span><br><span class="line">    $s &#x3D;~ s&#x2F;$NEWLINE&#x2F;\n&#x2F;g;</span><br><span class="line">    return $s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>用法：将这个脚本保存为 <a target="_blank" rel="noopener" href="http://mm2outline.pl">mm2outline.pl</a>
+文件，然后复制到freemind文件所在目录，然后使用这条命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">perl mm2outline.pl $0 &lt; freemind.mm &gt; emacs-outline.txt</span><br></pre></td></tr></table></figure>
+<p>其中，<a target="_blank" rel="noopener" href="http://freemind.mm">freemind.mm</a>
+为你要转换的freemind文件，emacs-outline.txt为目标文件。$0是转换选项，可以是下面三种之一：</p>
+<ol>
+<li>h: 打印帮助</li>
+<li>p: 设置 outline mode 的标题格式（默认是&quot;*&quot;）</li>
+<li>s: 将心智图的topic作为outline的标题 (默认为 off)</li>
+</ol>
+<h2 id="LaTeX与心智图">LaTeX与心智图</h2>
+<h3 id="在LaTeX中绘制心智图">在LaTeX中绘制心智图</h3>
+<p>要在LaTeX中绘制心智图，效果最好的是使用<a href="../../compose/tikz/index.html">TikZ</a>来绘制。你可以看看<a target="_blank" rel="noopener" href="http://www.texample.net/tikz/examples/feature/mindmaps/">画出来的效果</a>。</p>
+<p>官方的一段示例代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">% Author: Till Tantau</span><br><span class="line">% Source: The PGF&#x2F;TikZ manual</span><br><span class="line">\documentclass&#123;article&#125;</span><br><span class="line"></span><br><span class="line">\usepackage&#123;tikz&#125;</span><br><span class="line">\usetikzlibrary&#123;mindmap,trees&#125;</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line">\pagestyle&#123;empty&#125;</span><br><span class="line">\begin&#123;tikzpicture&#125;</span><br><span class="line">  \path[mindmap,concept color&#x3D;black,text&#x3D;white]</span><br><span class="line">    node[concept] &#123;Computer Science&#125;</span><br><span class="line">    [clockwise from&#x3D;0]</span><br><span class="line">    child[concept color&#x3D;green!50!black] &#123;</span><br><span class="line">      node[concept] &#123;practical&#125;</span><br><span class="line">      [clockwise from&#x3D;90]</span><br><span class="line">      child &#123; node[concept] &#123;algorithms&#125; &#125;</span><br><span class="line">      child &#123; node[concept] &#123;data structures&#125; &#125;</span><br><span class="line">      child &#123; node[concept] &#123;pro\-gramming languages&#125; &#125;</span><br><span class="line">      child &#123; node[concept] &#123;software engineer\-ing&#125; &#125;</span><br><span class="line">    &#125;  </span><br><span class="line">    child[concept color&#x3D;blue] &#123;</span><br><span class="line">      node[concept] &#123;applied&#125;</span><br><span class="line">      [clockwise from&#x3D;-30]</span><br><span class="line">      child &#123; node[concept] &#123;databases&#125; &#125;</span><br><span class="line">      child &#123; node[concept] &#123;WWW&#125; &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    child[concept color&#x3D;red] &#123; node[concept] &#123;technical&#125; &#125;</span><br><span class="line">    child[concept color&#x3D;orange] &#123; node[concept] &#123;theoretical&#125; &#125;;</span><br><span class="line">\end&#123;tikzpicture&#125;\end&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，&quot;node&quot;的表示个节点，可以在进跟着的中括号里设置颜色。node下面可以有child节点，这些节点是使用顺时针排列的。关于TikZ绘制心智图，更详细的教程可以参考《<a target="_blank" rel="noopener" href="http://www.ctan.org/tex-archive/graphics/pgf/base/doc/generic/pgf/pgfmanual.pdf">PGF/TikZ
+manual</a>》第32章的内容。</p>
+<p>如果觉得TikZ代码太复杂，可以先用<a href="#sec-4.3">VYM</a>绘制心智图，然后使用<a target="_blank" rel="noopener" href="http://blog.lindoze.net/software/convert-vym-mindmap-pgftikz/">Vym2TikZ</a>转换为TikZ代码，但直接生成的TikZ图案不是很好看，还需要对颜色、节点方向做进一步的微调。</p>
+<h3 id="Beamer使用心智图作为outline">Beamer使用心智图作为outline</h3>
+<p>在Beamer中使用心智图取代原来乏味的outline可以达到非常有趣的效果。比如我这份<a target="_blank" rel="noopener" href="http://www.slideshare.net/pwz7689/ss-12678304#">课件</a>。</p>
+<h4 id="设置方法">设置方法</h4>
+<ol>
+<li>
+<p>首先去掉Beamer自带的outline，即确保你的文档中没有这段内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;frame&#125;&#123;Outline&#125;</span><br><span class="line">\tableofcontents</span><br><span class="line">\end&#123;frame&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>使用TikZ为每一章画一张心智图，然后在每一章的开头手动插入这张图。</p>
+</li>
+</ol>
+<h4 id="缺点和思考">缺点和思考</h4>
+<p>比起原来的outline，这种方式缺点还是挺明显的：</p>
+<ol>
+<li>原来的outline是自动生成的，而这种心智图不是自动生成的，需要自己在每一章开头手动引入；</li>
+<li>没有点击跳转功能；</li>
+<li>耦合度太高，需要为每一章都画一份心智图，这样如果有一个节点发生改变，其他所有心智图都要做相应修改。所以建议在做课件前最好是先用XMind等工具把这份课件的整体框架都画好，以免制作课件过程中频繁修改outline。</li>
+</ol>
+<p>我还没有解决这几个问题，但应该可以通过更好的代码来实现的。如果你有更好的建议，欢迎<a href="mailto:cs.wzpan@gmail.com">联系我</a>。</p>
+<h2 id="作品示例">作品示例</h2>
+<h3 id="手绘系列">手绘系列</h3>
+<ol>
+<li>开山祖师 Tony Buzan
+所发表的心智图作品《蜂的技巧》（<a target="_blank" rel="noopener" href="http://www.mindmapart.com/wp-content/uploads/2011/03/Bee-Skills-Mind-Map-by-Tony-Buzan.gif">查看图片</a>）</li>
+<li>我的一些笔记（<a href="/images/mindmap/my-notes.jpg">查看图片</a>）</li>
+<li>白板和心智图是一对绝配（<a href="/images/mindmap/whiteboard-and-mindmap.jpg">查看图片</a>）</li>
+</ol>
+<h3 id="工具绘图系列">工具绘图系列</h3>
+<ol>
+<li>为一个演讲画的心智图（<a href="/images/mindmap//lecture-mindmap.png">查看图片</a>）</li>
+<li>我用TikZ画的心智图（<a href="/images/mindmap/tikz-mindmap.png">查看图片</a>)</li>
+<li>心智图小人（<a href="/images/mindmap/mindmap-man.png">查看图片</a>)</li>
+<li>在Mind42发布的一份心智图：软件工程方法学相关知识体系（<a target="_blank" href="http://mind42.com/pub/mindmap?mid=80605e53-7367-448e-adcb-0d7f421984c4&amp;rel=url">查看图片</a>）</li>
+</ol>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/tools/awesome/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/life/teaching-pascal/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '心智图（Mindmap）'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/mindmap.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2012-04-28 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/tools/">tools<span>12</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Mindmap/">Mindmap<span>1</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%BF%83%E6%99%BA%E5%9B%BE%EF%BC%88Mindmap%EF%BC%89%EF%BC%9F"><span class="toc-article-text">什么是心智图（Mindmap）？</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%BF%83%E6%99%BA%E5%9B%BE%E7%9A%84%E7%94%A8%E9%80%94"><span class="toc-article-text">心智图的用途</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%88%91%E7%94%A8%E5%BF%83%E6%99%BA%E5%9B%BE%E6%9D%A5%E2%80%A6"><span class="toc-article-text">我用心智图来…</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AE%83%E8%BF%98%E5%8F%AF%E4%BB%A5%E2%80%A6"><span class="toc-article-text">它还可以…</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E5%87%A0%E4%B8%AA%E5%BF%83%E6%99%BA%E5%9B%BE%E5%B7%A5%E5%85%B7"><span class="toc-article-text">常用的几个心智图工具</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#Docear"><span class="toc-article-text">Docear</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#XMind"><span class="toc-article-text">XMind</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#Freemind"><span class="toc-article-text">Freemind</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#VYM"><span class="toc-article-text">VYM</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#Mind42"><span class="toc-article-text">Mind42</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#Graphviz"><span class="toc-article-text">Graphviz</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#Emacs%E4%B8%8E%E5%BF%83%E6%99%BA%E5%9B%BE"><span class="toc-article-text">Emacs与心智图</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#org-mode%E5%AF%BC%E5%87%BA%E4%B8%BAfreemind"><span class="toc-article-text">org-mode导出为freemind</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#freemind%E8%BD%AC%E4%B8%BAoutline%E6%96%87%E4%BB%B6"><span class="toc-article-text">freemind转为outline文件</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#LaTeX%E4%B8%8E%E5%BF%83%E6%99%BA%E5%9B%BE"><span class="toc-article-text">LaTeX与心智图</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%9C%A8LaTeX%E4%B8%AD%E7%BB%98%E5%88%B6%E5%BF%83%E6%99%BA%E5%9B%BE"><span class="toc-article-text">在LaTeX中绘制心智图</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#Beamer%E4%BD%BF%E7%94%A8%E5%BF%83%E6%99%BA%E5%9B%BE%E4%BD%9C%E4%B8%BAoutline"><span class="toc-article-text">Beamer使用心智图作为outline</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E8%AE%BE%E7%BD%AE%E6%96%B9%E6%B3%95"><span class="toc-article-text">设置方法</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E7%BC%BA%E7%82%B9%E5%92%8C%E6%80%9D%E8%80%83"><span class="toc-article-text">缺点和思考</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BD%9C%E5%93%81%E7%A4%BA%E4%BE%8B"><span class="toc-article-text">作品示例</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%89%8B%E7%BB%98%E7%B3%BB%E5%88%97"><span class="toc-article-text">手绘系列</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%B7%A5%E5%85%B7%E7%BB%98%E5%9B%BE%E7%B3%BB%E5%88%97"><span class="toc-article-text">工具绘图系列</span></a></li></ol></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

@@ -1,0 +1,1730 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>标准库 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="文章所列的函数的相关参数名均以 man 手册各函数的参数名对应。例如 calloc 函数的 nmemb 参数
+
+stdio.h
+定义了几乎占整个标准库的三分之一的输入和输出函数、类型以及宏的数目。
+文件操作
+除了几个用于 输入输出 的函数之外，下列函数用于处理与文件有关的操作。其中 size_t 类">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="标准库"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '标准库'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 标准库</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<div class="alert alert-info"><i class="fas fa-info"></i>  文章所列的函数的相关参数名均以 man 手册各函数的参数名对应。例如 <code>calloc</code> 函数的 <code>nmemb</code> 参数
+</div>
+<h2 id="stdio-h">stdio.h</h2>
+<p>定义了几乎占整个标准库的三分之一的输入和输出函数、类型以及宏的数目。</p>
+<h3 id="文件操作">文件操作</h3>
+<p>除了几个用于 <a href="/wiki/c-io.html">输入输出</a> 的函数之外，下列函数用于处理与文件有关的操作。其中 <code>size_t</code> 类型是由运算符 sizeof 产生的无符号整类型。</p>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>remove</td>
+<td>用于删除参数指定的文件，这样，随后进行的打开该文件的操作将失败。如果失败，则返回一个非0值。</td>
+</tr>
+<tr>
+<td>rename</td>
+<td>用于改变文件的名字。如果操作失败，则返回一个非0值。</td>
+</tr>
+<tr>
+<td>tmpfile</td>
+<td>用于以方式 wb+ 创建一个临时文件，该文件在被关闭或程序正常结束时被自动删除。该函数的返回值为一个流;如果创建文件失败，则返回 NULL。</td>
+</tr>
+<tr>
+<td>tmpnam</td>
+<td>用于创建一个不同于现存文件名字的字符串，并返回一个指向一内部静态数组的指针。</td>
+</tr>
+<tr>
+<td>setvbuf</td>
+<td>用于控制参数所指定的流的缓冲区。在读、写以及其他任何操作之前必须调用此函数。</td>
+</tr>
+<tr>
+<td>setbuf</td>
+<td>如果buf的值为NULL，那么参数所指定流的缓冲区将被关闭;否则 setbuf 函数等价于 <code>(void) setvbuf(stream,buf,_IOFBF, BUFSIZ )</code> 。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ctype-h">ctype.h</h2>
+<p>头文件 ctype.h 中说明了一些用于测试字符的函数，以及用于字符的大小写转换的函数。</p>
+<h3 id="用于测试字符的函数">用于测试字符的函数</h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>isalnum©</td>
+<td>函数isalpha©或isdigit©为真。</td>
+</tr>
+<tr>
+<td>isalpha©</td>
+<td>函数isupper©或islo we r©为真。</td>
+</tr>
+<tr>
+<td>iscntrl©</td>
+<td>c为控制字符。</td>
+</tr>
+<tr>
+<td>isdigit©</td>
+<td>c为十进制数字。</td>
+</tr>
+<tr>
+<td>isgraph©</td>
+<td>c是除空格外的可打印字符。</td>
+</tr>
+<tr>
+<td>islower©</td>
+<td>c是小写字母。</td>
+</tr>
+<tr>
+<td>isprint©</td>
+<td>c是包括空格的可打印字符。</td>
+</tr>
+<tr>
+<td>ispunct©</td>
+<td>c是除空格、字母和数字外的可打印字符。</td>
+</tr>
+<tr>
+<td>isspace©</td>
+<td>c是空格、换页符、换行符、回车符、横向制表符和纵向制表符。</td>
+</tr>
+<tr>
+<td>isuppe r©</td>
+<td>c是大写字母。</td>
+</tr>
+<tr>
+<td>isxdigit©</td>
+<td>c是十六进制数字。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="说明">说明</h4>
+<ul>
+<li>每个函数的参数均为 int 类型，参数的值必须是 EOF 或可用unsigned char类型表示的字符，函数的返回值为 int类型。如果参数 c满足所指定的条件，那么函数返回非 0值(表示真);否则返回值为 0(表示假)。这些函数如下:</li>
+<li>在七位ASCII字符集中，可打印字符是从 0x20(’<code> </code>‘)到0x7E(’<code>~</code>’)之间的字符；控制字符是从0(’<code>NUL</code>’)到0x1F(’<code>US</code>’)之间的字符和字符0x7F(’<code>DEL</code>’)。</li>
+</ul>
+<h3 id="用于字符大小写转换的函数">用于字符大小写转换的函数</h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int tolower(int c)</td>
+<td>把c转换为小写字母</td>
+</tr>
+<tr>
+<td>int toupper(int c)</td>
+<td>把c转换为大写字母</td>
+</tr>
+</tbody>
+</table>
+<h4 id="说明-v2">说明</h4>
+<p>如果c是一个大写字母，那么 tolower©返回对应的小写字母；否则返回c。如果c是一个小写字母，那么 toupper©返回对应的大写字母；否则返回 c。</p>
+<h2 id="string-h">string.h</h2>
+<p>在头文件 string.h 中定义了两组字符串函数。第一组函数的名字以 <code>str</code> 开头；第二组函数的名字以 <code>mem</code> 开头。只有函数 memmove 对重叠对象间的拷贝进行了定义，而其他函数则未对重叠对象间的拷贝进行定义。比较类函数将其参数视为 unsigned char 类型的数组。</p>
+<h3 id="以-str-开头的函数">以 str 开头的函数</h3>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>strcpy</td>
+<td>用于把字符串 src (包括 <code>\0</code> )拷贝到字符串 dest 当中，并返回 dest。</td>
+</tr>
+<tr>
+<td>strncpy</td>
+<td>用于把字符串 src 中最多n个字符拷贝到字符串 dest 中,并返回 dest。</td>
+</tr>
+<tr>
+<td>strcat</td>
+<td>用于把字符串 src 连接到 dest 的尾部，并返回 dest。</td>
+</tr>
+<tr>
+<td>strncat</td>
+<td>用于把字符串 src 中最多n个字符连结到字符串 dest 的尾部,并以 <code>\0</code> 结束;返回 dest。</td>
+</tr>
+<tr>
+<td>strcmp</td>
+<td>用于比较字符串 s1 和 s2。当 s1 &lt; s2 时它返回一个负数；当 s1 &gt; s2 t时它返回一个正数；当 s1==s2 时它返回0。</td>
+</tr>
+<tr>
+<td>strncmp</td>
+<td>用于将字符串 s1 中至多n个字符与字符串 s2 相比较。</td>
+</tr>
+<tr>
+<td>strchr</td>
+<td>用于返回一个指向字符串s中c字符第一次出现的位置的指针。如果s中不包含c，返回NULL。</td>
+</tr>
+<tr>
+<td>strrchr</td>
+<td>用于返回一个指向字符串s中c字符最后一次出现的位置的指针。如果s中不包含c，返回NULL。</td>
+</tr>
+<tr>
+<td>strspn</td>
+<td>用于返回字符串 s 中由字符串 accept 中的字符组成的第一个字串的长度。</td>
+</tr>
+<tr>
+<td>strcspn</td>
+<td>用于返回字符串 s 中由不在字符串 reject 中的字符组成的第一个字串的长度。</td>
+</tr>
+<tr>
+<td>strpbrk</td>
+<td>用于返回指向字符串 accept 中的任意字符第一次出现在字符串 s 中的位置的指针。</td>
+</tr>
+<tr>
+<td>strstr</td>
+<td>用于返回指向字符串 needle 第一次出现在字符串 haystack 中的位置的指针。</td>
+</tr>
+<tr>
+<td>strlen</td>
+<td>用于返回字符串 s 的长度。</td>
+</tr>
+<tr>
+<td>strerror</td>
+<td>用于返回指向与错误序号 errnum 对应的错误信息字符串的指针。</td>
+</tr>
+<tr>
+<td>strtok</td>
+<td>在 str 中搜索由 delim 中的分界符界定的单词。通过对它的一系列调用可以把字符串分成许多单词，这些单词以 delim 为界。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="strcpy-函数的实现">strcpy 函数的实现</h4>
+<p>下面是一个 strcpy 的实现：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strcpy</span><span class="params">(<span class="keyword">char</span> *strDest, <span class="keyword">const</span> <span class="keyword">char</span> *strSrc)</span>	<span class="comment">// 实现 strSrc 到 strDest 的复制</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (strDest == Null) || (strSrc == <span class="literal">NULL</span>)	<span class="comment">// 判断参数 strDest 和 strSrc 的有效性</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">char</span> *strDestCopy = strDest;	<span class="comment">// 保存目标字符串的首地址</span></span><br><span class="line">    <span class="keyword">while</span>((*strDest++=*strSrc++ != <span class="string">&#x27;\0&#x27;</span>));	<span class="comment">// 把 strSrc 字符串的内容复制到 strDest 下</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> strDestCopy;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="以-mem-开头的函数">以 mem 开头的函数</h3>
+<p>以 mem 开头的函数以字符数组的方式操作对象，其主要目的是提供一个高效的函数接口。</p>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>memcpy</td>
+<td>用于把字符串 src 中的 n 个字符拷贝到 dest 当中，并返回 dest。</td>
+</tr>
+<tr>
+<td>memmove</td>
+<td>功能与 memcpy 相似，不同之处是当发生对象重叠时，该函数仍能正确执行。</td>
+</tr>
+<tr>
+<td>memcmp</td>
+<td>用于把 s1 的前n个字符与 s2 相比较，其返回值与 strcmp 的返回值相同。</td>
+</tr>
+<tr>
+<td>memchr</td>
+<td>用于返回指向 c 在 s 中第一次出现的位置指针。如果在 s 的前 n 个字符当中找不到匹配,那么返回 NULL。</td>
+</tr>
+<tr>
+<td>memset</td>
+<td>用于把 s 中的前 n 个字符替换为 c ，并返回 s 。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="math-h">math.h</h2>
+<p>头文件 math.h 中说明了数学函数和宏。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  使用math.h中声明的库函数有一点特殊之处，gcc命令行必须加<code>-lm</code>选项，因为数学函数位于libm.so库文件中（这些库文件通常位于/lib目录下），<code>-lm</code> 选项告诉编译器，我们程序中用到的数学函数要到这个库文件里找。
+</div>
+<p>宏 <code>EDOM</code> 和 <code>ERANGE</code> (定义在头文件 error.h 中)是两个非 0 整常量，用于引发各个数学函数的定义域错误和值域错误; <code>HUGE_VAL</code> 是一个 double 类型的正数。当参数取值在函数的定义域之外时，就会出现定义域错误。在发生定义域错误时，全局变量 <code>errno</code> 的值被置为 <code>EDOM</code>，函数的返回值视具体实现而定。如果函数的结果不能用 double 类型表示，那么就会发生值域错误。当结果上溢时，函数返回 <code>HUGE_VAL</code> 并带有正确的符号(正负号)，<code>errno</code> 的值被置为 <code>ERANGE</code>。当结果下溢时，函数返回 0，而 <code>errno</code> 是否被设置为 <code>ERANGE</code> 视具体实现而定。</p>
+<p>在下列函数中，x和y的类型为double，n的类型为int，所有函数的返回值的类型均为double。三角函数的角度用弧度表示。</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sin(x)</td>
+<td>\(x\)的正弦。</td>
+</tr>
+<tr>
+<td>cos(x)</td>
+<td>\(x\)的余弦。</td>
+</tr>
+<tr>
+<td>tan(x)</td>
+<td>\(x\)的正切。</td>
+</tr>
+<tr>
+<td>asin(x)</td>
+<td>\(sin^{-1}(x)\),值域为\([-\pi/2,\pi/2]\),其中 \(x \in [-1,1]\) 。</td>
+</tr>
+<tr>
+<td>acos(x)</td>
+<td>\(cos^{-1}(x)\),值域为\([0,\pi]\)，其中x ∈ [-1,1]。</td>
+</tr>
+<tr>
+<td>atan(x)</td>
+<td>\(tan^{-1}(x)\),值域为\([-\pi/2,\pi/2]\)。</td>
+</tr>
+<tr>
+<td>atan2 (y,x)</td>
+<td>\(tan^{-1}(y/x)\)，值域为\([-\pi,\pi]\)。</td>
+</tr>
+<tr>
+<td>sinh(x)</td>
+<td>\(x\)的双曲正弦。</td>
+</tr>
+<tr>
+<td>cosh(x)</td>
+<td>\(x\)的双曲余弦。</td>
+</tr>
+<tr>
+<td>tanh( x)</td>
+<td>\(x\)的双曲正切。</td>
+</tr>
+<tr>
+<td>exp(x)</td>
+<td>幂函数\(e^x\)。</td>
+</tr>
+<tr>
+<td>log(x)</td>
+<td>自然对数\(ln(x)\),其中\(x\gt{}0\)。</td>
+</tr>
+<tr>
+<td>log10(x)</td>
+<td>以10为底的对数 \(log_{10}(x)\),其中 \(x\gt{}0\)。</td>
+</tr>
+<tr>
+<td>pow(x,y)</td>
+<td>\(x^y\)。如果 \(x=0\) 且\(y\le{}0\)或者如果 \(x\lt{}0\)且\(y\)不是整数,那么产生定义域错误。</td>
+</tr>
+<tr>
+<td>sqrt(x)</td>
+<td>\(x\)的平方根,其中\(x\ge{}0\)。</td>
+</tr>
+<tr>
+<td>ceil(x)</td>
+<td>不小于\(x\)的最小整数，\(x\)的类型为double。</td>
+</tr>
+<tr>
+<td>floor(x)</td>
+<td>不大于\(x\)的最大整数，\(x\)的类型为double。</td>
+</tr>
+<tr>
+<td>fabs(x)</td>
+<td>绝对值$</td>
+</tr>
+<tr>
+<td>ldexp(x,n)</td>
+<td>\(x\dot{}2^n\)。</td>
+</tr>
+<tr>
+<td>frexp(x,int *exp)</td>
+<td>把\(x\)分成一个在 \([1/2, 1)\) 区间的真分数和一个 2 的幂数。将真分数返回，幂数保存在 *exp 中。如果 \(x\) 为0，那么这两部分均为 0。</td>
+</tr>
+<tr>
+<td>modf(x,double *ip)</td>
+<td>把x分成整数和小数两部分,两部分均与 \(x\) 有相同的正负号。函数返回小数部分,整数部分保存在 *ip 中。</td>
+</tr>
+<tr>
+<td>fmod(x,y)</td>
+<td>求 \(x/y\) 的浮点余数，符号与 \(x\) 相同。如果 y 为 0 ，那么结果由具体实现而定。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="stdlib-h">stdlib.h</h2>
+<p>一个非常实用的标准库。头文件 stdlib.h 中定义了用于数值转换、内存分配以及具有其他相似任务的若干函数。</p>
+<h3 id="用于数值转换的函数">用于数值转换的函数</h3>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>atof</td>
+<td>用于把 nptr 所指向的字符串数组转换成double类型。该函数等价于 <code>strtod(s, (char**)NULL)</code>。</td>
+</tr>
+<tr>
+<td>atoi</td>
+<td>函数用于把 nptr 所指向的字符串数组转换成int类型；该函数等价于<code>(int)strtol(s, (char**)NULL, 10)。</code></td>
+</tr>
+<tr>
+<td>atol</td>
+<td>用于把 nptr 所指向的字符串数组转换成long类型；该函数等价于<code>strtol(s, (char**)NULL, 10)</code></td>
+</tr>
+<tr>
+<td>strtod</td>
+<td>用于把 nptr 所指向的字符串数组的前缀转换成 double 类型，在转换时跳过字符串数组的前导空白符。</td>
+</tr>
+<tr>
+<td>strtol</td>
+<td>用于把 nptr 所指向的字符串数组的前缀转换成 long 类型，在转换时跳过字符串数组的前导空白符。</td>
+</tr>
+<tr>
+<td>strtoul</td>
+<td>strtoul函数的功能与strtol函数相同，只是结果为 unsigned long 类型，错误值为 <code>ULONG_MAX</code>。</td>
+</tr>
+</tbody>
+</table>
+<p>strtol是atoi的增强版，主要体现在这几方面：</p>
+<ul>
+<li>不仅可以识别十进制整数，还可以识别其它进制的整数，取决于base参数，比如<code>strtol(&quot;0XDEADbeE~~&quot;, NULL, 16)</code>返回0xdeadbee的值，<code>strtol(&quot;0777~~&quot;, NULL, 8)</code>返回0777的值。</li>
+<li>endptr是一个传出参数，函数返回时指向后面未被识别的第一个字符。例如<code>char *pos; strtol(&quot;123abc&quot;, &amp;pos, 10);</code>，strtol返回123，pos指向字符串中的字母a。如果字符串开头没有可识别的整数，例如<code>char *pos; strtol(&quot;ABCabc&quot;, &amp;pos, 10);</code>，则strtol返回0，pos指向字符串开头，可以据此判断这种出错的情况，而这是atoi处理不了的。</li>
+<li>如果字符串中的整数值超出long int的表示范围（上溢或下溢），则strtol返回它所能表示的最大（或最小）整数，并设置errno为ERANGE，例如<code>strtol(&quot;0XDEADbeef~~&quot;, NULL, 16)</code>返回0x7fffffff并设置errno为ERANGE。</li>
+</ul>
+<h4 id="示例：strtol的出错处理">示例：strtol的出错处理</h4>
+<p>回想一下使用fopen的套路if ( (fp = fopen(…)) == NULL) { 读取errno }，fopen在出错时会返回NULL，因此我们知道需要读errno，但strtol在成功调用时也可能返回0x7fffffff，我们如何知道需要读errno呢？最严谨的做法是首先把errno置0，再调用strtol，再查看errno是否变成了错误码。Man Page上有一个很好的例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;limits.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> base;</span><br><span class="line">    <span class="keyword">char</span> *endptr, *str;</span><br><span class="line">    <span class="keyword">long</span> val;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc &lt; <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;Usage: %s str [base]\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    str = argv[<span class="number">1</span>];</span><br><span class="line">    base = (argc &gt; <span class="number">2</span>) ? atoi(argv[<span class="number">2</span>]) : <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    errno = <span class="number">0</span>;    <span class="comment">/* To distinguish success/failure after call */</span></span><br><span class="line">    val = strtol(str, &amp;endptr, base);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Check for various possible errors */</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((errno == ERANGE &amp;&amp; (val == LONG_MAX || val == LONG_MIN))</span><br><span class="line">        || (errno != <span class="number">0</span> &amp;&amp; val == <span class="number">0</span>)) &#123;</span><br><span class="line">        perror(<span class="string">&quot;strtol&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (endptr == str) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;No digits were found\n&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* If we got here, strtol() successfully parsed a number */</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;strtol() returned %ld\n&quot;</span>, val);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (*endptr != <span class="string">&#x27;\0&#x27;</span>)        <span class="comment">/* Not necessarily an error... */</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Further characters after number: %s\n&quot;</span>, endptr);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">exit</span>(EXIT_SUCCESS);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="用于产生随机数的函数">用于产生随机数的函数</h3>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rand</td>
+<td>用于产生一个 0 到 <code>RAND_MAX</code> 之间的伪随机整数。<code>RAND_MAX</code> 的取值至少为 32767。</td>
+</tr>
+<tr>
+<td>srand</td>
+<td>播种函数。用参数 seed 作为生成新的伪随机数序列的种子。种子 seed 的初值为1。</td>
+</tr>
+</tbody>
+</table>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  srand只是一个播种函数，用于改变 rand 函数的种子，实际生成随机值还是需要使用 rand 函数。
+</div>
+<p>可以认为rand()在每次被调用的时候，它会查看：</p>
+<ol>
+<li>如果用户在此之前调用过srand(seed)，给seed指定了一个值，那么它会自动调用srand(seed)一次来初始化它的起始值。</li>
+<li>如果用户在此之前没有调用过srand(seed)，它会自动调用srand(1)一次。</li>
+</ol>
+<p>一个常用的生成伪随机数的方法是结合time函数作为种子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span> <span class="comment">/*用到了time函数，所以要有这个头文件*/</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX 10</span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">( <span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> number[MAX] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    srand((<span class="keyword">unsigned</span>) time(<span class="literal">NULL</span>)); <span class="comment">/*播种子*/</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; MAX; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        number[i] = rand() % <span class="number">100</span>; <span class="comment">/*产生100以内的随机整数*/</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>, number[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="用于内存分配的函数">用于内存分配的函数</h3>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>malloc</td>
+<td>用于为大小为 size 的元素分配足够的内存，并返回指向所分配区域的第一个字节的指针；若内存不足以满足要求，则返回 NULL。malloc并不负责把分配的内存空间清零。</td>
+</tr>
+<tr>
+<td>calloc</td>
+<td>用于为由 nmemb 个大小为 size 的元素组成的数组分配足够的内存，并返回指向所分配区域的第一个字节的指针。并且calloc负责把这块内存空间用字节0填充。若内存不足以满足要求，则返回 NULL。该空间的初始大小为0字节。</td>
+</tr>
+<tr>
+<td>realloc</td>
+<td>用于将 ptr 所指向的元素的大小改为 size 个字节。如果size比原来小，则前size个字节不变，后面的数据被截断，如果size比原来大，则原来的数据全部保留，后面长出来的一块内存空间未初始化（realloc不负责清零）。若不能满足要求，则返回NULL，在这种情况下，原p指向的内存区保持不变。</td>
+</tr>
+<tr>
+<td>free</td>
+<td>用于释放p所指向的内存空间；当 ptr 的值为 NULL 时，该函数不起作用。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="用于控制程序执行的函数">用于控制程序执行的函数</h3>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>abort</td>
+<td>用于使程序非正常终止。其功能与 <code>raise(SIGABRT)</code> 类似</td>
+</tr>
+<tr>
+<td>exit</td>
+<td>用于使程序正常终止。此时，所有已打开的文件被刷新，所有已打开的流被关闭，控制返回给环境。</td>
+</tr>
+<tr>
+<td>atexit</td>
+<td>用于注册在程序正常终止时所要调用的函数。如果注册失败,那么返回非0值。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="用于环境交互的函数">用于环境交互的函数</h3>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>system</td>
+<td>用于把字符串 command 传送给执行环境。</td>
+</tr>
+<tr>
+<td>getenv</td>
+<td>用于返回与变量有关的环境字符串。如果该字符串不存在，那么返回 NULL。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="其他实用函数">其他实用函数</h3>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bsearch</td>
+<td>用于在 base[0]…base[n-1]之间查找与 *key 匹配的项。</td>
+</tr>
+<tr>
+<td>qsort</td>
+<td>用于对由 n 个大小为 size 的元素构成的数组 base 进行升序排序。</td>
+</tr>
+<tr>
+<td>qsort_r</td>
+<td>和 qsort 相似，区别是多了第三个参数 arg 用来传入比较函数，因而达到线程安全。</td>
+</tr>
+<tr>
+<td>abs</td>
+<td>返回其 int 类型参数 j 的绝对值</td>
+</tr>
+<tr>
+<td>labs</td>
+<td>返回其 long 类型参数 j 的绝对值</td>
+</tr>
+<tr>
+<td>div</td>
+<td>用于求 numerator/denominator 的商和余数,并把结果分别保存在结构类型 <code>div_t</code> 的两个 int 类型的数 quot 和 rem 中。</td>
+</tr>
+<tr>
+<td>ldiv</td>
+<td>用于求 numerator/denominator 的商和余数,并把结果分别保存在结构类型 <code>div_t</code> 的两个 long 类型的数 quot 和 rem 中。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="assert-h">assert.h</h2>
+<p><code>assert</code> 宏用于为程序增加诊断功能。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">assert</span><span class="params">(<span class="keyword">int</span> expression)</span></span></span><br></pre></td></tr></table></figure>
+<p>当<code>assert(expression)</code>执行时，如果表达式的值为0，那么 <code>assert</code> 宏将在标准出错输出流 <code>stderr</code> 输出一条如下所示的信息:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Assertion failed: 表达式， file 文件名， line nnn</span><br></pre></td></tr></table></figure>
+<p>然后调用 <code>abort</code> 终止执行。其中的源文件名和行号来自于预处理程序宏 <code>__FILE__</code> 和 <code>__LINE__</code> 。</p>
+<p>如果在头文件 assert.h 被包含时定义了宏 <code>NDEBUG</code>，那么宏 <code>assert</code> 将被忽略。</p>
+<h2 id="stdarg-h">stdarg.h</h2>
+<p>头文件 stdarg.h 提供了依次处理含有未知数目和类型的函数参数列表的功能。</p>
+<p>假设函数 f 含有可变数目的参数, lastarg 是它的最后一个有名参数,然后在 f 内说明一个类型为 <code>va_list</code> 的变量 ap，它将依次指向每个参数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">va_list ap;</span><br></pre></td></tr></table></figure>
+<p>在访问任何未命名的参数前必须用 <code>va_start</code> 宏对 ap 进行初始化：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">va_start( va_list ap, lastarg);</span><br></pre></td></tr></table></figure>
+<p>此后，宏 <code>va_arg</code> 的每次执行将产生一个与下一个未命名的参数有相同类型和值的值，它同时还修改 ap，以使下一次使用 <code>va_arg</code> 时返回下一个参数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">type <span class="title">va_arg</span><span class="params">(va_list ap, 类型)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>当所有的参数被处理完毕之后 f 要退出执行以前，必须调用一次宏 <code>va_end</code>：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">va_end</span><span class="params">(va_list ap)</span></span>;</span><br></pre></td></tr></table></figure>
+<h2 id="setjump-h">setjump.h</h2>
+<p>头文件 setjmp.h 中的说明提供了一种避免通常的函数调用和返回顺序的途径，特别地，它允许立即从一个多层嵌套的函数调用中返回。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">setjmp</span><span class="params">(jmp_buf env)</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">longjmp</span><span class="params">(jmp_buf env, <span class="keyword">int</span> val)</span></span></span><br></pre></td></tr></table></figure>
+<h4 id="setjump">setjump</h4>
+<p>setjmp 宏用于把当前状态信息保存到 env 中，供以后 longjmp 函数恢复状态信息时使用。如果是直接调用 setjmp，那么返回值为 0；如果是由于调用 longjmp 而调用 setjmp，那么返回值非 0。</p>
+<p>setjmp 只能在某些特定的情况下调用，如在if语句、 switch语句及循环语句的条件测试部分以及一些简单的关系表达式中：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (setjmp(env) == <span class="number">0</span>)</span><br><span class="line">    <span class="comment">/*直接调用setjmp时进行的处理*/</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="comment">/*由于调用longjmp函数而进行的处理*/</span></span><br></pre></td></tr></table></figure>
+<h4 id="longjump">longjump</h4>
+<p>longjmp用于恢复由最近一次调用 setjmp 时所保存到 env 中的状态信息。当它执行完时，程序就像 setjmp 宏调用刚刚执行完并返回非 0 值val那样继续执行。包含 setjmp 宏调用的函数的执行不必已经终止。所有可访问的对象的值都与调用 longjmp 时相同，唯一的例外是，那些调用 setjmp 宏的函数中的非 volatile 自动变量如果在调用 setjmp 宏后有了改变，那么就变成未定义的。</p>
+<h2 id="signal-h">signal.h</h2>
+<p>头文件 signal.h 中提供了一些用于处理程序运行期间所引发的异常条件的功能，如处理来源于外部的中断信号或程序执行期间出现的错误等异常事件。</p>
+<h4 id="signal">signal</h4>
+<p>signal 用于确定处理以后的信号的方法。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> (*signal(<span class="keyword">int</span> sig, <span class="keyword">void</span> (*handler)(<span class="keyword">int</span>))) (<span class="keyword">int</span>)</span><br></pre></td></tr></table></figure>
+<p>如果 handler 的值是 <code>SIG_DFL</code> ，那么就采用由实现定义的缺省行为；如果 handler 的值是 SIG_IGN，那么就忽略该信号；否则，调用 handler 所指向的函数(参数的类型为信号的类型)。有效的信号包括:</p>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SIGABRT</td>
+<td>异常终止，如由abort发出的信号。</td>
+</tr>
+<tr>
+<td>SIGFPE</td>
+<td>算术运算出错，如除数为 0 或溢出。</td>
+</tr>
+<tr>
+<td>SIGILL</td>
+<td>非法函数映像，如非法指令。</td>
+</tr>
+<tr>
+<td>SIGINT</td>
+<td>交互式意图，如中断。</td>
+</tr>
+<tr>
+<td>SIGSEGV</td>
+<td>非法访问存储器,如访问不存在的内存单元。</td>
+</tr>
+<tr>
+<td>SIGTERM</td>
+<td>发送给本程序的终止请求信号</td>
+</tr>
+</tbody>
+</table>
+<p>signal 对指定信号返回 handler 的前一个值；如果出现错误，那么返回值为<code>SIG_ERR</code>。当随后出现信号 sig 时，该信号被恢复为其缺省行为，然后调用信号处理函数，如<code>(*handl er)(sig)</code>。如果从信号处理程序中返回,那么程序就从发信号时的位置重新开始执行。</p>
+<p>信号的初始状态由实现定义。</p>
+<h4 id="raise">raise</h4>
+<p>raise用于向程序发送信号 sig。如果发送不成功,就返回一个非 0 值。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">raise</span><span class="params">(<span class="keyword">int</span> sig)</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="time-h">time.h</h2>
+<p>头文件 time.h 中说明了一些用于处理日期与时间的类型和函数。</p>
+<p>头文件 time.h 中说明了一些用于处理日期与时间的类型和函数。其中的一部分函数用于处理当地时间，因为时区等原因，当地时间与日历时间可能不相同。 <code>clock_t</code> 和 <code>time_t</code> 是两个用于表示时间的算术类型，而 <code>struct tm</code> 则用于存放日历时间的各个成分。 <code>tm</code> 的各个成员的用途及取值范围如下:</p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int tm_sec</td>
+<td>从当前分钟开始经过的秒数( 0,61)。</td>
+</tr>
+<tr>
+<td>int tm_min</td>
+<td>从当前这小时开始经过的分钟数( 0,59)。</td>
+</tr>
+<tr>
+<td>int tm_hour</td>
+<td>自午夜(0,23)。</td>
+</tr>
+<tr>
+<td>int tm_mday</td>
+<td>本月中的天数( 1,31)。</td>
+</tr>
+<tr>
+<td>int tm_mon</td>
+<td>从1月起经过的月数( 0,11)。</td>
+</tr>
+<tr>
+<td>int tm_year</td>
+<td>从1900年起经过的年数。</td>
+</tr>
+<tr>
+<td>int tm_wday</td>
+<td>从星期天起经过的天数( 0,6)。</td>
+</tr>
+<tr>
+<td>int tm_yday</td>
+<td>从1月1日起经过的天数( 0,365)。</td>
+</tr>
+<tr>
+<td>int tm_isdst</td>
+<td>夏令时标记。</td>
+</tr>
+</tbody>
+</table>
+<p>其中，<code>tm_is dst</code> 在使用夏令时时其值为正，在不使用夏令时时其值为 0 。如果该信息不能使用，那么 <code>tm_isd st</code> 的值为负。</p>
+<h3 id="函数列表">函数列表</h3>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clock</td>
+<td>用于返回程序自开始执行到目前为止所占用的处理机时间。获取以秒为单位的时间可以用 <code>clock() / CLOCKS_PER_SEC</code>。</td>
+</tr>
+<tr>
+<td>time</td>
+<td>用于返回当前日历时间</td>
+</tr>
+<tr>
+<td>difftime</td>
+<td>返回 time1-time0 的值(以秒为单位)。</td>
+</tr>
+<tr>
+<td>mktime</td>
+<td>用于将结构 *tm 中的当地时间转换为 <code>time_t</code> 类型的日历时间(可被 time函数使用)。</td>
+</tr>
+<tr>
+<td>asctime</td>
+<td>用于将结构 *tm 中的时间转换成如下所示的字符串形式。</td>
+</tr>
+<tr>
+<td>ctime</td>
+<td>用于将结构 *timep 中的日历转换成当地时间。等效于<code>asctime(localtime(tp))</code></td>
+</tr>
+<tr>
+<td>gmtime</td>
+<td>用于将 *timep 中的日历时间转换成世界协调时(UTC)。</td>
+</tr>
+<tr>
+<td>localtime</td>
+<td>用于将结构 *timep 中的日历时间转换成当地时间。</td>
+</tr>
+<tr>
+<td>strftime</td>
+<td>用于根据 fomat 的值把结构 *tm 中的日期与时间信息转换成指定的格式并存储到 s 所指向的数组中。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="strftime">strftime</h4>
+<p>strftime 函数用于根据 fomat 的值把结构 *tm 中的日期与时间信息转换成指定的格式并存储到 s 所指向的数组中。其中 fomat 类似于 printf 函数中的格式说明，它由 0 个或多个转换规格说明与普通字符组成。普通字符(包括终结行的空字符 <code>\0</code> )都原封不动地拷贝到 s 中。每个 <code>%c</code> 按照下面所描述的格式用与当地环境相适应的值来替换。写到 s 中的字符数不得大于 max 。strftime函数返回实际写到s中的字符数(不包括空字符 <code>\0</code>)；如果所产生的字符数多于 max，该函数返回值为 0 。在 strftime 函数中可以使用的转换规格说明及其所表示的含义如下：</p>
+<table>
+<thead>
+<tr>
+<th>说明符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>%a</code></td>
+<td>一星期中各天的缩写名。</td>
+</tr>
+<tr>
+<td><code>%A</code></td>
+<td>一星期中各天的全名。</td>
+</tr>
+<tr>
+<td><code>%b</code></td>
+<td>缩写月份名。</td>
+</tr>
+<tr>
+<td><code>%B</code></td>
+<td>月份全名。</td>
+</tr>
+<tr>
+<td><code>%c</code></td>
+<td>当地时间和日期表示。</td>
+</tr>
+<tr>
+<td><code>%d</code></td>
+<td>用整数表示的一个月中的某一天(01~31)。</td>
+</tr>
+<tr>
+<td><code>%H</code></td>
+<td>用整数表示的时(24小时制，00~23)。</td>
+</tr>
+<tr>
+<td><code>%I</code></td>
+<td>用整数表示的时(12小时制，01~ 12)。</td>
+</tr>
+<tr>
+<td><code>%j</code></td>
+<td>用整数表示的一年中各天(001~366)。</td>
+</tr>
+<tr>
+<td><code>%m</code></td>
+<td>用整数表示的月份(01~12)。</td>
+</tr>
+<tr>
+<td><code>%M</code></td>
+<td>用整数表示的分(00~59)。</td>
+</tr>
+<tr>
+<td><code>%p</code></td>
+<td>与AM与PM对应的当地表示方法。</td>
+</tr>
+<tr>
+<td><code>%S</code></td>
+<td>用整数表示的秒(00~61)。</td>
+</tr>
+<tr>
+<td><code>%U</code></td>
+<td>用整数表示一年中的星期数(00~53，将星期日看作是每周的第一天)。</td>
+</tr>
+<tr>
+<td><code>%w</code></td>
+<td>用整数表示一周中的各天(0~6，星期日为 0)。</td>
+</tr>
+<tr>
+<td><code>%W</code></td>
+<td>用整数表示一年中的星期数(00~53，将星期一看作是每周的第一天)。</td>
+</tr>
+<tr>
+<td><code>%x</code></td>
+<td>当地日期表示。</td>
+</tr>
+<tr>
+<td><code>%X</code></td>
+<td>当地时间表示。</td>
+</tr>
+<tr>
+<td><code>%y</code></td>
+<td>不带世纪号的年份(00~99)。</td>
+</tr>
+<tr>
+<td><code>%Y</code></td>
+<td>完整年份表示(带世纪号)。</td>
+</tr>
+<tr>
+<td><code>%Z</code></td>
+<td>时区名字(在可以使用时)。</td>
+</tr>
+<tr>
+<td><code>%%</code></td>
+<td><code>%</code>本身。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="limits-h">limits.h</h2>
+<p>头文件 limits.h 定义了一些于表示整类型大小的常量。以下所列的值是可接受的最小值，在实际系统中可以使用更大的值。</p>
+<table>
+<thead>
+<tr>
+<th>常量名</th>
+<th>大小</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CHAR_BIT</code></td>
+<td>8</td>
+<td>char类型的位数</td>
+</tr>
+<tr>
+<td><code>CHAR_MAX</code></td>
+<td><code>UCHAR_MAX</code> 或 <code>SCHAR_MAX</code></td>
+<td>char类型的最大值</td>
+</tr>
+<tr>
+<td><code>CHAR_MIN</code></td>
+<td>0 或 <code>SCHAR_MIN</code></td>
+<td>char类型的最小值</td>
+</tr>
+<tr>
+<td><code>INT_MAX</code></td>
+<td>+32767</td>
+<td>int类型的最大值</td>
+</tr>
+<tr>
+<td><code>INT_MIN</code></td>
+<td>-32767</td>
+<td>int类型的最小值</td>
+</tr>
+<tr>
+<td><code>LONG_MAX</code></td>
+<td>+2147483647</td>
+<td>long类型的最大值</td>
+</tr>
+<tr>
+<td><code>LONG_MIN</code></td>
+<td>-2147483647</td>
+<td>long类型的最小值</td>
+</tr>
+<tr>
+<td><code>SCHAR_MAX</code></td>
+<td>+127</td>
+<td>signed char类型的最大值</td>
+</tr>
+<tr>
+<td><code>SCHAR_MIN</code></td>
+<td>-127</td>
+<td>signed char类型的最小值</td>
+</tr>
+<tr>
+<td><code>SHRT_MAX</code></td>
+<td>+32767</td>
+<td>short类型的最大值</td>
+</tr>
+<tr>
+<td><code>SHRT_MIN</code></td>
+<td>-32767</td>
+<td>short类型的最小值</td>
+</tr>
+<tr>
+<td><code>UCHAR_MAX</code></td>
+<td>255</td>
+<td>unsigned char类型的最大值</td>
+</tr>
+<tr>
+<td><code>UINT_MAX</code></td>
+<td>65535</td>
+<td>unsigend int类型的最大值</td>
+</tr>
+<tr>
+<td><code>ULONG_MAX</code></td>
+<td>4294967295</td>
+<td>unsigned long类型的最大值</td>
+</tr>
+<tr>
+<td><code>USHRT_MAX</code></td>
+<td>65535</td>
+<td>unsigned short类型的最大值</td>
+</tr>
+</tbody>
+</table>
+<h2 id="float-h">float.h</h2>
+<p>定义了与浮点算术运算相关的一些常量。下面列出的名字是 float.h 的一个子集，给出的每个值代表相应量的一个最小取值。各个实现可以定义适当的值。</p>
+<table>
+<thead>
+<tr>
+<th>常量名</th>
+<th>大小</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FLT_RADIX</code></td>
+<td>2</td>
+<td>指数表示的基数，如 2、16</td>
+</tr>
+<tr>
+<td><code>FLT_ROUNDS</code></td>
+<td></td>
+<td>加法的浮点舍入规则</td>
+</tr>
+<tr>
+<td><code>FLT_DIG</code></td>
+<td>6</td>
+<td>精度的十进制数字数</td>
+</tr>
+<tr>
+<td><code>FLT_EPSILON</code></td>
+<td>1E-5</td>
+<td>使 1.0+x != 1.0 成立的最小的 x</td>
+</tr>
+<tr>
+<td><code>xFLT_MANT_DIG</code></td>
+<td></td>
+<td>基数为 FLT_RADIX 的尾数中的数字数</td>
+</tr>
+<tr>
+<td><code>FLT_MAX</code></td>
+<td>1E+37</td>
+<td>最大浮点数</td>
+</tr>
+<tr>
+<td><code>FLT_MAX_EXP</code></td>
+<td></td>
+<td>使 \(\mbox{FLT_RADIX}^{n-1}\) 可表示的最大的 n</td>
+</tr>
+<tr>
+<td><code>FLT_MIN</code></td>
+<td>1E-37</td>
+<td>最小规范化的浮点数</td>
+</tr>
+<tr>
+<td><code>FLT_MIN_EXP</code></td>
+<td></td>
+<td>使 \(10^n\) 为规范化数的最小的n</td>
+</tr>
+<tr>
+<td><code>DBL_DIG</code></td>
+<td>10</td>
+<td>精度的十进制字数</td>
+</tr>
+<tr>
+<td><code>DBL_EPSILON</code></td>
+<td>1E-9</td>
+<td>使 1.0+x != 1.0 成立的最小的 x</td>
+</tr>
+<tr>
+<td><code>DBL_MANT_DIG</code></td>
+<td></td>
+<td>基数为 FLT_RADIX 的尾数中的数字数</td>
+</tr>
+<tr>
+<td><code>DBL_MAX</code></td>
+<td>1E+37</td>
+<td>最大双精度浮点数</td>
+</tr>
+<tr>
+<td><code>DBL_MAX_EXP</code></td>
+<td></td>
+<td>使 \(\mbox{FLT_RADIX}^{n-1}\) 可以正常表示的最大的 n</td>
+</tr>
+<tr>
+<td><code>DBL_MIN</code></td>
+<td>1E-37</td>
+<td>最小双精度浮点数</td>
+</tr>
+<tr>
+<td><code>DBL_MIN_EXP</code></td>
+<td></td>
+<td>使\(10^{n}\)为规范化数的最小的 n</td>
+</tr>
+</tbody>
+</table>
+<h2 id="其他一些非标准的C语言库">其他一些非标准的C语言库</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://man.chinaunix.net/develop/c&amp;c++/linux_c/default.htm">Linux C 函数库</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.gnome.org/glib/stable/">GLib</a></li>
+<li><a target="_blank" rel="noopener" href="http://ccodearchive.net/index.html">ccan</a></li>
+<li><a target="_blank" rel="noopener" href="http://apr.apache.org/">APR</a></li>
+</ul>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/c-unit-test.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next disabled"><a>Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '标准库'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

@@ -1,0 +1,44 @@
+#post_meta .affix {
+    top: 60px;
+    width: auto;
+}
+
+@media screen and (min-width: 1200px) {
+    /* Widen the fixed sidebar again */
+    #post_meta .affix-bottom,
+    #post_meta .affix {
+        opacity: 20%;
+        width: 262.5px;
+    }
+}
+
+@media (min-width: 979px) and (max-width: 1199px)  {
+    #post_meta .affix-bottom,
+    #post_meta .affix {
+        opacity: 20%;
+        width: 212.5px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 979px) {
+    #post_meta .affix {
+        opacity: 100%;
+        top: -10000px;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
+    #post_meta .affix {
+        opacity: 100%;
+        top: -10000px;
+    }
+}
+
+@media (max-width: 480px) {
+    #post_meta .affix {
+        opacity: 100%;
+        top: -10000px;
+    }
+}
+
+

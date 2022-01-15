@@ -1,0 +1,733 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>机器学习的数学基础：向量篇 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="本文将总结线性代数中向量的基本知识点。同时理论结合实践，使用 Python 来进行实践。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="机器学习的数学基础：向量篇"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '机器学习的数学基础：向量篇'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 机器学习的数学基础：向量篇</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>本文将总结线性代数中向量的基本知识点。同时理论结合实践，使用 Python 来进行实践。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <h2 id="前言">前言</h2>
+<p>在 <a target="_blank" rel="noopener" href="http://hahack.com/math/math-matrix/">上文</a> 中我简单概括了矩阵的基本运算，并给出了两个应用实例。这篇文章我们继续谈谈向量。</p>
+<p>向量是线性代数中的基本概念，也是机器学习的基础数据表示形式。例如计算机阅读文本的过程首先就会将文本分词，然后用向量表示<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>。这是因为向量很适合在高维空间中表达和处理。在机器学习中会接触到的诸如投影、降维的概念，都是在向量的基础上做的。</p>
+<span id="more"></span>
+<p>在 \(\mathbb{R}^{n}\) <sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>空间中定义的向量 \(\vec{\mathbf{V}}\)，可以用一个包含 n 个实数的有序集来表示，即 \(\vec{\mathbf{V}} = \begin{bmatrix}v_1 \\ v_2 \\ \ldots \\ v_n\end{bmatrix}\)，这个有序集里的每个元素称为向量的 <strong>分量</strong> 。例如一个 \(\mathbb{R}^{2}\) 空间中的向量 \(\begin{bmatrix}2 \\ 1\end{bmatrix}\) ，有些地方也会用 \((2, 1)\) 或 \(&lt;2, 1>\) 这样的形式来表示。</p>
+<p>绘图表示这个变量：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig5.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>向量的长度被定义为 \[\left\| \vec{\mathbf{v}} \right\| = \sqrt{v_{1}^{2} + v_{2}^{2} + \ldots + v_{n}^{2}}\]，和我们以往所接触的距离公式一模一样。长度为 1 的向量称为 <strong>单位向量</strong> 。</p>
+<h2 id="基本运算">基本运算</h2>
+<h3 id="加">加</h3>
+<p>向量 \(\mathbf{a}\) 与向量 \(\mathbf{b}\) 的加法定义为:</p>
+<p>\[
+\mathbf{a} + \mathbf{b} = \begin{bmatrix} a_1 + b_1 \\ a_2 + b_2 \\ \ldots \\ a_n + b_n \end{bmatrix}
+\]</p>
+<p>绘图示意向量 \(\mathbf{a} = \begin{bmatrix}-1 \\ 2\end{bmatrix}\) 与 \(\mathbf{b} = \begin{bmatrix}3 \\ 1\end{bmatrix}\) 的相加，值为 \(\begin{bmatrix}2 \\ 3\end{bmatrix}\) ：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig3.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>在 Python 中，可以直接用 Numpy 的 ndarray 来表示向量。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a = np.array([-<span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line">b = np.array([<span class="number">3</span>, <span class="number">1</span>])</span><br><span class="line"><span class="built_in">print</span> a + b <span class="comment"># [2 3]</span></span><br></pre></td></tr></table></figure>
+<h3 id="减">减</h3>
+<p>\[
+\mathbf{a} - \mathbf{b} = \begin{bmatrix} a_1 - b_1 \\ a_2 - b_2 \\ \ldots \\ a_n - b_n \end{bmatrix}
+\]</p>
+<p>从几何角度讲，向量减相当于加上一个反向的向量。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a = np.array([-<span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line">b = np.array([<span class="number">3</span>, <span class="number">1</span>])</span><br><span class="line"><span class="built_in">print</span> a - b  <span class="comment"># [-4,  1]</span></span><br></pre></td></tr></table></figure>
+<h3 id="乘">乘</h3>
+<h4 id="标量乘向量">标量乘向量</h4>
+<p>标量 \(c\) 乘以向量 \(\mathbf{a}\) 定义为：</p>
+<p>\[
+c \cdot \mathbf{a} = \begin{bmatrix} c \cdot a_1 \\ c \cdot a_2 \\ \ldots \\ c \cdot a_n \end{bmatrix} = \begin{bmatrix} a_1 \cdot c \\ a_2 \cdot c \\ \ldots \\ a_n \cdot c \end{bmatrix}
+\]</p>
+<p>绘图示意向量 \(\mathbf{a} = \begin{bmatrix} -1 \\ 2 \end{bmatrix}\) 乘以一个标量 3 得到 \(\begin{bmatrix} -3 \\ 6 \end{bmatrix}\) ：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig4.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>Python 实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a = np.array([-<span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line"><span class="built_in">print</span> a * <span class="number">3</span> <span class="comment">#[-3,  6]</span></span><br></pre></td></tr></table></figure>
+<h4 id="向量点积">向量点积</h4>
+<p>向量的点积（又叫点乘）定义如下：</p>
+<p>\[\vec{\mathbf{a}}\cdot \vec{\mathbf{b}} = \begin{bmatrix} a_1 \\ a_2 \\ \ldots \\ a_n\end{bmatrix} \cdot \begin{bmatrix} b_1 \\ b_2 \\ \ldots \\ b_n \end{bmatrix} = a_{1}b_{1} + a_{2}b_{2} + \ldots + a_{n}b_{n}\]</p>
+<p>可见点积得到的是一个标量。</p>
+<p>例如：</p>
+<p>\[\begin{bmatrix} 3 \\ 5 \\ 2 \end{bmatrix} \cdot \begin{bmatrix} 1 \\ 4 \\ 7 \end{bmatrix} = 3 \cdot 1 + 5 \cdot 4 + 2 \cdot 7 = 37\]</p>
+<p>Python 示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a = np.array([<span class="number">3</span>, <span class="number">5</span>, <span class="number">2</span>])</span><br><span class="line">b = np.array([<span class="number">1</span>, <span class="number">4</span>, <span class="number">7</span>])</span><br><span class="line"><span class="built_in">print</span> a.dot(b)  <span class="comment"># 37</span></span><br><span class="line"><span class="built_in">print</span> np.dot(a, b)  <span class="comment"># 37（另一种等价写法）</span></span><br></pre></td></tr></table></figure>
+<p>容易证明点积满足乘法交换律、分配律和结合律。</p>
+<p>我们 <a href="#%E5%89%8D%E8%A8%80">前面</a> 知道向量的长度定义为 \(\left\| \vec{\mathbf{v}} \right\| = \sqrt{v_{1}^{2} + v_{2}^{2} + \ldots + v_{n}^{2}}\)，联立点积的定义，可以得出：</p>
+<div class="label-anchor"><span>eq: 1 »</span></div>
+<p>\[\left\| \vec{\mathbf{v}} \right\| = \sqrt{v_{1}^{2} + v_{2}^{2} + \ldots + v_{n}^{2}} = \sqrt{\vec{\mathbf{v}} \cdot \vec{\mathbf{v}}}\]</p>
+<p>关于点积还有一个非常重要的性质，称为 <strong>柯西不等式</strong> <sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup>：</p>
+<div class="alert alert-warning"><i class="far fa-bell"></i>  <ul>
+<li>对两个非 0 向量 \(\vec{\mathbf{x}}, \vec{\mathbf{y}} \in \mathbb{R}^{n}\)，\(|\vec{\mathbf{x}} \cdot \vec{\mathbf{y}}| \le \left\|\vec{\mathbf{x}}\right\|\left\|\vec{\mathbf{y}}\right\|\)。</li>
+<li>当且仅当 \(\vec{\mathbf{x}} = c\vec{\mathbf{y}}\) 时，等式成立。</li>
+</ul>
+</div>
+<p>虽然受限于篇幅不去证明它，但这个性质非常重要，后面会有很多向量的理论都建立在它的基础之上。例如，对一个向量 \((\vec{\mathbf{x}} + \vec{\mathbf{y}})\) ,利用这个性质，结合公式 1，我们可以得到</p>
+<p>\[\begin{align}
+\left\|\vec{\mathbf{x}} + \vec{\mathbf{y}}\right\|^2 &amp; = (\vec{\mathbf{x}} + \vec{\mathbf{y}})\cdot (\vec{\mathbf{x}} + \vec{\mathbf{y}}) \\\
+ &amp; = \left\|\vec{\mathbf{x}}\right\|^2 + 2\vec{\mathbf{x}}\vec{\mathbf{y}} + \left\|\vec{\mathbf{y}}\right\|^2 \\\
+&amp; \le 
+\left\|\vec{\mathbf{x}}\right\|^2 + 2\left\|\vec{\mathbf{x}}\right\|\left\|\vec{\mathbf{y}}\right\| + \left\|\vec{\mathbf{y}}\right\|^2
+\end{align}\]</p>
+<p>所以：</p>
+<p>\[
+\left\|\vec{\mathbf{x}} + \vec{\mathbf{y}}\right\|^2 
+\le 
+(\left\|\vec{\mathbf{x}}\right\| + \left\|\vec{\mathbf{y}}\right\|)^2
+\]</p>
+<p>两边开平方得到：</p>
+<p>\[
+\left\|\vec{\mathbf{x}} + \vec{\mathbf{y}}\right\| 
+\le 
+\left\|\vec{\mathbf{x}}\right\| + \left\|\vec{\mathbf{y}}\right\|
+\]</p>
+<p>这就得到了三角不等式。</p>
+<p>从几何的角度来说，向量的点积与向量间夹角 \(\theta\) 的余弦有关：\[\vec{\mathbf{a}}\cdot\vec{\mathbf{b}} = \left\|\vec{\mathbf{a}}\right\|\left\|\vec{\mathbf{b}}\right\|cos\theta\]，这意味着向量的点积其实反映了向量 \(\vec{\mathbf{a}}\) 在向量 \(\vec{\mathbf{b}}\) 上的 <strong>投影</strong> ，即两个向量在同个方向上的相同程度。当两向量正交时，\(cos\theta\) 的值为0，点积的值为0，投影最小。当两向量平行时，\(cos\theta\) 的值为1，点积值最大，投影也最大。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig7.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>观察上图，\(L\) 是 \(\vec{\mathbf{v}}\) 向量两端延伸出来的直线，即 \(L={c\vec{\mathbf{v}}|c\in \mathbb{R}}\)。记向量 \(\vec{\mathbf{x}}\) 在 \(L\) 上的投影为 \(Proj_L(\vec{\mathbf{x}})\)。根据点积的性质，可得：</p>
+<p>\[
+\begin{align}
+(\vec{\mathbf{x}}-\underbrace {  c\vec{\mathbf{v}}}_{ Proj_L({\vec{\mathbf{x}}})  } )\cdot \vec{\mathbf{v}} &amp;= 0 \\\
+\vec{\mathbf{x}}\cdot \vec{\mathbf{v}} -c\vec{\mathbf{v}}\cdot \vec{\mathbf{v}} &amp;= 0\\\
+c\cdot \vec{\mathbf{v}} \cdot \vec{\mathbf{v}} &amp;= \vec{\mathbf{x}}\cdot \vec{\mathbf{v}}\\\
+c &amp;= \frac{\vec{\mathbf{x}}\cdot \vec{\mathbf{v}}}{\vec{\mathbf{v}}\cdot \vec{\mathbf{v}}}
+\end{align}
+\]</p>
+<p>有了 \(c\)， 我们就可以求出投影 \(Proj_L({\vec{\mathbf{x}}})\) 为：</p>
+<p>\[Proj_L({\vec{\mathbf{x}}}) =  c\vec{\mathbf{v}} = (\frac{\vec{\mathbf{x}}\cdot \vec{\mathbf{v}}}{\vec{\mathbf{v}}\cdot \vec{\mathbf{v}}})\vec{\mathbf{v}}\]</p>
+<p>例如，向量 \(\vec{\mathbf{a}} = \begin{bmatrix}1 \\ 2\end{bmatrix}\)，向量 \(\vec{\mathbf{b}} = \begin{bmatrix}1 \\ 1\end{bmatrix}\)，那么 \(\vec{\mathbf{a}}\) 在 \(\vec{\mathbf{b}}\) 方向 \(L\) 上的投影为：</p>
+<p>\[Proj_L({\vec{\mathbf{a}}}) = c\vec{\mathbf{b}} = (\frac{\vec{\mathbf{a}}\cdot \vec{\mathbf{b}}}{\vec{\mathbf{b}}\cdot \vec{\mathbf{b}}})\vec{\mathbf{b}} = \frac{3}{2}\vec{\mathbf{b}}\]</p>
+<p>Python 示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_projection</span>(<span class="params">a, b</span>):</span></span><br><span class="line">    <span class="keyword">return</span> a.dot(b)*<span class="number">1.0</span>*b/b.dot(b)</span><br><span class="line"></span><br><span class="line">a = np.array([<span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line">b = np.array([<span class="number">2</span>, <span class="number">2</span>])</span><br><span class="line"><span class="built_in">print</span> get_projection(a, b)  <span class="comment"># [1.5  1.5]</span></span><br></pre></td></tr></table></figure>
+<h4 id="向量外积">向量外积</h4>
+<p>向量的（又叫叉乘、向量积、叉积）只在 \(\mathbb{R}^{2}\) 和 \(\mathbb{R}^{3}\) 中定义：</p>
+<p>\(\mathbb{R}^{2}\) 的向量外积：</p>
+<p>\[\begin{bmatrix} a_1 \\ a_2\end{bmatrix} \times \begin{bmatrix} b_1 \\ b_2 \end{bmatrix} = \begin{bmatrix} a_1 \cdot b_2 - a_2 \cdot b_1\end{bmatrix}\]</p>
+<p>例如：</p>
+<p>\[\begin{bmatrix} 1 \\ 2 \end{bmatrix} \times \begin{bmatrix} 3 \\ 4 \end{bmatrix} = \begin{bmatrix} 1 \cdot 4 - 3 \cdot 2 \end{bmatrix} = \begin{bmatrix}-2\end{bmatrix}\]</p>
+<p>\(\mathbb{R}^{3}\) 的向量外积：</p>
+<p>\[\begin{bmatrix} a_1 \\ a_2 \\ a_3\end{bmatrix} \times \begin{bmatrix} b_1 \\ b_2 \\ b_3 \end{bmatrix} = \begin{bmatrix} a_2 \cdot b_3 - a_3 \cdot b_2 \\ a_3 \cdot b_1 - a_1 \cdot b_3 \\ a_1 \cdot b_2 - a_2 \cdot b_1\end{bmatrix}\]</p>
+<p>例如：</p>
+<p>\[\begin{bmatrix} 3 \\ 5 \\ 2 \end{bmatrix} \times \begin{bmatrix} 1 \\ 4 \\ 7 \end{bmatrix} = \begin{bmatrix} 5 \cdot 7 - 2 \cdot 4 \\ 2 \cdot 1 - 3 \cdot 7 \\ 3 \cdot 4 - 5 \cdot 1\end{bmatrix} = \begin{bmatrix} 27 \\ -19 \\ 7\end{bmatrix} \]</p>
+<p>可见向量间外积的结果会得到一个新的向量。</p>
+<p>Python 示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a = np.array([<span class="number">3</span>, <span class="number">5</span>, <span class="number">2</span>])</span><br><span class="line">b = np.array([<span class="number">1</span>, <span class="number">4</span>, <span class="number">7</span>])</span><br><span class="line"><span class="built_in">print</span> np.cross(a, b)  <span class="comment"># [27, -19, 7]</span></span><br></pre></td></tr></table></figure>
+<p>外积的一个重要作用是可以得到一个和 \(\vec{\mathbf{a}}\) 、\(\vec{\mathbf{b}}\) 两个原向量正交的新向量 \(\vec{\mathbf{c}}\) ，且可以通过右手法则来确定新向量的方向（一个简单的确定满足“右手定则”的结果向量的方向的方法是这样的：若坐标系是满足右手定则的，当右手的四指从 \(\vec{\mathbf{a}}\) 以不超过180度的转角转向 \(\vec{\mathbf{b}}\) 时，竖起的大拇指指向是 \(\vec{\mathbf{c}}\) 的方向）。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig6.jpeg" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>从几何的角度来说，向量的外积与向量间夹角 \(\theta\) 的正弦有关：\[\left\|\vec{\mathbf{a}}\times\vec{\mathbf{b}}\right\| = \left\|\vec{\mathbf{a}}\right\|\left\|\vec{\mathbf{b}}\right\|sin\theta\]，这意味着向量的外积反映了向量 \(\vec{\mathbf{a}}\) 与向量 \(\vec{\mathbf{b}}\) 的正交程度。当两向量平行时，\(sin\theta\) 的值为0，外积的值为0，正交程度最小。当两向量正交时，\(sin\theta\) 的值为1，外积值最大，正交程度最大。</p>
+<h4 id="矩阵向量积">矩阵向量积</h4>
+<p>当矩阵 \(\mathbf{A}\) 的列数与向量 \(\vec{\mathbf{x}}\) 的分量数相同时，矩阵和向量的积有定义：</p>
+<p>\[\underset{m\times n}{A}\vec{\mathbf{x}}=\begin{bmatrix}a_{11} &amp; a_{12} &amp; \ldots &amp; a_{1n} \\ a_{21} &amp; a_{22} &amp; \ldots &amp; a_{2n} \\ \ldots \\ a_{m1} &amp; a_{m2} &amp; \ldots &amp; a_{mn}\end{bmatrix}\begin{bmatrix}x_1 \\ x_2 \\ \ldots \\ x_n \end{bmatrix} = \begin{bmatrix}a_{11}x_1 + a_{12}x_2 + \ldots + a_{1n}x_n \\ a_{21}x_1 + a_{22}x_2 + \ldots + a_{2n}x_n \\ \ldots \\ a_{m1}x_1 + a_{m2}x_2 + \ldots + a_{mn}x_n \\ \end{bmatrix}
+\]</p>
+<p>例如矩阵 \(\mathbf{A} = \begin{bmatrix}4 &amp; 3 &amp; 1 \\ 1 &amp; 2 &amp; 5\end{bmatrix}\) 乘以向量 \(\vec{\mathbf{x}} = \begin{bmatrix}5 \\ 2 \\ 7\end{bmatrix}\) 的结果为：</p>
+<p>\[\begin{bmatrix}4\cdot 5 + 3\cdot 2 + 1\cdot 7 \\ 1 \cdot 5 + 2 \cdot 2 + 5 \cdot 7\end{bmatrix} = \begin{bmatrix}33 \\ 44\end{bmatrix}\]</p>
+<p>Python 示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = np.matrix(<span class="string">&#x27;4 3 1;1 2 5&#x27;</span>)</span><br><span class="line">x = np.array([[<span class="number">5</span>], [<span class="number">2</span>], [<span class="number">7</span>]])</span><br><span class="line"><span class="built_in">print</span> a*x  <span class="comment"># [[33] [44]]</span></span><br></pre></td></tr></table></figure>
+<p>矩阵的向量积可以当成是矩阵的所有列向量的线性组合：</p>
+<p>\[\underset { m\times n }{ \mathbf{A} } \vec { \mathbf{x} } =\begin{bmatrix} \underbrace { \begin{bmatrix} a_{ 11 } \\ a_{ 21 } \\ \ldots \\ a_{ m1 } \end{bmatrix} }_{ \vec { \mathbf{ V }_{ 1 } }  }  &amp; \underbrace { \begin{bmatrix} a_{ 12 } \\ a_{ 22 } \\\ldots  \\ a_{ m2 } \end{bmatrix} }_{ \vec { \mathbf{ V_{ 2 } } }  } &amp; \ldots &amp; \underbrace { \begin{bmatrix} a_{ 1n } \\ a_{ 2n } \\ \ldots \\ a_{ mn } \end{bmatrix} }_{ \vec { \mathbf{ V_{ n } } }  }  \end{bmatrix}\begin{bmatrix} x_{ 1 } \\ x_{ 2 } \\ \ldots \\ x_{ n } \end{bmatrix}=x_1\vec{\mathbf{V}_1}+x_2\vec{\mathbf{V}_2}+\ldots+x_n\vec{\mathbf{V}_n}\]</p>
+<p>而向量 \(\vec{\mathbf{x}}\) 的每一个分量可以看成是 \(\mathbf{A}\) 的每个列向量的加权。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  一个矩阵其实就是一个线性变换。一个矩阵乘以一个向量后得到的向量，其实就相当于将这个向量进行了线性变换。
+</div>
+<h2 id="向量的转置">向量的转置</h2>
+<p>向量 \(\vec{\mathbf{V}} = \underbrace{\begin{bmatrix}v_1 \\ v_2 \\ \ldots \\ v_n \end{bmatrix}}_{n\times 1}\) 的转置定义为 \(\vec{\mathbf{V}}^T = \underbrace{\begin{bmatrix}v_1 &amp; v_2 &amp; \ldots &amp; v_n \end{bmatrix}}_{1 \times n}\)</p>
+<p>例如向量 \(\vec{\mathbf{A}} = \begin{bmatrix} 2 &amp; 4 \end{bmatrix}\) 的转置就是 \(\vec{\mathbf{A}}^T = \begin{bmatrix} 2 \\ 4\end{bmatrix}\)。</p>
+<p>Python 示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.array([[<span class="number">2</span>, <span class="number">4</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.T</span><br><span class="line">array([[<span class="number">2</span>],</span><br><span class="line">       [<span class="number">4</span>]])</span><br></pre></td></tr></table></figure>
+<p>注意上面声明 <code>a</code> 时用了两对 <code>[]</code> ，以生成一个二维向量。一维的向量转置结果是不会变化的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = np.array([<span class="number">2</span>, <span class="number">4</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.T</span><br><span class="line">array([<span class="number">2</span>, <span class="number">4</span>])</span><br></pre></td></tr></table></figure>
+<p>向量的转置有一个性质：一个向量 \(\vec{\mathbf{v}}\) 点乘另一个向量 \(\vec{\mathbf{w}}\) ，其结果和向量 \(\vec{\mathbf{v}}\) 转置后和向量 \(\vec{\mathbf{w}}\) 做矩阵乘法相同。即 \(\vec{\mathbf{v}} \cdot \vec{\mathbf{w}} = \vec{\mathbf{v}}^T \vec{\mathbf{w}}\) 。</p>
+<h2 id="线性无关">线性无关</h2>
+<h3 id="张成空间">张成空间</h3>
+<p>一组向量的张成空间说白了就是指这些向量随便线性组合后能够表示多少个向量。记为 \(span(\vec{\mathbf{a}}, \vec{\mathbf{b}})\)。</p>
+<p>例如，对于 \(\mathbb{R}^{2}\) 空间中两个不平行的非0向量 \(\vec{\mathbf{a}} = \begin{bmatrix}2 \\ 1\end{bmatrix}\) 和向量 \(\vec{\mathbf{b}} = \begin{bmatrix} 0 \\ 3 \end{bmatrix}\) ，不难发现这两个向量能够表示二维空间中任一其他向量，即 \(span(\vec{\mathbf{a}}, \vec{\mathbf{b}}) = \mathbb{R}^{2}\)。证明如下：</p>
+<p>对于 \(\mathbb{R}^{2}\) 中任一向量 \(\begin{bmatrix}x \\y \end{bmatrix}\) ，假设可以由 \(\vec{\mathbf{a}}\) 和 \(\vec{\mathbf{b}}\) 线性组合而成，那么有：</p>
+<p>\[
+c_1 \begin{bmatrix}2 \\ 1\end{bmatrix} + c_2 \begin{bmatrix} 0 \\ 3 \end{bmatrix} = \begin{bmatrix} x \\ y \end{bmatrix}
+\]</p>
+<p>即：</p>
+<p>\[
+\left\{
+\begin{align}
+c_1 \cdot 2 &amp; + c_2 \cdot 0 &amp;= x\\\
+c_1 \cdot 1 &amp; + c_2 \cdot 3 &amp;= y
+\end{align}
+\right.
+\]</p>
+<p>求解该方程得：</p>
+<p>\[
+\left\{
+\begin{align}
+c_1 &amp;= \frac{x}{2}\\
+c_2 &amp;= \frac{y}{3} - \frac{x}{6}
+\end{align}
+\right.
+\]</p>
+<p>由于 \(x\)、\(y\) 的值已确定，所以 \(c_1\)、\(c_2\) 的值也必然唯一。</p>
+<h3 id="线性相关和线性无关">线性相关和线性无关</h3>
+<p>当一个向量集合里的每个向量都对张成的空间有贡献时，称这个向量集合线性无关。反之称为线性相关。能够表示一个空间的最少向量组合称为空间的基。</p>
+<p>听起来有点难理解，其实就是非常简单的道理：假如一个向量集合中存在某个向量能由集合里的其他向量线性组合而成，那这个集合对于张成空间而言就存在多余的向量。此时就是线性相关；反之，假如集合里每一个元素都没法由其他元素组合而成，那么这个集合每个元素都对张成空间有贡献，这个集合就是线性无关的。</p>
+<p>例如，对于上述的例子，如果再增加一个向量 \(\vec{\mathbf{c}} = \begin{bmatrix} 5 \\ 2\end{bmatrix}\) ，由于 \(\vec{\mathbf{c}}\) 可以由 \(\vec{\mathbf{a}}\) 和 \(\vec{\mathbf{b}}\) 线性组合而成，由 \(\mathbf{a}\) 、\({\mathbf{b}}\) 和 \({\mathbf{c}}\) 共同张成的空间并没有变化，仍然是 \(\mathbb{R}^{2}\)，因此称集合 \(\left\{\vec{\mathbf{a}}, \vec{\mathbf{b}}, \vec{\mathbf{c}}\right \}\) 线性相关。</p>
+<h3 id="判断是否线性相关">判断是否线性相关</h3>
+<p>一个向量集合 \(s = {v_1, v_2, \ldots, v_n}\) 线性相关的充分必要条件是存在一部分非0系数使得 \(c_1 v_1 + c_2 v_2 + \ldots + c_n v_n = \mathbf{0} = \begin{bmatrix} 0 \\ 0 \\ \ldots \\ 0\end{bmatrix}\) 。</p>
+<p>例如有向量 \(\begin{bmatrix}2 \\ 1\end{bmatrix}\) 和 \(\begin{bmatrix}3 \\ 2\end{bmatrix}\)，则可以先写出如下的等式：</p>
+<p>\[c_1 \begin{bmatrix}2 \\ 1\end{bmatrix} + c_2 \begin{bmatrix}3 \\ 2\end{bmatrix} = \begin{bmatrix}0 \\ 0\end{bmatrix}\]</p>
+<p>容易求解得 \(\begin{bmatrix}c_1 \\ c_2\end{bmatrix} = \begin{bmatrix}0 \\ 0\end{bmatrix}\)，说明两个向量线性无关。也说明这两个向量可以张成 \(\mathbb{R}^{2}\)。</p>
+<p>类似地，对于三个 \(\mathbb{R}^{3}\) 中的向量 \(\begin{bmatrix}2 \\ 0 \\ 0\end{bmatrix}\)、\(\begin{bmatrix}0 \\ 1 \\ 0\end{bmatrix}\) 和 \(\begin{bmatrix}0 \\ 0 \\ 7\end{bmatrix}\)，不难判断这三个向量是线性无关的，他们共同张成了 \(\mathbb{R}^3\) 空间。</p>
+<p>而对于向量集合 \(\left\{\begin{bmatrix}2 \\ 1\end{bmatrix}, \begin{bmatrix}3 \\ 2\end{bmatrix}, \begin{bmatrix}1 \\ 2 \end{bmatrix}\right\}\) ，不难算出存在非 0 的系数 \(\begin{bmatrix}c_1 \\ c_2 \\ c_3\end{bmatrix} = \begin{bmatrix}-4 \\ 3 \\ -1\end{bmatrix}\) 使得 \(c1 \begin{bmatrix}2 \\ 1\end{bmatrix} + c_2 \begin{bmatrix}3 \\ 2\end{bmatrix} + c_3 \begin{bmatrix}1 \\ 2 \end{bmatrix} = \begin{bmatrix}0 \\ 0\end{bmatrix}\)。因此集合 \(\left\{\begin{bmatrix}2 \\ 1\end{bmatrix}, \begin{bmatrix}3 \\ 2\end{bmatrix}, \begin{bmatrix}1 \\ 2 \end{bmatrix}\right\}\) 线性相关。</p>
+<p>下篇文章将进阶讨论线性子空间和特征向量。</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="http://acl-arc.comp.nus.edu.sg/archives/acl-arc-090501d4/data/pdf/anthology-PDF/W/W04/W04-3252.pdf">TextRank: Bring Order Into Texts</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>\(\mathbb{R}^{n}\) ：表示 n 个有序实数二元组构成的空间。例如 \(\mathbb{R}^2\) 表示有序实数二元组 \((x_1, x_2)\) 构成的空间，即\(\mathbb{R}^n = \left\{ (x_1, \ldots, x_n) | x_1, \ldots, x_n \in \mathbb{R} \right\}\) 。 <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p>从历史的角度讲，该不等式应当称为Cauchy-Buniakowsky-Schwarz不等式【柯西-布尼亚科夫斯基-施瓦茨不等式】，因为，正是后两位数学家彼此独立地在积分学中推而广之，才将这一不等式应用到近乎完善的地步。 <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/math/math-linear-algebra-graded/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/math/math-matrix/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '机器学习的数学基础：向量篇'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/math-vector.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2017-02-06 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/math/">math<span>3</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Linear-Algebra/">Linear Algebra<span>2</span></a></li> <li><a href="/tags/Math/">Math<span>2</span></a></li> <li><a href="/tags/Vector/">Vector<span>1</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-article-text">前言</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97"><span class="toc-article-text">基本运算</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%8A%A0"><span class="toc-article-text">加</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%87%8F"><span class="toc-article-text">减</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B9%98"><span class="toc-article-text">乘</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%A0%87%E9%87%8F%E4%B9%98%E5%90%91%E9%87%8F"><span class="toc-article-text">标量乘向量</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E5%90%91%E9%87%8F%E7%82%B9%E7%A7%AF"><span class="toc-article-text">向量点积</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E5%90%91%E9%87%8F%E5%A4%96%E7%A7%AF"><span class="toc-article-text">向量外积</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E7%9F%A9%E9%98%B5%E5%90%91%E9%87%8F%E7%A7%AF"><span class="toc-article-text">矩阵向量积</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%90%91%E9%87%8F%E7%9A%84%E8%BD%AC%E7%BD%AE"><span class="toc-article-text">向量的转置</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%BA%BF%E6%80%A7%E6%97%A0%E5%85%B3"><span class="toc-article-text">线性无关</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%BC%A0%E6%88%90%E7%A9%BA%E9%97%B4"><span class="toc-article-text">张成空间</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%BA%BF%E6%80%A7%E7%9B%B8%E5%85%B3%E5%92%8C%E7%BA%BF%E6%80%A7%E6%97%A0%E5%85%B3"><span class="toc-article-text">线性相关和线性无关</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E7%BA%BF%E6%80%A7%E7%9B%B8%E5%85%B3"><span class="toc-article-text">判断是否线性相关</span></a></li></ol></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

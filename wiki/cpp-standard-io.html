@@ -1,0 +1,910 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>标准IO库 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="面向对象的标准库
+IO 类型在三个独立的头文件中定义：
+Header     Type
+
+iostream   istream 从流中读取
+ostream 写到流中去
+iostream 对流进行读写；从 istream 和 ostream 派生而来
+fstream    ifstream 从文件中读">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="标准IO库"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '标准IO库'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 标准IO库</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="面向对象的标准库">面向对象的标准库</h2>
+<p>IO 类型在三个独立的头文件中定义：</p>
+<p>Header     Type</p>
+<hr>
+<p>iostream   istream 从流中读取
+ostream 写到流中去
+iostream 对流进行读写；从 istream 和 ostream 派生而来
+fstream    ifstream 从文件中读取；由 istream 派生而来
+ofstream 写到文件中去；由 ostream 派生而来
+fstream 读写文件；由 iostream 派生而来
+sstream    istringstream 从 string 对象中读取；由 istream 派生而来
+ostringstream 写到 string 对象中去；由 ostream 派生而来
+stringstream 对 string 对象进行读写；由 iostream 派生而来</p>
+<h3 id="IO-对象不可复制或赋值">IO 对象不可复制或赋值</h3>
+<p>出于某些原因，标准库类型不允许做复制或赋值操作。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ofstream out1, out2; </span><br><span class="line">out1 = out2;   <span class="comment">// error: cannot assign stream objects </span></span><br><span class="line"><span class="comment">// print function: parameter is copied </span></span><br><span class="line"><span class="function">ofstream <span class="title">print</span><span class="params">(ofstream)</span></span>; </span><br><span class="line">out2 = <span class="built_in">print</span>(out2);  <span class="comment">// error: cannot copy stream objects     </span></span><br></pre></td></tr></table></figure>
+<p>这个要求有两层特别重要的含义：</p>
+<ol>
+<li>只有支持复制的元素类型可以存储在 vector 或其他容器类型里。由于流对象不能复制，因此不能存储在 vector（或其他）容器中（即不存在存储流对象的 vector 或其他容器）。</li>
+<li>形参或返回类型也不能为流类型。如果需要传递或返回 IO 对象，则必须传递或返回指向该对象的指针或引用：</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ofstream &amp;<span class="title">print</span><span class="params">(ofstream&amp;)</span></span>;              <span class="comment">// ok: takes a reference, no copy </span></span><br><span class="line"><span class="keyword">while</span> (<span class="built_in">print</span>(out2)) &#123; <span class="comment">/* ... */</span> &#125; <span class="comment">// ok: pass reference to out2     </span></span><br></pre></td></tr></table></figure>
+<p>一般情况下，如果要传递 IO 对象以便对它进行读写，可用非 const 引用的方式传递这个流对象。对 IO 对象的读写会改变它的状态，因此引用必须是非 const 的。</p>
+<h2 id="文件流">文件流</h2>
+<p>fstream 头文件定义了三种支持文件 IO 的类型：</p>
+<ol>
+<li>ifstream，由 istream 派生而来，提供读文件的功能。</li>
+<li>ofstream，由 ostream 派生而来，提供写文件的功能。</li>
+<li>fstream，由 iostream 派生而来，提供读写同一个文件的功能。</li>
+</ol>
+<p>这些类型都由相应的 iostream 类型派生而来，这个事实意味着我们已经知道使用 fstream 类型需要了解的大部分内容了。特别是，可使用 IO 操作符 <code>&lt;&lt;</code> 和 <code>&gt;&gt;</code> 在文件上实现格式化的 IO，而且在前面章节介绍的条件状态也同样适用于 fstream 对象。</p>
+<p>fstream 类型除了继承下来的行为外，还定义了两个自己的新操作—— open 和 close，以及形参为要打开的文件名的构造函数。fstream、ifstream 或 ofstream 对象可调用这些操作，而其他的 IO 类型则不能调用。</p>
+<h3 id="文件流对象的使用">文件流对象的使用</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// construct an ifstream and bind it to the file named ifile </span></span><br><span class="line"><span class="function">ifstream <span class="title">infile</span><span class="params">(<span class="string">&quot;in&quot;</span>)</span></span>; </span><br><span class="line"><span class="comment">// ofstream output file object to write file named ofile </span></span><br><span class="line"><span class="function">ofstream <span class="title">outfile</span><span class="params">(<span class="string">&quot;out&quot;</span>)</span></span>;    </span><br></pre></td></tr></table></figure>
+<p>上述代码定义并打开了一对 fstream 对象。infile 是读的流，而 outfile 则是写的流。为 ifstream 或者 ofstream 对象提供文件名作为初始化式，就相当于打开了特定的文件。</p>
+<p>下面的代码与上述代码等效：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ifstream infile;    <span class="comment">// unbound input file stream </span></span><br><span class="line">ofstream outfile;   <span class="comment">// unbound output file stream</span></span><br><span class="line">infile.<span class="built_in">open</span>(<span class="string">&quot;in&quot;</span>);   <span class="comment">// open file named &quot;in&quot; in the current directory </span></span><br><span class="line">outfile.<span class="built_in">open</span>(<span class="string">&quot;out&quot;</span>); <span class="comment">// open file named &quot;out&quot; in the current directory    </span></span><br></pre></td></tr></table></figure>
+<div class="alert alert-warning">
+<strong>警告</strong>： C++ 中的文件名
+<p>由于历史原因，IO 标准库使用 C 风格字符串而不是 C++ strings 类型的字符串作为文件名。在创建 fstream 对象时，如果调用 open 或使用文件名作初始化式，需要传递的实参应为 C 风格字符串，而不是标准库 strings 对象。程序常常从标准输入获得文件名。通常，比较好的方法是将文件名读入 string 对象，而不是 C 风格字符数组。假设要使用的文件名保存在 string 对象中，则可调用 <code>c_str</code> 成员获取 C 风格字符串。</p>
+<p>例如，假设 ifile 和 ofile 是存储希望读写的文件名的 strings 对象，可如下编写代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">infile.<span class="built_in">open</span>(str1.<span class="built_in">c_str</span>());   <span class="comment">// open file named &quot;in&quot; in the current directory </span></span><br><span class="line">outfile.<span class="built_in">open</span>(str2.<span class="built_in">c_str</span>()); <span class="comment">// open file named &quot;out&quot; in the current directory</span></span><br></pre></td></tr></table></figure>
+</div>
+<h3 id="检查文件打开是否成功">检查文件打开是否成功</h3>
+<p>打开文件后，通常要检验打开是否成功，这是一个好习惯：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// check that the open succeeded </span></span><br><span class="line"><span class="keyword">if</span> (!infile) &#123; </span><br><span class="line">  cerr &lt;&lt; <span class="string">&quot;error: unable to open input file: &quot;</span> </span><br><span class="line">       &lt;&lt; ifile &lt;&lt; endl; </span><br><span class="line">  <span class="keyword">return</span> <span class="number">-1</span>; </span><br><span class="line"> &#125;     </span><br></pre></td></tr></table></figure>
+<p>这个条件与之前测试 cin 是否到达文件尾或遇到某些其他错误的条件类似。检查流等效于检查对象是否“适合”输入或输出。如果打开（open）失败，则说明 fstream 对象还没有为 IO 做好准备。当测试对象</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (outfile) <span class="comment">// ok to use outfile?     </span></span><br></pre></td></tr></table></figure>
+<p>返回 true 意味着文件已经可以使用。由于希望知道文件是否未准备好，则对返回值取反来检查流：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!outfile) <span class="comment">// not ok to use outfile?     </span></span><br></pre></td></tr></table></figure>
+<h3 id="将文件流与新文件重新捆绑">将文件流与新文件重新捆绑</h3>
+<p>fstream 对象一旦打开，就保持与指定的文件相关联。如果要把 fstream 对象与另一个不同的文件关联，则必须 <strong>先关闭</strong> （close）现在的文件，然后 <strong>再打开</strong> （open）另一个文件：要点是在尝试打开新文件之前，必须先关闭当前的文件流。open 函数会检查流是否已经打开。如果已经打开，则设置内部状态，以指出发生了错误。</p>
+<p>接下来使用文件流的任何尝试都会失败。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ifstream <span class="title">infile</span><span class="params">(<span class="string">&quot;in&quot;</span>)</span></span>;      <span class="comment">// opens file named &quot;in&quot; for reading </span></span><br><span class="line">infile.<span class="built_in">close</span>();             <span class="comment">// closes &quot;in&quot; </span></span><br><span class="line">infile.<span class="built_in">open</span>(<span class="string">&quot;next&quot;</span>);        <span class="comment">// opens file named &quot;next&quot; for reading     </span></span><br></pre></td></tr></table></figure>
+<h3 id="文件模式">文件模式</h3>
+<p>在打开文件时，无论是调用 open 还是以文件名作为流初始化的一部分，都需指定文件模式（file mode）。每个 fstream 类都定义了一组表示不同模式的值，用于指定流打开的不同模式。与条件状态标志一样，文件模式也是整型常量，在打开指定文件时，可用位操作符设置一个或多个模式。文件流构造函数和 open 函数都提供了默认实参设置文件模式。默认值因流类型的不同而不同。此外，还可以显式地以模式打开文件。</p>
+<hr>
+<p><code>in</code>       打开文件做读操作
+<code>out</code>      打开文件做写操作
+<code>app</code>      追加模式：在每次写之前找到文件尾
+<code>ate</code>      打开文件后立即将文件定位在文件尾
+<code>trunc</code>    清空模式：打开文件时清空已存在的文件流
+<code>binary</code>   以二进制模式进行 IO 操作</p>
+<hr>
+<p>并不是所有的打开模式都可以同时指定。有些模式组合是没有意义的，例如同时以 in 和 trunc 模式打开文件，准备读取所生成的流，但却因为 trunc 操作而导致无数据可读。下表列出了有效的模式组合及其含义。</p>
+<hr>
+<p><code>out</code>                打开文件做写操作，删除文件中已有的数据
+<code>out | app</code>          打开文件做写操作，在文件尾写入
+<code>out | trunc</code>        与 out 模式相同
+<code>in</code>                 打开文件做读操作
+<code>in | out</code>           打开文件做读、写操作，并定位于文件开头处
+<code>in | out | trunc</code>   打开文件做读、写操作，删除文件中已有的数据</p>
+<hr>
+<p>out、trunc 和 app 模式只能用于指定与 ofstream 或 fstream 对象关联的文件；in 模式只能用于指定与 ifstream 或 fstream 对象关联的文件。所有的文件都可以用 ate 或 binary 模式打开。ate 模式只在打开时有效：文件打开后将定位在文件尾。以 binary 模式打开的流则将文件以字节序列的形式处理，而不解释流中的字符。</p>
+<p>默认时，与 ifstream 流对象关联的文件将以 in 模式打开，该模式允许文件做读的操作：与 ofstream 关联的文件则以 out 模式打开，使文件可写。以 out 模式打开的文件会被清空：丢弃该文件存储的所有数据。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  从效果来看，为 ofstream 对象指定 out 模式等效于同时指定了 out 和 trunc 模式。
+</div>
+<p>对于用 ofstream 打开的文件，要保存文件中存在的数据，唯一方法是显式地指定 app 模式打开：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// output mode by default; truncates file named &quot;file1&quot; </span></span><br><span class="line"><span class="function">ofstream <span class="title">outfile</span><span class="params">(<span class="string">&quot;file1&quot;</span>)</span></span>; </span><br><span class="line"><span class="comment">// equivalent effect: &quot;file1&quot; is explicitly truncated </span></span><br><span class="line"><span class="function">ofstream <span class="title">outfile2</span><span class="params">(<span class="string">&quot;file1&quot;</span>, ofstream::out | ofstream::trunc)</span></span>; </span><br><span class="line"><span class="comment">// append mode; adds new data at end of existing file named &quot;file2&quot; </span></span><br><span class="line"><span class="function">ofstream <span class="title">appfile</span><span class="params">(<span class="string">&quot;file2&quot;</span>, ofstream::app)</span></span>;    </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>outfile2 的定义使用了按位或操作符将相应的文件同时以 out 和 trunc 模式打开。</p>
+<h3 id="对同一个文件作输入和输出运算">对同一个文件作输入和输出运算</h3>
+<p>fstream 对象既可以读也可以写它所关联的文件。fstream 如何使用它的文件取决于打开文件时指定的模式。</p>
+<p>默认情况下，fstream 对象以 in 和 out 模式同时打开。 <strong>当文件同时以 in 和 out 打开时不清空</strong> 。如果打开 fstream 所关联的文件时，只使用 out 模式，而不指定 in 模式，则文件会清空已存在的数据。如果打开文件时指定了 trunc 模式，则无论是否同时指定了 in 模式，文件同样会被清空。下面的定义将 copyOut 文件同时以输入和输出的模式打开：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// open for input and output </span></span><br><span class="line"><span class="function">fstream <span class="title">inOut</span><span class="params">(<span class="string">&quot;copyOut&quot;</span>, fstream::in | fstream::out)</span></span>; </span><br></pre></td></tr></table></figure>
+<h3 id="示例：一个打开并检查输入文件的程序">示例：一个打开并检查输入文件的程序</h3>
+<p>我们编写一个名为 <code>open_file</code> 的函数实现这个功能。这个函数有两个引用形参，分别是 ifstream 和 string 类型，其中 string 类型的引用形参存储与指定 ifstream 对象关联的文件名：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// opens in binding it to the given file </span></span><br><span class="line"><span class="function">ifstream&amp; <span class="title">open_file</span><span class="params">(ifstream &amp;in, <span class="keyword">const</span> string &amp;file)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">  in.<span class="built_in">close</span>();     <span class="comment">// close in case it was already open </span></span><br><span class="line">  in.<span class="built_in">clear</span>();     <span class="comment">// clear any existing errors </span></span><br><span class="line">  <span class="comment">// if the open fails, the stream will be in an invalid state </span></span><br><span class="line">  in.<span class="built_in">open</span>(file.<span class="built_in">c_str</span>()); <span class="comment">// open the file we were given </span></span><br><span class="line">  <span class="keyword">return</span> in; <span class="comment">// condition state is good if open succeeded </span></span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>由于不清楚流 in 的当前状态，因此首先调用 close 和 clear 将这个流设置为有效状态。然后尝试打开给定的文件。如果打开失败，流的条件状态将标志这个流是不可用的。最后返回流对象 in，此时，in 要么已经与指定文件绑定起来了，要么处于错误条件状态。</p>
+<h2 id="字符串流">字符串流</h2>
+<p>标准库定义了三种类型的字符串流：</p>
+<ul>
+<li>istringstream，由 istream 派生而来，提供读 string 的功能。</li>
+<li>ostringstream，由 ostream 派生而来，提供写 string 的功能。</li>
+<li>stringstream，由 iostream 派生而来，提供读写 string 的功能。</li>
+</ul>
+<p>要使用上述类，必须包含 sstream 头文件。</p>
+<p>与 fstream 类型一样，上述类型由 iostream 类型派生而来，这意味着 iostream
+上所有的操作适用于 sstream 中的类型。sstream
+类型除了继承的操作外，还各自定义了一个有 string
+形参的构造函数，这个构造函数将 string 类型的实参复制给 stringstream
+对象。对 stringstream 的读写操作实际上读写的就是该对象中的 string
+对象。这些类还定义了名为 str 的成员，用来读取或设置 stringstream
+对象所操纵的 string 值。</p>
+<hr>
+<p>stringstream strm;      创建自由的 stringstream 对象
+stringstream strm(s);   创建存储 s 的副本的 stringstream 对象，其中 s 是 string 类型的对象
+strm.str()              返回 strm 中存储的 string 类型对象
+strm.str(s)             将 string 类型的 s 复制给 strm，返回 void</p>
+<hr>
+<h3 id="定义和使用">定义和使用</h3>
+<p>前面已经见过以每次一个单词或每次一行的方式处理输入的程序。第一种程序用
+string 输入操作符，而第二种则使用 getline
+函数。然而，有些程序需要同时使用这两种方式：有些处理基于每行实现，而其他处理则要操纵每行中每个单词。可用
+stringstreams 对象实现：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">string line, word;      <span class="comment">// will hold a line and word from input, respectively </span></span><br><span class="line"><span class="keyword">while</span> (<span class="built_in">getline</span>(cin, line))   &#123;            <span class="comment">// read a line from the input into line </span></span><br><span class="line">    <span class="comment">// do per-line processing </span></span><br><span class="line">    <span class="function">istringstream <span class="title">stream</span><span class="params">(line)</span></span>;            <span class="comment">// bind to stream to the line we read </span></span><br><span class="line">    <span class="keyword">while</span> (stream &gt;&gt; word)&#123;          <span class="comment">// read a word from line </span></span><br><span class="line">      <span class="comment">// do per-word processing </span></span><br><span class="line">    &#125; </span><br><span class="line"> &#125; </span><br></pre></td></tr></table></figure>
+<p>这里，使用 getline 函数从输入读取整行内容。然后为了获得每行中的单词，将一个 istringstream 对象与所读取的行绑定起来，这样只需要使用普通的 string 输入操作符即可读出每行中的单词。</p>
+<h3 id="转换-和-格式化">转换 和 格式化</h3>
+<p>stringstream 对象的一个常见用法是， 需要在多种数据类型之间实现自动格式化时使用该类类型。例如，有一个数值型数据集合，要获取它们的 string 表示形式，或反之。sstream 输入和输出操作可自动地把算术类型转化为相应的 string 表示形式，反过来也可以。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> val1 = <span class="number">512</span>, val2 = <span class="number">1024</span>; </span><br><span class="line">ostringstream format_message; </span><br><span class="line"><span class="comment">// ok: converts values to a string representation </span></span><br><span class="line">format_message &lt;&lt; <span class="string">&quot;val1: &quot;</span> &lt;&lt; val1 &lt;&lt; <span class="string">&quot;\n&quot;</span> </span><br><span class="line">               &lt;&lt; <span class="string">&quot;val2: &quot;</span> &lt;&lt; val2 &lt;&lt; <span class="string">&quot;\n&quot;</span>; </span><br></pre></td></tr></table></figure>
+<p>这里创建了一个名为 <code>format_message</code> 的 ostringstream 类型空对象，并将指定的内容插入该对象。重点在于 int 型值自动转换为等价的可打印的字符串。<code>format_message</code> 的内容是以下字符：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val1: <span class="number">512</span>\nval2: <span class="number">1024</span></span><br></pre></td></tr></table></figure>
+<p>相反，用 istringstream 读 string 对象，即可重新将数值型数据找回来。读取 istringstream 对象自动地将数值型数据的字符表示方式转换为相应的算术值。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// str member obtains the string associated with a stringstream </span></span><br><span class="line"><span class="function">istringstream <span class="title">input_istring</span><span class="params">(format_message.str())</span></span>; </span><br><span class="line">string dump; <span class="comment">// place to dump the labels from the formatted message </span></span><br><span class="line"><span class="comment">// extracts the stored ascii values, converting back to arithmetic types </span></span><br><span class="line">input_istring &gt;&gt; dump &gt;&gt; val1 &gt;&gt; dump &gt;&gt; val2; </span><br><span class="line">cout &lt;&lt; val1 &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; val2 &lt;&lt; endl;  <span class="comment">// prints 512 1024 </span></span><br></pre></td></tr></table></figure>
+<p>这里使用 .str 成员获取与之前创建的 ostringstream 对象关联的 string 副本。再将 <code>input_istring</code> 与 string 绑定起来。在读 <code>input_istring</code> 时，相应的值恢复为它们原来的数值型表示形式</p>
+<p>为了读取 <code>input_string</code>，必须把该 string 对象分解为若干个部分。我们要的是数值型数据；为了得到它们，必须读取（和忽略）处于所需数据周围的标号。</p>
+<h2 id="错误处理">错误处理</h2>
+<h3 id="条件状态">条件状态</h3>
+<p>IO 标准库管理一系列条件状态（condition state）条件状态（condition state）成员，用来标记给定的 IO 对象是否处于可用状态，或者碰到了哪种特定的错误。下列出了标准库定义的一组函数和标记，提供访问和操纵流状态的手段。</p>
+<hr>
+<p><code>strm::iostate</code>      机器相关的整型名，由各个 iostream 类定义，用于定义条件状态
+<code>strm::badbit</code>       strm::iostate 类型的值，用于指出被破坏的流
+<code>strm::failbit</code>      strm::iostate 类型的值，用于指出失败的 IO 操作
+<code>strm::eofbit</code>       strm::iostate 类型的值，用于指出流已经到达文件结束符
+<code>s.eof()</code>            如果设置了流 s 的 eofbit 值，则该函数返回 true
+<code>s.fail()</code>           如果设置了流 s 的 failbit 值，则该函数返回 true
+<code>s.bad()</code>            如果设置了流 s 的 badbit 值，则该函数返回 true
+<code>s.good()</code>           如果流 s 处于有效状态，则该函数返回 true
+<code>s.clear()</code>          将流 s 中的所有状态值都重设为有效状态
+<code>s.clear(flag)</code>      将流 s 中的某个指定条件状态设置为有效。flag 的类型是 strm::iostate
+<code>s.setstate(flag)</code>   给流 s 添加指定条件。flag 的类型是 strm::iostate
+<code>s.rdstate()</code>        返回流 s 的当前条件，返回值类型为 strm::iostate</p>
+<hr>
+<p>许多程序只需知道是否有效。而某些程序则需要更详细地访问或控制流的状态，此时，除了知道流处于错误状态外，还必须了解它遇到了哪种类型的错误。例如，程序员也许希望弄清是到达了文件的结尾，还是遇到了
+IO 设备上的错误。 所有流对象都包含一个条件状态成员，该成员由 setstate 和 clear 操作管理。这个状态成员为 iostate 类型，这是由各个 iostream 类分别定义的机器相关的整型。该状态成员以二进制位（bit）的形式使用。</p>
+<p>每个 IO 类还定义了三个 iostate 类型的常量值，分别表示特定的位模式。这些常量值用于指出特定类型的 IO 条件，可与位操作符一起使用，以便在一次操作中检查或设置多个标志。 badbit 标志着系统级的故障，如无法恢复的读写错误。如果出现了这类错误，则该流通常就不能再继续使用了。如果出现的是可恢复的错误，如在希望获得数值型数据时输入了字符，此时则设置 failbit 标志，这种导致设置 failbit 的问题通常是可以修正的。eofbit 是在遇到文件结束符时设置的，此时同时还设置了 failbit。</p>
+<p>流的状态由 bad、fail、eof 和 good 操作提示。如果 bad、fail 或者 eof 中的任意一个为 true，则检查流本身将显示该流处于错误状态。类似地，如果这三个条件没有一个为 true，则 good 操作将返回 true。 clear 和 setstate 操作用于改变条件成员的状态。clear 操作将条件重设为有效状态。在流的使用出现了问题并做出补救后，如果我们希望把流重设为有效状态，则可以调用 clear 操作。使用 setstate 操作可打开某个指定的条件，用于表示某个问题的发生。除了添加的标记状态，setstate 将保留其他已存在的状态变量不变。</p>
+<p>clear 和 setstate 操作用于改变条件成员的状态。clear 操作将条件重设为有效状态。在流的使用出现了问题并做出补救后，如果我们希望把流重设为有效状态，则可以调用 clear 操作。使用 setstate 操作可打开某个指定的条件，用于表示某个问题的发生。除了添加的标记状态，setstate 将保留其他已存在的状态变量不变。</p>
+<h3 id="流状态的查询和控制">流状态的查询和控制</h3>
+<p>可以如下管理输入操作</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ival; </span><br><span class="line"><span class="comment">// read cin and test only for EOF; loop is executed even if there are other IO failures </span></span><br><span class="line"><span class="keyword">while</span> (cin &gt;&gt; ival, !cin.<span class="built_in">eof</span>()) &#123; </span><br><span class="line">  <span class="keyword">if</span> (cin.<span class="built_in">bad</span>())         <span class="comment">// input stream is corrupted; bail out </span></span><br><span class="line">    <span class="keyword">throw</span> <span class="built_in">runtime_error</span>(<span class="string">&quot;IO stream corrupted&quot;</span>); </span><br><span class="line">  <span class="keyword">if</span> (cin.<span class="built_in">fail</span>()) &#123;                        <span class="comment">// bad input </span></span><br><span class="line">    cerr&lt;&lt; <span class="string">&quot;bad data, try again&quot;</span>;        <span class="comment">// warn the user </span></span><br><span class="line">    cin.<span class="built_in">clear</span>(istream::failbit);         <span class="comment">// reset the stream </span></span><br><span class="line">    <span class="keyword">continue</span>;                            <span class="comment">// get next input </span></span><br><span class="line">  &#125; </span><br><span class="line">  <span class="comment">// ok to process ival </span></span><br><span class="line"> &#125; </span><br></pre></td></tr></table></figure>
+<h3 id="清除流状态">清除流状态</h3>
+<p>考虑这样的程序，它有一个 vector 对象，包含一些要打开并读取的文件名，程序要对每个文件中存储的单词做一些处理。假设该 vector 对象命名为 files，程序也许会有如下循环：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// for each file in the vector </span></span><br><span class="line"><span class="keyword">while</span> (it != files.<span class="built_in">end</span>()) &#123; </span><br><span class="line">  <span class="function">ifstream <span class="title">input</span><span class="params">(it-&gt;c_str())</span></span>;   <span class="comment">// open the file; </span></span><br><span class="line">  <span class="comment">// if the file is ok, read and &quot;process&quot; the input </span></span><br><span class="line">  <span class="keyword">if</span> (!input) </span><br><span class="line">    <span class="keyword">break</span>;                  <span class="comment">// error: bail out! </span></span><br><span class="line">  <span class="keyword">while</span>(input &gt;&gt; s)               <span class="comment">// do the work on this file </span></span><br><span class="line">    <span class="built_in">process</span>(s); </span><br><span class="line">  ++it;                           <span class="comment">// increment iterator to get next file </span></span><br><span class="line"> &#125;     </span><br></pre></td></tr></table></figure>
+<p>每一次循环都构造了名为 input 的 ifstream 对象，打开并读取指定的文件。构造函数的初始化式使用了箭头操作符 对 it 进行解引用，从而获取 it 当前表示的 string 对象的 <code>c_str</code> 成员。文件由构造函数打开，并假设打开成功，读取文件直到到达文件结束符或者出现其他的错误条件为止。</p>
+<p>在这个点上，input 处于错误状态。任何读 input 的尝试都会失败。因为 input 是 while 循环的局部变量，在每次迭代中创建。这就意味着它在每次循环中都以干净的状态即 input.good() 为 true，开始使用。</p>
+<p>如果希望避免在每次 while 循环过程中创建新流对象，可将 input 的定义移到 while 之前。这点小小的改动意味着必须更仔细地管理流的状态。如果遇到文件结束符或其他错误，将设置流的内部状态，以便之后不允许再对该流做读写操作。关闭流并不能改变流对象的内部状态。如果最后的读写操作失败了，对象的状态将保持为错误模式，直到执行 clear 操作重新恢复流的状态为止。调用 clear 后，就像重新创建了该对象一样。</p>
+<p>如果打算重用已存在的流对象，那么 while 循环必须在每次循环进记得关闭（close）和清空（clear）文件流：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ifstream input; </span><br><span class="line">vector&lt;string&gt;::const_iterator it = files.<span class="built_in">begin</span>(); </span><br><span class="line"><span class="comment">//   for each file in the vector </span></span><br><span class="line"><span class="keyword">while</span> (it != files.<span class="built_in">end</span>()) &#123; </span><br><span class="line">  input.<span class="built_in">open</span>(it-&gt;<span class="built_in">c_str</span>());  <span class="comment">// open the file </span></span><br><span class="line">  <span class="comment">// if the file is ok, read and &quot;process&quot; the input </span></span><br><span class="line">  <span class="keyword">if</span> (!input) </span><br><span class="line">    <span class="keyword">break</span>;                    <span class="comment">// error: bail out! </span></span><br><span class="line">  <span class="keyword">while</span>(input &gt;&gt; s) <span class="comment">// do the work on this file </span></span><br><span class="line">    <span class="built_in">process</span>(s); </span><br><span class="line">  input.<span class="built_in">close</span>();        <span class="comment">// close file when we&#x27;re done with it </span></span><br><span class="line">  input.<span class="built_in">clear</span>();        <span class="comment">// reset state to ok </span></span><br><span class="line">  ++it;                 <span class="comment">// increment iterator to get next file </span></span><br><span class="line"> &#125;       </span><br></pre></td></tr></table></figure>
+<p><strong>如果忽略 clear 的调用，则循环只能读入第一个文件</strong>。要了解其原因，就需要考虑在循环中发生了什么：首先打开指定的文件。假设打开成功，则读取文件直到文件结束或者出现其他错误条件为止。在这个点上，input 处于错误状态。如果在关闭（close）该流前没有调用 clear 清除流的状态，接着在 input 上做的任何输入运算都会失败。一旦关闭该文件，再打开下一个文件时，在内层 while 循环上读 input 仍然会失败——毕竟最后一次对流的读操作到达了文件结束符，事实上该文件结束符对应的是另一个与本文件无关的其他文件。</p>
+<div class="alert alert-warning"><i class="far fa-bell"></i>  如果程序员需要重用文件流读写多个文件，必须在读另一个文件之前调用 clear 清除该流的状态。
+</div>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/cpp-style.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/cpp-template.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '标准IO库'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

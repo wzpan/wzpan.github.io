@@ -1,0 +1,902 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>HTTP Web 服务 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="在Python 3中，可以使用一个第三方的开源库 httplib2 来处理 HTTP Web 服务。它比自带的模块 http.client 更完整的实现了http协议，同时比另一个自带的模块 urllib.request 提供了更好的抽象。例如：
+
+Python的http库不支持缓存，而httpli">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="HTTP Web 服务"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: 'HTTP Web 服务'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> HTTP Web 服务</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc', 2, 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<p>在Python 3中，可以使用一个第三方的开源库 <a target="_blank" rel="noopener" href="http://code.google.com/p/httplib2/">httplib2</a> 来处理 HTTP Web 服务。它比自带的模块 http.client 更完整的实现了http协议，同时比另一个自带的模块 urllib.request 提供了更好的抽象。例如：</p>
+<ol>
+<li>Python的http库不支持缓存，而httplib2支持。</li>
+<li>Python的http库不支持最后修改时间检查，而httplib2 支持。</li>
+<li>Python的http库不支持ETag，而httplib2支持。</li>
+<li>Python的http库不支持压缩，但httplib2支持。</li>
+<li>urllib.request模块在从http服务器收到对应的状态码的时候会自动“跟随”重定向, 但它不会告诉你它这么干了。你最后得到了你请求的数据，但是你永远也不会知道下层的库友好的帮助你跟随了重定向；httplib2 帮你处理了永久重定向。它不仅会告诉你发生了永久重定向，而且它会在本地记录这些重定向，并且在发送请求前自动重写为重定向后的url。</li>
+</ol>
+<p>我们来举个例子，你想要通过http下载一个资源, 比如说一个Atom 供稿。作为一个供稿, 你不会只下载一次，你会一次又一次的下载它。 (大部分的供稿阅读器会美一小时检查一次更新。) 让我们先用最粗糙和最快的方法来实现它，接着再来看看怎样改进。</p>
+<h2 id="HTTP-Get">HTTP Get</h2>
+<p>简单粗暴的方法就是使用 urllib 模块：</p>
+<h4 id="示例">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> urllib.request</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a_url = <span class="string">&#x27;http://diveintopython3.org/examples/feed.xml&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>data = urllib.request.urlopen(a_url).read() </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">type</span>(data)                                  </span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">bytes</span>&#x27;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">print</span>(<span class="params">data</span>)</span></span><br><span class="line">&lt;?xml version=&#x27;1.0&#x27; encoding=&#x27;utf-8&#x27;?&gt;</span><br><span class="line">&lt;feed xmlns=<span class="string">&#x27;http://www.w3.org/2005/Atom&#x27;</span> xml:lang=<span class="string">&#x27;en&#x27;</span>&gt;</span><br><span class="line">  &lt;title&gt;dive into mark&lt;/title&gt;</span><br><span class="line">  &lt;subtitle&gt;currently between addictions&lt;/subtitle&gt;</span><br><span class="line">  &lt;id&gt;tag:diveintomark.org,2001-07-29:/&lt;/id&gt;</span><br><span class="line">  &lt;updated&gt;2009-03-27T21:56:07Z&lt;/updated&gt;</span><br><span class="line">  &lt;link rel=<span class="string">&#x27;alternate&#x27;</span> <span class="built_in">type</span>=<span class="string">&#x27;text/html&#x27;</span> href=<span class="string">&#x27;http://diveintomark.org/&#x27;</span>/&gt;</span><br><span class="line">  …</span><br></pre></td></tr></table></figure>
+<h4 id="说明">说明</h4>
+<ul>
+<li>在Python中通过http下载东西是非常简单的; 实际上，只需要一行代码。<code>urllib.request</code>模块有一个方便的函数<code>urlopen()</code> ，它接受你所要获取的页面地址，然后返回一个类文件对象，您只要调用它的<code>read()</code>方法就可以获得网页的全部内容。没有比这更简单的了。</li>
+<li><code>urlopen().read()</code>方法<strong>总是返回bytes对象，而不是字符串</strong>。记住字节仅仅是字节，字符只是一种抽象。 http 服务器不关心抽象的东西。如果你请求一个资源，你得到字节。 如果你需要一个字符串，你需要确定字符编码，并显式的将其转化成字符串。</li>
+</ul>
+<p>如果需要定期访问Web服务，上面的做法就显得很低效和粗暴了。充分利用HTTP的缓存、压缩技术将可以实习更高效的做法。于是 <code>httplib2</code> 闪亮登场。</p>
+<p>要使用httplib2, 请创建一个 httplib2.Http 类的实例。</p>
+<h3 id="创建-httplib2-Http-实例">创建 httplib2.Http 实例</h3>
+<h4 id="示例-v2">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> httplib2</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>h = httplib2.Http(<span class="string">&#x27;.cache&#x27;</span>)                                                    </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>response, content = h.request(<span class="string">&#x27;http://diveintopython3.org/examples/feed.xml&#x27;</span>)  </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>response.status                                                                </span><br><span class="line"><span class="number">200</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>content[:<span class="number">52</span>]                                                                   </span><br><span class="line"><span class="string">b&quot;&lt;?xml version=&#x27;1.0&#x27; encoding=&#x27;utf-8&#x27;?&gt;\r\n&lt;feed xmlns=&quot;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">len</span>(content)</span><br><span class="line"><span class="number">3070</span></span><br></pre></td></tr></table></figure>
+<h4 id="说明-v2">说明</h4>
+<ul>
+<li>httplib2的主要接口是Http对象。你创建Http对象时总是应该传入一个目录名（例如本例中的<code>.cache</code>），具体原因你会在下一节看见。目录不需要事先存在，httplib2会在必要的时候创建它。</li>
+<li>一旦你有了Http对象, 获取数据非常简单，以你要的数据的地址作为参数调用request()方法就可以了。这会对该url执行一个http GET请求. (这一章下面你会看见怎样执行其他http 请求, 比如 POST。)</li>
+<li><code>request()</code> 方法返回两个值。第一个是一个<code>httplib2.Response</code>对象，其中包含了服务器返回的所有http头。比如, status为200 表示请求成功。</li>
+<li>content 变量包含了http服务器返回的实际数据。数据以bytes对象返回，不是字符串。 如果你需要一个字符串，你需要确定字符编码并自己进行转换。</li>
+</ul>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  你很可能只需要一个httplib2.Http对象。当然存在足够的理由来创建多个，但是只有当你清楚创建多个的原因的时候才应该这样做。从不同的url获取数据不是一个充分的理由，重用Http对象并调用request()方法两次就可以了。
+</div>
+<h3 id="使用缓存">使用缓存</h3>
+<p>之后，退出你的Python交互 shell 然后打开一个新的会话：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># NOT continued from previous example!</span><br><span class="line"># Please exit out of the interactive shell</span><br><span class="line"># and launch a new one.</span><br><span class="line">&gt;&gt;&gt; import httplib2</span><br><span class="line">&gt;&gt;&gt; httplib2.debuglevel &#x3D; 1                                                        </span><br><span class="line">&gt;&gt;&gt; h &#x3D; httplib2.Http(&#39;.cache&#39;)                                                    </span><br><span class="line">&gt;&gt;&gt; response, content &#x3D; h.request(&#39;http:&#x2F;&#x2F;diveintopython3.org&#x2F;examples&#x2F;feed.xml&#39;)  </span><br><span class="line">&gt;&gt;&gt; len(content)                                                                   </span><br><span class="line">3070</span><br><span class="line">&gt;&gt;&gt; response.status                                                                </span><br><span class="line">200</span><br><span class="line">&gt;&gt;&gt; response.fromcache                                                             </span><br><span class="line">True</span><br></pre></td></tr></table></figure>
+<h4 id="说明-v3">说明</h4>
+<ul>
+<li>最后一句话揭示了奥秘所在: 响应是从httplib2的本地缓存构造出来的。你创建httplib2.Http对象是传入的目录里面保存了所有httplib2执行过的操作的缓存。</li>
+<li>你刚刚请求过这个url的数据。那个请求是成功的(状态码: 200)。该响应不仅包含feed数据，也包含一系列缓存头，告诉那些关注着的人这个资源可以缓存长达24小时(Cache-Control: max-age=86400, 24小时所对应的秒数)。 httplib2 理解并尊重那些缓存头，并且它会在.cache目录(你在创建Http对象时提供的)保存之前的响应。缓存还没有过期，所以你第二次请求该url的数据时, httplib2不会去访问网络，直接返回缓存着的数据。</li>
+</ul>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  如果你想要打开httplib2的调试开关，你需要设置一个模块级的常量(httplib2.debuglevel), 然后再创建<code>httplib2.Http</code>对象。如果你希望关闭调试，你需要改变同一个模块级常量, 接着创建一个新的<code>httplib2.Http</code>对象。
+</div>
+<h4 id="跳过缓存">跳过缓存</h4>
+<p>假设你有数据缓存着，但是你希望跳过缓存并且重新请求远程服务器。由于缓存可能还存留在不受你控制的中继代理服务器里，因此简单删除本地缓存并不足以解决问题。你应该使用http的特性来保证你的请求最终到达远程服务器，而不是修改本地缓存。</p>
+<h4 id="示例-v3">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># continued from the previous example</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>response2, content2 = h.request(<span class="string">&#x27;http://diveintopython3.org/examples/feed.xml&#x27;</span>,</span><br><span class="line"><span class="meta">... </span>    headers=&#123;<span class="string">&#x27;cache-control&#x27;</span>:<span class="string">&#x27;no-cache&#x27;</span>&#125;)  </span><br><span class="line">connect: (diveintopython3.org, <span class="number">80</span>)             </span><br><span class="line">send: <span class="string">b&#x27;GET /examples/feed.xml HTTP/1.1</span></span><br><span class="line"><span class="string">Host: diveintopython3.org</span></span><br><span class="line"><span class="string">user-agent: Python-httplib2/$Rev: 259 $</span></span><br><span class="line"><span class="string">accept-encoding: deflate, gzip</span></span><br><span class="line"><span class="string">cache-control: no-cache&#x27;</span></span><br><span class="line">reply: <span class="string">&#x27;HTTP/1.1 200 OK&#x27;</span></span><br><span class="line">…further debugging information omitted…</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>response2.status</span><br><span class="line"><span class="number">200</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>response2.fromcache                        </span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(<span class="built_in">dict</span>(response2.items()))             </span><br><span class="line">&#123;<span class="string">&#x27;status&#x27;</span>: <span class="string">&#x27;200&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;content-length&#x27;</span>: <span class="string">&#x27;3070&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;content-location&#x27;</span>: <span class="string">&#x27;http://diveintopython3.org/examples/feed.xml&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;accept-ranges&#x27;</span>: <span class="string">&#x27;bytes&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;expires&#x27;</span>: <span class="string">&#x27;Wed, 03 Jun 2009 00:40:26 GMT&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;vary&#x27;</span>: <span class="string">&#x27;Accept-Encoding&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;server&#x27;</span>: <span class="string">&#x27;Apache&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;last-modified&#x27;</span>: <span class="string">&#x27;Sun, 31 May 2009 22:51:11 GMT&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;connection&#x27;</span>: <span class="string">&#x27;close&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;-content-encoding&#x27;</span>: <span class="string">&#x27;gzip&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;etag&#x27;</span>: <span class="string">&#x27;&quot;bfe-255ef5c0&quot;&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;cache-control&#x27;</span>: <span class="string">&#x27;max-age=86400&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;date&#x27;</span>: <span class="string">&#x27;Tue, 02 Jun 2009 00:40:26 GMT&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;content-type&#x27;</span>: <span class="string">&#x27;application/xml&#x27;</span>&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="说明-v4">说明</h4>
+<p>httplib2 允许你添加任意的http头部到发出的请求里。为了跳过所有缓存(不仅仅是你本地的磁盘缓存，也包括任何处于你和远程服务器之间的缓存代理服务器), 在headers字典里面加入no-cache头就可以了。</p>
+<h3 id="处理Last-Modified和ETag头">处理Last-Modified和ETag头</h3>
+<p>Cache-Control和Expires缓存头被称为<em>新鲜度指标(freshness indicators)</em>。他们毫不含糊告诉缓存，你可以完全避免所有网络访问，直到缓存过期。而这正是你在前一节所看到的: 给出一个新鲜度指标, httplib2 不会产生哪怕是一个字节的网络活动就可以提供缓存了的数据(当然除非你显式的要求跳过缓存).</p>
+<p>那如果数据可能已经改变了, 但实际没有呢? http 为这种目的定义了Last-Modified和Etag头。 这些头被称为验证器(validators)。如果本地缓存已经不是新鲜的，客户端可以在下一个请求的时候发送验证器来检查数据实际上有没有改变。如果数据没有改变，服务器返回304状态码，但不返回数据。 所以虽然还会在网络上有一个来回，但是你最终可以少下载一点字节。</p>
+<h4 id="示例代码">示例代码</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> httplib2</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>httplib2.debuglevel = <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>h = httplib2.Http(<span class="string">&#x27;.cache&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>response, content = h.request(<span class="string">&#x27;http://diveintopython3.org/&#x27;</span>)  </span><br><span class="line">connect: (diveintopython3.org, <span class="number">80</span>)</span><br><span class="line">send: <span class="string">b&#x27;GET / HTTP/1.1</span></span><br><span class="line"><span class="string">Host: diveintopython3.org</span></span><br><span class="line"><span class="string">accept-encoding: deflate, gzip</span></span><br><span class="line"><span class="string">user-agent: Python-httplib2/$Rev: 259 $&#x27;</span></span><br><span class="line">reply: <span class="string">&#x27;HTTP/1.1 200 OK&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(<span class="built_in">dict</span>(response.items()))                                 </span><br><span class="line">&#123;<span class="string">&#x27;-content-encoding&#x27;</span>: <span class="string">&#x27;gzip&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;accept-ranges&#x27;</span>: <span class="string">&#x27;bytes&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;connection&#x27;</span>: <span class="string">&#x27;close&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;content-length&#x27;</span>: <span class="string">&#x27;6657&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;content-location&#x27;</span>: <span class="string">&#x27;http://diveintopython3.org/&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;content-type&#x27;</span>: <span class="string">&#x27;text/html&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;date&#x27;</span>: <span class="string">&#x27;Tue, 02 Jun 2009 03:26:54 GMT&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;etag&#x27;</span>: <span class="string">&#x27;&quot;7f806d-1a01-9fb97900&quot;&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;last-modified&#x27;</span>: <span class="string">&#x27;Tue, 02 Jun 2009 02:51:48 GMT&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;server&#x27;</span>: <span class="string">&#x27;Apache&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;status&#x27;</span>: <span class="string">&#x27;200&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;vary&#x27;</span>: <span class="string">&#x27;Accept-Encoding,User-Agent&#x27;</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">len</span>(content)                                                  </span><br><span class="line"><span class="number">6657</span></span><br></pre></td></tr></table></figure>
+<p>现在在此请求同一页面，使用同一个Http对象(以及同一个本地缓存)。httplib2 将ETag validator 通过If-None-Match头发送回服务器。httplib2 也将Last-Modified validator 通过If-Modified-Since头发送回服务器。：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># continued from the previous example</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>response, content = h.request(<span class="string">&#x27;http://diveintopython3.org/&#x27;</span>)  </span><br><span class="line">connect: (diveintopython3.org, <span class="number">80</span>)</span><br><span class="line">send: <span class="string">b&#x27;GET / HTTP/1.1</span></span><br><span class="line"><span class="string">Host: diveintopython3.org</span></span><br><span class="line"><span class="string">if-none-match: &quot;7f806d-1a01-9fb97900&quot;                             </span></span><br><span class="line"><span class="string">if-modified-since: Tue, 02 Jun 2009 02:51:48 GMT                  </span></span><br><span class="line"><span class="string">accept-encoding: deflate, gzip</span></span><br><span class="line"><span class="string">user-agent: Python-httplib2/$Rev: 259 $&#x27;</span></span><br><span class="line">reply: <span class="string">&#x27;HTTP/1.1 304 Not Modified&#x27;</span>                                </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>response.fromcache                                            </span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>response.status                                               </span><br><span class="line"><span class="number">200</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>response.<span class="built_in">dict</span>[<span class="string">&#x27;status&#x27;</span>]                                       </span><br><span class="line"><span class="string">&#x27;304&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">len</span>(content)                                                  </span><br><span class="line"><span class="number">6657</span></span><br></pre></td></tr></table></figure>
+<p>服务器查看这些验证器(validators), 查看你请求的页面，然后判读得出页面在上次请求之后没有改变过, 所以它发回了304 状态码不带数据。</p>
+<h3 id="处理压缩">处理压缩</h3>
+<p>http支持两种类型的压缩。httplib2都支持。</p>
+<h4 id="示例-v4">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>response, content = h.request(<span class="string">&#x27;http://diveintopython3.org/&#x27;</span>)</span><br><span class="line">connect: (diveintopython3.org, <span class="number">80</span>)</span><br><span class="line">send: <span class="string">b&#x27;GET / HTTP/1.1</span></span><br><span class="line"><span class="string">Host: diveintopython3.org</span></span><br><span class="line"><span class="string">accept-encoding: deflate, gzip                          </span></span><br><span class="line"><span class="string">user-agent: Python-httplib2/$Rev: 259 $&#x27;</span></span><br><span class="line">reply: <span class="string">&#x27;HTTP/1.1 200 OK&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(<span class="built_in">dict</span>(response.items()))</span><br><span class="line">&#123;<span class="string">&#x27;-content-encoding&#x27;</span>: <span class="string">&#x27;gzip&#x27;</span>,                           </span><br><span class="line"> <span class="string">&#x27;accept-ranges&#x27;</span>: <span class="string">&#x27;bytes&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;connection&#x27;</span>: <span class="string">&#x27;close&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;content-length&#x27;</span>: <span class="string">&#x27;6657&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;content-location&#x27;</span>: <span class="string">&#x27;http://diveintopython3.org/&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;content-type&#x27;</span>: <span class="string">&#x27;text/html&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;date&#x27;</span>: <span class="string">&#x27;Tue, 02 Jun 2009 03:26:54 GMT&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;etag&#x27;</span>: <span class="string">&#x27;&quot;7f806d-1a01-9fb97900&quot;&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;last-modified&#x27;</span>: <span class="string">&#x27;Tue, 02 Jun 2009 02:51:48 GMT&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;server&#x27;</span>: <span class="string">&#x27;Apache&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;status&#x27;</span>: <span class="string">&#x27;304&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;vary&#x27;</span>: <span class="string">&#x27;Accept-Encoding,User-Agent&#x27;</span>&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="说明-v5">说明</h4>
+<ul>
+<li>每一次httplib2 发送请求，它包含了Accept-Encoding头来告诉服务器它能够处理deflate 或者 gzip压缩。</li>
+<li>这个例子中，服务器返回了gzip压缩过的负载，当<code>request()</code>方法返回的时候，httplib2就已经解压缩了响应的体(body)并将其放在 content变量里。如果你想知道响应是否压缩过, 你可以检查<code>response['-content-encoding']</code>；否则，不用担心了.</li>
+</ul>
+<h3 id="处理重定向">处理重定向</h3>
+<p>http 定义了 两种类型的重定向: 临时的和永久的。</p>
+<h4 id="临时重定向">临时重定向</h4>
+<p>对于临时重定向，除了跟随它们其他没有什么特别要做的, httplib2 会自动处理跟随。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> httplib2</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>httplib2.debuglevel = <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>h = httplib2.Http(<span class="string">&#x27;.cache&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>response, content = h.request(<span class="string">&#x27;http://diveintopython3.org/examples/feed-302.xml&#x27;</span>) </span><br><span class="line">connect: (diveintopython3.org, <span class="number">80</span>)</span><br><span class="line">send: <span class="string">b&#x27;GET /examples/feed-302.xml HTTP/1.1                                           </span></span><br><span class="line"><span class="string">Host: diveintopython3.org</span></span><br><span class="line"><span class="string">accept-encoding: deflate, gzip</span></span><br><span class="line"><span class="string">user-agent: Python-httplib2/$Rev: 259 $&#x27;</span></span><br><span class="line">reply: <span class="string">&#x27;HTTP/1.1 302 Found&#x27;</span>                                                           </span><br><span class="line">send: <span class="string">b&#x27;GET /examples/feed.xml HTTP/1.1    # 跟随重定向                                </span></span><br><span class="line"><span class="string">Host: diveintopython3.org</span></span><br><span class="line"><span class="string">accept-encoding: deflate, gzip</span></span><br><span class="line"><span class="string">user-agent: Python-httplib2/$Rev: 259 $&#x27;</span></span><br><span class="line">reply: <span class="string">&#x27;HTTP/1.1 200 OK&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>“跟随” 一个重定向就是这个例子展示的那么多。httplib2 发送一个请求到你要求的url。服务器返回一个响应说“不，不, 看那边.” httplib2 给新的url发送另一个请求.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># continued from the previous example</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>response                                                          </span><br><span class="line">&#123;<span class="string">&#x27;status&#x27;</span>: <span class="string">&#x27;200&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;content-length&#x27;</span>: <span class="string">&#x27;3070&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;content-location&#x27;</span>: <span class="string">&#x27;http://diveintopython3.org/examples/feed.xml&#x27;</span>,  </span><br><span class="line"> <span class="string">&#x27;accept-ranges&#x27;</span>: <span class="string">&#x27;bytes&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;expires&#x27;</span>: <span class="string">&#x27;Thu, 04 Jun 2009 02:21:41 GMT&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;vary&#x27;</span>: <span class="string">&#x27;Accept-Encoding&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;server&#x27;</span>: <span class="string">&#x27;Apache&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;last-modified&#x27;</span>: <span class="string">&#x27;Wed, 03 Jun 2009 02:20:15 GMT&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;connection&#x27;</span>: <span class="string">&#x27;close&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;-content-encoding&#x27;</span>: <span class="string">&#x27;gzip&#x27;</span>,                                         </span><br><span class="line"> <span class="string">&#x27;etag&#x27;</span>: <span class="string">&#x27;&quot;bfe-4cbbf5c0&quot;&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;cache-control&#x27;</span>: <span class="string">&#x27;max-age=86400&#x27;</span>,                                    </span><br><span class="line"> <span class="string">&#x27;date&#x27;</span>: <span class="string">&#x27;Wed, 03 Jun 2009 02:21:41 GMT&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;content-type&#x27;</span>: <span class="string">&#x27;application/xml&#x27;</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>注意，你调用<code>request()</code>方法返回的<code>response</code>是<strong>最终url</strong>的响应。httplib2 会将最终的 url（在这里是feed.xml而不是上面的fee2.xml的url） 以 <code>content-location</code> 加入到 <code>response</code> 字典中。这不是服务器返回的头，它特定于httplib2。</p>
+<p>如果你希望那些最后重定向到最终url的中间url的信息呢？httplib2 也能帮你。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># continued from the previous example</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>response.previous                                                     </span><br><span class="line">&#123;<span class="string">&#x27;status&#x27;</span>: <span class="string">&#x27;302&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;content-length&#x27;</span>: <span class="string">&#x27;228&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;content-location&#x27;</span>: <span class="string">&#x27;http://diveintopython3.org/examples/feed-302.xml&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;expires&#x27;</span>: <span class="string">&#x27;Thu, 04 Jun 2009 02:21:41 GMT&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;server&#x27;</span>: <span class="string">&#x27;Apache&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;connection&#x27;</span>: <span class="string">&#x27;close&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;location&#x27;</span>: <span class="string">&#x27;http://diveintopython3.org/examples/feed.xml&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;cache-control&#x27;</span>: <span class="string">&#x27;max-age=86400&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;date&#x27;</span>: <span class="string">&#x27;Wed, 03 Jun 2009 02:21:41 GMT&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;content-type&#x27;</span>: <span class="string">&#x27;text/html; charset=iso-8859-1&#x27;</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">type</span>(response)                                                        </span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">httplib2</span>.<span class="title">Response</span>&#x27;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">type</span>(<span class="params">response.previous</span>)</span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> &#x27;<span class="title">httplib2</span>.<span class="title">Response</span>&#x27;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">response</span>.<span class="title">previous</span>.<span class="title">previous</span>                                            </span></span><br><span class="line"><span class="class">&gt;&gt;&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>response.previous</code>属性持有前一个响应对象的引用，httplib2跟随那个响应获得了当前的响应对象。<code>response</code> 和 <code>response.previous</code> 都是 <code>httplib2.Response</code> 对象。这意味着你可以通过<code>response.previous.previous</code> 来反向跟踪重定向链到更前的请求。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  对于临时重定向你不需要做什么特别的处理。httplib2 会自动跟随它们，而一个url重定向到另一个这个事实上不会影响httplib2对压缩，缓存, ETags, 或者任何其他http特性的支持。
+</div>
+<h4 id="永久重定向">永久重定向</h4>
+<p>永久重定向同样也很简单。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># continued from the previous example</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>response, content = h.request(<span class="string">&#x27;http://diveintopython3.org/examples/feed-301.xml&#x27;</span>)  </span><br><span class="line">connect: (diveintopython3.org, <span class="number">80</span>)</span><br><span class="line">send: <span class="string">b&#x27;GET /examples/feed-301.xml HTTP/1.1</span></span><br><span class="line"><span class="string">Host: diveintopython3.org</span></span><br><span class="line"><span class="string">accept-encoding: deflate, gzip</span></span><br><span class="line"><span class="string">user-agent: Python-httplib2/$Rev: 259 $&#x27;</span></span><br><span class="line">reply: <span class="string">&#x27;HTTP/1.1 301 Moved Permanently&#x27;</span>                                                </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>response.fromcache                                                                 </span><br><span class="line"><span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>又一次，这个url实际上并不存在。服务器已将其永久重定向到<code>http://diveintopython3.org/examples/feed.xml</code>.</li>
+<li>这就是: 状态码 301。 但是再次注意什么没有发生: 没有发送到重定向后的url的请求。为什么没有? 因为它已经在本地缓存了。</li>
+<li>httplib2 “跟随” 重定向到了它的缓存里面。</li>
+</ul>
+<p>但是等等! 还有更多!</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># continued from the previous example</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>response2, content2 = h.request(<span class="string">&#x27;http://diveintopython3.org/examples/feed-301.xml&#x27;</span>)  </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>response2.fromcache                                                                  </span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>content2 == content                                                                  </span><br><span class="line"><span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<p>这是临时和永久重定向的区别: 一旦 httplib2跟随了一个永久重定向, 所有后续的对这个url的请求会被透明的重写到目标 url 而不会接触网络来访问原始的url。 记住, 调试还开着, 但没有任何网络活动的输出。</p>
+<h2 id="HTTP-Post">HTTP Post</h2>
+<p>当你在论坛上发表一个评论，更新你的博客，在 Twitter 或者 <a target="_blank" rel="noopener" href="http://Identi.ca">Identi.ca</a> 这样的微博客上面发表状态消息的时候, 你很可能已经使用了http POST。</p>
+<p>Twitter 和 <a target="_blank" rel="noopener" href="http://Identi.ca">Identi.ca</a> 都提供一个基于http的简单的api来发布并更新你状态(不超过140个字符)。让我们来看看Identi.ca的关于更新状态的api文档 :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Identi.ca 的rest api 方法: statuses&#x2F;update</span><br><span class="line">更新已认证用户的状态。需要下面格式的status参数。请求必须是POST.</span><br><span class="line"></span><br><span class="line">url</span><br><span class="line">https:&#x2F;&#x2F;identi.ca&#x2F;api&#x2F;statuses&#x2F;update.format</span><br><span class="line">Formats</span><br><span class="line">xml, json, rss, atom</span><br><span class="line">http Method(s)</span><br><span class="line">POST</span><br><span class="line">Requires Authentication</span><br><span class="line">true</span><br><span class="line">Parameters</span><br><span class="line">status. Required. The text of your status update. url-encode as necessary.</span><br></pre></td></tr></table></figure>
+<p>怎么操作呢？要在 <a target="_blank" rel="noopener" href="http://Identi.ca">Identi.ca</a> 发布一条消息, 你需要提交一个http POST请求到<code>http://identi.ca/api/statuses/update.format</code>。(format字样不是url的一部分; 你应该将其替换为你希望服务器返回的请求的格式。所以如果需要一个xml格式的返回。你应该向<code>https://identi.ca/api/statuses/update.xml发送请求。</code>) 请求需要一个参数status, 包含了你的状态更新文本。并且请求必须是已授权的。<a target="_blank" rel="noopener" href="http://Identi.ca">Identi.ca</a> 使用建立在ssl之上的<a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Basic_access_authentication">HTTP Basic Authentication</a> (也就是<a target="_blank" rel="noopener" href="http://www.ietf.org/rfc/rfc2617.txt">RFC 2617</a>) 来提供安全但方便的认证。httplib2 支持 ssl 和 http Basic Authentication, 所以这部分很简单。</p>
+<p>POST 请求同 GET 请求不同, 因为它包含负荷(payload)。负荷是你要发送到服务器的数据。这个api方法必须的参数是status, 并且它应该是<strong>url编码过的</strong>。 这是一种很简单的序列化格式，将一组键值对(比如字典)转化为一个字符串。Python 带有一个工具函数用于url编码一个字典: <code>urllib.parse.urlencode()</code>。</p>
+<h4 id="示例-v5">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> urllib.parse <span class="keyword">import</span> urlencode</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> httplib2</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>httplib2.debuglevel = <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>h = httplib2.Http(<span class="string">&#x27;.cache&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>data = &#123;<span class="string">&#x27;status&#x27;</span>: <span class="string">&#x27;Test update from Python 3&#x27;</span>&#125; </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>h.add_credentials(<span class="string">&#x27;diveintomark&#x27;</span>, <span class="string">&#x27;MY_SECRET_PASSWORD&#x27;</span>, <span class="string">&#x27;identi.ca&#x27;</span>)    </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>resp, content = h.request(<span class="string">&#x27;https://identi.ca/api/statuses/update.xml&#x27;</span>,</span><br><span class="line"><span class="meta">... </span>    <span class="string">&#x27;POST&#x27;</span>,                                                             </span><br><span class="line"><span class="meta">... </span>    urlencode(data),                                                    </span><br><span class="line"><span class="meta">... </span>    headers=&#123;<span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/x-www-form-urlencoded&#x27;</span>&#125;)      </span><br></pre></td></tr></table></figure>
+<h4 id="说明-v6">说明</h4>
+<ul>
+<li>第5行是 <a target="_blank" rel="noopener" href="http://Identi.ca">Identi.ca</a> api 所期望的字典。</li>
+<li>第6行是httplib2处理认证的方法。 <code>add_credentials()</code>方法记录你的用户名和密码。当 httplib2 试图执行请求的时候，服务器会返回一个401 Unauthorized状态码, 并且列出所有它支持的认证方法(在 WWW-Authenticate 头中). httplib2会自动构造Authorization头并且重新请求该url。</li>
+<li>第二个参数是http请求的类型。这里是POST。</li>
+<li>第三个参数是要发送到服务器的负荷 。我们发送包含状态消息的url编码过的字典。</li>
+<li>最后，我们得告诉服务器负荷是url编码过的数据。</li>
+</ul>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  <code>add_credentials()</code>方法的第三个参数是该证书有效的域名。你应该总是指定这个参数! 如果你省略了这个参数，并且之后重用这个httplib2.Http对象访问另一个需要认证的站点，可能会导致httplib2将一个站点的用户名密码泄漏给其他站点。
+</div>
+<h4 id="发送到线路上的数据">发送到线路上的数据</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># continued from the previous example</span><br><span class="line">send: b&#39;POST &#x2F;api&#x2F;statuses&#x2F;update.xml HTTP&#x2F;1.1</span><br><span class="line">Host: identi.ca</span><br><span class="line">Accept-Encoding: identity</span><br><span class="line">Content-Length: 32</span><br><span class="line">content-type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">user-agent: Python-httplib2&#x2F;$Rev: 259 $</span><br><span class="line"></span><br><span class="line">status&#x3D;Test+update+from+Python+3&#39;</span><br><span class="line">reply: &#39;HTTP&#x2F;1.1 401 Unauthorized&#39;                        </span><br><span class="line">send: b&#39;POST &#x2F;api&#x2F;statuses&#x2F;update.xml HTTP&#x2F;1.1            </span><br><span class="line">Host: identi.ca</span><br><span class="line">Accept-Encoding: identity</span><br><span class="line">Content-Length: 32</span><br><span class="line">content-type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">authorization: Basic SECRET_HASH_CONSTRUCTED_BY_HTTPLIB2  </span><br><span class="line">user-agent: Python-httplib2&#x2F;$Rev: 259 $</span><br><span class="line"></span><br><span class="line">status&#x3D;Test+update+from+Python+3&#39;</span><br><span class="line">reply: &#39;HTTP&#x2F;1.1 200 OK&#39;                                  </span><br></pre></td></tr></table></figure>
+<h4 id="服务器返回客户端的数据">服务器返回客户端的数据</h4>
+<p>请求成功后服务器返回什么？这个完全由web 服务 api决定。 在一些协议里面(就像 <a target="_blank" rel="noopener" href="http://www.ietf.org/rfc/rfc5023.txt">Atom Publishing Protocol</a> )，服务器会返回201 Created状态码，并通过Location提供新创建的资源的地址。<a target="_blank" rel="noopener" href="http://Identi.ca">Identi.ca</a> 返回<code>200 OK</code>和一个包含新创建资源信息的xml 文档。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"># continued from the previous example</span><br><span class="line">&gt;&gt;&gt; print(content.decode(&#x27;utf-8&#x27;))                             </span><br><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">status</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">text</span>&gt;</span>Test update from Python 3<span class="tag">&lt;/<span class="name">text</span>&gt;</span>                        </span><br><span class="line"> <span class="tag">&lt;<span class="name">truncated</span>&gt;</span>false<span class="tag">&lt;/<span class="name">truncated</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">created_at</span>&gt;</span>Wed Jun 10 03:53:46 +0000 2009<span class="tag">&lt;/<span class="name">created_at</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">in_reply_to_status_id</span>&gt;</span><span class="tag">&lt;/<span class="name">in_reply_to_status_id</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">source</span>&gt;</span>api<span class="tag">&lt;/<span class="name">source</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">id</span>&gt;</span>5131472<span class="tag">&lt;/<span class="name">id</span>&gt;</span>                                              </span><br><span class="line"> <span class="tag">&lt;<span class="name">in_reply_to_user_id</span>&gt;</span><span class="tag">&lt;/<span class="name">in_reply_to_user_id</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">in_reply_to_screen_name</span>&gt;</span><span class="tag">&lt;/<span class="name">in_reply_to_screen_name</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">favorited</span>&gt;</span>false<span class="tag">&lt;/<span class="name">favorited</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">user</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">id</span>&gt;</span>3212<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>Mark Pilgrim<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">screen_name</span>&gt;</span>diveintomark<span class="tag">&lt;/<span class="name">screen_name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">location</span>&gt;</span>27502, US<span class="tag">&lt;/<span class="name">location</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>tech writer, husband, father<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">profile_image_url</span>&gt;</span>http://avatar.identi.ca/3212-48-20081216000626.png<span class="tag">&lt;/<span class="name">profile_image_url</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://diveintomark.org/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">protected</span>&gt;</span>false<span class="tag">&lt;/<span class="name">protected</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">followers_count</span>&gt;</span>329<span class="tag">&lt;/<span class="name">followers_count</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">profile_background_color</span>&gt;</span><span class="tag">&lt;/<span class="name">profile_background_color</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">profile_text_color</span>&gt;</span><span class="tag">&lt;/<span class="name">profile_text_color</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">profile_link_color</span>&gt;</span><span class="tag">&lt;/<span class="name">profile_link_color</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">profile_sidebar_fill_color</span>&gt;</span><span class="tag">&lt;/<span class="name">profile_sidebar_fill_color</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">profile_sidebar_border_color</span>&gt;</span><span class="tag">&lt;/<span class="name">profile_sidebar_border_color</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">friends_count</span>&gt;</span>2<span class="tag">&lt;/<span class="name">friends_count</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">created_at</span>&gt;</span>Wed Jul 02 22:03:58 +0000 2008<span class="tag">&lt;/<span class="name">created_at</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">favourites_count</span>&gt;</span>30768<span class="tag">&lt;/<span class="name">favourites_count</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">utc_offset</span>&gt;</span>0<span class="tag">&lt;/<span class="name">utc_offset</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">time_zone</span>&gt;</span>UTC<span class="tag">&lt;/<span class="name">time_zone</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">profile_background_image_url</span>&gt;</span><span class="tag">&lt;/<span class="name">profile_background_image_url</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">profile_background_tile</span>&gt;</span>false<span class="tag">&lt;/<span class="name">profile_background_tile</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">statuses_count</span>&gt;</span>122<span class="tag">&lt;/<span class="name">statuses_count</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">following</span>&gt;</span>false<span class="tag">&lt;/<span class="name">following</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">notifications</span>&gt;</span>false<span class="tag">&lt;/<span class="name">notifications</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">user</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">status</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>记住, <strong>httplib2返回的数据总是字节串(bytes), 不是字符串</strong>。另外，上面第10行是这条状态消息的唯一标识符。<a target="_blank" rel="noopener" href="http://Identi.ca">Identi.ca</a> 用这个标识来构造在web上查看该消息的url。</p>
+<h2 id="HTTP-DELETE">HTTP DELETE</h2>
+<p>http 并不只限于 GET 和 POST。 它们当然是最常见的请求类型，特别是在web浏览器里面。 但是web服务api会使用GET和POST之外的东西, 对此httplib2也能处理。</p>
+<h4 id="示例-v6">示例</h4>
+<p>下面将示例如何执行 HTTP DELETE 删除一条状态消息。要删除一条状态消息，首先需要找到该状态消息的 id。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># continued from the previous example</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> xml.etree <span class="keyword">import</span> ElementTree <span class="keyword">as</span> etree</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tree = etree.fromstring(content)                                          </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>status_id = tree.findtext(<span class="string">&#x27;id&#x27;</span>)                                           </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>status_id</span><br><span class="line"><span class="string">&#x27;5131472&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>url = <span class="string">&#x27;https://identi.ca/api/statuses/destroy/&#123;0&#125;.xml&#x27;</span>.<span class="built_in">format</span>(status_id)  </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>resp, deleted_content = h.request(url, <span class="string">&#x27;DELETE&#x27;</span>)                          </span><br></pre></td></tr></table></figure>
+<p>之后对该url执行一个http DELETE请求就可以了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">send: <span class="string">b&#x27;DELETE /api/statuses/destroy/5131472.xml HTTP/1.1      </span></span><br><span class="line"><span class="string">Host: identi.ca</span></span><br><span class="line"><span class="string">Accept-Encoding: identity</span></span><br><span class="line"><span class="string">user-agent: Python-httplib2/$Rev: 259 $</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;</span></span><br><span class="line">reply: <span class="string">&#x27;HTTP/1.1 401 Unauthorized&#x27;</span>                             </span><br><span class="line">send: <span class="string">b&#x27;DELETE /api/statuses/destroy/5131472.xml HTTP/1.1      </span></span><br><span class="line"><span class="string">Host: identi.ca</span></span><br><span class="line"><span class="string">Accept-Encoding: identity</span></span><br><span class="line"><span class="string">authorization: Basic SECRET_HASH_CONSTRUCTED_BY_HTTPLIB2       </span></span><br><span class="line"><span class="string">user-agent: Python-httplib2/$Rev: 259 $</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#x27;</span></span><br><span class="line">reply: <span class="string">&#x27;HTTP/1.1 200 OK&#x27;</span>                                       </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>resp.status</span><br><span class="line"><span class="number">200</span></span><br></pre></td></tr></table></figure>
+<h2 id="进一步阅读">进一步阅读</h2>
+<h3 id="httplib2">httplib2</h3>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://code.google.com/p/httplib2/">httplib2项目页面</a></li>
+<li><a target="_blank" rel="noopener" href="http://code.google.com/p/httplib2/wiki/ExamplesPython3">更多httplib2的代码示例</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.xml.com/pub/a/2006/02/01/doing-http-caching-right-introducing-httplib2.html">正确的处理http缓存: 介绍httplib2</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.xml.com/pub/a/2006/03/29/httplib2-http-persistence-and-authentication.html">httplib2: http 持久化和认证</a></li>
+</ul>
+<h3 id="http-缓存">http 缓存</h3>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.mnot.net/cache_docs/">http 缓存教程</a></li>
+<li><a target="_blank" rel="noopener" href="http://code.google.com/p/doctype/wiki/ArticleHttpCaching">怎用使用http头控制缓存</a></li>
+</ul>
+<h3 id="RFCS">RFCS</h3>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.ietf.org/rfc/rfc2616.txt">RFC 2616: HTTP</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.ietf.org/rfc/rfc2617.txt">RFC 2617: HTTP Basic Authentication</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.ietf.org/rfc/rfc1951.txt">RFC 1951: deflate compression</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.ietf.org/rfc/rfc1952.txt">RFC 1952: gzip compression</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.rfc-editor.org/rfc-index2.html">RFC Index</a></li>
+</ul>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+			
+			
+			
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/python3-more.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/python3-module.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: 'HTTP Web 服务'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

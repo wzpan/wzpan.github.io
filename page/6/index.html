@@ -1,0 +1,728 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Page 6 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: 'undefined'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      <div class="page-header page-header-inverse ">
+  <h1 class="title title-inverse ">哈嘿！</h1>
+</div>
+
+<div class="row page pjax">
+
+	
+	<div class="col-md-9">
+	
+
+		<div class="slogan">
+      <i class="fa fa-heart"></i>
+      Happy Hacking!
+</div>    
+		<div id="top_search"></div>
+		<div class="mypage">
+		
+		<!-- title and entry -->
+        <!-- render top articles firstly -->
+        
+        <!-- render other articles -->
+        
+           
+			  
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2015-10-19 </div>
+			<div class="article-title"><a href="/codes/learn-react-native-for-android-02/" title="本文将从一个简单的例子开始，逐步深入 React 的编写细节。">学习 React Native for Android：React 基础</a></div>						
+		</h3>
+	
+
+
+			  <div class="entry">
+  <div class="row">
+	
+           
+              <div class="thumbnail"><a href="/codes/learn-react-native-for-android-02/"><img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/learn-react-native-for-android-02/React.js_logo.svg.png" alt="学习 React Native for Android：React 基础"  class="nofancybox"></a>
+           
+		</div>
+	
+	
+		<p>React Native 主张用 React 的开发思维来编写 UI 层。因此在学习 React-Native 之前，了解基本的 React 的语法和存在的坑会对今后 React Native 的开发大有裨益。</p>
+<p>本文将从一个简单的例子开始，逐步完善我们的程序。在这个过程中，我们将一步步探讨如何用 React 来开发网页应用，以及需要注意的陷阱。与其他教程不同，本文将采用类似 <a target="_blank" rel="noopener" href="http://zedshaw.com/">Zed A. Shaw</a> 的 <a target="_blank" rel="noopener" href="http://learncodethehardway.org/">《Learn Code the Hard Way》</a> 系列的案例驱动的形式，从例子开始着手。我相信，掌握一门新技术最好的方法就是自己动手。因此，我并不打算面面俱到的列举所有关于 React 的内容，而更倾向于担任一个引路人的角色：把读者们带到 React 花园的门前，然后让读者们在 React 花园里来一场自助游。为了让这个旅途更加有收获，我会在每节内容的最后安排几个练习，并在最后分享一些值得深入学习的文章和教程。</p>
+	
+	</div>
+  <a type="button" href="/codes/learn-react-native-for-android-02/#more" class="btn btn-default more">Read More</a>
+</div>
+
+           
+		
+           
+			  
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2015-10-17 </div>
+			<div class="article-title"><a href="/codes/learn-react-native-for-android-01/" title="学习 React Native for Android 的开发环境搭建。">学习 React Native for Android：环境搭建</a></div>						
+		</h3>
+	
+
+
+			  <div class="entry">
+  <div class="row">
+	
+           
+              <div class="thumbnail"><a href="/codes/learn-react-native-for-android-01/"><img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/learn-react-native-for-android-01/react-native.jpg" alt="学习 React Native for Android：环境搭建"  class="nofancybox"></a>
+           
+		</div>
+	
+	
+		<p>Facebook 于 2015 年 9 月 15 日发布了 React Native for Android 。React Native 让开发者使用 JavaScript 和 React 编写应用，利用相同的核心代码就可以创建 Web，iOS 和 Android 平台的原生应用。注意这里的 <q>核心</q> 两个词，它指的是那些底层的、与界面无关的逻辑。与 ionic / PhoneGap 这类 Web App 开发框架不同，React Native 主张使用 React 的开发方式来开发 Native 应用，因为在现阶段 Web App 还无法达到 Native App 的体验。所以，React Native 并不强调 <q>write Once, run everywhere</q> ，而是 <q>learn once, write everywhere</q> ：上层使用 JS 和 React 开发不同平台的 UI，下层则可以编写能够复用的核心代码，从而大幅提高开发效率。</p>
+<p>关于 React Native 的好处，唐巧在 《<a target="_blank" rel="noopener" href="http://blog.devtang.com/blog/2015/02/01/talk-about-react-native/">谈谈 React Native</a>》 里已经有比较深刻的总结，本文不再赘述。本文将作为一个 React Native for Android 学习系列的一个开篇，从零开始学习 React Native 。我尽量不偷懒，保证文章及时更新。</p>
+	
+	</div>
+  <a type="button" href="/codes/learn-react-native-for-android-01/#more" class="btn btn-default more">Read More</a>
+</div>
+
+           
+		
+           
+			  
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2015-10-08 </div>
+			<div class="article-title"><a href="/codes/local-search-engine-for-hexo/" title="介绍如何为 hexo 写一个本地的搜索引擎。">jQuery-based Local Search Engine for Hexo</a></div>						
+		</h3>
+	
+
+
+			  <div class="entry">
+  <div class="row">
+	
+           
+              <div class="thumbnail"><a href="/codes/local-search-engine-for-hexo/"><img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/local-search-engine-for-hexo/demo.gif" alt="jQuery-based Local Search Engine for Hexo"  class="nofancybox"></a>
+           
+		</div>
+	
+	
+		<p>早在我最初<a href="/codes/from-ruhoh-to-hexo/">从 Ruhoh 迁移博客到 Hexo</a> 时，我就有动手写一个本地的搜索引擎的想法。比起使用第三方服务的站内搜索，本地搜索引擎有几个好处：</p>
+<ol>
+<li>更可靠。不用担心<del>由于某些显而易见的原因导致</del>第三方服务不可访问。</li>
+<li>速度更快。不管是 Google 还是 Swiftype ，第三方搜索服务的加载速度总是比较慢，影响浏览体验。</li>
+<li>定制性更强。由于是自己写的插件，检索的具体策略、界面样式都可以自己定义，满足极客们 Bigger than Bigger 的需求。</li>
+</ol>
+<p>这个想法起初是受了 Christian Fei 的 <a target="_blank" rel="noopener" href="https://github.com/christian-fei/Simple-Jekyll-Search">Simple Jekyll Search</a> 启发。在了解了它的原理后，我认为在 Hexo 上实现一个本地搜索引擎并不复杂。大致的思路是：</p>
+<ul>
+<li>写一个 generator ，生成站点所有文章的索引数据；</li>
+<li>当在搜索框中输入关键词时，触发 Javascript 的特定函数，在这个索引数据里头检索包含该关键词的文章；</li>
+<li>利用 jQuery 在页面中动态插入检索结果。</li>
+</ul>
+	
+	</div>
+  <a type="button" href="/codes/local-search-engine-for-hexo/#more" class="btn btn-default more">Read More</a>
+</div>
+
+           
+		
+           
+			  
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2015-06-02 </div>
+			<div class="article-title"><a href="/tools/dockerize-your-hexo/" title="使用 Docker 打包 Hexo 写作环境。">Dockerize Your Hexo</a></div>						
+		</h3>
+	
+
+
+			  <div class="entry">
+  <div class="row">
+	
+           
+              <div class="thumbnail"><a href="/tools/dockerize-your-hexo/"><img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/dockerize-your-hexo/docker.png" alt="Dockerize Your Hexo"  class="nofancybox"></a>
+           
+		</div>
+	
+	
+		<h2 id="前言">前言</h2>
+<p>在<a href="/codes/hexo-3-speed-up/">上篇文章</a>中，我简单提到了在升级 Hexo 3 过程中遇到的一些痛苦。其实还有很多问题没有在上篇文章中提及。比如，我的渲染器使用的是 pandoc ，在 2.x 的时候，<a target="_blank" rel="noopener" href="http://wzpan.github.io/hexo-theme-freemind/2014/03/16/tag-plugins/">hexo-tag-plugins</a> 里头的文字可以通过调用 <code>renderSync</code> 方法传给 markdown 进行渲染，而到了 3.0 ，这些文字无论怎么做都不能被 pandoc 或者 markdown 渲染。</p>
+<p>早在我决定挥刀动斧定制我的个人博客之前，我早已经做好了发生这种情况的心理准备。我的博客最早是使用 Ruhoh 编写的，从主题到渲染器进行了大量的个人定制，后面出于种种原因我决定<a target="_blank" rel="noopener" href="http://192.168.59.103:4000/codes/from-ruhoh-to-hexo/">切换到Hexo</a> ，于是我又花了很多力气把原来的博客移植到 Hexo 2.x 上。与其说是移植，不如说是一个基于 Hexo 2.x 的山寨版。现在 Hexo 一旦做了大幅更新，相当于我又得经历和前两次一样的折腾，实在是有心无力呀。考虑再三，我决定放弃使用 Hexo 3 ，而将我的博客所使用的环境 <q>冻结</q> 为 2.8.3 。</p>
+<p>但这样又带来了问题：为了方便使用我的主题和插件的朋友们，我已经对这几个项目进行了升级以支持最新的 Hexo 3 。如果我只在我的机器上安装 Hexo 2.8.3 ，那我接下来维护这几个项目就变得非常不方便。</p>
+<p>出于以上的原因，我决定使用 Docker 将 Hexo 2 和 Hexo 3 两套写作环境各自打包成镜像。这样，当我需要编写自己的博客时，就使用 Hexo 2 的镜像；当我需要维护几个 Hexo 主题和插件时，就使用 Hexo 3 的镜像。我也顺便将整个过程记录下来，形成此文，以供其他朋友参考借鉴。
+	
+	</div>
+  <a type="button" href="/tools/dockerize-your-hexo/#more" class="btn btn-default more">Read More</a>
+</div>
+
+           
+		
+           
+			  
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2015-06-01 </div>
+			<div class="article-title"><a href="/codes/hexo-3-speed-up/" title="升级到 Hexo 3 后站点文章渲染过慢的解决办法。">Speed Up the Rendering Process of hexo 3</a></div>						
+		</h3>
+	
+
+
+			  <div class="entry">
+  <div class="row">
+	
+           
+              <div class="thumbnail"><a href="/codes/hexo-3-speed-up/"><img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/hexo-3-speed-up/rocket.jpg" alt="Speed Up the Rendering Process of hexo 3"  class="nofancybox"></a>
+           
+		</div>
+	
+	
+		<p>Hexo 3 自从放出更新到现在已经有很长一段时间了，相信很多人跟我一样都经历了一个非常曲折的升级过程。</p>
+<p>第一个问题是我所编写的主题和插件全都阵亡了，这个问题在我决定升级 Hexo 之前已经被很多用户轰炸过，于是我花了两个晚上的时间对所有的主题和插件进行了大幅修改和升级。</p>
+<p>另一个让我无比郁闷的问题是：官方虽然宣称 3.0 之后站点渲染速度更快了，但实际测试时我发现结果正好相反——全站 168 篇文章，在 Hexo 2.8.3 环境中渲染只需 3~4 秒时间，而更新到 Hexo 3.0 之后，网站的渲染居然花了一个多钟！</p>
+<p>为了找出导致这个问题的 bottleneck ，我通过二分的手段很快定位出了问题文章 《<a href="/codes/opengl-on-archlinux/">ArchLinux安装配置OpenGL</a>》，这篇文章乍一看没啥特别之处，但问题就出在文中这段长长的目录结构图：
+	
+	</div>
+  <a type="button" href="/codes/hexo-3-speed-up/#more" class="btn btn-default more">Read More</a>
+</div>
+
+           
+		
+
+		</div>
+
+		<!-- pagination -->
+		<div>
+  		<center>
+		<div class="pagination">
+<ul class="pagination">
+	 
+		
+    	<li class="prev"><a href="/page/5/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i> Prev</a></li>
+  		
+
+        <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+
+		
+		   <li class="next"> <a href="/page/7/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a> </li>          
+        
+	
+</ul>
+</div>
+
+  		</center>
+		</div>
+
+		
+		
+	</div> <!-- col-md-9 -->
+
+	
+		<div class="col-md-3">
+	<div id="sidebar">
+		    
+		
+			
+  <div id="site_search">
+   <div class="form-group">
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
+   </div>  
+  <div id="local-search-result"></div>
+  </div>
+
+
+		
+			
+	<div class="widget">
+		<h4>Categories</h4>
+		<ul class="tag_box inline list-unstyled">
+		
+			<li><a href="/categories/codes/">codes<span>38</span></a></li>
+		
+			<li><a href="/categories/life/">life<span>9</span></a></li>
+		
+			<li><a href="/categories/math/">math<span>3</span></a></li>
+		
+			<li><a href="/categories/reading/">reading<span>2</span></a></li>
+		
+			<li><a href="/categories/slides/">slides<span>3</span></a></li>
+		
+			<li><a href="/categories/tools/">tools<span>12</span></a></li>
+		
+			<li><a href="/categories/work/">work<span>7</span></a></li>
+		
+		</ul>
+	</div>
+
+		
+			
+	<div class="widget">
+		<h4>Tag Cloud</h4>
+		<ul class="tag_box inline list-unstyled">		
+		
+			<li><a href="/tags/Python/">Python<span>3</span></a></li>
+		
+			<li><a href="/tags/openFrameworks/">openFrameworks<span>1</span></a></li>
+		
+			<li><a href="/tags/Atom/">Atom<span>1</span></a></li>
+		
+			<li><a href="/tags/music/">music<span>1</span></a></li>
+		
+			<li><a href="/tags/CMake/">CMake<span>1</span></a></li>
+		
+			<li><a href="/tags/xml/">xml<span>1</span></a></li>
+		
+			<li><a href="/tags/ABCmouse/">ABCmouse<span>1</span></a></li>
+		
+			<li><a href="/tags/jQuery/">jQuery<span>2</span></a></li>
+		
+			<li><a href="/tags/Flyspell/">Flyspell<span>1</span></a></li>
+		
+			<li><a href="/tags/Beamer/">Beamer<span>1</span></a></li>
+		
+			<li><a href="/tags/SCNUThesis/">SCNUThesis<span>1</span></a></li>
+		
+			<li><a href="/tags/Docker/">Docker<span>1</span></a></li>
+		
+			<li><a href="/tags/comment/">comment<span>1</span></a></li>
+		
+			<li><a href="/tags/PowerPoint/">PowerPoint<span>1</span></a></li>
+		
+			<li><a href="/tags/Android/">Android<span>1</span></a></li>
+		
+			<li><a href="/tags/TikZ/">TikZ<span>1</span></a></li>
+		
+			<li><a href="/tags/HaHack/">HaHack<span>3</span></a></li>
+		
+			<li><a href="/tags/utf-8/">utf-8<span>1</span></a></li>
+		
+			<li><a href="/tags/Course/">Course<span>2</span></a></li>
+		
+			<li><a href="/tags/Scheme/">Scheme<span>1</span></a></li>
+		
+		
+		   <li><a href="/tags">...<span>109</span></a></li>
+		 
+		</ul>
+	</div>
+
+
+		
+			
+   <div class="widget">
+	 <h4>Weibo</h4>
+   	 <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="https://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=0&speed=0&skin=1&isTitle=0&noborder=0&isWeibo=1&isFans=0&uid=1522727845&verifier=75dfaa45&dpc=1"></iframe>
+   </div>
+
+
+		
+			
+<div class="widget">
+  <h4>Recent Posts</h4>
+  <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/life/2020-montage-1/"  title="以 montage 的形式，回顾我的 2020 年。本文所有内容仅代表个人观点，与雇主无关。" ><i class="fas fa-file-alt"></i>2020 蒙太奇（上）</a>
+      </li>
+    
+      <li>
+        <a href="/codes/rhubarb-lip-sync/"  title="rhubarb-lip-sync-ccc (简称 lipsync) 是一款专用于 Cocos Creator 的嘴型动画生成插件。" ><i class="fas fa-file-alt"></i>让你的角色学会说话——rhubarb-lip-sync...</a>
+      </li>
+    
+      <li>
+        <a href="/life/2019-montage/"  title="以 montage 的形式，回顾我的 2019 年。本文所有内容仅代表个人观点，与雇主无关。" ><i class="fas fa-file-alt"></i>2019 蒙太奇</a>
+      </li>
+    
+      <li>
+        <a href="/codes/bci-and-muse-headband-development/"  title="本文介绍了关于脑机接口技术（Brain-Computer Interface）的基本概念以及 Muse 头环的 Python 开发基础，并分享了几个我开发的应用场景。" ><i class="fas fa-file-alt"></i>脑机接口概述及Muse头环Python开发基础</a>
+      </li>
+    
+      <li>
+        <a href="/life/donation-by-wukong-robot/" ><i class="fas fa-file-alt"></i>小目标达成：一万元开源项目善款筹集计划</a>
+      </li>
+    
+  </ul>
+</div>
+
+
+		
+			
+<div class="widget">
+	<h4>Links</h4>
+	<ul class="blogroll list-unstyled">
+	
+		<li><i class="fab fa-github"></i><a href="http://www.github.com/wzpan" title="我的 Github" target="_blank"]);">My Github</a></li>
+	
+		<li><i class="fab fa-linkedin"></i><a href="http://www.linkedin.com/pub/weizhou-pan/5b/8a0/161" title="跟我的LinkedIn建立链接吧！" target="_blank"]);">My LinkedIn</a></li>
+	
+		<li><i class="fab fa-weibo"></i><a href="http://weibo.com/weizhoupan" title="深恶痛绝僵尸粉、广告账户、troller和其他spam，宁删错不放过" target="_blank"]);">My Weibo</a></li>
+	
+		<li><i class="fas fa-video"></i><a href="https://space.bilibili.com/234099133" title="我的 bilibili 视频集" target="_blank"]);">My Bilibili</a></li>
+	
+	</ul>
+</div>
+
+
+		
+	
+</div> <!-- col-md-3 -->
+
+	
+	
+</div> <!-- row-fluid -->
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

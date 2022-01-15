@@ -1,0 +1,1159 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>排序 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="冒泡排序
+算法思想
+
+比较相邻的元素。如果第一个比第二个大，就交换他们两个。
+对每一对相邻元素作同样的工作，从开始第一对到结尾的最后一对。在这一点，最后的元素应该会是最大的数。
+针对所有的元素重复以上的步骤，除了最后一个。
+持续每次对越来越少的元素重复上面的步骤，直到没有任何一对数字需要比较。
+
+C">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="排序"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '排序'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 排序</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="冒泡排序">冒泡排序</h2>
+<h3 id="算法思想">算法思想</h3>
+<ol>
+<li>比较相邻的元素。如果第一个比第二个大，就交换他们两个。</li>
+<li>对每一对相邻元素作同样的工作，从开始第一对到结尾的最后一对。在这一点，最后的元素应该会是最大的数。</li>
+<li>针对所有的元素重复以上的步骤，除了最后一个。</li>
+<li>持续每次对越来越少的元素重复上面的步骤，直到没有任何一对数字需要比较。</li>
+</ol>
+<h3 id="C语言实现">C语言实现</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * bubble_sort		-	ascendly bubble sort the array</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param array 		the array to be sorted</span></span><br><span class="line"><span class="comment"> * @param length 		the length of the array</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="keyword">void</span> <span class="title">bubble_sort</span><span class="params">(<span class="keyword">int</span> <span class="built_in">array</span>[], <span class="keyword">int</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i, j;</span><br><span class="line">    <span class="keyword">for</span> (i = length; i &gt; <span class="number">0</span>; i--)&#123;</span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; i<span class="number">-1</span>; j++)&#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">array</span>[j] &gt; <span class="built_in">array</span>[j+<span class="number">1</span>])</span><br><span class="line">                swap(&amp;<span class="built_in">array</span>[j], &amp;<span class="built_in">array</span>[j+<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="特性">特性</h3>
+<ul>
+<li>时间复杂度：\(O(n^2)\)</li>
+<li>原地：是</li>
+<li>稳定：是</li>
+</ul>
+<h2 id="选择排序">选择排序</h2>
+<h3 id="基本思想">基本思想</h3>
+<p>首先在未排序序列中找到最小（大）元素，存放到排序序列的起始位置，然后，再从剩余未排序元素中继续寻找最小（大）元素，然后放到已排序序列的末尾。以此类推，直到所有元素均排序完毕。</p>
+<h3 id="C语言实现-v2">C语言实现</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * selection_sort	-	ascendly selection sort the array</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param array			the array to be sorted </span></span><br><span class="line"><span class="comment"> * @param length 		the length of the array</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="keyword">void</span> <span class="title">selection_sort</span><span class="params">(<span class="keyword">int</span> <span class="built_in">array</span>[], <span class="keyword">int</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i, j, min;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i++) &#123;</span><br><span class="line">        min = i;</span><br><span class="line">        <span class="keyword">for</span> (j = i; j &lt; length; j++) &#123;</span><br><span class="line">            <span class="comment">/* search for the minimum value */</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">array</span>[min] &gt; <span class="built_in">array</span>[j]) &#123;</span><br><span class="line">                min = j;</span><br><span class="line">            &#125;            </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (min != i) &#123;</span><br><span class="line">            <span class="comment">/* swap array[j] and min */</span></span><br><span class="line">            swap(&amp;<span class="built_in">array</span>[i], &amp;<span class="built_in">array</span>[min]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="性质">性质</h3>
+<p>选择排序的主要优点与数据移动有关。如果某个元素位于正确的最终位置上，则它不会被移动。选择排序每次交换一对元素，它们当中至少有一个将被移到其最终位置上，因此对n个元素的表进行排序总共进行至多n-1次交换。在所有的完全依靠交换去移动元素的排序方法中，选择排序属于非常好的一种。</p>
+<ul>
+<li>时间复杂度：\(O(n^2)\)</li>
+<li>原地：是</li>
+<li>稳定：否</li>
+</ul>
+<h2 id="插入排序">插入排序</h2>
+<h3 id="基本思想-v2">基本思想</h3>
+<p>插入排序（Insertion Sort）算法类似于玩扑克时抓牌的过程，玩家每拿到一张牌都要插入到手中已有的牌里，使之从小到大排好序。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/algorithms-sort/sortcards.png" alt="扑克牌的插入排序" />
+        <figcaption>扑克牌的插入排序</figcaption>
+      </figure>
+    </p>
+<p>开始时，我们的左手为空，并且桌子上的牌面向下。然后，我们每次从桌子上拿走一张牌并将它插入左手中正确的位置。为了找到一张牌的正确位置，我们从右到左将它与已在手中的每张牌进行比较。拿在左手上的牌总是排序好的，原来这些牌是桌子上牌堆中顶部的牌。</p>
+<p>插入排序算法与这个过程类似，但和插入扑克牌有一点不同：不可能在两个相邻的存储单元之间再插入一个单元，因此要将插入点之后的数据依次往后移动一个单元。排序算法如下：</p>
+<ol>
+<li>从第一个元素开始，该元素可以认为已经被排序；</li>
+<li>取出下一个元素，在已经排序的元素序列中从后向前扫描；</li>
+<li>如果该元素（已排序）大于新元素，将该元素移到下一位置；</li>
+<li>重复步骤3，直到找到已排序的元素小于或者等于新元素的位置；</li>
+<li>将新元素插入到该位置后；</li>
+<li>重复步骤2~5。</li>
+</ol>
+<h3 id="过程演示">过程演示</h3>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/algorithms-sort/insertion-sort.png" alt="title" />
+        <figcaption>title</figcaption>
+      </figure>
+    </p>
+<h3 id="C语言实现-v3">C语言实现</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * insertion_sort	-	ascendly insertion sort the array</span><br><span class="line"> * @param array			the array to be sorted</span><br><span class="line"> * @param length		the length of the array</span><br><span class="line"> *</span><br><span class="line"> * Sorting the array ascendly by using the insertion sort algorithms.</span><br><span class="line"> *</span><br><span class="line"> *&#x2F;</span><br><span class="line">extern void insertion_sort(int array[], int length)</span><br><span class="line">&#123;</span><br><span class="line">    int i, j, key;</span><br><span class="line">    for (i &#x3D; 1; i &lt; length; j++)&#123;</span><br><span class="line">        key &#x3D; array[i];</span><br><span class="line">        for (j &#x3D; i - 1; j &gt;&#x3D; 0 &amp;&amp; array[j] &gt; key; j--)&#123;</span><br><span class="line">        	array[j+1] &#x3D; array[j];</span><br><span class="line">        &#125;</span><br><span class="line">        array[j+1] &#x3D; key;</span><br><span class="line">    &#125;</span><br><span class="line">    return;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>另外一个<a target="_blank" rel="noopener" href="https://gist.github.com/wzpan/6481134">用递归实现的插入排序</a>。</p>
+<h3 id="性质-v2">性质</h3>
+<ul>
+<li>算法复杂度：\(O(n^2)\) 。当 n 比较小时（e.g. \(n \le 30\)），使用插入排序比较适合；当 n 比较大时，插入排序就显得很慢了。</li>
+<li>原址<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>：是</li>
+<li>稳定<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>：是</li>
+</ul>
+<h3 id="改进版本">改进版本</h3>
+<ul>
+<li><a href="#%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F">希尔排序</a>：带步长的采样数据，从而将元素分成若干组进行插入排序。然后再改用更小的步长。</li>
+<li><a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Tree_sort">二叉查找树排序</a>：利用二叉查找树，快速确定元素的插入位置，从而改进插入排序的效率。</li>
+<li><a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Library_sort">图书馆排序</a>：排列图书时，如果在每本书之间留一定的空隙，那么在进行插入时就有可能会少移动一些书。说白了就是在插入排序的基础上，给书与书之间留一定的空隙，这个空隙越大，需要移动的书就越少，这是它的思路——用空间换时间。</li>
+<li><a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Patience_sorting">耐心排序</a>：先将元素入桶，最后用插入排序。</li>
+</ul>
+<h2 id="希尔排序">希尔排序</h2>
+<h3 id="基本思想-v3">基本思想</h3>
+<p>希尔排序（Shell Sort）算法是 D.L. Shell 于1959年发明的，它是插入排序的一种高速而稳定的改进版本。</p>
+<p>希尔排序通过将比较的全部元素分为若干组来提升插入排序的性能。这样可以让一个元素可以一次性地朝最终位置前进一大步。然后算法再取越来越小的步长进行排序，算法的最后一步就是普通的插入排序，但是到了这步，需排序的数据几乎是已排好的了。</p>
+<p>一个更好理解的希尔排序实现：将数组列在一个表中并对列排序（用插入排序）。重复这过程，不过每次用更长的列来进行。最后整个表就只有一列了。将数组转换至表是为了更好地理解这算法，算法本身仅仅对原数组进行排序。</p>
+<h3 id="过程演示-v2">过程演示</h3>
+<p>例如，假设有这样一组数[ 13 14 94 33 82 25 59 94 65 23 45 27 73 25 39 10 ]，如果我们以步长为5开始进行排序，我们可以通过将这列表放在有5列的表中来更好地描述算法，这样他们就应该看起来是这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">13 14 94 33 82</span><br><span class="line">25 59 94 65 23</span><br><span class="line">45 27 73 25 39</span><br><span class="line">10</span><br></pre></td></tr></table></figure>
+<p>然后我们对每列进行排序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">10 14 73 25 23</span><br><span class="line">13 27 94 33 39</span><br><span class="line">25 59 94 65 82</span><br><span class="line">45</span><br></pre></td></tr></table></figure>
+<p>将上述四行数字，依序接在一起时我们得到：[ 10 14 73 25 23 13 27 94 33 39 25 59 94 65 82 45 ].这时10已经移至正确位置了，然后再以3为步长进行排序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">10 14 73</span><br><span class="line">25 23 13</span><br><span class="line">27 94 33</span><br><span class="line">39 25 59</span><br><span class="line">94 65 82</span><br><span class="line">45</span><br></pre></td></tr></table></figure>
+<p>排序之后变为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">10 14 13</span><br><span class="line">25 23 33</span><br><span class="line">27 25 59</span><br><span class="line">39 65 73</span><br><span class="line">45 94 82</span><br><span class="line">94</span><br></pre></td></tr></table></figure>
+<h3 id="C语言实现-v4">C语言实现</h3>
+<p>下面的函数是对整型数组进行排序的Shell排序算法。步长使用了 \(\frac{n}{2}\) 并且对步长取半直到步长达到 1。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * shell_sort	-	ascendly shell sort the array</span></span><br><span class="line"><span class="comment"> * @param array		the array to be sorted</span></span><br><span class="line"><span class="comment"> * @param length	the length of the array</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Sorting the array ascendly by using the shell sort algorithms. </span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">shell_sort</span><span class="params">(<span class="keyword">int</span> <span class="built_in">array</span>[], <span class="keyword">int</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> gap, i, j, key;</span><br><span class="line">    <span class="keyword">for</span> (gap = length/<span class="number">2</span>; gap &gt; <span class="number">0</span>; gap /= <span class="number">2</span>)</span><br><span class="line">        <span class="keyword">for</span> (i = gap; i &lt; length; i++)</span><br><span class="line">            <span class="keyword">for</span> (j=i-gap; j&gt;=<span class="number">0</span> &amp;&amp; <span class="built_in">array</span>[j]&gt;<span class="built_in">array</span>[j+gap]; j-=gap) &#123;</span><br><span class="line">                <span class="comment">// swap the two elements</span></span><br><span class="line">                key = <span class="built_in">array</span>[j];</span><br><span class="line">                <span class="built_in">array</span>[j] = <span class="built_in">array</span>[j+gap];</span><br><span class="line">                <span class="built_in">array</span>[j+gap] = key;</span><br><span class="line">            &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="性质-v3">性质</h3>
+<h4 id="步长的选择">步长的选择</h4>
+<ol>
+<li><strong>步长的选择是希尔排序的重要部分</strong>。只要最终步长为1（此时为插入排序）任何步长串行都可以工作。</li>
+<li>Donald Shell 最初建议步长选择为 \(\frac{n}{2}\) 并且对步长取半直到步长达到 1。虽然这样取可以比 \(O(n^2)\) 类的算法（插入排序）更好，但这样仍然有减少平均时间和最差时间的余地。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>步长串行</th>
+<th>最坏情况下复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\(n/2^i\)</td>
+<td>\(O(n^2)\)</td>
+</tr>
+<tr>
+<td>\(2^k{}-1\)</td>
+<td>\(O(n^{3/2})\)</td>
+</tr>
+<tr>
+<td>\(2^{i}3^{j}\)</td>
+<td>\(O(nlog^{2}n)\)</td>
+</tr>
+</tbody>
+</table>
+<ol start="3">
+<li>已知的最好步长串行是由Sedgewick提出的 (1, 5, 19, 41, 109,…)，该串行的项来自 \(9 * 4^i - 9 * 2^i + 1 和 4^i - 3 * 2^i + 1\)。用这样步长串行的希尔排序比插入排序和堆排序都要快，甚至在小数组中比快速排序还快，但是在涉及大量数据时希尔排序还是比快速排序慢。</li>
+<li>另一个在大数组中表现优异的步长串行是(斐波那契数列除去0和1将剩余的数以黄金分区比的两倍的幂进行运算得到的数列：(1, 9, 34, 182, 836, 4025, 19001, 90358, 428481, 2034035, 9651787, 45806244, 217378076, 1031612713, …)。</li>
+</ol>
+<h4 id="综合评价">综合评价</h4>
+<ol>
+<li>时间复杂度： \(O(n\lg{n})\)</li>
+<li>原址：是</li>
+<li>稳定：否</li>
+</ol>
+<h2 id="归并排序">归并排序</h2>
+<h3 id="算法思想-v2">算法思想</h3>
+<p>归并排序（Merge Sort）算法完全遵循<a href="/wiki/algorithms-divide-and-conquer.html">分治模式</a>，直观上其操作如下：</p>
+<ol>
+<li><strong>分解</strong>：把长度为n的输入序列分成两个长度为n/2的子序列。</li>
+<li><strong>解决</strong>：对这两个子序列分别采用归并排序。</li>
+<li><strong>合并</strong>：将两个排序好的子序列合并成一个最终的排序序列。</li>
+</ol>
+<p>在描述归并排序的步骤时又调用了归并排序本身，可见这是一个递归的过程。</p>
+<p>归并排序算法的一个核心操作是<q>合并</q>步骤中两个已排序序列的合并。回到我们玩扑克牌的例子，假设桌上有两堆牌，每堆都已排序，最小的牌在顶上。我们希望把这两堆牌合并成单一的排好序的输出堆。我们的基本步骤包括在两堆牌的顶上的两张牌中选取较小的一张并将该牌放置到输出堆。重复这个步骤，直到一个输入堆为空，这时，我们只是拿起剩余的输出堆并牌面朝下的将该堆放置到输出堆。</p>
+<p>这个合并算法需要 \(\Theta(n)\) 的时间。</p>
+<h3 id="过程演示-v3">过程演示</h3>
+<h4 id="总体框架">总体框架</h4>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/algorithms-sort/merge-sort.png" alt="title" />
+        <figcaption>title</figcaption>
+      </figure>
+    </p>
+<h4 id="合并过程">合并过程</h4>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/algorithms-sort/merge1.png" alt="title" />
+        <figcaption>title</figcaption>
+      </figure>
+    
+
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/algorithms-sort/merge2.png" alt="title" />
+        <figcaption>title</figcaption>
+      </figure>
+    </p>
+<h3 id="C语言实现-v5">C语言实现</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * merge	-	merge array</span></span><br><span class="line"><span class="comment"> * @param array	the array to be merge</span></span><br><span class="line"><span class="comment"> * @param start	the start of the array</span></span><br><span class="line"><span class="comment"> * @param mid	the end of the left array</span></span><br><span class="line"><span class="comment"> * @param end	the end of the whole array</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * A key subroutine of merge sort.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span> <span class="built_in">array</span>[], <span class="keyword">int</span> start, <span class="keyword">int</span> mid, <span class="keyword">int</span> end)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// Logically divide the array into two and treat them respectively</span></span><br><span class="line">    <span class="keyword">int</span> n1 = mid - start + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> n2 = end - mid;</span><br><span class="line">    <span class="keyword">int</span> left[n1], right[n2];</span><br><span class="line">    <span class="keyword">int</span> i, j, k;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n1; i++)  <span class="comment">// left holds array[start...mid]</span></span><br><span class="line">        left[i] = <span class="built_in">array</span>[start + i];</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; n2; j++)  <span class="comment">// right holds array[mid+1..end]</span></span><br><span class="line">        right[j] = <span class="built_in">array</span>[mid + <span class="number">1</span> + j];</span><br><span class="line">    </span><br><span class="line">    i = j = <span class="number">0</span>;</span><br><span class="line">    k = start;</span><br><span class="line">    <span class="keyword">while</span> (i &lt; n1 &amp;&amp; j &lt; n2)&#123;</span><br><span class="line">    <span class="keyword">if</span> (left[i] &lt; right[j])</span><br><span class="line">        <span class="built_in">array</span>[k++] = left[i++];</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">array</span>[k++] = right[j++];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// append the rest to the array</span></span><br><span class="line">    <span class="keyword">while</span> (i &lt; n1)  <span class="comment">// left[] is not exhausted</span></span><br><span class="line">        <span class="built_in">array</span>[k++] = left[i++];</span><br><span class="line">    <span class="keyword">while</span> (j &lt; n2)</span><br><span class="line">        <span class="built_in">array</span>[k++] = right[j++];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * msort	-	ascendly merge sort the array</span></span><br><span class="line"><span class="comment"> * @param array	the array to be sorted</span></span><br><span class="line"><span class="comment"> * @param start	the start of the array</span></span><br><span class="line"><span class="comment"> * @param end	the end of the array</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Sorting the array ascendly by using the merge sort algorithms.</span></span><br><span class="line"><span class="comment"> * The core of merge sort.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">msort</span><span class="params">(<span class="keyword">int</span> <span class="built_in">array</span>[], <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> mid;</span><br><span class="line">    <span class="keyword">if</span> (start &lt; end)&#123;</span><br><span class="line">        mid = (start + end) / <span class="number">2</span>;</span><br><span class="line">        msort(<span class="built_in">array</span>, start, mid);</span><br><span class="line">        msort(<span class="built_in">array</span>, mid + <span class="number">1</span>, end);</span><br><span class="line">        merge(<span class="built_in">array</span>, start, mid, end);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * merge_sort	-	ascendly merge sort the array</span></span><br><span class="line"><span class="comment"> * @param array		the array to be sorted</span></span><br><span class="line"><span class="comment"> * @param length	the length of the array</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * The interface of merge sort.</span></span><br><span class="line"><span class="comment"> * @returns 0 after sorting.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="keyword">void</span> <span class="title">merge_sort</span><span class="params">(<span class="keyword">int</span> <span class="built_in">array</span>[], <span class="keyword">int</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    msort(<span class="built_in">array</span>, <span class="number">0</span>, length<span class="number">-1</span>);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="性质-v4">性质</h3>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/algorithms-sort/sortsearch.calcrecurrence.png" alt="递归树" />
+        <figcaption>递归树</figcaption>
+      </figure>
+    </p>
+<ul>
+<li>算法复杂度：\(O(n\lg{n})\)</li>
+<li>原址：否</li>
+<li>稳定：是</li>
+</ul>
+<h2 id="堆排序">堆排序</h2>
+<p>堆排序（Heapsort）是指利用堆这种数据结构所设计的一种排序算法。堆积是一个近似完全二叉树的结构，并同时满足堆积的性质：即子结点的键值或索引总是小于（或者大于）它的父节点。</p>
+<h3 id="算法思想-v3">算法思想</h3>
+<h4 id="堆">堆</h4>
+<p>这里的堆(二叉堆)，指得不是堆栈的那个堆，而是一种数据结构。</p>
+<p>堆是一个数组，它可以被看成一个近似的完全二叉树。完全二叉树的一个<q>优秀</q>的性质是，除了最底层之外，每一层都是满的，而且是从左向右填充。因此，树上的每一个结点可以对应数组中的一个元素。这使得堆可以利用数组来表示。每一个结点对应数组中的一个元素。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/algorithms-sort/heap.png" alt="以二叉树和数组形式展现的一个最大堆" />
+        <figcaption>以二叉树和数组形式展现的一个最大堆</figcaption>
+      </figure>
+    </p>
+<p>二叉堆一般分为两种：最大堆和最小堆。</p>
+<h5 id="最大堆">最大堆</h5>
+<p>堆中每个父节点的元素值都大于等于其孩子结点（如果存在）,这样的堆就是一个最大堆。因此,最大堆中的最大元素值出现在根结点(堆顶)。堆排序算法使用的是最大堆。</p>
+<h5 id="最小堆">最小堆</h5>
+<p>最小堆的组织方式正好相反：最小堆性质是指每个父节点的元素值都小于或等于其孩子结点（如果存在）。因此，最小堆中的最小元素存放在根节点中。最小堆通常用于构造优先队列。</p>
+<h4 id="堆节点的访问">堆节点的访问</h4>
+<p>通常堆是通过一维数组来实现的。在起始数组为 0 的情形中：</p>
+<ul>
+<li>父节点i的左子节点在位置 (2*i+1);</li>
+<li>父节点i的右子节点在位置 (2*i+2);</li>
+<li>子节点i的父节点在位置 floor((i-1)/2);</li>
+</ul>
+<h3 id="堆排序-v2">堆排序</h3>
+<p>堆排序是一种利用堆这种数据结构，进行原地排序的排序算法，其时间复杂度是\(O(n\lg{n})\)，而且只和数据规模有关。</p>
+<p>堆排序算法是一种很漂亮的算法，这里需要用到三个函数：MaxHeapify、BuildMaxHeap 和 HeapSort。</p>
+<ul>
+<li>最大堆调整（MaxHeapify）：将堆的末端子节点作调整，使得子节点永远小于父节点。其时间复杂度为 \(O(\lg{n})\) 。</li>
+<li>创建最大堆（BuildMaxHeap）：将堆所有数据重新排序。具有线性时间复杂度。</li>
+<li>堆排序（HeapSort）：移除位在第一个数据的根节点，并做最大堆调整的递归运算。其时间复杂度为 \(O(n\lg{n})\)。</li>
+</ul>
+<h3 id="过程演示-v4">过程演示</h3>
+<h4 id="MaxHeapify">MaxHeapify</h4>
+<p>下图演示了 MaxHeapify 的执行过程。在程序的每一步中，从 A[i]、A[LEFT(i)] 和 A[RIGHT(i)] 中挑选出最大的，并将其下标存储在变量 largest 中。如果 A[i] 是最大的，那么以 i 为根结点的子树已经是最大堆，程序结束。否则，最大元素是 i 的某个孩子结点，则交换 A[i] 和 A[largest] 的值。从而使 i 及其孩子都满足最大堆的性质。在交换后，下标为 largest 的结点的值是原来的 A[i]，于是以该结点为根的子树又有可能会违反最大堆的性质。因此，需要对该子树递归调用 MaxHeapify 。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/algorithms-sort/max-heapify.png" alt="当 A.heap-size = 10 时，MaxHeapify(A, 2)的执行过程" />
+        <figcaption>当 A.heap-size = 10 时，MaxHeapify(A, 2)的执行过程</figcaption>
+      </figure>
+    </p>
+<p>其中：(a)初始状态，在结点 i=2 处，A[2]违背了 最大堆性质，因为它的值不大于它的孩子。在(b)中，通过交换A[2]和A[4]的值，结点2恢复了最大堆的性质，但又导致结点4违反了最大堆的性质。递归调用 MaxHeapify(A, 4)，此时 i = 4。在©中，通过交换 A[4] 和 A[9] 的值，结点4的最大堆性质得到了恢复。在此递归调用 MaxHeapify(A, 9)，此时不再有新的数据交换。</p>
+<h4 id="BuildMaxHeap">BuildMaxHeap</h4>
+<p>BuildMaxHeap中自下而上的调用MaxHeapify来改造数组，建立最大堆。因为MaxHeapify能够保证下标i的结点之后结点都满足最大堆的性质，所以自下而上的调用MaxHeapify能够在改造过程中保持这一性质。</p>
+<p>如果最大堆的数量元素是n，那么BuildMaxHeap从PARENT(n)开始，往上依次调用MaxHeapify。</p>
+<p>这基于一个定理：如果最大堆有n个元素，那么从PARENT(n)+1，PARENT(n)+2…n都是叶子结点（叶子结点指没有儿子结点的结点）。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/algorithms-sort/buildmaxheap.png" alt="BuildMaxHeap" />
+        <figcaption>BuildMaxHeap</figcaption>
+      </figure>
+    </p>
+<h4 id="HeapSort">HeapSort</h4>
+<p>HeapSort是堆排序的接口算法，接受数组和元素个数两个参数。</p>
+<p>HeapSort先调用BuildMaxHeap将数组改造为最大堆，然后将堆顶和堆底元素交换，之后将底部上升，最后重新调用MaxHeapify保持最大堆性质。</p>
+<p>由于堆顶元素必然是堆中最大的元素，所以一次操作之后，堆中存在的最大元素被分离出堆。</p>
+<p>重复n-1次之后，数组排列完毕。过程演示如下：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/algorithms-sort/heap-sort.png" alt="HeapSort" />
+        <figcaption>HeapSort</figcaption>
+      </figure>
+    </p>
+<h3 id="性质-v5">性质</h3>
+<ul>
+<li>时间复杂度：\(\Theta(n\lg{n})\)</li>
+<li>原地：是</li>
+<li>稳定：否</li>
+</ul>
+<h2 id="快速排序">快速排序</h2>
+<p>快速排序是由东尼·霍尔所发展的一种排序算法。在平均状况下，排序 n 个项目要 \(Ο(n\log n)\) 次比较。在最坏状况下则需要 \(Ο(n^2)\) 次比较，但这种状况并不常见。事实上，快速排序通常明显比其他\(Ο(n\log n)\) 算法更快，因为它的内部循环（inner loop）可以在大部分的架构上很有效率地被实现出来。</p>
+<h3 id="算法思想-v4">算法思想</h3>
+<p>快速排序使用<a href="/wiki/algorithms-divide-and-conquer.html">分治法</a>策略来把一个串行（list）分为两个子串行（sub-lists）。</p>
+<ol>
+<li>分解：从数列中挑出一个元素，称为 “主元”（pivot），并以此将数列分成两个子数列（partition）：所有元素比主元值小的摆放在主元前面，所有元素比主元值大的摆在主元的后面（相同的数可以到任一边），该主元处于数列的中间位置。</li>
+<li>排序：递归地把小于主元值元素的子数列和大于主元值元素的子数列排序。</li>
+<li>合并：合并子数列。</li>
+</ol>
+<p>可见，归并排序做的是是递归地“合并”，而快速排序做的是递归地“分区”。</p>
+<h3 id="过程演示-v5">过程演示</h3>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/algorithms-sort/partition.png" alt="partition过程示意图" />
+        <figcaption>partition过程示意图</figcaption>
+      </figure>
+    </p>
+<p>下图是 partition 过程的一个示例。\(A[r]\) 是主元，用浅灰色标记的元素是小于或等于主元的子数列，而深灰色标记的元素是比主元大的子数列。未用颜色标记的元素是尚未被分区的元素。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/algorithms-sort/partition-sample.png" alt="partition过程演示" />
+        <figcaption>partition过程演示</figcaption>
+      </figure>
+    </p>
+<h3 id="C语言实现-v6">C语言实现</h3>
+<h4 id="不依赖标准库的实现">不依赖标准库的实现</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** </span></span><br><span class="line"><span class="comment"> * sway	-	swap two integers</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param a	the first integer</span></span><br><span class="line"><span class="comment"> * @param b	the second integer</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> *a, <span class="keyword">int</span> *b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> temp = *a;</span><br><span class="line">    *a = *b;</span><br><span class="line">    *b = temp;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * partition	-	divide the array into two parts by using a pivot</span></span><br><span class="line"><span class="comment"> * @param array	the array to be divided</span></span><br><span class="line"><span class="comment"> * @param start	the start of the array</span></span><br><span class="line"><span class="comment"> * @param end	the end of the array</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * A key subroutine of quick sort.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">partition</span><span class="params">(<span class="keyword">int</span> <span class="built_in">array</span>[], <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> pivot = <span class="built_in">array</span>[end];</span><br><span class="line">    <span class="keyword">int</span> mid = start;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = start; i &lt; end; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">array</span>[i] &lt;= pivot)&#123;</span><br><span class="line">            swap(&amp;<span class="built_in">array</span>[i], &amp;<span class="built_in">array</span>[mid]);</span><br><span class="line">            mid++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    swap(&amp;<span class="built_in">array</span>[end], &amp;<span class="built_in">array</span>[mid]);</span><br><span class="line">    <span class="keyword">return</span> mid;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * msort	-	ascendly quick sort the array</span></span><br><span class="line"><span class="comment"> * @param array	the array to be sorted</span></span><br><span class="line"><span class="comment"> * @param start	the start of the array</span></span><br><span class="line"><span class="comment"> * @param end	the end of the array</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Sorting the array ascendly by using the quick sort algorithms.</span></span><br><span class="line"><span class="comment"> * The core of quick sort.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">q_sort</span><span class="params">(<span class="keyword">int</span> <span class="built_in">array</span>[], <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> mid;</span><br><span class="line">    <span class="keyword">if</span> (end &gt; start) &#123;</span><br><span class="line">        mid = partition(<span class="built_in">array</span>, start, end);</span><br><span class="line">        q_sort(<span class="built_in">array</span>, start, mid<span class="number">-1</span>);</span><br><span class="line">        q_sort(<span class="built_in">array</span>, mid+<span class="number">1</span>, end);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * quick_sort - ascendly quick sort the array</span></span><br><span class="line"><span class="comment"> * @param array		the array to be sorted</span></span><br><span class="line"><span class="comment"> * @param length	the length of the array</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * The interface of quick sort.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="keyword">void</span> <span class="title">quick_sort</span><span class="params">(<span class="keyword">int</span> <span class="built_in">array</span>[], <span class="keyword">int</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    q_sort(<span class="built_in">array</span>, <span class="number">0</span>, length<span class="number">-1</span>);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="直接调用标准库函数">直接调用标准库函数</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;dbg.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> <span class="built_in">array</span>[<span class="number">8</span>] = &#123;<span class="number">2</span>, <span class="number">8</span>, <span class="number">7</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">4</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">cmp_int</span> <span class="params">( <span class="keyword">const</span> <span class="keyword">void</span> *a , <span class="keyword">const</span> <span class="keyword">void</span> *b )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> *(<span class="keyword">int</span> *)a - *(<span class="keyword">int</span> *)b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    qsort(&amp;<span class="built_in">array</span>[<span class="number">0</span>], <span class="number">8</span>, <span class="keyword">sizeof</span>(<span class="keyword">int</span>), cmp_int);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>, <span class="built_in">array</span>[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="性质-v6">性质</h3>
+<ul>
+<li>算法复杂度：
+<ul>
+<li>最坏情况下（当数据是已排序的时候），快速排序的时间复杂度是 \(\Theta(n^{2})\) ；</li>
+<li>大多数情况下，快速排序的时间复杂度是：\(\Theta(n\lg{n})\)。</li>
+</ul>
+</li>
+<li>原址：是</li>
+<li>稳定：否</li>
+</ul>
+<h3 id="改进：快速排序的随机化版本">改进：快速排序的随机化版本</h3>
+<p>在排序前先将数列随机化，或者采用随机选择主元的方式可以将快速排序的时间复杂度始终限制在 \(\Theta(n\lg{n})\)。在实践中，快速排序往往能够比归并排序快三倍。</p>
+<h2 id="线性时间排序">线性时间排序</h2>
+<h3 id="排序算法的下界">排序算法的下界</h3>
+<p>比较排序可以被抽象为一棵决策树。决策树是一棵完全二叉树，它可以表示在给定输入规模情况下，某一特定排序算法对所有元素的比较操作。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/algorithms-sort/decision-tree.png" alt="作用于3个元素时的插入排序决策树" />
+        <figcaption>作用于3个元素时的插入排序决策树</figcaption>
+      </figure>
+    </p>
+<p>在决策树种，从根结点到任意一个可达叶结点之间最长简单路径的长度，表示的是对应的排序算法中最坏情况下的比较次数。因此，<strong>一个比较排序算法中的最坏情况比较次数就等于其决策树的高度</strong>。同时，当决策树中每种排列都是以可达的叶结点的形式出现时，该决策树高度的下界也就是比较排序算法运行时间的下界。</p>
+<p>因此，在最坏情况下，任何比较排序算法都需要做 \(\Omega(n\lg{n})\) 次比较。下面介绍两个非比较型整数排序算法，在适当的假设条件下可以达到线性的复杂度。</p>
+<h3 id="计数排序">计数排序</h3>
+<p>计数排序假设 \(n\) 个输入元素中的每一个都是在 0 到 \(k\) 区间内的一个整数，其中 \(k\) 为某个整数，当 \(k = O(n)\) 时，排序的运行时间为 \(\Theta(n)\) 。</p>
+<h4 id="算法思想-v5">算法思想</h4>
+<p>对每一个输入元素 x，确定小于 x 的元素个数。利用这一信息，就可以直接把 x 放到它在输出数组中的位置上了。</p>
+<h4 id="过程演示-v6">过程演示</h4>
+<p>下图是计数排序在输入数组A[1…8]上的处理过程，其中\(A\)中的每一个元素都是不大于 \(k = 5\) 的非负整数。(a) 第5行执行后数组A和辅助数组C的情况。(b)第8行执行后，数组C的情况。©~(e)分别显示了第10~12行的循环体迭代了一次、两次和三次之后，输出数组B和辅助数组C的情况。(f)最终排好序的输出数组B。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/algorithms-sort/counting-sort.png" alt="计数排序在输入数组$A[1..8]$上的处理过程" />
+        <figcaption>计数排序在输入数组$A[1..8]$上的处理过程</figcaption>
+      </figure>
+    </p>
+<h4 id="性质-v7">性质</h4>
+<ul>
+<li>算法复杂度： \(\Theta(k+n)\) 。在实际工作中，当 \(k = O(n)\) 时，我们一般会采用计数排序，这时的运行时间为 \(\Theta(n)\)。</li>
+<li>原址：否</li>
+<li>稳定：是</li>
+</ul>
+<h3 id="基数排序">基数排序</h3>
+<p>基数排序的发明可以追溯到1887年赫尔曼·何乐礼（Herman Hollerith）在打孔卡片制表机（Tabulation Machine）上的贡献。</p>
+<h4 id="基本思想-v4">基本思想</h4>
+<p>将整数按位数切割成不同的数字，然后按每个位数分别比较。由于整数也可以表达字符串（比如名字或日期）和特定格式的浮点数，所以基数排序也不是只能使用于整数。</p>
+<p>基数排序的方式可以采用LSD（Least significant digital）或MSD（Most significant digital），LSD的排序方式由最低位开始，而MSD则相反，由键值的最高位开始。现在的基数排序通常使用更加高效的LSD的方案。</p>
+<h4 id="过程演示-v7">过程演示</h4>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/algorithms-sort/radix-sort.png" alt="基数排序" />
+        <figcaption>基数排序</figcaption>
+      </figure>
+    </p>
+<h4 id="性质-v8">性质</h4>
+<ul>
+<li>算法复杂度： \(\Theta(d(k+n))\)</li>
+<li>原址：否</li>
+<li>稳定：是</li>
+</ul>
+<h2 id="各种算法的运行时间">各种算法的运行时间</h2>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>最坏情况运行时间</th>
+<th>平均情况/期望运行时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>冒泡排序</td>
+<td>\(\Theta(n^2)\)</td>
+<td>\(\Theta(n^2)\)</td>
+</tr>
+<tr>
+<td>插入排序</td>
+<td>\(\Theta(n^2)\)</td>
+<td>\(\Theta(n^2)\)</td>
+</tr>
+<tr>
+<td>选择排序</td>
+<td>\(\Theta(n^2)\)</td>
+<td>\(\Theta(n^2)\)</td>
+</tr>
+<tr>
+<td>归并排序</td>
+<td>\(\Theta(n\lg{n})\)</td>
+<td>\(\Theta(n\lg{n})\)</td>
+</tr>
+<tr>
+<td>堆排序</td>
+<td>\(O(n\lg{n})\)</td>
+<td>–</td>
+</tr>
+<tr>
+<td>快速排序</td>
+<td>\(\Theta(n^2)\)</td>
+<td>\(\Theta(n\lg{n})\)（期望）</td>
+</tr>
+<tr>
+<td>计数排序</td>
+<td>\(\Theta(k+n)\)</td>
+<td>\(\Theta(k+n)\)</td>
+</tr>
+<tr>
+<td>基数排序</td>
+<td>\(\Theta((d(n+k))\)</td>
+<td>\(\Theta((d(n+k))\)</td>
+</tr>
+<tr>
+<td>桶排序</td>
+<td>\(\Theta(n^2)\)</td>
+<td>\(\Theta(n)\) （平均情况）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="其他参考材料">其他参考材料</h2>
+<ol>
+<li>最酷的排序算法演示（冒泡排序 vs. 快速排序）</li>
+</ol>
+<p><embed src="http://www.tudou.com/v/htKY1-Rj9ZE/&resourceId=0_05_05_99&bid=05/v.swf" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" wmode="opaque" width="100%" height="400"></embed></p>
+<ol start="2">
+<li>MIT算法导论：课程简介及算法分析</li>
+</ol>
+<p><embed src="http://swf.ws.126.net/openplayer/v01/-0-2_M6UTT5U0I_M6V2T1JGF-vimg1_ws_126_net//image/snapshot_movie/2011/5/S/8/M72MFOHS8-.swf" type="application/x-shockwave-flash" width="100%" height="360" allowFullScreen="true" wmode="transparent" allowScriptAccess="always"></embed></p>
+<ol start="3">
+<li>MIT算法导论：快排及随机化算法</li>
+</ol>
+<p><object width="100%" height="360"><param name="movie" value="http://swf.ws.126.net/openplayer/v01/-0-2_M6UTT5U0I_M6V2T7IS4-vimg1_ws_126_net//image/snapshot_movie/2011/6/M/6/M75LF3LM6-.swf"></param><param name="allowScriptAccess" value="always"></param><param name="wmode" value="transparent"></param><embed src="http://swf.ws.126.net/openplayer/v01/-0-2_M6UTT5U0I_M6V2T7IS4-vimg1_ws_126_net//image/snapshot_movie/2011/6/M/6/M75LF3LM6-.swf" type="application/x-shockwave-flash" width="640" height="360" allowFullScreen="true" wmode="transparent" allowScriptAccess="always"></embed></object></p>
+<ol start="4">
+<li>MIT算法导论：线性时间排序</li>
+</ol>
+<p><object width="100%" height="360"><param name="movie" value="http://swf.ws.126.net/openplayer/v01/-0-2_M6UTT5U0I_M6V2TBK7V-vimg1_ws_126_net//image/snapshot_movie/2011/6/P/C/M75LF3NPC-.swf"></param><param name="allowScriptAccess" value="always"></param><param name="wmode" value="transparent"></param><embed src="http://swf.ws.126.net/openplayer/v01/-0-2_M6UTT5U0I_M6V2TBK7V-vimg1_ws_126_net//image/snapshot_movie/2011/6/P/C/M75LF3NPC-.swf" type="application/x-shockwave-flash" width="640" height="360" allowFullScreen="true" wmode="transparent" allowScriptAccess="always"></embed></object></p>
+<ol start="5">
+<li><a target="_blank" rel="noopener" href="http://www.cnblogs.com/kkun/archive/2011/11/23/2260312.html">经典排序算法集绵</a></li>
+</ol>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>原址（或称原地，in place）是指该算法在任何时候，最多只有其中的常数个数字存储在数组外面。 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>稳定度：一个排序算法是稳定的，就是当有两个有相等关键的纪录R和S，且在原本的列表中R出现在S之前，在排序过的列表中R也将会是在S之前。不稳定排序算法可能会在相等的键值中改变纪录的相对次序，但是稳定排序算法从来不会如此。不稳定排序算法可以被特别地实现为稳定。 <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/algorithms-search.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '排序'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

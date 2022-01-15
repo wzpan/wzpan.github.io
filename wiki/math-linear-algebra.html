@@ -1,0 +1,1590 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>线性代数 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="前言
+本文将简单总结线性代数的基本知识点。同时理论结合实际，使用 Python 来进行实践。如果需要跟着进行编程实践，请先确保下列环境已安装：
+
+Python - 编程实践所使用的语言；
+Numpy - Python 的数值计算库。
+
+矩阵
+矩阵（Matrix）是人为约定的一种数据的表示方法，在图像">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="线性代数"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '线性代数'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 线性代数</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="前言">前言</h2>
+<p>本文将简单总结线性代数的基本知识点。同时理论结合实际，使用 Python 来进行实践。如果需要跟着进行编程实践，请先确保下列环境已安装：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.python.org/">Python</a> - 编程实践所使用的语言；</li>
+<li><a target="_blank" rel="noopener" href="https://pypi.python.org/pypi/numpy">Numpy</a> - Python 的数值计算库。</li>
+</ul>
+<h2 id="矩阵">矩阵</h2>
+<p>矩阵（Matrix）是人为约定的一种数据的表示方法，在图像处理、人工智能等领域，使用矩阵来表示和处理数据非常常见。一个矩阵的举例：</p>
+<p>\[\mathbf{A}_{2 \times 3}=\begin{bmatrix} 5 &amp; 2 &amp; 7 \\ 1 &amp; 3 &amp; 4  \end{bmatrix}\]</p>
+<p>其中，矩阵 \(\mathbf{A}\) 的下标 \(2 \times 3\) 表示 \(\mathbf{A}\) 是一个 2 行 3 列的矩阵。类似的，另一个示例：</p>
+<p>\[\mathbf{ B }_{ 4 \times 4 }=\begin{bmatrix} 5 &amp; 2 &amp; 7 &amp; 6 \\ 1 &amp; 3 &amp; 4 &amp; 2 \\ 7 &amp; -1 &amp; 9 &amp; 0 \\ 8  &amp; 2 &amp; -2 &amp; 3 \end{bmatrix}\]</p>
+<p>再看回矩阵 \(\mathbf{A}\) ，如果要表示第 2 行的第 2 个元素 3 ，可以使用 \(\mathbf{A}[2, 2]\) 或 \(a_{2,2}\)。</p>
+<p>Python 的 Numpy 库提供了 ndarray 类用于存储高维数组及普通的数组运算，另外提供 matrix 类用来支持矩阵运算。使用 Python 创建矩阵很简单：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a = np.matrix(<span class="string">&#x27;5 2 7;1 3 4&#x27;</span>)</span><br><span class="line">b = np.matrix(<span class="string">&#x27;5 2 7 6;1 3 4 2;8 2 -2 3&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>也可以用下面这种形式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a = np.matrix([[<span class="number">5</span>,<span class="number">2</span>,<span class="number">7</span>],[<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>]])</span><br><span class="line">b = np.matrix([[<span class="number">5</span>,<span class="number">2</span>,<span class="number">7</span>,<span class="number">6</span>],[<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">2</span>],[<span class="number">8</span>,<span class="number">2</span>,-<span class="number">2</span>,<span class="number">3</span>]])</span><br></pre></td></tr></table></figure>
+<p>两种形式完全等效。但第一种更简明直观，不容易犯错。因此推荐第一种方式。</p>
+<p>要把一个 matrix 对象转换为 ndarray 对象，可以直接用 <code>getA()</code> 方法。而把 ndarray 对象转成 matrix 对象可以用 <code>asmatrix()</code> 方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = a.getA()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span> b</span><br><span class="line">[[<span class="number">5</span> <span class="number">2</span> <span class="number">7</span>]</span><br><span class="line"> [<span class="number">1</span> <span class="number">3</span> <span class="number">4</span>]]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">type</span>(b)</span><br><span class="line">&lt;<span class="built_in">type</span> <span class="string">&#x27;numpy.ndarray&#x27;</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c = np.asmatrix(b)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span> c</span><br><span class="line">[[<span class="number">5</span> <span class="number">2</span> <span class="number">7</span>]</span><br><span class="line"> [<span class="number">1</span> <span class="number">3</span> <span class="number">4</span>]]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">type</span>(c)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">numpy</span>.<span class="title">matrixlib</span>.<span class="title">defmatrix</span>.<span class="title">matrix</span>&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
+<p>要取出矩阵中的某个值，可以使用类似数组的下标运算符。但要注意的是，计算机是以 0 开始计数的。例如，要取出 \(\mathbf{A}[2,2]\) ，应该使用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="number">1</span>,<span class="number">1</span>]</span><br><span class="line">a[<span class="number">1</span>,<span class="number">1</span>]</span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure>
+<h3 id="基本运算">基本运算</h3>
+<h4 id="加">加</h4>
+<p>矩阵加法的定义非常符合直觉。假设有 \(\mathbf{ A }_{ 3 \times 3 }=\begin{bmatrix} 1 &amp; 0 &amp; 1 \\ 1 &amp; 2 &amp; 1 \\ 2 &amp; 1 &amp; 1 \end{bmatrix}\) ， \(\mathbf{ B }_{ 3 \times 3 }=\begin{bmatrix} 2 &amp; 1 &amp; -1 \\ 0 &amp; -1 &amp; 2 \\ 2 &amp; -1 &amp; 0 \end{bmatrix}\) ，则:</p>
+<p>\[\mathbf{A}+\mathbf{B} = \begin{bmatrix} 1 &amp; 0 &amp; 1 \\ 1 &amp; 2 &amp; 1 \\ 2 &amp; 1 &amp; 1 \end{bmatrix} + \begin{bmatrix} 2 &amp; 1 &amp; -1 \\ 0 &amp; -1 &amp; 2 \\ 2 &amp; -1 &amp; 0 \end{bmatrix} = \begin{bmatrix} 1+2 &amp; 0+1 &amp; 1+(-1) \\ 1+ 0 &amp; 2+(-1) &amp; 1+2 \\ 2+2 &amp; 1+(-1) &amp; 1+0 \end{bmatrix} = \begin{bmatrix} 3 &amp; 1 &amp; 0 \\ 1 &amp; 1 &amp; 3 \\ 4 &amp; 0 &amp; 1 \end{bmatrix} \]</p>
+<p>要注意两个矩阵的行数和列数必须相同，否则无定义。</p>
+<p>Python 示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.matrix(<span class="string">&#x27;1 0 1;1 2 1;2 1 1&#x27;</span>)</span><br><span class="line">a = np.matrix(<span class="string">&#x27;1 0 1;1 2 1;2 1 1&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = np.matrix(<span class="string">&#x27;2 1 -1;0 -1 2;2 -1 0&#x27;</span>)</span><br><span class="line">b = np.matrix(<span class="string">&#x27;2 1 -1;0 -1 2;2 -1 0&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a + b</span><br><span class="line">a + b</span><br><span class="line">matrix([[<span class="number">3</span>, <span class="number">1</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">1</span>, <span class="number">3</span>],</span><br><span class="line">        [<span class="number">4</span>, <span class="number">0</span>, <span class="number">1</span>]])</span><br></pre></td></tr></table></figure>
+<p>很容易看出，矩阵的加法满足交换律和结合律，即 \(\mathbf{A} + \mathbf{B} = \mathbf{B} + \mathbf{A}\)， \((\mathbf{A} + \mathbf{B}) + \mathbf{C} = \mathbf{A} + (\mathbf{B} + \mathbf{C})\)。</p>
+<h4 id="减">减</h4>
+<p>矩阵减法也和加法一样简单。对于上面给出的 \(\mathbf{A}\) 和 \(\mathbf{B}\)，有：</p>
+<p>\[\mathbf{A}-\mathbf{B}=\begin{bmatrix} 1 &amp; 0 &amp; 1 \\ 1 &amp; 2 &amp; 1 \\ 2 &amp; 1 &amp; 1 \end{bmatrix}-\begin{bmatrix} 2 &amp; 1 &amp; -1 \\ 0 &amp; -1 &amp; 2 \\ 2 &amp; -1 &amp; 0 \end{bmatrix}=\begin{bmatrix} 1-2 &amp; 0-1 &amp; 1-(-1) \\ 1-0 &amp; 2-(-1) &amp; 1-2 \\ 2-2 &amp; 1-(-1) &amp; 1-0 \end{bmatrix}=\begin{bmatrix} -1 &amp; -1 &amp; 2 \\ 1 &amp; 3 &amp; -1 \\ 0 &amp; 2 &amp; 1 \end{bmatrix}\]</p>
+<p>同样，相减的两个矩阵行数和列数必须完全相同，否则无定义。</p>
+<p>Python 示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a - b</span><br><span class="line">a - b</span><br><span class="line">matrix([[-<span class="number">1</span>, -<span class="number">1</span>,  <span class="number">2</span>],</span><br><span class="line">        [ <span class="number">1</span>,  <span class="number">3</span>, -<span class="number">1</span>],</span><br><span class="line">        [ <span class="number">0</span>,  <span class="number">2</span>,  <span class="number">1</span>]])</span><br></pre></td></tr></table></figure>
+<h4 id="乘">乘</h4>
+<p>矩阵乘法的定义是 \(\mathbf{A}_{i \times j}\) 矩阵的每一行的元素分别与 $\mathbf{B}_{j \times k} $ 矩阵的每一列的元素两两相乘并相加，从而得到一个新的矩阵 \(\mathbf{C}_{i \times k}\) 。两个矩阵能相乘的充分必要条件是第一个矩阵的列数与第二个矩阵的行数相等，否则无定义。例如，对于上面给出的 \(\mathbf{A}\) 和 \(\mathbf{B}\)，有：</p>
+<p>\[\begin {aligned} 
+\mathbf{A} \times \mathbf{B} &amp;=\begin{bmatrix} 1 &amp; 0 &amp; 1 \\ 1 &amp; 2 &amp; 1 \\ 2 &amp; 1 &amp; 1 \end{bmatrix}\times \begin{bmatrix} 2 &amp; 1 &amp; -1 \\ 0 &amp; -1 &amp; 2 \\ 2 &amp; -1 &amp; 0 \end{bmatrix} \\\ &amp;=\begin{bmatrix} 1\cdot 2+0\cdot 0+1\cdot 2 &amp; 1\cdot 1+0\cdot (-1)+1\cdot (-1) &amp; 1\cdot (-1)+0\cdot 2+1\cdot 0 \\ 1\cdot 2+2\cdot 0+1\cdot 2 &amp; 1\cdot 1+2\cdot (-1)+1\cdot (-1) &amp; 1\cdot (-1)+2\cdot 2+1\cdot 0 \\ 2\cdot 2+1\cdot 0+1\cdot 2 &amp; 2\cdot 1+1\cdot (-1)+1\cdot (-1) &amp; 2\cdot (-1)+1\cdot 2+1\cdot 0 \end{bmatrix}\\\ &amp;=\begin{bmatrix} 4 &amp; 0 &amp; -1 \\ 4 &amp; -2 &amp; 3 \\ 6 &amp; 0 &amp; 0 \end{bmatrix}
+\end {aligned} \]</p>
+<p>再举一个行列数不同的例子， 假设有 \(\mathbf{C}_{2 \times 3} = \begin{bmatrix} 5 &amp; 7 &amp; 2 \\ 4 &amp; 3 &amp; 1 \end{bmatrix}\) 和 \(\mathbf{D}_{3 \times 1} = \begin{bmatrix} 1 \\ 5 \\ 6 \end{bmatrix}\)，则可以得出：</p>
+<p>\[
+\mathbf{C}\times \mathbf{D} = \begin{bmatrix} 5 &amp; 7 &amp; 2 \\ 4 &amp; 3 &amp; 1 \end{bmatrix}\times \begin{bmatrix} 1 \\ 5 \\ 6 \end{bmatrix}
+ =\begin{bmatrix} 5 \cdot 1+ 7 \cdot 5+ 2\cdot 6 \\ 4\cdot 1+3\cdot 5+1\cdot 6  \end{bmatrix} =\begin{bmatrix} 52 \\ 25 \end{bmatrix}
+\]</p>
+<p>与初等代数的乘法不同，矩阵的乘法并不满足交换律，即 \(\mathbf{A} \times \mathbf{B} \ne \mathbf{B} \times \mathbf{A}\)。但满足分配律，即 \((\mathbf{A} \times \mathbf{B}) \times \mathbf{C} = \mathbf{A} \times (\mathbf{B} \times \mathbf{C})\)。</p>
+<p>再介绍两个特殊的矩阵：</p>
+<ol>
+<li>单元矩阵 \(\mathbf{I}\) 。它的特点是行数列数相等，且在对角线上值为 1，其他地方值为 0 。它的一个特性是与其他矩阵相乘都等于那个矩阵本身。一个 \(3\times 3\) 的单元矩阵示例：\[\mathbf{I}_{3 \times 3} = \begin{bmatrix} 1 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \end{bmatrix}\]</li>
+<li>零矩阵。顾名思义就是全部元素都是 0 的矩阵。零矩阵乘以任何矩阵都为零矩阵，与任何矩阵相加都等于那个矩阵。</li>
+</ol>
+<p>Python 示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a * b</span><br><span class="line">a * b</span><br><span class="line">matrix([[ <span class="number">4</span>,  <span class="number">0</span>, -<span class="number">1</span>],</span><br><span class="line">        [ <span class="number">4</span>, -<span class="number">2</span>,  <span class="number">3</span>],</span><br><span class="line">        [ <span class="number">6</span>,  <span class="number">0</span>,  <span class="number">0</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b * a</span><br><span class="line">b * a</span><br><span class="line">matrix([[ <span class="number">1</span>,  <span class="number">1</span>,  <span class="number">2</span>],</span><br><span class="line">        [ <span class="number">3</span>,  <span class="number">0</span>,  <span class="number">1</span>],</span><br><span class="line">        [ <span class="number">1</span>, -<span class="number">2</span>,  <span class="number">1</span>]])        </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c = np.matrix(<span class="string">&#x27;5 7 2;4 3 1&#x27;</span>)</span><br><span class="line">c = np.matrix(<span class="string">&#x27;5 7 2;4 3 1&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d = np.matrix(<span class="string">&#x27;1;5;6&#x27;</span>)</span><br><span class="line">d = np.matrix(<span class="string">&#x27;1;5;6&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c*d</span><br><span class="line">c*d</span><br><span class="line">matrix([[<span class="number">52</span>],</span><br><span class="line">        [<span class="number">25</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a * b * d</span><br><span class="line">a * b * d</span><br><span class="line">matrix([[-<span class="number">2</span>],</span><br><span class="line">        [<span class="number">12</span>],</span><br><span class="line">        [ <span class="number">6</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a * (b * d)</span><br><span class="line">a * (b * d)</span><br><span class="line">matrix([[-<span class="number">2</span>],</span><br><span class="line">        [<span class="number">12</span>],</span><br><span class="line">        [ <span class="number">6</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>I = np.eye(<span class="number">3</span>)  <span class="comment"># 创建一个3阶单元矩阵</span></span><br><span class="line">I = np.eye(<span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a * I</span><br><span class="line">a * I</span><br><span class="line">matrix([[<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>],</span><br><span class="line">        [<span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>I * a</span><br><span class="line">I * a</span><br><span class="line">matrix([[<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>],</span><br><span class="line">        [<span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a * z</span><br><span class="line">a * z</span><br><span class="line">matrix([[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b * z</span><br><span class="line">b * z</span><br><span class="line">matrix([[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c * z</span><br><span class="line">c * z</span><br><span class="line">matrix([[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]])</span><br></pre></td></tr></table></figure>
+<p>注意上面创建单元矩阵用了 ‘eye’ 方法，它等同于下面的写法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>I = np.matrix(<span class="string">&#x27;1 0 0;0 1 0;0 0 1&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="除（求逆）">除（求逆）</h4>
+<p>矩阵并没有一个直接叫除法的操作。但有个与之相似的运算，叫做求逆运算。</p>
+<p>矩阵 \(\mathbf{A}\) 的逆 \(\mathbf{A}^{-1}\) 被定义为一个与 \(\mathbf{A}\) 相乘后能得到一个单元矩阵的矩阵。即：\(\mathbf{A} \times \mathbf{A}^{-1} = \mathbf{I}\)。求逆这个操作本身是可逆的，一个矩阵的逆的逆也是这个矩阵本身。因此 \(\mathbf{A}^{-1} \times \mathbf{A} = \mathbf{I}\)。根据这个特点我们可以推断出能求逆的矩阵，其行数和列数也必然相同。</p>
+<p>为什么说这个求逆操作很像除等代数的除法呢？因为矩阵的逆很像数的倒数，一个数乘以它的倒数等于 1。而拿倒数与其他数相乘，就相当于被其他数除。</p>
+<p>矩阵的求逆有很多种方法。常见的有伴随阵法、初等变换法、分块矩阵求逆法等<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>。</p>
+<h5 id="伴随阵法">伴随阵法</h5>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  <strong>定理</strong> \(n\) 阶矩阵 \(\mathbf{A}=\begin{bmatrix}a_{ij}\end{bmatrix}\) 为可逆的充分必要条件是 \(\mathbf{A}\) 非奇异。且
+<p>\[\mathbf{A}^{-1}=\frac{1}{|\mathbf{A}|}\begin{bmatrix}A_{11} &amp; A_{21} &amp; \ldots &amp; A_{n1} \\ A_{12} &amp; A_{22} &amp; \ldots &amp; A_{n2} \\ \ldots &amp; \ldots &amp; \ldots &amp; \ldots \\ A_{1n} &amp; A_{2n} &amp; \ldots &amp; A_{nn} \end{bmatrix}\]</p>
+<p>其中 \(\mathbf{A}_{ij}\) 是 \(|\mathbf{A}|\) 中元素 \(a_{ij}\) 的代数余子式。</p>
+</div>
+<p>矩阵 \(\begin{bmatrix}A_{11} &amp; A_{21} &amp; \ldots &amp; A_{n1} \\ A_{12} &amp; A_{22} &amp; \ldots &amp; A_{n2} \\ \ldots &amp; \ldots &amp; \ldots &amp; \ldots \\ A_{1n} &amp; A_{2n} &amp; \ldots &amp; A_{nn} \end{bmatrix}\) 称为矩阵 \(\mathbf{A}\) 的伴随矩阵，记作 \(\mathbf{A}^{*}\) ，于是有 \(\mathbf{A}^{-1}=\frac{1}{|\mathbf{A}|}\mathbf{A}^{*}\)。</p>
+<p>对于二阶矩阵，使用伴随阵法比较简单。</p>
+<p>假定一个矩阵 \(\mathbf{M}=\begin{bmatrix} a &amp; b \\ c &amp; d \end{bmatrix}\)，则</p>
+<p>\[\mathbf{M}^{-1}=\frac{1}{|\mathbf{M}|}\begin{bmatrix} d &amp; -b \\ -c &amp; a \end{bmatrix}\]</p>
+<p>，其中 \(|\mathbf{M}|\) 称为矩阵 \(\mathbf{M}\) 的行列式：</p>
+<p>\[|\mathbf{M}| = ad - bc\]</p>
+<p>，而 \(\begin{bmatrix} d &amp; -b \\ -c &amp; a \end{bmatrix}\) 就是矩阵 \(\mathbf{M}\) 的伴随矩阵。</p>
+<p>例如，对于矩阵 \(A = \begin{bmatrix} 5 &amp; 7 \\ 3 &amp; 2 \end{bmatrix}\)，那么有：</p>
+<p>\[|\mathbf{A}|=5\cdot 2-7\cdot 3=-11\]</p>
+<p>，则</p>
+<p>\[\mathbf{A}^{ -1 }=\frac { 1 }{ -11 } \begin{bmatrix} 2 &amp; -7 \\ -3 &amp; 5 \end{bmatrix}=\begin{bmatrix} -\frac { 2 }{ 11 }  &amp; \frac { 7 }{ 11 }  \\ \frac { 3 }{ 11 }  &amp; -\frac { 5 }{ 11 }  \end{bmatrix}\]</p>
+<p>验证一下 \(\mathbf{A} \times \mathbf{A}^{-1}\) 的值是否等于 \(\mathbf{I}\) ，有：</p>
+<p>\[\mathbf{A}\times \mathbf{A}^{ -1 }=\begin{bmatrix} 5 &amp; 7 \\ 3 &amp; 2 \end{bmatrix}\times \begin{bmatrix} -\frac { 2 }{ 11 }  &amp; \frac { 7 }{ 11 }  \\ \frac { 3 }{ 11 }  &amp; -\frac { 2 }{ 11 }  \end{bmatrix}=\begin{bmatrix} 5\cdot \left( -\frac { 2 }{ 11 }  \right) +7\cdot \frac { 3 }{ 11 }  &amp; 5\cdot \frac { 7 }{ 11 } +\left( -7\cdot \frac { 5 }{ 11 }  \right)  \\ 3\cdot \left( -\frac { 2 }{ 11 }  \right) +2\cdot \frac { 3 }{ 11 }  &amp; 3\cdot \frac { 7 }{ 11 } +2\cdot \left( -\frac { 5 }{ 11 }  \right)  \end{bmatrix}=\begin{bmatrix} 1 &amp; 0 \\ 0 &amp; 1 \end{bmatrix} = \mathbf{I}\]</p>
+<h5 id="初等变换法">初等变换法</h5>
+<p>求元素为具体数字的矩阵的逆矩阵，常用初等变换法（又称为高斯·约当消去法）。用矩阵表示 $(\mathbf{A} \mathbf{I})\xrightarrow [  ]{ 初等变换 } (\mathbf{I} \mathbf{A}^{-1}) $ ，就是求逆矩阵的初等行变换法。\((\mathbf{A} \mathbf{I})\) 被称为矩阵 \(\mathbf{A}\) 的增广矩阵。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  矩阵的初等行变换和初等列变换，统称矩阵的初等变换。下面的三种变换称为矩阵的初等行变换：
+<ol>
+<li>对调两行；</li>
+<li>以数 \(k \ne 0\) 乘某一行的所有元素；</li>
+<li>把某一行所有元素的 \(k\) 倍加到另一行对应的元素上去。</li>
+</ol>
+</div>
+<p>把上面定义中的“行”换成“列”，既得矩阵的初等列变换的定义。如果矩阵A经过有限次初等变换变成矩阵B，就称矩阵A与B等价。</p>
+<p>三阶以上的伴随矩阵如果使用伴随阵法求逆，需要求9个或9个以上的代数余子式，以及一个三阶或三阶以上的行列式，过程比较繁琐。相比之下，使用初等变换就简单很多。</p>
+<p>假定有三阶矩阵 \({ \mathbf{A} }_{ 3 \times 3 }=\begin{bmatrix} 1 &amp; 0 &amp; 1 \\ 1 &amp; 2 &amp; 1 \\ 2 &amp; 1 &amp; 1 \end{bmatrix}\) ，则：</p>
+<p>\[
+\begin{aligned}
+\begin{bmatrix}\mathbf{A} \mathbf{I}\end{bmatrix} 
+&amp; \rightarrow 
+\begin{bmatrix} 
+1 &amp; 0 &amp; 1 &amp; 1 &amp; 0 &amp; 0 \\
+1 &amp; 2 &amp; 1 &amp; 0 &amp; 1 &amp; 0 \\
+2 &amp; 1 &amp; 1 &amp; 0 &amp; 0 &amp; 1
+\end{bmatrix}
+\rightarrow 
+\begin{bmatrix} 
+1 &amp; 0 &amp; 1 &amp; 1 &amp; 0 &amp; 0 \\
+0 &amp; 2 &amp; 0 &amp; -1 &amp; 1 &amp; 0 \\
+2 &amp; 1 &amp; 1 &amp; 0 &amp; 0 &amp; 1
+\end{bmatrix}
+\rightarrow 
+\begin{bmatrix} 
+1 &amp; 0 &amp; 1 &amp; 1 &amp; 0 &amp; 0 \\
+0 &amp; 1 &amp; 0 &amp; -0.5 &amp; 0.5 &amp; 0 \\
+2 &amp; 1 &amp; 1 &amp; 0 &amp; 0 &amp; 1
+\end{bmatrix}\\
+&amp; \rightarrow 
+\begin{bmatrix} 
+1 &amp; 0 &amp; 1 &amp; 1 &amp; 0 &amp; 0 \\
+0 &amp; 1 &amp; 0 &amp; -0.5 &amp; 0.5 &amp; 0 \\
+1 &amp; 1 &amp; 0 &amp; -1 &amp; 0 &amp; 1
+\end{bmatrix}
+\rightarrow 
+\begin{bmatrix} 
+1 &amp; 0 &amp; 1 &amp; 1 &amp; 0 &amp; 0 \\
+0 &amp; 1 &amp; 0 &amp; -0.5 &amp; 0.5 &amp; 0 \\
+1 &amp; 0 &amp; 0 &amp; -0.5 &amp; -0.5 &amp; 1
+\end{bmatrix}
+\rightarrow 
+\begin{bmatrix} 
+0 &amp; 0 &amp; 1 &amp; 1.5 &amp; 0.5 &amp; -1 \\
+0 &amp; 1 &amp; 0 &amp; 0 &amp; 0.5 &amp; 0 \\
+1 &amp; 0 &amp; 0 &amp; -0.5 &amp; -0.5 &amp; 1
+\end{bmatrix}\\
+&amp;\rightarrow 
+\begin{bmatrix} 
+1 &amp; 0 &amp; 0 &amp; -0.5 &amp; -0.5 &amp; 1 \\
+0 &amp; 1 &amp; 0 &amp; -0.5 &amp; 0.5 &amp; 0 \\
+0 &amp; 0 &amp; 1 &amp; 1.5 &amp; 0.5 &amp; -1
+\end{bmatrix}
+\end{aligned}
+\]</p>
+<p>因此</p>
+<p>\[\mathbf{A}^{-1}=\begin{bmatrix}-0.5 &amp; -0.5 &amp; 1 \\ -0.5 &amp; 0.5 &amp; 0 \\ 1.5 &amp; 0.5 &amp; -1\end{bmatrix}\]</p>
+<h5 id="奇异矩阵">奇异矩阵</h5>
+<p>要注意的是，<strong>矩阵并不一定都可逆的</strong>。从定义来看，只要矩阵 \(\mathbf{M}\) 的行列式 \(|\mathbf{M}|\) 为 0 ，则 \[\mathbf{M}^{-1}=\frac{1}{|\mathbf{M}|}\begin{bmatrix} d &amp; -b \\ -c &amp; a \end{bmatrix}\] 的值就无定义。我们把这种矩阵叫做 <strong>奇异矩阵</strong> 。</p>
+<p>例如矩阵 \(\begin{bmatrix}0 &amp; 0\\ 0 &amp; 1\end{bmatrix}\) ，其行列式的值为 \(0 \cdot 1 - 0 \cdot 0 = 0\) ，因此无法求逆。</p>
+<p>Python 求逆示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.matrix(<span class="string">&#x27;1 0 1; 1 2 1; 2 1 1&#x27;</span>)</span><br><span class="line">a = np.matrix(<span class="string">&#x27;1 0 1; 1 2 1; 2 1 1&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.I</span><br><span class="line">a.I</span><br><span class="line">matrix([[-<span class="number">0.5</span>, -<span class="number">0.5</span>,  <span class="number">1.</span> ],</span><br><span class="line">        [-<span class="number">0.5</span>,  <span class="number">0.5</span>,  <span class="number">0.</span> ],</span><br><span class="line">        [ <span class="number">1.5</span>,  <span class="number">0.5</span>, -<span class="number">1.</span> ]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a * a.I</span><br><span class="line">a * a.I</span><br><span class="line">matrix([[ <span class="number">1.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>],</span><br><span class="line">        [ <span class="number">0.</span>,  <span class="number">1.</span>,  <span class="number">0.</span>],</span><br><span class="line">        [ <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">1.</span>]]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.I * a</span><br><span class="line">a.I * a</span><br><span class="line">matrix([[ <span class="number">1.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>],</span><br><span class="line">        [ <span class="number">0.</span>,  <span class="number">1.</span>,  <span class="number">0.</span>],</span><br><span class="line">        [ <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">1.</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f = np.matrix(<span class="string">&#x27;0 1;0 0&#x27;</span>)</span><br><span class="line">f = np.matrix(<span class="string">&#x27;0 1;0 0&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.I</span><br><span class="line">f.I</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">  File <span class="string">&quot;/Library/Python/2.7/site-packages/numpy/matrixlib/defmatrix.py&quot;</span>, line <span class="number">972</span>, <span class="keyword">in</span> getI</span><br><span class="line">    <span class="keyword">return</span> asmatrix(func(self))</span><br><span class="line">  File <span class="string">&quot;/Library/Python/2.7/site-packages/numpy/linalg/linalg.py&quot;</span>, line <span class="number">526</span>, <span class="keyword">in</span> inv</span><br><span class="line">    ainv = _umath_linalg.inv(a, signature=signature, extobj=extobj)</span><br><span class="line">  File <span class="string">&quot;/Library/Python/2.7/site-packages/numpy/linalg/linalg.py&quot;</span>, line <span class="number">90</span>, <span class="keyword">in</span> _raise_linalgerror_singular</span><br><span class="line">    <span class="keyword">raise</span> LinAlgError(<span class="string">&quot;Singular matrix&quot;</span>)</span><br><span class="line">numpy.linalg.linalg.LinAlgError: Singular matrix</span><br></pre></td></tr></table></figure>
+<h3 id="矩阵的转置">矩阵的转置</h3>
+<p>矩阵 \(\underset{m\times n}{\mathbf{A}} = \begin{bmatrix}a_{11} &amp; a_{12} &amp; \ldots &amp; a_{1n} \\ a_{21} &amp; a_{22} &amp; \ldots &amp; a_{2n} \\ \ldots \\ a_{m1} &amp; a_{m2} &amp; \ldots &amp; a_{mn}\end{bmatrix}\) 的转置定义为 \(\underset{n\times n}{A^{T}} = \begin{bmatrix}a_{11} &amp; a_{21} &amp; \ldots &amp; a_{m1} \\ a_{12} &amp; a_{22} &amp; \ldots &amp; a_{m2} \\ \ldots \\ a_{1n} &amp; a_{2n} &amp; \ldots &amp; a_{mn}\end{bmatrix}\)</p>
+<p>例如矩阵 \(\mathbf{A} = \begin{bmatrix} 2 &amp; 4 \\ 1 &amp; 3\end{bmatrix}\) 的转置矩阵就是 \(\mathbf{A}^T = \begin{bmatrix} 2 &amp; 1 \\ 4 &amp; 3\end{bmatrix}\)；矩阵 \(\mathbf{B} = \begin{bmatrix} 1 &amp; 2 &amp; 3 \\ 4 &amp; 5 &amp; 6 \end{bmatrix}\) 的转置矩阵就是 \(\mathbf{B}^T = \begin{bmatrix} 1 &amp; 4 \\ 2 &amp; 5 \\ 3 &amp; 6\end{bmatrix}\)。</p>
+<p>Python 示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.matrix(<span class="string">&#x27;2 4;1 3&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.T</span><br><span class="line">matrix([[<span class="number">2</span>, <span class="number">1</span>],</span><br><span class="line">        [<span class="number">4</span>, <span class="number">3</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = np.matrix(<span class="string">&#x27;1 2 3;4 5 6&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.T</span><br><span class="line">matrix([[<span class="number">1</span>, <span class="number">4</span>],</span><br><span class="line">        [<span class="number">2</span>, <span class="number">5</span>],</span><br><span class="line">        [<span class="number">3</span>, <span class="number">6</span>]])</span><br></pre></td></tr></table></figure>
+<p>矩阵的转置有一个性质：矩阵乘积的转置等于矩阵调换后分别做转置的乘积，即 \[(\mathbf{A}\cdot \mathbf{B})^T = \mathbf{B}^T\cdot \mathbf{A}^T\]</p>
+<p>Python 示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.matrix(<span class="string">&#x27;2 4;1 3&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = np.matrix(<span class="string">&#x27;1 6;2 5&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a*b</span><br><span class="line">matrix([[<span class="number">10</span>, <span class="number">32</span>],</span><br><span class="line">        [ <span class="number">7</span>, <span class="number">21</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.T*a.T</span><br><span class="line">matrix([[<span class="number">10</span>,  <span class="number">7</span>],</span><br><span class="line">        [<span class="number">32</span>, <span class="number">21</span>]])</span><br></pre></td></tr></table></figure>
+<h3 id="应用举例">应用举例</h3>
+<p>矩阵是一种非常通用的数据表示方法，只要能用矩阵来表示数据，就能够用矩阵的这套运算来解决问题。下面列举几种常见的数学问题，它们都能够使用矩阵的思路来解决。</p>
+<h4 id="求解方程组">求解方程组</h4>
+<p>例如一个二元方程组</p>
+<p>\[\left\{ \begin{eqnarray} 3x+2y &amp; = &amp; 7 \\ -x+y &amp; = &amp; 1 \end{eqnarray} \right. \]</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig1.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>可以用矩阵表示成：</p>
+<p>\[\begin{bmatrix}3 &amp; 2 \\-1 &amp; 1\end{bmatrix}\begin{bmatrix}x \\y\end{bmatrix}=
+\begin{bmatrix}7\\1\end{bmatrix}\]</p>
+<p>设公式里的 \(\begin{bmatrix} 3 &amp; 2 \\ -1 &amp; 1\end{bmatrix}\) 为矩阵 \(A\)，将等式两边左乘一个 \(A\) 的逆得到：</p>
+<p>\[
+\begin{aligned}
+A^{-1}A
+\begin{bmatrix}
+x \\ y
+\end{bmatrix}
+&amp;= 
+A^{-1}
+\begin{bmatrix}
+7\\
+1
+\end{bmatrix}\\\
+&amp;=
+\frac{1}{|A|}\begin{bmatrix}1 &amp; -2 \\ 1 &amp; 3\end{bmatrix}
+\begin{bmatrix}
+7\\
+1
+\end{bmatrix}\\\
+&amp;=
+\frac{1}{5}\begin{bmatrix}1 &amp; -2 \\ 1 &amp; 3\end{bmatrix}
+\begin{bmatrix}
+7\\
+1
+\end{bmatrix}\\\
+&amp;=
+\frac{1}{5}\begin{bmatrix}5 \\ 10\end{bmatrix}
+\end{aligned}
+\]</p>
+<p>因此：</p>
+<p>\[\begin{bmatrix}x \\ y\end{bmatrix}=\begin{bmatrix}1 \\ 2\end{bmatrix}\]</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig1-answer.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>虽然这个例子给出的方法用于二元一次矩阵求解还不如直接用初中就学到的消元法，但矩阵的好处在于对于更高维的数据，比如有成百上千个未知数，这个解法依然有效。</p>
+<p>在 Python 中，可以使用 Numpy 的线性代数算法库 <code>linalg</code> 提供的 <code>solve</code> 方法求解方程组。示例如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.matrix(<span class="string">&#x27;3 2; -1 1&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = np.matrix(<span class="string">&#x27;7; 1&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = np.linalg.solve(a, b)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>matrix([[ <span class="number">1.</span>],</span><br><span class="line">        [ <span class="number">2.</span>]])</span><br><span class="line"><span class="comment"># 检查结果是否正确</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.allclose(np.dot(a, x), b)</span><br><span class="line"><span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<h4 id="求向量组合">求向量组合</h4>
+<p>假设有向量 \(\vec { a }  =  \begin{bmatrix} 3 \\ -1 \end{bmatrix}\) ，\(\vec { b }  =  \begin{bmatrix} 2 \\ 1 \end{bmatrix}\) ，求二者如何组合成向量 \(\vec { c }  =  \begin{bmatrix} 7 \\ 1 \end{bmatrix}\) ？</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig2.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>如果用 \(x\) 和 \(y\) 分别表示两个向量的倍数，这个问题就同样可以用矩阵表示成：</p>
+<p>\[\begin{bmatrix}3 \\-1 \end{bmatrix}x + \begin{bmatrix}2 \\1\end{bmatrix}y=\begin{bmatrix}7\\1\end{bmatrix}\]</p>
+<p>这样就得到了一个和上一个问题完全同构的问题，使用相同解法解决得出 \(\begin{bmatrix}x \\ y\end{bmatrix}=\begin{bmatrix}1 \\ 2\end{bmatrix}\)。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig2-answer.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h2 id="向量">向量</h2>
+<p>向量是线性代数中的基本概念，也是机器学习的基础数据表示形式。例如计算机阅读文本的过程首先就会将文本分词，然后用向量表示<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>。这是因为向量很适合在高维空间中表达和处理。在机器学习中会接触到的诸如投影、降维的概念，都是在向量的基础上做的。</p>
+<p>在 \(\mathbb{R}^{n}\) <sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup>空间中定义的向量 \(\vec{\mathbf{V}}\)，可以用一个包含 n 个实数的有序集来表示，即 \(\vec{\mathbf{V}} = \begin{bmatrix}v_1 \\ v_2 \\ \ldots \\ v_n\end{bmatrix}\)，这个有序集里的每个元素称为向量的 <strong>分量</strong> 。例如一个 \(\mathbb{R}^{2}\) 空间中的向量 \(\begin{bmatrix}2 \\ 1\end{bmatrix}\) ，有些地方也会用 \((2, 1)\) 或 \(&lt;2, 1>\) 这样的形式来表示。</p>
+<p>绘图表示这个变量：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig5.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>向量的长度被定义为 \[\left\| \vec{\mathbf{v}} \right\| = \sqrt{v_{1}^{2} + v_{2}^{2} + \ldots + v_{n}^{2}}\]，和我们以往所接触的距离公式一模一样。长度为 1 的向量称为 <strong>单位向量</strong> 。</p>
+<h3 id="基本运算-v2">基本运算</h3>
+<h4 id="加-v2">加</h4>
+<p>向量 \(\mathbf{a}\) 与向量 \(\mathbf{b}\) 的加法定义为:</p>
+<p>\[
+\mathbf{a} + \mathbf{b} = \begin{bmatrix} a_1 + b_1 \\ a_2 + b_2 \\ \ldots \\ a_n + b_n \end{bmatrix}
+\]</p>
+<p>绘图示意向量 \(\mathbf{a} = \begin{bmatrix}-1 \\ 2\end{bmatrix}\) 与 \(\mathbf{b} = \begin{bmatrix}3 \\ 1\end{bmatrix}\) 的相加，值为 \(\begin{bmatrix}2 \\ 3\end{bmatrix}\) ：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig3.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>在 Python 中，可以直接用 Numpy 的 ndarray 来表示向量。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a = np.array([-<span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line">b = np.array([<span class="number">3</span>, <span class="number">1</span>])</span><br><span class="line"><span class="built_in">print</span> a + b <span class="comment"># [2 3]</span></span><br></pre></td></tr></table></figure>
+<h4 id="减-v2">减</h4>
+<p>\[
+\mathbf{a} - \mathbf{b} = \begin{bmatrix} a_1 - b_1 \\ a_2 - b_2 \\ \ldots \\ a_n - b_n \end{bmatrix}
+\]</p>
+<p>从几何角度讲，向量减相当于加上一个反向的向量。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a = np.array([-<span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line">b = np.array([<span class="number">3</span>, <span class="number">1</span>])</span><br><span class="line"><span class="built_in">print</span> a - b  <span class="comment"># [-4,  1]</span></span><br></pre></td></tr></table></figure>
+<h4 id="乘-v2">乘</h4>
+<h5 id="标量乘向量">标量乘向量</h5>
+<p>标量 \(c\) 乘以向量 \(\mathbf{a}\) 定义为：</p>
+<p>\[
+c \cdot \mathbf{a} = \begin{bmatrix} c \cdot a_1 \\ c \cdot a_2 \\ \ldots \\ c \cdot a_n \end{bmatrix} = \begin{bmatrix} a_1 \cdot c \\ a_2 \cdot c \\ \ldots \\ a_n \cdot c \end{bmatrix}
+\]</p>
+<p>绘图示意向量 \(\mathbf{a} = \begin{bmatrix} -1 \\ 2 \end{bmatrix}\) 乘以一个标量 3 得到 \(\begin{bmatrix} -3 \\ 6 \end{bmatrix}\) ：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig4.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>Python 实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a = np.array([-<span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line"><span class="built_in">print</span> a * <span class="number">3</span> <span class="comment">#[-3,  6]</span></span><br></pre></td></tr></table></figure>
+<h5 id="向量点积">向量点积</h5>
+<p>向量的点积（又叫点乘）定义如下：</p>
+<p>\[\vec{\mathbf{a}}\cdot \vec{\mathbf{b}} = \begin{bmatrix} a_1 \\ a_2 \\ \ldots \\ a_n\end{bmatrix} \cdot \begin{bmatrix} b_1 \\ b_2 \\ \ldots \\ b_n \end{bmatrix} = a_{1}b_{1} + a_{2}b_{2} + \ldots + a_{n}b_{n}\]</p>
+<p>可见点积得到的是一个标量。</p>
+<p>例如：</p>
+<p>\[\begin{bmatrix} 3 \\ 5 \\ 2 \end{bmatrix} \cdot \begin{bmatrix} 1 \\ 4 \\ 7 \end{bmatrix} = 3 \cdot 1 + 5 \cdot 4 + 2 \cdot 7 = 37\]</p>
+<p>Python 示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a = np.array([<span class="number">3</span>, <span class="number">5</span>, <span class="number">2</span>])</span><br><span class="line">b = np.array([<span class="number">1</span>, <span class="number">4</span>, <span class="number">7</span>])</span><br><span class="line"><span class="built_in">print</span> a.dot(b)  <span class="comment"># 37</span></span><br><span class="line"><span class="built_in">print</span> np.dot(a, b)  <span class="comment"># 37（另一种等价写法）</span></span><br></pre></td></tr></table></figure>
+<p>容易证明点积满足乘法交换律、分配律和结合律。</p>
+<p>我们<a href="#%E5%90%91%E9%87%8F">前面</a>知道向量的长度定义为 \(\left\| \vec{\mathbf{v}} \right\| = \sqrt{v_{1}^{2} + v_{2}^{2} + \ldots + v_{n}^{2}}\)，联立点积的定义，可以得出：</p>
+<div class="label-anchor"><span>eq: 1 »</span></div>
+<p>\[\left\| \vec{\mathbf{v}} \right\| = \sqrt{v_{1}^{2} + v_{2}^{2} + \ldots + v_{n}^{2}} = \sqrt{\vec{\mathbf{v}} \cdot \vec{\mathbf{v}}}\]</p>
+<p>关于点积还有一个非常重要的性质，称为 <strong>柯西不等式</strong> <sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup>：</p>
+<div class="alert alert-warning"><i class="far fa-bell"></i>  <ul>
+<li>对两个非 0 向量 \(\vec{\mathbf{x}}, \vec{\mathbf{y}} \in \mathbb{R}^{n}\)，\(|\vec{\mathbf{x}} \cdot \vec{\mathbf{y}}| \le \left\|\vec{\mathbf{x}}\right\|\left\|\vec{\mathbf{y}}\right\|\)。</li>
+<li>当且仅当 \(\vec{\mathbf{x}} = c\vec{\mathbf{y}}\) 时，等式成立。</li>
+</ul>
+</div>
+<p>虽然受限于篇幅不去证明它，但这个性质非常重要，后面会有很多向量的理论都建立在它的基础之上。例如，对一个向量 \((\vec{\mathbf{x}} + \vec{\mathbf{y}})\) ,利用这个性质，结合公式 1，我们可以得到</p>
+<p>\[
+\begin{align}
+\left\|\vec{\mathbf{x}} + \vec{\mathbf{y}}\right\|^2 &amp; = (\vec{\mathbf{x}} + \vec{\mathbf{y}})\cdot (\vec{\mathbf{x}} + \vec{\mathbf{y}}) \\\
+ &amp; = \left\|\vec{\mathbf{x}}\right\|^2 + 2\vec{\mathbf{x}}\vec{\mathbf{y}} + \left\|\vec{\mathbf{y}}\right\|^2 \\\
+&amp; \le 
+\left\|\vec{\mathbf{x}}\right\|^2 + 2\left\|\vec{\mathbf{x}}\right\|\left\|\vec{\mathbf{y}}\right\| + \left\|\vec{\mathbf{y}}\right\|^2
+\end{align}
+\]</p>
+<p>所以：</p>
+<p>\[
+\left\|\vec{\mathbf{x}} + \vec{\mathbf{y}}\right\|^2 
+\le 
+(\left\|\vec{\mathbf{x}}\right\| + \left\|\vec{\mathbf{y}}\right\|)^2
+\]</p>
+<p>两边开平方得到：</p>
+<p>\[
+\left\|\vec{\mathbf{x}} + \vec{\mathbf{y}}\right\| 
+\le 
+\left\|\vec{\mathbf{x}}\right\| + \left\|\vec{\mathbf{y}}\right\|
+\]</p>
+<p>这就得到了三角不等式。</p>
+<p>从几何的角度来说，向量的点积与向量间夹角 \(\theta\) 的余弦有关：\[\vec{\mathbf{a}}\cdot\vec{\mathbf{b}} = \left\|\vec{\mathbf{a}}\right\|\left\|\vec{\mathbf{b}}\right\|cos\theta\]，这意味着向量的点积其实反映了向量 \(\vec{\mathbf{a}}\) 在向量 \(\vec{\mathbf{b}}\) 上的 <strong>投影</strong> ，即两个向量在同个方向上的相同程度。当两向量正交时，\(cos\theta\) 的值为0，点积的值为0，投影最小。当两向量平行时，\(cos\theta\) 的值为1，点积值最大，投影也最大。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig7.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>观察上图，\(L\) 是 \(\vec{\mathbf{v}}\) 向量两端延伸出来的直线，即 \(L={c\vec{\mathbf{v}}|c\in \mathbb{R}}\)。记向量 \(\vec{\mathbf{x}}\) 在 \(L\) 上的投影为 \(Proj_L(\vec{\mathbf{x}})\)。根据点积的性质，可得：</p>
+<p>\[
+\begin{align}
+(\vec{\mathbf{x}}-\underbrace {  c\vec{\mathbf{v}}}_{ Proj_L({\vec{\mathbf{x}}})  } )\cdot \vec{\mathbf{v}} &amp;= 0 \\\
+\vec{\mathbf{x}}\cdot \vec{\mathbf{v}} -c\vec{\mathbf{v}}\cdot \vec{\mathbf{v}} &amp;= 0\\\
+c\cdot \vec{\mathbf{v}} \cdot \vec{\mathbf{v}} &amp;= \vec{\mathbf{x}}\cdot \vec{\mathbf{v}}\\\
+c &amp;= \frac{\vec{\mathbf{x}}\cdot \vec{\mathbf{v}}}{\vec{\mathbf{v}}\cdot \vec{\mathbf{v}}}
+\end{align}
+\]</p>
+<p>有了 \(c\)， 我们就可以求出投影 \(Proj_L({\vec{\mathbf{x}}})\) 为：</p>
+<p>\[Proj_L({\vec{\mathbf{x}}}) =  c\vec{\mathbf{v}} = (\frac{\vec{\mathbf{x}}\cdot \vec{\mathbf{v}}}{\vec{\mathbf{v}}\cdot \vec{\mathbf{v}}})\vec{\mathbf{v}}\]</p>
+<p>例如，向量 \(\vec{\mathbf{a}} = \begin{bmatrix}1 \\ 2\end{bmatrix}\)，向量 \(\vec{\mathbf{b}} = \begin{bmatrix}1 \\ 1\end{bmatrix}\)，那么 \(\vec{\mathbf{a}}\) 在 \(\vec{\mathbf{b}}\) 方向 \(L\) 上的投影为：</p>
+<p>\[Proj_L({\vec{\mathbf{a}}}) = c\vec{\mathbf{b}} = (\frac{\vec{\mathbf{a}}\cdot \vec{\mathbf{b}}}{\vec{\mathbf{b}}\cdot \vec{\mathbf{b}}})\vec{\mathbf{b}} = \frac{3}{2}\vec{\mathbf{b}}\]</p>
+<p>Python 示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_projection</span>(<span class="params">a, b</span>):</span></span><br><span class="line">    <span class="keyword">return</span> a.dot(b)*<span class="number">1.0</span>*b/b.dot(b)</span><br><span class="line"></span><br><span class="line">a = np.array([<span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line">b = np.array([<span class="number">2</span>, <span class="number">2</span>])</span><br><span class="line"><span class="built_in">print</span> get_projection(a, b)  <span class="comment"># [1.5  1.5]</span></span><br></pre></td></tr></table></figure>
+<h5 id="向量外积">向量外积</h5>
+<p>向量的（又叫叉乘、向量积、叉积）只在 \(\mathbb{R}^{2}\) 和 \(\mathbb{R}^{3}\) 中定义：</p>
+<p>\(\mathbb{R}^{2}\) 的向量外积：</p>
+<p>\[\begin{bmatrix} a_1 \\ a_2\end{bmatrix} \times \begin{bmatrix} b_1 \\ b_2 \end{bmatrix} = \begin{bmatrix} a_1 \cdot b_2 - a_2 \cdot b_1\end{bmatrix}\]</p>
+<p>例如：</p>
+<p>\[\begin{bmatrix} 1 \\ 2 \end{bmatrix} \times \begin{bmatrix} 3 \\ 4 \end{bmatrix}=\begin{bmatrix} 1 \cdot 4 - 3 \cdot 2 \end{bmatrix}= \begin{bmatrix}-2\end{bmatrix}\]</p>
+<p>\(\mathbb{R}^{3}\) 的向量外积：</p>
+<p>\[\begin{bmatrix} a_1 \\ a_2 \\ a_3\end{bmatrix} \times \begin{bmatrix} b_1 \\ b_2 \\ b_3 \end{bmatrix} = \begin{bmatrix} a_2 \cdot b_3 - a_3 \cdot b_2 \\ a_3 \cdot b_1 - a_1 \cdot b_3 \\ a_1 \cdot b_2 - a_2 \cdot b_1\end{bmatrix}\]</p>
+<p>例如：</p>
+<p>\[\begin{bmatrix} 3 \\ 5 \\ 2 \end{bmatrix} \times \begin{bmatrix} 1 \\ 4 \\ 7 \end{bmatrix} =\begin{bmatrix} 5 \cdot 7 - 2 \cdot 4 \\ 2 \cdot 1 - 3 \cdot 7 \\ 3 \cdot 4 - 5 \cdot 1\end{bmatrix}= \begin{bmatrix} 27 \\ -19 \\ 7\end{bmatrix}\]</p>
+<p>可见向量间外积的结果会得到一个新的向量。</p>
+<p>Python 示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a = np.array([<span class="number">3</span>, <span class="number">5</span>, <span class="number">2</span>])</span><br><span class="line">b = np.array([<span class="number">1</span>, <span class="number">4</span>, <span class="number">7</span>])</span><br><span class="line"><span class="built_in">print</span> np.cross(a, b)  <span class="comment"># [27, -19, 7]</span></span><br></pre></td></tr></table></figure>
+<p>外积的一个重要作用是可以得到一个和 \(\vec{\mathbf{a}}\) 、\(\vec{\mathbf{b}}\) 两个原向量正交的新向量 \(\vec{\mathbf{c}}\) ，且可以通过右手法则来确定新向量的方向（一个简单的确定满足“右手定则”的结果向量的方向的方法是这样的：若坐标系是满足右手定则的，当右手的四指从 \(\vec{\mathbf{a}}\) 以不超过180度的转角转向 \(\vec{\mathbf{b}}\) 时，竖起的大拇指指向是 \(\vec{\mathbf{c}}\) 的方向）。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig6.jpeg" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>从几何的角度来说，向量的外积与向量间夹角 \(\theta\) 的正弦有关：\[\left\|\vec{\mathbf{a}}\times\vec{\mathbf{b}}\right\| = \left\|\vec{\mathbf{a}}\right\|\left\|\vec{\mathbf{b}}\right\|sin\theta\]，这意味着向量的外积反映了向量 \(\vec{\mathbf{a}}\) 与向量 \(\vec{\mathbf{b}}\) 的正交程度。当两向量平行时，\(sin\theta\) 的值为0，外积的值为0，正交程度最小。当两向量正交时，\(sin\theta\) 的值为1，外积值最大，正交程度最大。</p>
+<h5 id="矩阵向量积">矩阵向量积</h5>
+<p>当矩阵 \(\mathbf{A}\) 的列数与向量 \(\vec{\mathbf{x}}\) 的分量数相同时，矩阵和向量的积有定义：</p>
+<p>\[\underset{m\times n}{A}\vec{\mathbf{x}}=\begin{bmatrix}a_{11} &amp; a_{12} &amp; \ldots &amp; a_{1n} \\ a_{21} &amp; a_{22} &amp; \ldots &amp; a_{2n} \\ \ldots \\ a_{m1} &amp; a_{m2} &amp; \ldots &amp; a_{mn}\end{bmatrix}\begin{bmatrix}x_1 \\ x_2 \\ \ldots \\ x_n \end{bmatrix} = \begin{bmatrix}a_{11}x_1 + a_{12}x_2 + \ldots + a_{1n}x_n \\ a_{21}x_1 + a_{22}x_2 + \ldots + a_{2n}x_n \\ \ldots \\ a_{m1}x_1 + a_{m2}x_2 + \ldots + a_{mn}x_n \\ \end{bmatrix}
+\]</p>
+<p>例如矩阵 \(\mathbf{A} = \begin{bmatrix}4 &amp; 3 &amp; 1 \\ 1 &amp; 2 &amp; 5\end{bmatrix}\) 乘以向量 \(\vec{\mathbf{x}} = \begin{bmatrix}5 \\ 2 \\ 7\end{bmatrix}\) 的结果为：</p>
+<p>\[\begin{bmatrix}4\cdot 5 + 3\cdot 2 + 1\cdot 7 \\ 1 \cdot 5 + 2 \cdot 2 + 5 \cdot 7\end{bmatrix} = \begin{bmatrix}33 \\ 44\end{bmatrix}\]</p>
+<p>Python 示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = np.matrix(<span class="string">&#x27;4 3 1;1 2 5&#x27;</span>)</span><br><span class="line">x = np.array([[<span class="number">5</span>], [<span class="number">2</span>], [<span class="number">7</span>]])</span><br><span class="line"><span class="built_in">print</span> a*x  <span class="comment"># [[33] [44]]</span></span><br></pre></td></tr></table></figure>
+<p>矩阵的向量积可以当成是矩阵的所有列向量的线性组合：</p>
+<p>\[\underset { m\times n }{ \mathbf{A} } \vec { \mathbf{x} } =\begin{bmatrix} \underbrace { \begin{bmatrix} a_{ 11 } \\ a_{ 21 } \\ \ldots \\ a_{ m1 } \end{bmatrix} }_{ \vec { \mathbf{ V }_{ 1 } }  }  &amp; \underbrace { \begin{bmatrix} a_{ 12 } \\ a_{ 22 } \\\ldots  \\ a_{ m2 } \end{bmatrix} }_{ \vec { \mathbf{ V_{ 2 } } }  } &amp; \ldots &amp; \underbrace { \begin{bmatrix} a_{ 1n } \\ a_{ 2n } \\ \ldots \\ a_{ mn } \end{bmatrix} }_{ \vec { \mathbf{ V_{ n } } }  }  \end{bmatrix}\begin{bmatrix} x_{ 1 } \\ x_{ 2 } \\ \ldots \\ x_{ n } \end{bmatrix}=x_1\vec{\mathbf{V}_1}+x_2\vec{\mathbf{V}_2}+\ldots+x_n\vec{\mathbf{V}_n}\]</p>
+<p>而向量 \(\vec{\mathbf{x}}\) 的每一个分量可以看成是 \(\mathbf{A}\) 的每个列向量的加权。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  一个矩阵其实就是一个线性变换。一个矩阵乘以一个向量后得到的向量，其实就相当于将这个向量进行了线性变换。
+</div>
+<h3 id="向量的转置">向量的转置</h3>
+<p>向量 \(\vec{\mathbf{V}} = \underbrace{\begin{bmatrix}v_1 \\ v_2 \\ \ldots \\ v_n \end{bmatrix}}_{n\times 1}\) 的转置定义为 \(\vec{\mathbf{V}}^T = \underbrace{\begin{bmatrix}v_1 &amp; v_2 &amp; \ldots &amp; v_n \end{bmatrix}}_{1 \times n}\)</p>
+<p>例如向量 \(\vec{\mathbf{A}} = \begin{bmatrix} 2 &amp; 4 \end{bmatrix}\) 的转置就是 \(\vec{\mathbf{A}}^T = \begin{bmatrix} 2 \\ 4\end{bmatrix}\)。</p>
+<p>Python 示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.array([[<span class="number">2</span>, <span class="number">4</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.T</span><br><span class="line">array([[<span class="number">2</span>],</span><br><span class="line">       [<span class="number">4</span>]])</span><br></pre></td></tr></table></figure>
+<p>注意上面声明 <code>a</code> 时用了两对 <code>[]</code> ，以生成一个二维向量。一维的向量转置结果是不会变化的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = np.array([<span class="number">2</span>, <span class="number">4</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.T</span><br><span class="line">array([<span class="number">2</span>, <span class="number">4</span>])</span><br></pre></td></tr></table></figure>
+<p>向量的转置有一个性质：一个向量 \(\vec{\mathbf{v}}\) 点乘另一个向量 \(\vec{\mathbf{w}}\) ，其结果和向量 \(\vec{\mathbf{v}}\) 转置后和向量 \(\vec{\mathbf{w}}\) 做矩阵乘法相同。即 \(\vec{\mathbf{v}} \cdot \vec{\mathbf{w}} = \vec{\mathbf{v}}^T \vec{\mathbf{w}}\) 。</p>
+<h3 id="线性无关">线性无关</h3>
+<h4 id="张成空间">张成空间</h4>
+<p>一组向量的张成空间说白了就是指这些向量随便线性组合后能够表示多少个向量。记为 \(span(\vec{\mathbf{a}}, \vec{\mathbf{b}})\)。</p>
+<p>例如，对于 \(\mathbb{R}^{2}\) 空间中两个不平行的非0向量 \(\vec{\mathbf{a}} = \begin{bmatrix}2 \\ 1\end{bmatrix}\) 和向量 \(\vec{\mathbf{b}} = \begin{bmatrix} 0 \\ 3 \end{bmatrix}\) ，不难发现这两个向量能够表示二维空间中任一其他向量，即 \(span(\vec{\mathbf{a}}, \vec{\mathbf{b}}) = \mathbb{R}^{2}\)。证明如下：</p>
+<p>对于 \(\mathbb{R}^{2}\) 中任一向量 \(\begin{bmatrix}x \\y \end{bmatrix}\) ，假设可以由 \(\vec{\mathbf{a}}\) 和 \(\vec{\mathbf{b}}\) 线性组合而成，那么有：</p>
+<p>\[c_1 \begin{bmatrix}2 \\ 1\end{bmatrix} + c_2 \begin{bmatrix} 0 \\ 3 \end{bmatrix} = \begin{bmatrix} x \\ y \end{bmatrix}\]</p>
+<p>即：</p>
+<p>\[
+\left\{
+\begin{align}
+c_1 \cdot 2 &amp; + c_2 \cdot 0 &amp;= x\\\
+c_1 \cdot 1 &amp; + c_2 \cdot 3 &amp;= y
+\end{align}
+\right.
+\]</p>
+<p>求解该方程得：</p>
+<p>\[
+\left\{
+\begin{align}
+c_1 &amp;= \frac{x}{2}\\
+c_2 &amp;= \frac{y}{3} - \frac{x}{6}
+\end{align}
+\right.
+\]</p>
+<p>由于 \(x\)、\(y\) 的值已确定，所以 \(c_1\)、\(c_2\) 的值也必然唯一。</p>
+<h4 id="线性相关和线性无关">线性相关和线性无关</h4>
+<p>当一个向量集合里的每个向量都对张成的空间有贡献时，称这个向量集合 <strong>线性无关</strong> 。反之称为 <strong>线性相关</strong> 。能够表示一个空间的最少向量组合称为空间的 <strong>基</strong> 。</p>
+<p>听起来有点难理解，其实就是非常简单的道理：假如一个向量集合中存在某个向量能由集合里的其他向量线性组合而成，那这个集合对于张成空间而言就存在多余的向量。此时就是线性相关；反之，假如集合里每一个元素都没法由其他元素组合而成，那么这个集合每个元素都对张成空间有贡献，这个集合就是线性无关的。</p>
+<p>例如，对于上述的例子，如果再增加一个向量 \(\vec{\mathbf{c}} = \begin{bmatrix} 5 \\ 2\end{bmatrix}\) ，由于 \(\vec{\mathbf{c}}\) 可以由 \(\vec{\mathbf{a}}\) 和 \(\vec{\mathbf{b}}\) 线性组合而成，由 \(\mathbf{a}\) 、\({\mathbf{b}}\) 和 \({\mathbf{c}}\) 共同张成的空间并没有变化，仍然是 \(\mathbb{R}^{2}\)，因此称集合 \(\left\{\vec{\mathbf{a}}, \vec{\mathbf{b}}, \vec{\mathbf{c}}\right \}\) 线性相关。</p>
+<p>如果一个向量集合线性无关，且集合里的每个向量长度都为 1 ，那么就称这个集合为 <strong>标准正交集合</strong> （Othonormal Set），称这个集合的基为 <strong>标准正交基</strong> 。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  基可以理解为坐标系的轴。我们平常用到的大多是直角坐标系，在线形代数中可以把这个坐标系扭曲、拉伸、旋转，称为基的变换。我们可以按我们的需求去设定基，但是基的轴之间必须是线形无关的。
+</div>
+<h4 id="判断是否线性相关">判断是否线性相关</h4>
+<p>一个向量集合 \(s = {v_1, v_2, \ldots, v_n}\) 线性相关的充分必要条件是存在一部分非0系数使得 \(c_1 v_1 + c_2 v_2 + \ldots + c_n v_n = \mathbf{0} = \begin{bmatrix} 0 \\ 0 \\ \ldots \\ 0\end{bmatrix}\) 。</p>
+<p>例如有向量 \(\begin{bmatrix}2 \\ 1\end{bmatrix}\) 和 \(\begin{bmatrix}3 \\ 2\end{bmatrix}\)，则可以先写出如下的等式：</p>
+<p>\[c_1 \begin{bmatrix}2 \\ 1\end{bmatrix} + c_2 \begin{bmatrix}3 \\ 2\end{bmatrix} = \begin{bmatrix}0 \\ 0\end{bmatrix}\]</p>
+<p>容易求解得 \(\begin{bmatrix}c_1 \\ c_2\end{bmatrix} = \begin{bmatrix}0 \\ 0\end{bmatrix}\)，说明两个向量线性无关。也说明这两个向量可以张成 \(\mathbb{R}^{2}\)。</p>
+<p>类似地，对于三个 \(\mathbb{R}^{3}\) 中的向量 \(\begin{bmatrix}2 \\ 0 \\ 0\end{bmatrix}\)、\(\begin{bmatrix}0 \\ 1 \\ 0\end{bmatrix}\) 和 \(\begin{bmatrix}0 \\ 0 \\ 7\end{bmatrix}\)，不难判断这三个向量是线性无关的，他们共同张成了 \(\mathbb{R}^3\) 空间。</p>
+<p>而对于向量集合 \(\left\{\begin{bmatrix}2 \\ 1\end{bmatrix}, \begin{bmatrix}3 \\ 2\end{bmatrix}, \begin{bmatrix}1 \\ 2 \end{bmatrix}\right\}\) ，不难算出存在非 0 的系数 \(\begin{bmatrix}c_1 \\ c_2 \\ c_3\end{bmatrix} = \begin{bmatrix}-4 \\ 3 \\ -1\end{bmatrix}\) 使得 \(c1 \begin{bmatrix}2 \\ 1\end{bmatrix} + c_2 \begin{bmatrix}3 \\ 2\end{bmatrix} + c_3 \begin{bmatrix}1 \\ 2 \end{bmatrix} = \begin{bmatrix}0 \\ 0\end{bmatrix}\)。因此集合 \(\left\{\begin{bmatrix}2 \\ 1\end{bmatrix}, \begin{bmatrix}3 \\ 2\end{bmatrix}, \begin{bmatrix}1 \\ 2 \end{bmatrix}\right\}\) 线性相关。</p>
+<h2 id="张量">张量</h2>
+<p>张量（tensor）这个术语常常在机器学习的库中出现。Google 的 TensorFlow 甚至直接以它命名了。</p>
+<p>其实，学完了矩阵和向量，张量并不是什么新鲜的概念。使用这个词汇的目的是为了表述统一，张量可以看作是向量、矩阵的自然推广，我们用张量来表示广泛的数据类型。</p>
+<p>规模最小的张量是0阶张量，即标量，也就是一个数。</p>
+<p>当我们把一些数有序的排列起来，就形成了1阶张量，也就是一个向量。</p>
+<p>如果我们继续把一组向量有序的排列起来，就形成了2阶张量，也就是一个矩阵。</p>
+<p>把矩阵摞起来，就是3阶张量，我们可以称为一个立方体，具有3个颜色通道的彩色图片就是一个这样的立方体。</p>
+<p>把矩阵摞起来，好吧这次我们真的没有给它起别名了，就叫4阶张量了，不要去试图想像4阶张量是什么样子，它就是个数学上的概念。</p>
+<p>张量的阶数有时候也称为维度（dimension），或者轴（axis）。譬如一个矩阵 \(\begin{bmatrix}1 &amp; 3 \\ 2 &amp; 4\end{bmatrix}\)，是一个 2 阶张量，有两个维度或轴，沿着第 0 个轴（为了与python的计数方式一致，本文档维度和轴从0算起）你看到的是 \(\begin{bmatrix}1 \\ 2\end{bmatrix}\)、\(\begin{bmatrix}3 \\ 4\end{bmatrix}\) 两个向量，沿着第 1 个轴你看到的是 \(\begin{bmatrix}1 \\ 3\end{bmatrix}\)、\(\begin{bmatrix}2 \\ 4\end{bmatrix}\) 两个向量。</p>
+<p>要理解“沿着某个轴”是什么意思，不妨试着运行一下下面的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">a = np.array([[<span class="number">1</span>,<span class="number">2</span>],[<span class="number">3</span>,<span class="number">4</span>]])</span><br><span class="line">sum0 = np.<span class="built_in">sum</span>(a, axis=<span class="number">0</span>)</span><br><span class="line">sum1 = np.<span class="built_in">sum</span>(a, axis=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> sum0  <span class="comment"># [4 6]</span></span><br><span class="line"><span class="built_in">print</span> sum1  <span class="comment"># [3 7]</span></span><br></pre></td></tr></table></figure>
+<h2 id="线性代数进阶">线性代数进阶</h2>
+<h3 id="阶梯形矩阵">阶梯形矩阵</h3>
+<p>阶梯形矩阵是一类非常实用的工具，可以帮助我们求解出线性空间的基，这就能用在诸如计算解不唯一的方程组之类的问题上。</p>
+<h4 id="阶梯形矩阵-v2">阶梯形矩阵</h4>
+<p>若矩阵 \(\mathbf{A}\) 满足两条件：</p>
+<ol>
+<li>若有零行（元素全为0的行），则零行应在最下方；</li>
+<li>非零首元（即非零行的第一个不为零的元素）的列标号随行标号的增加而严格递增。</li>
+</ol>
+<p>则称此矩阵 \(\mathbf{A}\) 为阶梯形矩阵。</p>
+<p>示例：</p>
+<p>\[
+\begin{bmatrix}
+2 &amp; 0 &amp; 2 &amp; 1 \\
+0 &amp; 5 &amp; 2 &amp; -2 \\
+0 &amp; 0 &amp; 3 &amp; 2 \\
+0 &amp; 0 &amp; 0 &amp; 0
+\end{bmatrix}
+\]</p>
+<h4 id="行简化阶梯形矩阵">行简化阶梯形矩阵</h4>
+<p>若矩阵 \(\mathbf{A}\) 满足两条件：</p>
+<ol>
+<li>它是阶梯形矩阵；</li>
+<li>非零首元所在的列除了非零首元外，其余元素全为0。</li>
+</ol>
+<p>则称此矩阵 \(\mathbf{A}\) 为行简化阶梯形矩阵。</p>
+<p>示例：</p>
+<p>\[
+\begin{bmatrix}
+2 &amp; 0 &amp; 2 &amp; 1 \\
+0 &amp; 5 &amp; 2 &amp; -2 \\
+0 &amp; 0 &amp; 3 &amp; 2 \\
+0 &amp; 0 &amp; 0 &amp; 0
+\end{bmatrix}
+\]</p>
+<h4 id="行最简形矩阵">行最简形矩阵</h4>
+<p>若矩阵 \(\mathbf{A}\) 满足两条件：</p>
+<ol>
+<li>它是行简化阶梯形矩阵；</li>
+<li>非零首元都为1</li>
+</ol>
+<p>则称此矩阵 \(\mathbf{A}\) 为行最简形矩阵。</p>
+<h4 id="将矩阵化简成行最简阶梯形">将矩阵化简成行最简阶梯形</h4>
+<p>对如下矩阵</p>
+<p>\[
+\begin{bmatrix}
+1 &amp; 2 &amp; 1 &amp; 1 &amp; 7\\ 
+1 &amp; 2 &amp; 2 &amp; -1 &amp; 12\\ 
+2 &amp; 4 &amp; 0 &amp; 6 &amp; 4
+\end{bmatrix}
+\]</p>
+<p>，使用初等变换可以将这个矩阵转换成如下的形式：</p>
+<p>\[
+\begin{bmatrix}
+1 &amp; 2 &amp; 1 &amp; 1 &amp; 7\\ 
+1 &amp; 2 &amp; 2 &amp; -1 &amp; 12\\ 
+2 &amp; 4 &amp; 0 &amp; 6 &amp; 4
+\end{bmatrix}
+\rightarrow
+\begin{bmatrix}
+1 &amp; 2 &amp; 1 &amp; 1 &amp; 7\\ 
+0 &amp; 0 &amp; 1 &amp; -2 &amp; 5\\ 
+2 &amp; 4 &amp; 0 &amp; 6 &amp; 4
+\end{bmatrix}
+\rightarrow
+\begin{bmatrix}
+1 &amp; 2 &amp; 1 &amp; 1 &amp; 7\\ 
+0 &amp; 0 &amp; 1 &amp; -2 &amp; 5\\ 
+0 &amp; 0 &amp; -2 &amp; 4 &amp; -10
+\end{bmatrix}
+\rightarrow
+\begin{bmatrix}
+1 &amp; 2 &amp; 1 &amp; 1 &amp; 7\\ 
+0 &amp; 0 &amp; 1 &amp; -2 &amp; 5\\ 
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0
+\end{bmatrix}
+\rightarrow
+\begin{bmatrix}
+1 &amp; 2 &amp; 0 &amp; 3 &amp; 2\\ 
+0 &amp; 0 &amp; 1 &amp; -2 &amp; 5\\ 
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0
+\end{bmatrix}
+\]</p>
+<p>行最简形非常实用。例如，对于下面的方程组：</p>
+<p>\[\left\{ 
+\begin{eqnarray} 
+x_1 + 2x_2 + x_3 + x_4 &amp;=&amp; 7 \\\
+x_1 + 2x_2 + 2x_3 - x_4 &amp;=&amp; 12 \\\
+2x_1 + 4x_2 + 6x_4 &amp;=&amp; 4
+\end{eqnarray}
+\right.
+\]</p>
+<p>只有三个方程，肯定无法求解出四个未知数（此时如果在用 <code>numpy.linalg.solve</code> 求解这个矩阵会引发 <code>LinAlgError</code> ），但是通过化成行最简形，我们可以进一步找出变量的限制关系。先将方程组表达成增广矩阵形式：</p>
+<p>\[
+\begin{bmatrix}
+1 &amp; 2 &amp; 1 &amp; 1 &amp; 7\\ 
+1 &amp; 2 &amp; 2 &amp; -1 &amp; 12\\ 
+2 &amp; 4 &amp; 0 &amp; 6 &amp; 4
+\end{bmatrix}
+\]</p>
+<p>这个矩阵和完全和我们上一步给出的矩阵相同，因此其行简化阶梯性就是</p>
+<p>\[
+\begin{bmatrix}
+1 &amp; 2 &amp; 0 &amp; 3 &amp; 2\\ 
+0 &amp; 0 &amp; 1 &amp; -2 &amp; 5\\ 
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0
+\end{bmatrix}
+\]</p>
+<p>对于方程组，非0首元位置对应的变量就叫做<strong>主元变量</strong>，其他的变量就叫做<strong>自由变量</strong>。例如上面的行最简形，\(x_1\) 和 \(x_3\) 是首元变量，\(x_2\) 和 \(x_4\) 就是自由变量。我们可以将方程改写成下面的形式：</p>
+<p>\[
+\left\{ 
+\begin{eqnarray} 
+x_1 &amp;=&amp; 2 - 2x_2 - 3x_4 \\\
+x_3 &amp;=&amp; 5 + 2x_4
+\end{eqnarray}
+\right.
+\]</p>
+<p>然后可以得到：</p>
+<p>\[
+\begin{bmatrix} x_{ 1 } \\ x_{ 2 } \\ x_{ 3 } \\ x_{ 4 } \end{bmatrix}=\begin{bmatrix} 2 \\ 0 \\ 5 \\ 0 \end{bmatrix}+x_{ 2 }\underbrace { \begin{bmatrix} -2 \\ 1 \\ 0 \\ 0 \end{bmatrix} }_{ \vec{\mathbf{a}} } +x_{ 4 }\underbrace{\begin{bmatrix} -3 \\ 0 \\ 2 \\ 1 \end{bmatrix}}_{\vec{\mathbf{b}}}
+\]</p>
+<p>观察这个结果，方程组的解集就是向量 \(\vec{\mathbf{a}}\) 和向量 \(\vec{\mathbf{b}}\) 的线性组合。这两个向量张成了 \(\mathbb{R}^4\) 中的一个平面。</p>
+<h3 id="线性子空间">线性子空间</h3>
+<p>在前面的内容中我们已经多少涉及到了一些关于空间、张成空间的知识了。有时候我们需要从一个空间 \(K\) 里头挑出一些向量张成一个新的空间 \(\mathbf{W}\) ，这个空间 \(\mathbf{W}\) 就是原来的向量 \(\mathbf{K}\) 的子空间。</p>
+<div class="alert alert-warning"><i class="far fa-bell"></i>  <strong>定理</strong>：设 \(\mathbf{V}\) 是在域 \(\mathbf{K}\) 上的向量空间，并设 \(\mathbf{W}\) 是 \(\mathbf{V}\) 的子集。则 \(\mathbf{W}\) 是个子空间，当且仅当它满足下列三个条件:
+<ol>
+<li>零向量 0 在 \(\mathbf{W}\) 中。</li>
+<li>加法封闭：如果 \(\vec{\mathbf{u}}\) 和 \(\vec{\mathbf{v}}\) 是 \(\mathbf{W}\) 的元素，则向量和 \(\mathbf{\vec{\mathbf{u}}+\vec{\mathbf{v}}}\) 是 \(\mathbf{W}\) 的元素。</li>
+<li>标量乘法封闭：如果 \(\vec{\mathbf{u}}\) 是 \(\mathbf{W}\) 的元素而 \(c\) 是标量，则标量积 \(c\vec{\mathbf{u}}\) 是 \(\mathbf{W}\) 的元素。</li>
+</ol>
+</div>
+<p>子空间的引入有助于我们更专注于某类线性组合，从中找出这些子空间的特点，以及与原来的空间的关系。下面将列举几种典型的子空间。</p>
+<h4 id="零空间">零空间</h4>
+<p>矩阵 \(\mathbf{A}\) 的零空间 \(N(\mathbf{A})\) 就是由满足 \(\mathbf{A}\vec{\mathbf{x}}=0\) 的所有向量 \(\vec{\mathbf{x}}\) 的集合。</p>
+<p>要求解一个矩阵的零空间，可以先将其化简成行最简形。例如矩阵 $\mathbf{A} = \begin{bmatrix} 1 &amp; 1 &amp; 1 &amp; 1 \\ 1 &amp; 2 &amp; 3 &amp; 4 \\ 4 &amp; 3 &amp; 2 &amp; 1 \end{bmatrix} $，为了计算零空间，可以写出如下的等式：</p>
+<p>\[\begin{bmatrix} 1 &amp; 1 &amp; 1 &amp; 1 \\ 1 &amp; 2 &amp; 3 &amp; 4 \\ 4 &amp; 3 &amp; 2 &amp; 1 \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \\ x_3 \\ x_4 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix}\]</p>
+<p>展开得到如下的方程组：</p>
+<p>\[
+\left\{ 
+\begin{eqnarray} 
+x_1 + x_2 + x_3 + x_4 &amp;=&amp; 0 \\\
+x_1 + 2x_2 + 3x_3 + 4x_4 &amp;=&amp; 0 \\\
+4x_1 + 3x_2 + 2x_4 + x_4 &amp;=&amp; 0
+\end{eqnarray}
+\right.
+\]</p>
+<p>参考 <a href="#%E5%8C%96%E7%AE%80%E6%88%90%E8%A1%8C%E6%9C%80%E7%AE%80%E9%98%B6%E6%A2%AF%E5%BD%A2">化简成行最简阶梯形</a> 一节里介绍的方法，先把上面的方程组表示成增广矩阵：</p>
+<p>\[
+\begin{bmatrix} 1 &amp; 1 &amp; 1 &amp; 1 &amp; 0 \\ 1 &amp; 2 &amp; 3 &amp; 4 &amp; 0 \\ 4 &amp; 3 &amp; 2 &amp; 1 &amp; 0 \end{bmatrix}
+\]</p>
+<p>然后将其转换成行最简形：</p>
+<p>\[
+\begin{bmatrix} 1 &amp; 0 &amp; -1 &amp; -2 &amp; 0 \\ 0 &amp; 1 &amp; 2 &amp; 3 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \end{bmatrix}
+\]</p>
+<p>最终求解得到：</p>
+<p>\[
+\begin{bmatrix} x_{ 1 } \\ x_{ 2 } \\ x_{ 3 } \\ x_{ 4 } \end{bmatrix}=x_{ 3 }\underbrace { \begin{bmatrix} 1 \\ -2 \\ 1 \\ 0 \end{bmatrix} }_{ \vec{\mathbf{a}} } +x_{ 4 }\underbrace{\begin{bmatrix} 2 \\ -3 \\ 0 \\ 1 \end{bmatrix}}_{\vec{\mathbf{b}}}
+\]</p>
+<p>因此矩阵 \(\mathbf{A}\) 的零空间就是由上式中的 \(\vec{\mathbf{a}}\) 向量和 \(\vec{\mathbf{b}}\) 向量张成的空间。即</p>
+<p>\[N(\mathbf{A}) = span\left(\begin{bmatrix} 1 \\ -2 \\ 1 \\ 0 \end{bmatrix} \begin{bmatrix} 2 \\ -3 \\ 0 \\ 1 \end{bmatrix}\right)\]</p>
+<p>另外，上面得到的这个行最简形有两个自由变量，就称矩阵 \(\mathbf{A}\) 的 <strong>零度</strong> 为 2。零度等于 \(\mathbf{A}\vec{\mathbf{x}} = 0\) 化成行最简形后自由变量的个数。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  零空间其实和线性无关其实有很大的联系。一个矩阵的零空间为 \(\vec{\mathbf{0}}\) 的充分必要条件是这个矩阵的所有列线性无关。
+</div>
+<h4 id="列空间">列空间</h4>
+<p>矩阵的列空间就是由每一列的向量张成的空间。对于矩阵 \(\underset { m\times n }{ \mathbf{A} } =\begin{bmatrix} \underbrace { \begin{bmatrix} a_{ 11 } \\ a_{ 21 } \\ \ldots \\ a_{ m1 } \end{bmatrix} }_{ \vec { \mathbf{ V }_{ 1 } }  }  &amp; \underbrace { \begin{bmatrix} a_{ 12 } \\ a_{ 22 } \\\ldots  \\ a_{ m2 } \end{bmatrix} }_{ \vec { \mathbf{ V_{ 2 } } }  } &amp; \ldots &amp; \underbrace { \begin{bmatrix} a_{ 1n } \\ a_{ 2n } \\ \ldots \\ a_{ mn } \end{bmatrix} }_{ \vec { \mathbf{ V_{ n } } }  }  \end{bmatrix}\)，那么矩阵 \(\mathbf{A}\) 的列空间就是</p>
+<p>\[C(\mathbf{A}) = span(\vec{v_1}, \vec{v_2}, \ldots, \vec{v_n})\]</p>
+<p>例如，矩阵 \(\mathbf{A} = \begin{bmatrix}1 &amp; 1 &amp; 1 &amp; 1 \\ 1 &amp; 2 &amp; 3 &amp; 4 \\4 &amp; 3 &amp; 2 &amp; 1\end{bmatrix}\) 的列空间是 \(C(\mathbf{A}) = span\left(\begin{bmatrix}1 \\ 1 \\ 4\end{bmatrix}\begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix}\begin{bmatrix}1 \\ 3 \\ 2\end{bmatrix}\begin{bmatrix}1 \\ 4 \\ 1\end{bmatrix}\right)\)</p>
+<p>把一个矩阵化成行最简形后，这个矩阵的不相关主列（基底）的个数就称为矩阵的<strong>秩</strong>（Rank），或者叫维数。</p>
+<p>例如，上面的矩阵 \(\mathbf{A}\) 化成最简形矩阵是（参考上节的化简结果）：</p>
+<p>\[
+\begin{bmatrix} 1 &amp; 0 &amp; -1 &amp; -2  \\ 0 &amp; 1 &amp; 2 &amp; 3  \\ 0 &amp; 0 &amp; 0 &amp; 0 \end{bmatrix}
+\]</p>
+<p>从结果可以看出这个矩阵的主列有 2 个，而且是线性无关的。所以矩阵 \(\mathbf{A}\) 的秩为 2 ，即 \(rank(\mathbf{A}) = 2\)。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  矩阵的秩有一个特性：矩阵 \(\mathbf{A}\) 的秩等于矩阵 \(\mathbf{A}\) 的转置的秩。即 \(Rank(\mathbf{A}) = Rank(\mathbf{A^T})\)
+</div>
+<p>在 Python 中，可以使用 Numpy 包中的 <code>linalg.matrix_rank</code> 方法计算矩阵的秩：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = np.matrix(<span class="string">&#x27;1 1 1 1;1 2 3 4;4 3 2 1&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> np.linalg.matrix_rank(a)  <span class="comment"># 2</span></span><br></pre></td></tr></table></figure>
+<div class="alert alert-warning"><i class="far fa-bell"></i>  <strong>注意</strong> 在 Numpy 中的秩和线性代数里的秩是不同的概念。在NumPy中维度（dimensions）叫做轴（axes），轴的个数叫做秩。
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a = np.matrix(<span class="string">&#x27;1 1 1 1;1 2 3 4; 0 0 1 0&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> a.ndim  <span class="comment"># 2（维度）</span></span><br><span class="line"><span class="built_in">print</span> np.rank(a)  <span class="comment"># 2（a.ndim 的别名，已经过时）</span></span><br><span class="line"><span class="built_in">print</span> np.linalg.matrix_rank(a)  <span class="comment"># 3（秩）</span></span><br></pre></td></tr></table></figure>
+</div>
+<h4 id="行空间">行空间</h4>
+<p>有了列空间的定义，行空间顾名思义就是矩阵的每一行转置得到的向量张成的子空间，也就是矩阵的转置的列空间，记为 \(R(\mathbf{A}) = C(\mathbf{A}^T)\)。</p>
+<p>例如，矩阵 \(\mathbf{A} = \begin{bmatrix}1 &amp; 1 &amp; 1 &amp; 1 \\ 1 &amp; 2 &amp; 3 &amp; 4 \\4 &amp; 3 &amp; 2 &amp; 1\end{bmatrix}\) 的行空间是 \(R(\mathbf{A}) = C(\mathbf{A}^T) = span\left(\begin{bmatrix}1 \\ 1 \\ 1 \\ 1\end{bmatrix}\begin{bmatrix}1 \\ 2 \\ 3 \\ 4\end{bmatrix}\begin{bmatrix}4 \\ 3 \\ 2 \\ 1\end{bmatrix}\right)\)。</p>
+<h4 id="左零空间">左零空间</h4>
+<p>矩阵 \(\mathbf{A}\) 的左零空间是 \(\mathbf{A}\) 的转置的零空间。即：</p>
+<p>\[N(\mathbf{A}^T) = \left\{ \vec{\mathbf{x}} | \mathbf{A}^{T} \vec{\mathbf{x}} = \vec{\mathbf{0}} \right\} = \left\{ \vec{\mathbf{x}} | \vec{\mathbf{x}}^{T} \mathbf{A} = \vec{\mathbf{0}}^{T} \right\}\]</p>
+<p>例如，矩阵 \(\mathbf{B} = \begin{bmatrix}1 &amp; 1 &amp; 4 \\ 1 &amp; 2 &amp; 3 \\1 &amp; 4 &amp; 2\\ 1 &amp; 3 &amp; 1\end{bmatrix}\) 的转置是矩阵 \(\mathbf{A} = \mathbf{A} = \begin{bmatrix}1 &amp; 1 &amp; 1 &amp; 1 \\ 1 &amp; 2 &amp; 3 &amp; 4 \\4 &amp; 3 &amp; 2 &amp; 1\end{bmatrix}\) ，因此左零空间是 \(N(\mathbf{B^T}) = N(\mathbf{A}) = span\left(\begin{bmatrix} 1 \\ -2 \\ 1 \\ 0 \end{bmatrix} \begin{bmatrix} 2 \\ -3 \\ 0 \\ 1 \end{bmatrix}\right)\)</p>
+<p>由于转置是对称的，所以矩阵 \(\mathbf{A}\) 的转置的左零空间也是矩阵 \(\mathbf{A}\) 的零空间。</p>
+<h4 id="子空间的正交补">子空间的正交补</h4>
+<p>假设 \(\mathbf{V}\) 是 \(\mathbb{R}^n\) 的一个子空间，那么 \(\mathbf{V}\) 的正交补 \(\mathbf{V}^{\bot}\) 也是一个子空间，定义为 \(\left\{\vec{\mathbf{x}} | \vec{\mathbf{x}} \vec{\mathbf{v}}=0\right\}\)，也即是 \(\mathbb{R}^{n}\) 中所有正交于 \(\mathbf{V}\) 的向量所组成的子空间。</p>
+<p>由于正交是对称的，所以正交补也是对称的。一个子空间的正交补的正交补依然等于这个子空间。</p>
+<p>矩阵的零空间是行空间的正交补<sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup>，即 \(N(\mathbf{A}) = R(\mathbf{A})^{\bot}\)。反过来，矩阵的左零空间是列空间的正交补，即  \(N(\mathbf{B}^T) = C(\mathbf{B})^{\bot}\)。</p>
+<h3 id="最小二乘逼近">最小二乘逼近</h3>
+<p>最小二乘法是一个实用的数学工具，利用它可以在方程无解的情况下给出近似解。在机器学习中，最小二乘逼近也是一个重要的拟合方法。</p>
+<p>假设有一个方程</p>
+<p>\[
+\underset{n\times k}{\mathbf{A}}\vec{\mathbf{x}} = \vec{\mathbf{b}}
+\]</p>
+<p>无解。把上式写成：</p>
+<p>\[
+\vec{a_1}\vec{\mathbf{x}} + \vec{a_2}\vec{\mathbf{x}} + \ldots + \vec{a_k}\vec{\mathbf{x}} = \vec{\mathbf{b}}
+\]</p>
+<p>无解就意味着 \(\mathbf{A}\) 的所有列向量的张成空间不包括向量 \(\vec{\mathbf{b}}\) 。即 \(\vec{\mathbf{b}} \notin span(C(\mathbf{A}))\)。</p>
+<p>我们可以通过最小二乘法求解出近似解。即是要让找出一些向量 \(\vec{\mathbf{x}^*}\) 使得 \(\left\|\vec{\mathbf{b}}-\mathbf{A}\vec{\mathbf{x}^*}\right\|\) 最小。用向量 \(\vec{\mathbf{V}}\) 代表 \(\mathbf{A}\vec{\mathbf{x}^*}\) ，有：</p>
+<p>\[\left\|\begin{bmatrix}\vec{b_1}-\vec{v_1}\\\vec{b_2}-\vec{v_2}\\\ldots\\\vec{b_n}-\vec{v_n}\\\end{bmatrix}\right\|^2= (b_1-v_1)^2 + (b_2-v_2)^2 + \ldots + (b_n-v_n)^2\]</p>
+<p>把这个值最小化的过程就叫做<strong>最小二乘逼近</strong>。</p>
+<p>如何求出 \(\mathbf{A}\vec{\mathbf{x}^*}\) 这个近似值呢？从几何上考虑，列空间可以看成空间中张成的一个平面，而向量 \(\vec{\mathbf{b}}\) 并不落在这个平面上。但我们知道，在这个平面上与向量 \(\vec{\mathbf{b}}\) 最接近的向量就是它的<a href="#%E5%90%91%E9%87%8F%E7%82%B9%E7%A7%AF">投影</a>！所以，</p>
+<p>\[
+\mathbf{A}\vec{\mathbf{x}^*} = Proj_{C(\mathbf{A})}\vec{\mathbf{b}}
+\]</p>
+<p>直接计算 \(Proj_{C(\mathbf{A})}\vec{\mathbf{b}}\) 并不简单。不过，\(\vec{\mathbf{b}}-\mathbf{A}\vec{\mathbf{x}}\) 其实就是 \(\mathbf{A}\vec{\mathbf{x}}\) 的正交补，所以一个简单的求解方法是将原来无解的方程左乘一个 \(\mathbf{A}\) 的转置再求解：</p>
+<p>\[
+\mathbf{A}^T\mathbf{A}\vec{\mathbf{x}^*} = \mathbf{A}^T\vec{\mathbf{b}}
+\]</p>
+<p>得出的解就是原方程的近似解。</p>
+<h4 id="实例1：求解方程">实例1：求解方程</h4>
+<p>问题：求解如下方程组</p>
+<p>\[
+\left\{ 
+\begin{eqnarray} 
+x + y &amp;=&amp; 3 \\\
+x - y &amp;=&amp; -2 \\\
+y &amp;=&amp; 1
+\end{eqnarray}
+\right.
+\]</p>
+<p>将三个方程表示的直线画出来，可以看出这三条直线并没有交点：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig8.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>如何找出一个与三条直线距离最近的一个点呢？这时候我们的最小二乘逼近就派上用场了。</p>
+<p>先将方程写成矩阵和向量的形式：</p>
+<p>\[\underbrace{\begin{bmatrix}1 &amp; 1 \\1 &amp; -1 \\0 &amp; 1\end{bmatrix}}_{\mathbf{A}}\underbrace{\begin{bmatrix}x \\y\end{bmatrix}}_{\vec{\mathbf{x}}}=\underbrace{
+\begin{bmatrix}3 \\-2 \\1\end{bmatrix}}_{\vec{\mathbf{b}}}\]</p>
+<p>这个等式的最小二乘逼近就是：</p>
+<p>\[
+\begin{align}
+\begin{bmatrix}
+1 &amp; 1 &amp; 0 \\
+1 &amp; -1 &amp; 1\\
+\end{bmatrix}
+\begin{bmatrix}
+1 &amp; 1 \\
+1 &amp; -1 \\
+0 &amp; 1
+\end{bmatrix}
+\begin{bmatrix}
+x^* \\
+y^*
+\end{bmatrix}
+&amp; = 
+\begin{bmatrix}
+1 &amp; 1 &amp; 0 \\
+1 &amp; -1 &amp; 1\\
+\end{bmatrix}
+\begin{bmatrix}
+3 \\
+-2 \\
+1
+\end{bmatrix}
+\\\
+\begin{bmatrix}
+2 &amp; 0 \\
+0 &amp; 3
+\end{bmatrix}
+\begin{bmatrix}
+x^* \\
+y^*
+\end{bmatrix}
+&amp; =
+\begin{bmatrix}
+1 \\
+6
+\end{bmatrix}
+\end{align}
+\]</p>
+<p>由于是二阶方程，可以很容易求出矩阵 \(\begin{bmatrix}2 &amp; 0 \\ 0 &amp; 3\end{bmatrix}\) 的逆是 \(\begin{bmatrix}\frac{1}{2} &amp; 0 \\ 0 &amp; \frac{1}{3}\end{bmatrix}\)，所以：</p>
+<p>\[\begin{bmatrix}x^* \\y^*\end{bmatrix}=\begin{bmatrix}\frac{1}{2} &amp; 0 \\ 0 &amp; \frac{1}{3}\end{bmatrix}\begin{bmatrix}1 \\6\end{bmatrix}=\begin{bmatrix}\frac{1}{2} \\
+2\end{bmatrix}\]</p>
+<p>因此 \(\begin{bmatrix}\frac{5}{2} \\\frac{2}{3}\end{bmatrix}\) 就是方程组的近似解。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig9.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>在 Python 中，可以使用 <code>numpy.linalg.lstsq</code> 方法来求解最小二乘逼近。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.array([[<span class="number">1</span>, <span class="number">1</span>], [<span class="number">1</span>, -<span class="number">1</span>], [<span class="number">0</span>, <span class="number">1</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = np.array([<span class="number">3</span>, -<span class="number">2</span>, <span class="number">1</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = np.linalg.lstsq(a,b)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span> x</span><br><span class="line">(array([ <span class="number">0.5</span>,  <span class="number">2.</span> ]), array([ <span class="number">1.5</span>]), <span class="number">2</span>, array([ <span class="number">1.73205081</span>,  <span class="number">1.41421356</span>]))</span><br></pre></td></tr></table></figure>
+<p><code>numpy.linalg.lstsq</code> 的返回包括四个部分：</p>
+<ol>
+<li>最小二乘逼近解。如果 <code>b</code> 是二维的，那么这个逼近的结果有多个列，每一列是一个逼近解。对于上例，逼近解就是 \(\begin{bmatrix}0.5 \\  2 \end{bmatrix}\) 。</li>
+<li>残差。即每一个 <code>b - a*x</code> 的长度的和。对于上例，残差是 1.5 。</li>
+<li>矩阵 <code>a</code> 的秩。对于上例，矩阵 <code>a</code> 的秩为 2 。</li>
+<li>矩阵 <code>a</code> 的奇异值。对于上例，矩阵 <code>a</code> 的奇异值为 \(\begin{bmatrix}1.73205081 \\  1.41421356\end{bmatrix}\)</li>
+</ol>
+<h4 id="实例2：线性回归">实例2：线性回归</h4>
+<p>问题：给定4个坐标点 \((-1, 0)\), \((0, 1)\), \((1, 2)\), \((2, 1)\) ，求一条经过这些点的直线 \(y=mx+b\)。</p>
+<p>将四个点画图如下：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig10.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>显然这样的直线并不存在。然而我们能够使用最小二乘逼近，找到一条尽可能接近这些点的直线。将四个点表示成方程组的形式：</p>
+<p>\[
+\left\{
+\begin{eqnarray}
+f(-1) &amp;= -m + b = 0\\\
+f(0) &amp;= 0 + b  = 1\\\
+f(1) &amp;= m + b = 2\\\
+f(2) &amp;= 2m + b = 1
+\end{eqnarray}
+\right.
+\]</p>
+<p>还是那个套路，将方程组表示成矩阵和向量的形式：</p>
+<p>\[\underbrace{\begin{bmatrix}-1 &amp; 1 \\0 &amp; 1 \\1 &amp; 1 \\2 &amp; 1\end{bmatrix}}_{\mathbf{A}}\underbrace{\begin{bmatrix}m\\b\end{bmatrix}}_{\vec{\mathbf{x}}}=\underbrace{
+\begin{bmatrix}0\\1\\2\\1\end{bmatrix}}_{\vec{\mathbf{b}}}\]</p>
+<p>这个等式的最小二乘逼近就是：</p>
+<p>\[
+\begin{align}
+\begin{bmatrix}
+-1 &amp; 0 &amp; 1 &amp; 2 \\
+1 &amp; 1 &amp; 1 &amp; 1
+\end{bmatrix}
+\begin{bmatrix}
+-1 &amp; 1 \\
+0 &amp; 1 \\
+1 &amp; 1 \\
+2 &amp; 1
+\end{bmatrix}
+\begin{bmatrix}
+m^*\\
+b^*
+\end{bmatrix}
+&amp;=
+\begin{bmatrix}
+-1 &amp; 0 &amp; 1 &amp; 2 \\
+1 &amp; 1 &amp; 1 &amp; 1
+\end{bmatrix}
+\begin{bmatrix}
+0\\
+1\\
+2\\
+1
+\end{bmatrix}\\\
+\begin{bmatrix}
+6 &amp; 2 \\
+2 &amp; 4
+\end{bmatrix}
+\begin{bmatrix}
+m^*\\
+b^*
+\end{bmatrix}
+&amp;=
+\begin{bmatrix}
+4\\
+4
+\end{bmatrix}
+\end{align}
+\]</p>
+<p>容易求得 \(\begin{bmatrix}6 &amp; 2\\2 &amp; 4\end{bmatrix}\) 的逆为 \(\frac{1}{20}\begin{bmatrix}4 &amp; -2\\-2 &amp; 6\end{bmatrix}\)，因此</p>
+<p>\[\begin{bmatrix}m^*\\b^*\end{bmatrix} = \frac{1}{20}\begin{bmatrix}4 &amp; -2\\-2 &amp; 6\end{bmatrix}\begin{bmatrix}4 \\ 4\end{bmatrix} = \frac{1}{20}\begin{bmatrix}8 \\ 16\end{bmatrix} = \begin{bmatrix}\frac{2}{5} \\ \frac{4}{5}\end{bmatrix}\]</p>
+<p>将直线 \(y = \frac{2}{5}x + \frac{4}{5}\) 绘图如下所示：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig11.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>这就是所求的直线的近似解。</p>
+<p>Python 示例如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.matrix(<span class="string">&#x27;-1 1;0 1;1 1;2 1&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = np.array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = np.linalg.lstsq(a, b)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span> x</span><br><span class="line">(array([ <span class="number">0.4</span>,  <span class="number">0.8</span>]), array([ <span class="number">1.2</span>]), <span class="number">2</span>, array([ <span class="number">2.68999405</span>,  <span class="number">1.66250775</span>]))</span><br></pre></td></tr></table></figure>
+<h3 id="特征向量">特征向量</h3>
+<p>“特征”在模式识别和图像处理中是非常常见的一个词汇。我们要认识和描绘一件事物，首先得找出这个事物的特征。同样的道理，要让计算机识别一件事物，首先就要让计算机学会理解或者抽象出事物的特征。什么样的东西能当成特征呢？那必须是能“放之四海皆准”的依据，不论个体如何变换，都能从中找到这类群体共有的特点。例如，计算机视觉中常用的 <a href="/wiki/opencv-video.html#sift-%E7%89%B9%E5%BE%81%E7%82%B9">SIFT 特征点</a> 是一种很经典的用于视觉跟踪的特征点，即使被跟踪的物体的尺度、角度发生了变化，这种特征点依然能够找到关联。而谷歌的计算机在观看了一堆视频后能够识别出猫脸<sup class="footnote-ref"><a href="#fn6" id="fnref6">[6]</a></sup>，说明谷歌的计算机已经能够抽象出猫脸的特征。不管黑猫白猫，只要符合猫脸特征，都能被识别成猫。</p>
+<p>在线性代数中，“特征” 就是一种更抽象的描述。我们知道，矩阵乘法对应了一个变换，是把任意一个向量变成另一个方向或长度都大多不同的新向量。在这个变换的过程中，原向量主要发生旋转、伸缩的变化。如果矩阵对某一个向量或某些向量只发生伸缩（尺度）变换，而没有产生旋转的效果（也就意味着张成的子空间没有发生改变），这样的向量就认为是特征向量。</p>
+<p>\[\mathbf{T}(\vec{\mathbf{v}}) = \underbrace{\mathbf{A}}_{n\times n}\vec{\mathbf{v}} = \underbrace{\lambda}_{特征值} \overbrace{\vec{\mathbf{v}}}^{特征向量}\]</p>
+<p>其中， \(T\) 是一种线性变换，我们知道线性变换可以用矩阵向量积来表示，因此可以表示成 \(\mathbf{A}\vec{\mathbf{v}}\) 。\(\mathbf{A}\) 是一个 \(n\times n\) 的方阵。\(\vec{\mathbf{v}}\) 就是特征向量（Eigen Vector），也就是<q>能被伸缩的向量</q>（要求是非 \(\mathbf{0}\) 向量），而 \(\lambda\) 是特征向量 \(\vec{\mathbf{v}}\) 所对应的特征值，也就是<q>伸缩了多少</q>。如果特征值是负数，那说明了矩阵不但把向量拉长（缩短）了，而且让向量指向了相反的方向。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  简而言之，特征向量就是在线性变化当中不变的向量。
+</div>
+<p>听起来很抽象，放个例子就清楚了。下图出自 wikipedia的《<a target="_blank" rel="noopener" href="http://zh.wikipedia.org/wiki/%C3%A7%C2%89%C2%B9%C3%A5%C2%BE%C2%81%C3%A5%C2%90%C2%91%C3%A9%C2%87%C2%8F">特征向量</a>》一文：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/eigen.jpg" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>在这个仿射变换中，蒙娜丽莎的图像被变形，但是中心的纵轴在变换下保持不变。（注意：角落在右边的图像中被裁掉了。）蓝色的向量，从胸部到肩膀，其方向改变了，但是红色的向量，从胸部到下巴，其方向不变。因此红色向量是该变换的一个特征向量，而蓝色的不是。因为红色向量既没有被拉伸又没有被压缩，其特征值为1。所有沿着垂直线的向量也都是特征向量，它们的特征值相等。它们构成这个特征值的特征空间。</p>
+<h4 id="求解特征值">求解特征值</h4>
+<p>非 \(\mathbf{0}\) 向量 \(\vec{\mathbf{v}}\) 是线性变化矩阵 \(\mathbf{A}\) 的特征向量，需要满足如下条件<div class="label-anchor"><span>eq: 2 »</span></div>：</p>
+<p>\[det(\lambda \mathbf{I}_n - \underbrace{\mathbf{A}}_{n\times n}) = 0\]</p>
+<p>其中，\(det\) 表示矩阵行列式，\(\lambda\) 是特征值，\(\mathbf{I}\) 是单位矩阵。</p>
+<p>例如矩阵 \(\mathbf{A} = \begin{bmatrix}1 &amp; 2 \\ 4 &amp; 3\end{bmatrix}\) ，代入公式 2 得：</p>
+<p>\[
+\begin{align} det\left( \lambda \begin{bmatrix} 1 &amp; 0 \\ 0 &amp; 1 \end{bmatrix}-\begin{bmatrix} 1 &amp; 2 \\ 4 &amp; 3 \end{bmatrix} \right)  &amp;=0 \\ det\left( \begin{bmatrix} \lambda  &amp; 0 \\ 0 &amp; \lambda  \end{bmatrix}-\begin{bmatrix} 1 &amp; 2 \\ 4 &amp; 3 \end{bmatrix} \right)  &amp;=0 \\ det\left( \begin{bmatrix} \lambda -1 &amp; -2 \\ -4 &amp; \lambda -3 \end{bmatrix} \right)  &amp;=0 \end{align}
+\]</p>
+<p>所以有：</p>
+<p>\[\begin{align} (\lambda -1)(\lambda -3)-8 &amp; =0 \\ \lambda ^{ 2 }-4\lambda -5 &amp;=0 \\ (\lambda - 5)(\lambda +1) &amp;= 0\end{align}\]</p>
+<p>因此 \(\lambda\) 的值为 5 或者 -1 。</p>
+<p>在 Python 中，可以使用 <code>numpy.linalg.eigvals</code> 方法求解一个方阵的特征值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.matrix(<span class="string">&#x27;1 2;4 3&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span> np.linalg.eigvals(a)</span><br><span class="line">[-<span class="number">1.</span>  <span class="number">5.</span>]</span><br></pre></td></tr></table></figure>
+<p>前面说了变换矩阵必须是方阵，所以如果用在其他形状的矩阵上就会抛出 <code>LinAlgError</code> 错误：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = np.matrix(<span class="string">&#x27;1 2 3;4 3 1&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span> np.linalg.eigvals(b)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">  File <span class="string">&quot;/usr/local/lib/python2.7/dist-packages/numpy/linalg/linalg.py&quot;</span>, line <span class="number">902</span>, <span class="keyword">in</span> eigvals</span><br><span class="line">    _assertNdSquareness(a)</span><br><span class="line">  File <span class="string">&quot;/usr/local/lib/python2.7/dist-packages/numpy/linalg/linalg.py&quot;</span>, line <span class="number">212</span>, <span class="keyword">in</span> _assertNdSquareness</span><br><span class="line">    <span class="keyword">raise</span> LinAlgError(<span class="string">&#x27;Last 2 dimensions of the array must be square&#x27;</span>)</span><br><span class="line">numpy.linalg.linalg.LinAlgError: Last <span class="number">2</span> dimensions of the array must be square</span><br></pre></td></tr></table></figure>
+<h4 id="求解特征向量">求解特征向量</h4>
+<p>变换矩阵 \(\mathbf{A}\) 的特征空间（特征向量张成的空间）可以用下面的等式来求解： <div class="label-anchor"><span>eq: 3 »</span></div></p>
+<p>\[\mathbf{E}_{\lambda}=N(\lambda I_n - \mathbf{A})\]</p>
+<p>例如上面的变换矩阵 \(\mathbf{A} = \begin{bmatrix}1 &amp; 2 \\ 4 &amp; 3\end{bmatrix}\) ，代入公式 3 得：</p>
+<p>\[{ E }_{ \lambda  }=N\left( \lambda I_{ n }-\begin{bmatrix} 1 &amp; 2 \\ 4 &amp; 3 \end{bmatrix} \right) =N\left( \lambda \begin{bmatrix} 1 &amp; 0 \\ 0 &amp; 1 \end{bmatrix}-\begin{bmatrix} 1 &amp; 2 \\ 4 &amp; 3 \end{bmatrix} \right) =N\left( \begin{bmatrix} \lambda -1 &amp; -2 \\ -4 &amp; \lambda -3 \end{bmatrix} \right) \]</p>
+<p>当 \(\lambda = 5\) 时，</p>
+<p>\[{ E }_{ 5  }=N\left( \begin{bmatrix} 4 &amp; -2 \\ -4 &amp; 2 \end{bmatrix} \right) \]</p>
+<p>利用前面所学的 <a href="#%E9%9B%B6%E7%A9%BA%E9%97%B4">零空间的求解方法</a> ，得</p>
+<p>\[{ E }_{ 5  }= span\left(\begin{bmatrix}\frac{1}{2} \\ 1 \end{bmatrix}\right) \]</p>
+<p>同样地，当 \(\lambda = -1\) 时，</p>
+<p>\[{ E }_{ -1  }= span\left(\begin{bmatrix}1 \\ -1 \end{bmatrix}\right) \]</p>
+<p>在 Python 中，可以使用 <code>numpy.linalg.eig</code> 方法来求解方阵的特征值和特征向量：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.matrix(<span class="string">&#x27;1 2;4 3&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span> np.linalg.eig(a)</span><br><span class="line">(array([-<span class="number">1.</span>,  <span class="number">5.</span>]), matrix([[-<span class="number">0.70710678</span>, -<span class="number">0.4472136</span> ],</span><br><span class="line">        [ <span class="number">0.70710678</span>, -<span class="number">0.89442719</span>]]))</span><br></pre></td></tr></table></figure>
+<p>得到的元组中，第一部分是特征值，和前面使用 <code>numpy.linalg.eigvals</code> 得到的结果完全一样；第二部分是特征向量，乍一看好像和我们上面求解的结果不一样，但如果我们这么写就完全一样了：\(\begin{bmatrix}-0.70710678\begin{bmatrix}1 \\ -1\end{bmatrix} &amp; -0.89442719\begin{bmatrix}\frac{1}{2} \\ 1\end{bmatrix} \end{bmatrix}\)</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  变换矩阵线性无关的特征向量特别适合作为空间的基，因为在这些方向上变换矩阵可以拉伸向量而不必扭曲和旋转它，使得计算大为简单。我们把这种基称为 <strong>特征基</strong> 。
+</div>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="http://www.doc88.com/p-086655362651.html">逆矩阵的几种求法与解析</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="http://acl-arc.comp.nus.edu.sg/archives/acl-arc-090501d4/data/pdf/anthology-PDF/W/W04/W04-3252.pdf">TextRank: Bring Order Into Texts</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p>\(\mathbb{R}^{n}\) ：表示 n 个有序实数二元组构成的空间。例如 \(\mathbb{R}^2\) 表示有序实数二元组 \((x_1, x_2)\) 构成的空间，即\(\mathbb{R}^n = \left\{ (x_1, \ldots, x_n) | x_1, \ldots, x_n \in \mathbb{R} \right\}\) 。 <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p>从历史的角度讲，该不等式应当称为Cauchy-Buniakowsky-Schwarz不等式【柯西-布尼亚科夫斯基-施瓦茨不等式】，因为，正是后两位数学家彼此独立地在积分学中推而广之，才将这一不等式应用到近乎完善的地步。 <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn5" class="footnote-item"><p>证明过程视频：<a target="_blank" rel="noopener" href="http://open.163.com/movie/2011/6/E/M/M82ICR1D9_M83HEAPEM.html">http://open.163.com/movie/2011/6/E/M/M82ICR1D9_M83HEAPEM.html</a> <a href="#fnref5" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn6" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1112.6209v5.pdf">Building High-level Features Using Large Scale Unsupervised Learning</a> <a href="#fnref6" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next disabled"><a>Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '线性代数'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

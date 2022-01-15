@@ -1,0 +1,884 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>打包 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="一个示例
+先直接看个示例：
+12345678910111213141516171819202122232425262728293031323334353637383940414243# chardet&amp;#x27;s setup.pyfrom distutils.core import setupse">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="打包"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '打包'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 打包</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc', 2, 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="一个示例">一个示例</h2>
+<p>先直接看个示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># chardet&#x27;s setup.py</span></span><br><span class="line"><span class="keyword">from</span> distutils.core <span class="keyword">import</span> setup</span><br><span class="line">setup(</span><br><span class="line">    name = <span class="string">&quot;chardet&quot;</span>,</span><br><span class="line">    packages = [<span class="string">&quot;chardet&quot;</span>],</span><br><span class="line">    version = <span class="string">&quot;1.0.2&quot;</span>,</span><br><span class="line">    description = <span class="string">&quot;Universal encoding detector&quot;</span>,</span><br><span class="line">    author = <span class="string">&quot;Mark Pilgrim&quot;</span>,</span><br><span class="line">    author_email = <span class="string">&quot;mark@diveintomark.org&quot;</span>,</span><br><span class="line">    url = <span class="string">&quot;http://chardet.feedparser.org/&quot;</span>,</span><br><span class="line">    download_url = <span class="string">&quot;http://chardet.feedparser.org/download/python3-chardet-1.0.1.tgz&quot;</span>,</span><br><span class="line">    keywords = [<span class="string">&quot;encoding&quot;</span>, <span class="string">&quot;i18n&quot;</span>, <span class="string">&quot;xml&quot;</span>],</span><br><span class="line">    classifiers = [</span><br><span class="line">        <span class="string">&quot;Programming Language :: Python&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Programming Language :: Python :: 3&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Development Status :: 4 - Beta&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Environment :: Other Environment&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Intended Audience :: Developers&quot;</span>,</span><br><span class="line">        <span class="string">&quot;License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Operating System :: OS Independent&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Topic :: Software Development :: Libraries :: Python Modules&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Topic :: Text Processing :: Linguistic&quot;</span>,</span><br><span class="line">        ],</span><br><span class="line">    long_description = <span class="string">&quot;&quot;&quot;\</span></span><br><span class="line"><span class="string">Universal character encoding detector</span></span><br><span class="line"><span class="string">-------------------------------------</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Detects</span></span><br><span class="line"><span class="string"> - ASCII, UTF-8, UTF-16 (2 variants), UTF-32 (4 variants)</span></span><br><span class="line"><span class="string"> - Big5, GB2312, EUC-TW, HZ-GB-2312, ISO-2022-CN (Traditional and Simplified Chinese)</span></span><br><span class="line"><span class="string"> - EUC-JP, SHIFT_JIS, ISO-2022-JP (Japanese)</span></span><br><span class="line"><span class="string"> - EUC-KR, ISO-2022-KR (Korean)</span></span><br><span class="line"><span class="string"> - KOI8-R, MacCyrillic, IBM855, IBM866, ISO-8859-5, windows-1251 (Cyrillic)</span></span><br><span class="line"><span class="string"> - ISO-8859-2, windows-1250 (Hungarian)</span></span><br><span class="line"><span class="string"> - ISO-8859-5, windows-1251 (Bulgarian)</span></span><br><span class="line"><span class="string"> - windows-1252 (English)</span></span><br><span class="line"><span class="string"> - ISO-8859-7, windows-1253 (Greek)</span></span><br><span class="line"><span class="string"> - ISO-8859-8, windows-1255 (Visual and Logical Hebrew)</span></span><br><span class="line"><span class="string"> - TIS-620 (Thai)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">This version requires Python 3 or later; a Python 2 version is available separately.</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h2 id="目录结构">目录结构</h2>
+<p>要开始打包 Python 软件，必须先将文件和目录安排好。例如，chardet 的目录树：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">chardet&#x2F;</span><br><span class="line">|</span><br><span class="line">+--COPYING.txt</span><br><span class="line">|</span><br><span class="line">+--setup.py</span><br><span class="line">|</span><br><span class="line">+--README.txt</span><br><span class="line">|</span><br><span class="line">+--docs&#x2F;</span><br><span class="line">|  |</span><br><span class="line">|  +--index.html</span><br><span class="line">|  |</span><br><span class="line">|  +--usage.html</span><br><span class="line">|  |</span><br><span class="line">|  +--images&#x2F; ...</span><br><span class="line">|</span><br><span class="line">+--chardet&#x2F;</span><br><span class="line">   |</span><br><span class="line">   +--__init__.py</span><br><span class="line">   |</span><br><span class="line">   +--big5freq.py</span><br><span class="line">   |</span><br><span class="line">   +--...</span><br></pre></td></tr></table></figure>
+<h4 id="说明">说明</h4>
+<ol>
+<li>创建根目录来保存所有的目录和文件。将其以 Python 模块的名字命名。</li>
+<li>为了适应 Windows 用户，<strong>&quot;自述&quot;文件应包含 .txt 扩展名</strong>，而且它应该使用 Windows 风格回车符。不能仅仅因为你使用了一个优秀的文本编辑器，它从命令行运行并包括它自己的宏语言，而需要让你的用户为难。（你的用户使用记事本。虽然可悲，但却是事实。）即使你工作在 Linux 或 Mac OS X 环境下，优秀的文本编辑器毫无疑问地会有一个选项，允许将文件以 Windows 风格回车符来保存。</li>
+<li>Distutils 安装脚本应命名为 <a target="_blank" rel="noopener" href="http://setup.py">setup.py</a>。</li>
+<li>如果你的Python软件只包含一个单一的 .py 文件，你应该把它和&quot;自述&quot;文件以及安装脚本放到根目录下。但 chardet 并不是单一的 .py 文件，它是一个多文件模块 。但是没关系！只需在根目录下放置 chardet 目录，这样在 chardet/ 根目录下就会有一个包含 <code>__init__.py</code> 文件的 chardet/ 目录。这并不是一个难题，事实上，它可以简化打包过程。</li>
+</ol>
+<h2 id="编写安装脚本">编写安装脚本</h2>
+<p>每个 Distutils 安装脚本的第一行总是相同的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">from distutils.core import setup</span><br></pre></td></tr></table></figure>
+<p>该行导入 <code>setup()</code> 函数，这是 Distutils 的主入口点。大部分 Distutils 安装脚本仅由一个对 <code>setup()</code> 方法的调用组成。</p>
+<p><code>setup()</code> 方法可以有<a target="_blank" rel="noopener" href="http://docs.python.org/3.1/distutils/apiref.html#distutils.core.setup">几十个参数</a> 。为了使每个参与者都能清楚，你必须对每个参数使用命名变量 。这不只是一项约定，还是一项硬性要求。如果尝试以非命名变量调用 <code>setup()</code> 方法，安装脚本会崩溃。</p>
+<p>下面的命名变量是必需的：</p>
+<ul>
+<li>name，安装包的名称。</li>
+<li>version，安装包的版本。</li>
+<li>author，您的全名。</li>
+<li>author_email，您的邮件地址。</li>
+<li>url，项目主页。如果没有一个单独的项目网站，这里可以是安装包的 <a target="_blank" rel="noopener" href="http://pypi.python.org/">PyPI</a> 的页面地址。</li>
+</ul>
+<p>虽然以下内容不是必须的，但我也建议你把他们包括在你的安装脚本里：</p>
+<ul>
+<li><code>description</code>，在线的项目摘要。</li>
+<li><code>long_description</code>，以 reStructuredText format 格式编写的多行字符串。PyPI 将其转换为 html 并在安装包中显示它。</li>
+<li><code>classifiers</code>，下一节中将讲述的特别格式化字符串。</li>
+</ul>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  安装脚本中用到的元数据具体定义在<a target="_blank" rel="noopener" href="http://www.python.org/dev/peps/pep-0314/">PEP 34</a>中。
+</div>
+<p>现在让我们看看 chardet 的安装脚本。它包含所有这些要求的和建议的参数，还有一个我没有提到： <code>packages</code> 。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> distutils.core <span class="keyword">import</span> setup</span><br><span class="line">setup(</span><br><span class="line">    name = <span class="string">&#x27;chardet&#x27;</span>,</span><br><span class="line">    packages = [<span class="string">&#x27;chardet&#x27;</span>],</span><br><span class="line">    version = <span class="string">&#x27;1.0.2&#x27;</span>,</span><br><span class="line">    description = <span class="string">&#x27;Universal encoding detector&#x27;</span>,</span><br><span class="line">    author=<span class="string">&#x27;Mark Pilgrim&#x27;</span>,</span><br><span class="line">    ...</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>在分发过程中，这个 <code>packages</code> 参数凸显出一个不幸的词汇表重叠。我们一直在谈论正在构建的“安装包”（并将潜在地出现在Python包索引中）。但是，这并不是 packages 参数所指代的。它指代的是 chardet 模块是一个多文件模块这一事实 ，有时也被称为“<a href="/wiki/python3-module.html#%E6%A8%A1%E5%9D%97%E7%9A%84%E7%BB%84%E7%BB%87%E5%8C%85">包</a>”。packages 参数告诉 Distutils 去包含 chardet/ 目录，它的 <code>__init__.py</code> 文件，以及所有其他构成 chardet 模块的 .py 文件。</p>
+<h2 id="将包分类">将包分类</h2>
+<p>Python 包索引（“PyPI”）包含成千上万的 Python 库。正确的分类数据将让人们更容易找到你的包。PyPI 让你<a target="_blank" rel="noopener" href="http://pypi.python.org/pypi?:action=browse">以类别的形式浏览包</a> 。你甚至可以选择多个类别来缩小搜索范围。分类不是你可以忽略的不可见的元数据！</p>
+<p>你可以通过传递 classifiers 参数给 Distutils 的 <code>setup()</code> 方法来给你的软件分类。classifers 参数是一个字符串列表。这些字符串不是任意形式的。所有的分类字符串应该来自 <a target="_blank" rel="noopener" href="http://pypi.python.org/pypi?:action=list_classifiers">PyPI 上的列表</a> 。</p>
+<p>你应该总是至少包括以下分类：</p>
+<ul>
+<li>编程语言。特别的，你应该包括&quot;Programming Language :: Python&quot;和&quot;Programming Language :: Python :: 3&quot;。如果你不包括这些，你的包将不会出现在兼容Python 3的库列表中，它链接自每个pypi.python.org单页的侧边拦。</li>
+<li>许可证. 当我评价一个第三方库的时候，这绝对是我寻找的第一个东西。不要让我（花太多时间）寻找这个重要的信息。不要包含一个以上的许可证分类，除非你的软件明确地在多许可证下分发。（不要在多许可证下发布你的软件，除非你不得不这样做。不要强迫别人这样做。许可证已经足够让人头痛了，不要使情况变得更糟。）</li>
+<li>操作系统. 如果你的软件只能运行于Windows（或Mac OS X或Linux），我想要尽早知道。如果你的软件不包含任何特定平台的代码并可以在任何平台运行，请使用分类 “Operating System :: OS Independent”。多操作系统 分类仅在你的软件在不同平台需要特别支持时使用。（这并不常见。）</li>
+</ul>
+<p>还建议你包括以下分类：</p>
+<ul>
+<li>开发状态. 你的软件品质适合beta发布么？适合Alpha发布么？还是Pre-alpha？在这里面选择一个吧。要诚实点。</li>
+<li>目标用户. 谁会下载你的软件？最常见的选项包括： Developers、 End Users/Desktop、 Science/Research 和 System Administrators。</li>
+<li>框架. 如果你的软件是像 Django 或 Zope 这样较大的框架的插件，请包含适当的 Framework 分类。如果不是，请忽略它。</li>
+<li>主题. 有 大量的主题 可供选择 ，选择所有的适用项。</li>
+</ul>
+<h4 id="示例">示例</h4>
+<p><a target="_blank" rel="noopener" href="http://pypi.python.org/pypi/Django/">Django</a> 的分类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Categories</span><br><span class="line">    Development Status :: 5 - Production&#x2F;Stable</span><br><span class="line">    Environment :: Web Environment</span><br><span class="line">    Framework :: Django</span><br><span class="line">    Intended Audience :: Developers</span><br><span class="line">    License :: OSI Approved :: BSD License</span><br><span class="line">    Operating System :: OS Independent</span><br><span class="line">    Programming Language :: Python</span><br><span class="line">    Programming Language :: Python :: 2.6</span><br><span class="line">    Programming Language :: Python :: 2.7</span><br><span class="line">    Programming Language :: Python :: 3.2</span><br><span class="line">    Programming Language :: Python :: 3.3</span><br><span class="line">    Topic :: Internet :: WWW&#x2F;HTTP</span><br><span class="line">    Topic :: Internet :: WWW&#x2F;HTTP :: Dynamic Content</span><br><span class="line">    Topic :: Internet :: WWW&#x2F;HTTP :: WSGI</span><br><span class="line">    Topic :: Software Development :: Libraries :: Application Frameworks</span><br><span class="line">    Topic :: Software Development :: Libraries :: Python Modules</span><br></pre></td></tr></table></figure>
+<h2 id="通过清单指定附加文件">通过清单指定附加文件</h2>
+<p>默认情况下，Distutils 将把下列文件包含在你的发布包中：</p>
+<ul>
+<li>README.txt</li>
+<li><a target="_blank" rel="noopener" href="http://setup.py">setup.py</a></li>
+<li>由列在 packages 参数中的多模块文件所需的 .py 文件</li>
+<li>在 py_modules 参数中列出的单独 .py 文件</li>
+</ul>
+<p>但对于 chardet 项目，我们还希望包含 COPYING.txt 许可文件和含有图像与 html 文件的整个 docs/ 目录。要让 Distutils 在构建 chardet 发布包时包含这些额外的文件和目录，你需要创建一个 manifest file 。</p>
+<p>清单文件是一个名为 <a target="_blank" rel="noopener" href="http://MANIFEST.in">MANIFEST.in</a> 的文本文件。将它放置在项目的根目录下，同 README.txt 和 <a target="_blank" rel="noopener" href="http://setup.py">setup.py</a> 一起。清单文件并不是 Python 脚本，它是文本文件，其中包含一系列 Distutils 定义格式的命令。清单命令允许你包含或排除特定的文件和目录。</p>
+<p>以下是 chardet 项目的全部清单文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">include COPYING.txt                            </span><br><span class="line">recursive-include docs *.html *.css *.png *.gif</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第一行是不言自明的：包含项目根目录的 COPYING.txt 文件。</li>
+<li>第二行有些复杂。recursive-include 命令需要一个目录名和至少一个文件名。文件名并不限于特定的文件，可以包含通配符。这行的意思是“看到在项目根目录下的 docs/ 目录了吗？在该目录下（递归地）查找 .html、 .css、 .png 和 .gif 文件。我希望将他们都包含在我的发布包中。”</li>
+</ul>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  清单文件有自己独特的格式。详见 <a target="_blank" rel="noopener" href="http://docs.python.org/3.1/distutils/sourcedist.html#manifest">分发指定文件</a> 和 <a target="_blank" rel="noopener" href="http://docs.python.org/3.1/distutils/commandref.html#sdist-cmd">清单文件命令</a> 。
+</div>
+<h2 id="检查安装脚本的错误">检查安装脚本的错误</h2>
+<p>有许多事情需要留意。Distutils带有一个内置的验证命令，它检查是否所有必须的元数据都体现在你的安装脚本中。例如，如果你忘记包含 version 参数，Distutils 会提醒你。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">c:\Users\pilgrim\chardet&gt; c:\python31\python.exe setup.py check</span><br><span class="line">running check</span><br><span class="line">warning: check: missing required meta-data: version</span><br></pre></td></tr></table></figure>
+<p>当你包含了 version 参数（和所有其他所需的元数据）时， check 命令将如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">c:\Users\pilgrim\chardet&gt; c:\python31\python.exe setup.py check</span><br><span class="line">running check</span><br></pre></td></tr></table></figure>
+<h2 id="创建发布源">创建发布源</h2>
+<p>Distutils 支持构建多种类型的发布包。至少，你应该建立一个“源代码分发”，其中包含源代码，你的Distutils 安装脚本，“Readme”文件和你想要包含其他文件 。为了建立一个源代码分发，传递 sdist 命令给你的 Distutils 安装脚本。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">c:\Users\pilgrim\chardet&gt; c:\python31\python.exe setup.py sdist</span><br><span class="line">running sdist</span><br><span class="line">running check</span><br><span class="line">reading manifest template <span class="string">&#x27;MANIFEST.in&#x27;</span></span><br><span class="line">writing manifest file <span class="string">&#x27;MANIFEST&#x27;</span></span><br><span class="line">creating chardet-1.0.2</span><br><span class="line">creating chardet-1.0.2\chardet</span><br><span class="line">creating chardet-1.0.2\docs</span><br><span class="line">creating chardet-1.0.2\docs\images</span><br><span class="line">copying files to chardet-1.0.2...</span><br><span class="line">copying COPYING -&gt; chardet-1.0.2</span><br><span class="line">copying README.txt -&gt; chardet-1.0.2</span><br><span class="line">copying setup.py -&gt; chardet-1.0.2</span><br><span class="line">copying chardet\__init__.py -&gt; chardet-1.0.2\chardet</span><br><span class="line">copying chardet\big5freq.py -&gt; chardet-1.0.2\chardet</span><br><span class="line">...</span><br><span class="line">copying chardet\universaldetector.py -&gt; chardet-1.0.2\chardet</span><br><span class="line">copying chardet\utf8prober.py -&gt; chardet-1.0.2\chardet</span><br><span class="line">copying docs\faq.html -&gt; chardet-1.0.2\docs</span><br><span class="line">copying docs\history.html -&gt; chardet-1.0.2\docs</span><br><span class="line">copying docs\how-it-works.html -&gt; chardet-1.0.2\docs</span><br><span class="line">copying docs\index.html -&gt; chardet-1.0.2\docs</span><br><span class="line">copying docs\license.html -&gt; chardet-1.0.2\docs</span><br><span class="line">copying docs\supported-encodings.html -&gt; chardet-1.0.2\docs</span><br><span class="line">copying docs\usage.html -&gt; chardet-1.0.2\docs</span><br><span class="line">copying docs\images\caution.png -&gt; chardet-1.0.2\docs\images</span><br><span class="line">copying docs\images\important.png -&gt; chardet-1.0.2\docs\images</span><br><span class="line">copying docs\images\note.png -&gt; chardet-1.0.2\docs\images</span><br><span class="line">copying docs\images\permalink.gif -&gt; chardet-1.0.2\docs\images</span><br><span class="line">copying docs\images\tip.png -&gt; chardet-1.0.2\docs\images</span><br><span class="line">copying docs\images\warning.png -&gt; chardet-1.0.2\docs\images</span><br><span class="line">creating dist</span><br><span class="line">creating <span class="string">&#x27;dist\chardet-1.0.2.zip&#x27;</span> and adding <span class="string">&#x27;chardet-1.0.2&#x27;</span> to it</span><br><span class="line">adding <span class="string">&#x27;chardet-1.0.2\COPYING&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;chardet-1.0.2\PKG-INFO&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;chardet-1.0.2\README.txt&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;chardet-1.0.2\setup.py&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;chardet-1.0.2\chardet\big5freq.py&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;chardet-1.0.2\chardet\big5prober.py&#x27;</span></span><br><span class="line">...</span><br><span class="line">adding <span class="string">&#x27;chardet-1.0.2\chardet\universaldetector.py&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;chardet-1.0.2\chardet\utf8prober.py&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;chardet-1.0.2\chardet\__init__.py&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;chardet-1.0.2\docs\faq.html&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;chardet-1.0.2\docs\history.html&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;chardet-1.0.2\docs\how-it-works.html&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;chardet-1.0.2\docs\index.html&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;chardet-1.0.2\docs\license.html&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;chardet-1.0.2\docs\supported-encodings.html&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;chardet-1.0.2\docs\usage.html&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;chardet-1.0.2\docs\images\caution.png&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;chardet-1.0.2\docs\images\important.png&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;chardet-1.0.2\docs\images\note.png&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;chardet-1.0.2\docs\images\permalink.gif&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;chardet-1.0.2\docs\images\tip.png&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;chardet-1.0.2\docs\images\warning.png&#x27;</span></span><br><span class="line">removing <span class="string">&#x27;chardet-1.0.2&#x27;</span> (and everything under it)</span><br></pre></td></tr></table></figure>
+<p>有几件事情需要注意：</p>
+<ul>
+<li>Distutils发现了清单文件( <a target="_blank" rel="noopener" href="http://MANIFEST.in">MANIFEST.in</a> )</li>
+<li>Distutils 成功地解析了清单文件，并添加了我们所需要的文件—— COPYING.txt 和在 docs/ 目录下的 html 与图像文件。</li>
+<li>如果你进入你的项目目录，你会看到 Distutils 创建了一个 dist/ 目录。你可以分发在 dist/ 目录中的 .zip 文件。</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">c:\Users\pilgrim\chardet&gt; dir dist</span><br><span class="line"> Volume <span class="keyword">in</span> drive C has no label.</span><br><span class="line"> Volume Serial Number is DED5-B4F8</span><br><span class="line"></span><br><span class="line"> Directory of c:\Users\pilgrim\chardet\dist</span><br><span class="line"></span><br><span class="line">07/30/2009  06:29 PM    &lt;DIR&gt;          .</span><br><span class="line">07/30/2009  06:29 PM    &lt;DIR&gt;          ..</span><br><span class="line">07/30/2009  06:29 PM           206,440 chardet-1.0.2.zip</span><br><span class="line">               1 File(s)        206,440 bytes</span><br><span class="line">               2 Dir(s)  61,424,635,904 bytes free</span><br></pre></td></tr></table></figure>
+<h2 id="创建图形化安装程序">创建图形化安装程序</h2>
+<p>在我看来，每一个 Python 库都应该为 Windows 用户提供图形安装程序。这很容易做（即使你并没有运行 Windows ），而且 Windows 用户会对此表示感激。</p>
+<p>通过传递 bdist_wininst 命令到你的 Distutils 安装脚本，它可以为你<a target="_blank" rel="noopener" href="http://docs.python.org/3.1/distutils/builtdist.html#creating-windows-installers">创建一个图形化的 Windows 安装程序</a> 。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">c:\Users\pilgrim\chardet&gt; c:\python31\python.exe setup.py bdist_wininst</span><br><span class="line">running bdist_wininst</span><br><span class="line">running build</span><br><span class="line">running build_py</span><br><span class="line">creating build</span><br><span class="line">creating build\lib</span><br><span class="line">creating build\lib\chardet</span><br><span class="line">copying chardet\big5freq.py -&gt; build\lib\chardet</span><br><span class="line">copying chardet\big5prober.py -&gt; build\lib\chardet</span><br><span class="line">...</span><br><span class="line">copying chardet\universaldetector.py -&gt; build\lib\chardet</span><br><span class="line">copying chardet\utf8prober.py -&gt; build\lib\chardet</span><br><span class="line">copying chardet\__init__.py -&gt; build\lib\chardet</span><br><span class="line">installing to build\bdist.win32\wininst</span><br><span class="line">running install_lib</span><br><span class="line">creating build\bdist.win32</span><br><span class="line">creating build\bdist.win32\wininst</span><br><span class="line">creating build\bdist.win32\wininst\PURELIB</span><br><span class="line">creating build\bdist.win32\wininst\PURELIB\chardet</span><br><span class="line">copying build\lib\chardet\big5freq.py -&gt; build\bdist.win32\wininst\PURELIB\chardet</span><br><span class="line">copying build\lib\chardet\big5prober.py -&gt; build\bdist.win32\wininst\PURELIB\chardet</span><br><span class="line">...</span><br><span class="line">copying build\lib\chardet\universaldetector.py -&gt; build\bdist.win32\wininst\PURELIB\chardet</span><br><span class="line">copying build\lib\chardet\utf8prober.py -&gt; build\bdist.win32\wininst\PURELIB\chardet</span><br><span class="line">copying build\lib\chardet\__init__.py -&gt; build\bdist.win32\wininst\PURELIB\chardet</span><br><span class="line">running install_egg_info</span><br><span class="line">Writing build\bdist.win32\wininst\PURELIB\chardet-<span class="number">1.0</span><span class="number">.2</span>-py3<span class="number">.1</span>.egg-info</span><br><span class="line">creating <span class="string">&#x27;c:\users\pilgrim\appdata\local\temp\tmp2f4h7e.zip&#x27;</span> <span class="keyword">and</span> adding <span class="string">&#x27;.&#x27;</span> to it</span><br><span class="line">adding <span class="string">&#x27;PURELIB\chardet-1.0.2-py3.1.egg-info&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;PURELIB\chardet\big5freq.py&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;PURELIB\chardet\big5prober.py&#x27;</span></span><br><span class="line">...</span><br><span class="line">adding <span class="string">&#x27;PURELIB\chardet\universaldetector.py&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;PURELIB\chardet\utf8prober.py&#x27;</span></span><br><span class="line">adding <span class="string">&#x27;PURELIB\chardet\__init__.py&#x27;</span></span><br><span class="line">removing <span class="string">&#x27;build\bdist.win32\wininst&#x27;</span> (<span class="keyword">and</span> everything under it)</span><br><span class="line">c:\Users\pilgrim\chardet&gt; <span class="built_in">dir</span> dist</span><br><span class="line">c:\Users\pilgrim\chardet&gt;<span class="built_in">dir</span> dist</span><br><span class="line"> Volume <span class="keyword">in</span> drive C has no label.</span><br><span class="line"> Volume Serial Number <span class="keyword">is</span> AADE-E29F</span><br><span class="line"></span><br><span class="line"> Directory of c:\Users\pilgrim\chardet\dist</span><br><span class="line"></span><br><span class="line">07/<span class="number">30</span>/<span class="number">2009</span>  <span class="number">10</span>:<span class="number">14</span> PM    &lt;DIR&gt;          .</span><br><span class="line">07/<span class="number">30</span>/<span class="number">2009</span>  <span class="number">10</span>:<span class="number">14</span> PM    &lt;DIR&gt;          ..</span><br><span class="line">07/<span class="number">30</span>/<span class="number">2009</span>  <span class="number">10</span>:<span class="number">14</span> PM           <span class="number">371</span>,<span class="number">236</span> chardet-<span class="number">1.0</span><span class="number">.2</span>.win32.exe</span><br><span class="line">07/<span class="number">30</span>/<span class="number">2009</span>  06:<span class="number">29</span> PM           <span class="number">206</span>,<span class="number">440</span> chardet-<span class="number">1.0</span><span class="number">.2</span>.<span class="built_in">zip</span></span><br><span class="line">               <span class="number">2</span> File(s)        <span class="number">577</span>,<span class="number">676</span> <span class="built_in">bytes</span></span><br><span class="line">               <span class="number">2</span> Dir(s)  <span class="number">61</span>,<span class="number">424</span>,070,<span class="number">656</span> <span class="built_in">bytes</span> free</span><br></pre></td></tr></table></figure>
+<p>Distutils 也可以帮助你<a target="_blank" rel="noopener" href="http://docs.python.org/3.1/distutils/builtdist.html#creating-rpm-packages">为 Linux 用户构建可安装包</a> 。但这可能不值得你浪费时间。如果你希望在 Linux 中分发你的软件，你最好将时间花在与那些社区成员进行交流上，他们专门为主流 Linux 发行版打包软件。</p>
+<h2 id="将软件添加到-Python-安装包列表">将软件添加到 Python 安装包列表</h2>
+<p>上传软件到 Python 包索引需要三个步骤。</p>
+<ul>
+<li>注册你自己</li>
+<li>注册你的软件</li>
+<li>上传你通过 <a target="_blank" rel="noopener" href="http://setup.py">setup.py</a> sdist 和 <a target="_blank" rel="noopener" href="http://setup.py">setup.py</a> bdist_* 创建的包。</li>
+</ul>
+<p>要注册自己，访问 <a target="_blank" rel="noopener" href="http://pypi.python.org/pypi?:action=register_form">PyPI用户注册页面</a>。输入你想要的用户名和密码，提供一个有效的电子邮件地址，然后点击 Register 按钮。（如果你有一个 pgp 或 gpg 密钥，你也可以提供。如果你没有或者不知道这是什么意思，不用担心。）检查你的电子邮件，在几分钟之内，你应该会收到一封来自 PyPI 的包含验证链接的邮件。点击链接以完成注册过程。</p>
+<p>现在，你需要在PyPI注册你的软件并上传它。你可以用一步完成。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">c:\Users\pilgrim\chardet&gt; c:\python31\python.exe setup.py register sdist bdist_wininst upload  </span><br><span class="line">running register</span><br><span class="line">We need to know who you are, so please choose either:</span><br><span class="line"> 1. use your existing login,</span><br><span class="line"> 2. register as a new user,</span><br><span class="line"> 3. have the server generate a new password <span class="keyword">for</span> you (and email it to you), or</span><br><span class="line"> 4. quit</span><br><span class="line">Your selection [default 1]:  1                                                                 </span><br><span class="line">Username: MarkPilgrim                                                                          </span><br><span class="line">Password:</span><br><span class="line">Registering chardet to http://pypi.python.org/pypi                                             </span><br><span class="line">Server response (200): OK</span><br><span class="line">running sdist                                                                                  </span><br><span class="line">... output trimmed <span class="keyword">for</span> brevity ...</span><br><span class="line">running bdist_wininst                                                                          </span><br><span class="line">... output trimmed <span class="keyword">for</span> brevity ...</span><br><span class="line">running upload                                                                                 </span><br><span class="line">Submitting dist\chardet-1.0.2.zip to http://pypi.python.org/pypi</span><br><span class="line">Server response (200): OK</span><br><span class="line">Submitting dist\chardet-1.0.2.win32.exe to http://pypi.python.org/pypi</span><br><span class="line">Server response (200): OK</span><br><span class="line">I can store your PyPI login so future submissions will be faster.</span><br><span class="line">(the login will be stored <span class="keyword">in</span> c:\home\.pypirc)</span><br><span class="line">Save your login (y/N)?n                                                                        </span><br></pre></td></tr></table></figure>
+<h3 id="发布新版本">发布新版本</h3>
+<p>如果你想发布一个新版本，只需以新的版本号更新 <a target="_blank" rel="noopener" href="http://setup.py">setup.py</a> 文件，然后再一次运行相同的上传命令:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c:\Users\pilgrim\chardet&gt; c:\python31\python.exe setup.py register sdist bdist_wininst upload</span><br></pre></td></tr></table></figure>
+<h2 id="Python-打包工具的一些可能的将来">Python 打包工具的一些可能的将来</h2>
+<p>Python 还存在许多其他的框架，有的重在安装，有的重在测试，还有的重在部署：</p>
+<h4 id="以下框架重在安装">以下框架重在安装</h4>
+<p><a target="_blank" rel="noopener" href="http://pypi.python.org/pypi/setuptools">Setuptools</a>
+<a target="_blank" rel="noopener" href="http://pypi.python.org/pypi/pip">Pip</a>
+<a target="_blank" rel="noopener" href="http://bitbucket.org/tarek/distribute/">Distribute</a></p>
+<h4 id="以下框架重在测试和部署">以下框架重在测试和部署</h4>
+<p><a target="_blank" rel="noopener" href="http://pypi.python.org/pypi/virtualenv">virtualenv</a>
+<a target="_blank" rel="noopener" href="http://pypi.python.org/pypi/zc.buildout">zc.buildout</a>
+<a target="_blank" rel="noopener" href="http://www.blueskyonmars.com/projects/paver/">Paver</a>
+<a target="_blank" rel="noopener" href="http://fabfile.org/">Fabric</a>
+<a target="_blank" rel="noopener" href="http://www.py2exe.org/">py2exe</a></p>
+<h2 id="深入阅读">深入阅读</h2>
+<p><a target="_blank" rel="noopener" href="http://docs.python.org/3.1/distutils/">通过 Distutils 发布 Python 模块</a>
+<a target="_blank" rel="noopener" href="http://docs.python.org/3.1/distutils/apiref.html#module-distutils.core">核心发布功能</a> 列出了 setup() 函数的所有可能参数
+<a target="_blank" rel="noopener" href="http://wiki.python.org/moin/Distutils/Cookbook">Distutils食谱</a>
+<a target="_blank" rel="noopener" href="http://groups.google.com/group/django-developers/msg/5407cdb400157259">Python 打包生态系统</a>
+<a target="_blank" rel="noopener" href="http://www.b-list.org/weblog/2008/dec/14/packaging/">关于打包</a>
+<a target="_blank" rel="noopener" href="http://blog.ianbicking.org/2008/12/14/a-few-corrections-to-on-packaging/">对 “关于打包” 的几点纠错</a></p>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	
+		<li class="prev"><a data-pjax href="/wiki/python3-xml.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/python3-bpython.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '打包'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

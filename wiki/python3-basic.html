@@ -1,0 +1,1198 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>基础 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="逻辑行和物理行
+你所看到的代码中的行即为 物理行 ，而python将一条语言当作一个 逻辑行 。
+python假设一个物理行对应一个逻辑行。
+逻辑行的例子是形如print(&#39;Hello World&#39;)的单条语句，如果它独占一行(就象你在编辑器看到的)，那么它也是一个物理行。
+python本身鼓励每条">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="基础"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '基础'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 基础</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc', 2, 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="逻辑行和物理行">逻辑行和物理行</h2>
+<p>你所看到的代码中的行即为 <strong>物理行</strong> ，而python将一条语言当作一个 <strong>逻辑行</strong> 。</p>
+<p>python假设一个物理行对应一个逻辑行。</p>
+<p>逻辑行的例子是形如<code>print('Hello World')</code>的单条语句，如果它独占一行(就象你在编辑器看到的)，那么它也是一个物理行。</p>
+<p><strong>python本身鼓励每条语句占一行</strong> ，这样可读性更强。</p>
+<p>如果你希望在一个物理行包含多个逻辑行，则必须使用分号 <code>;</code> 显式一个逻辑行/语句的结束. 例，</p>
+<pre><code> i = 5
+ print(i)
+</code></pre>
+<p>与下面的等效</p>
+<pre><code> i = 5;
+ print(i);
+</code></pre>
+<p>这样写的效果也一样</p>
+<pre><code> i = 5; print(i);
+</code></pre>
+<p>甚至可以这样写</p>
+<pre><code> i = 5; print(i)
+</code></pre>
+<p>虽然有多种写法，但我强烈建议你一个物理行只包含一个逻辑行。不过当逻辑行太长，也可以把它写成多个物理行。</p>
+<p><strong>这些办法都是为了尽可能避免分号，使得代码的可读性更强。事实上我从不使用甚至都没在python程序中看到过分号</strong> 。</p>
+<p>下面是一个将逻辑行扩展为多个物理行的例子，它被称做 <em>显式行合并(explicit line joining)</em></p>
+<pre><code> s = 'This is a string. \
+ This continues the string.'
+ print(s)
+</code></pre>
+<p>相应的输出为:</p>
+<pre><code> This is a string. This continues the string.
+</code></pre>
+<p>与之类似的，</p>
+<pre><code> print\
+ (i)
+</code></pre>
+<p>相当于</p>
+<pre><code> print(i)
+</code></pre>
+<p>另外某些情况下会导致 <em>隐式行合并(implicit line joining)</em> ，比如逻辑行使用了大中小括号，此时无需反斜杠。</p>
+<p>在后面我们会使用列表编写程序，届时你会看到这种用法。</p>
+<h2 id="缩进">缩进</h2>
+<p>在python中空白字符是非常重要的，更具体的说是 <strong>每行开头的空白字符十分重要</strong> 。这被称作缩进。</p>
+<p>逻辑行开头的空白字符(空格和制表符tab)用于确定逻辑行的缩进级别，依此按顺序将语句分组。</p>
+<p>也就是说同组的语句<strong>必须</strong>拥有相同的缩进级别，而这些语句组被称作<strong>块</strong>。下一章我们会看到块的重要性。</p>
+<p>现在你需要牢记的是 <strong>错误的缩进会导致程序出错</strong>，举个例子:</p>
+<pre><code> i = 5
+  print('Value is ', i) #错误! 注意本行的开头多了一个空格.
+ print('I repeat, the value is ', i)
+</code></pre>
+<p>运行上面代码会得到下面的错误信息:</p>
+<pre><code> File &quot;whitespace.py&quot;, line 4
+ print('Value is ', i) # Error! Notice a single space at the start of the line
+    ^
+ IndentationError: unexpected indent
+</code></pre>
+<p>你可能注意到了程序的第2行的开头多了一个空格。错误信息告诉我们程序的语法是非法的，即程序的编写有问题。</p>
+<p>这也意味着你不能随便开始新的语句块(除了主块, 我们一直在主块内编写)。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  <strong>如何缩进</strong>
+<p>不要混合使用制表符和空格来缩进，因为这在跨越不同的平台的时候，无法正常工作。我 强烈建议 你在每个缩进层次使用 四个空格 或 单个制表符 。</p>
+<p>选择这两种缩进风格之一。更加重要的是，选择一种风格，然后一贯地使用它，即 只 使用这一种风格。</p>
+<p>关于空格和制表符的选择，可以参考 <a target="_blank" rel="noopener" href="http://www.zhihu.com/question/19960028">知乎上的讨论</a> 。</p>
+</div>
+<h2 id="单语句块">单语句块</h2>
+<p>我们已经看到每个语句块都根据它的缩进级别将彼此区分开。不过有一个例外。</p>
+<p>如果某语句块只包含单条语句，你可以把它放到同一行，例如条件语句或循环语句。</p>
+<p>下面的例子清楚的说明了这点：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; flag &#x3D; True</span><br><span class="line">&gt;&gt;&gt; if flag: print &#39;Yes&#39;</span><br><span class="line">...</span><br><span class="line">Yes</span><br></pre></td></tr></table></figure>
+<p>注意上面的单条语句被放置到同一行而没有作为单独的块。</p>
+<p>虽然你利用这点可以让程序变的更短，但我强烈建议你<strong>避免使用它(除了错误检测)</strong>，主要原因是使用适当的缩进可以更方便的添加额外的语句。</p>
+<h2 id="运算符和表达式">运算符和表达式</h2>
+<h3 id="运算符">运算符</h3>
+<p>我们将简单浏览一下运算符和它们的用法：</p>
+<h4 id="技巧">技巧</h4>
+<p>你可以交互地使用解释器来计算例子中给出的表达式。例如，为了测试表达式2 + 3，使用交互式的带提示符的Python解释器：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; 2 + 3</span><br><span class="line">5</span><br><span class="line">&gt;&gt;&gt; 3 * 5</span><br><span class="line">15</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>名称</th>
+<th>说明</th>
+<th>例子</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>+</code></td>
+<td>加</td>
+<td>两个对象相加</td>
+<td><code>3 + 5</code>得到<code>8</code>。<code>'a' + 'b'</code>得到<code>'ab'</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>-</code></td>
+<td>减</td>
+<td>得到负数或是一个数减去另一个数</td>
+<td><code>-5.2</code>得到一个负数。<code>50 - 24</code>得到<code>26</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>乘</td>
+<td>两个数相乘 <strong>或是</strong> 返回一个被重复若干次的字符串</td>
+<td><code>2 * 3</code>得到<code>6</code>。<code>'la' * 3</code>得到 <code>'lalala'</code> 。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>**</code></td>
+<td>幂</td>
+<td>返回x的y次幂 3</td>
+<td><code>\** 4</code>得到<code>81</code>（即<code>3 * 3 * 3 * 3</code>）</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>/</code></td>
+<td>除</td>
+<td>x除以y</td>
+<td><code>4 / 3</code> 得到 <code>1.3333333333333333</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>//</code></td>
+<td>取整除</td>
+<td>返回商的整数部分</td>
+<td><code>4 // 3</code>得到<code>1</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>%</code></td>
+<td>取模</td>
+<td>返回除法的余数</td>
+<td><code>8%3</code>得到<code>2</code>。<code>-25.5%2.25</code>得到<code>1.5</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>&lt;&lt;</code></td>
+<td>左移</td>
+<td>把一个数的向左移若干<strong>比特位</strong>（每个数在内存中都表示为比特或二进制数字，即0和1）</td>
+<td><code>2 &lt;&lt; 2</code>得到<code>8</code>。——<code>2</code>按比特表示为<code>10</code>，左位移两bit位后得到<code>1000</code>，十进制中表示为<code>8</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>&gt;&gt;</code></td>
+<td>右移</td>
+<td>把一个数的向右移若干<strong>比特位</strong></td>
+<td><code>11 &gt;&gt; 1</code> 得到<code>5</code>。——<code>11</code>按比特表示为<code>1011</code>，向右移动1比特后得到<code>101</code>，即十进制的<code>5</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>&amp;</code></td>
+<td>按位与</td>
+<td>数的按位与</td>
+<td><code>5 &amp; 3</code>得到1。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>|</code></td>
+<td>按位或</td>
+<td>数的按位或</td>
+<td><code>5 | 3</code>得到<code>7</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>按位异或</td>
+<td>数的按位异或</td>
+<td><code>5 ^ 3</code>得到6</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>~</code></td>
+<td>按位翻转</td>
+<td>x的按位翻转是-(x+1)</td>
+<td><code>~5</code>得到<code>6</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>&lt;</code></td>
+<td>小于</td>
+<td>返回x是否小于y。所有比较运算符返回布尔值True或False。请注意布尔值大小写敏感。</td>
+<td><code>5 &lt; 3</code>返回<code>False</code>，<code>3 &lt; 5</code>返回<code>True</code>。比较可以被任意连接，如<code>3 &lt; 5 &lt; 7</code>返回<code>True</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>&gt;</code></td>
+<td>大于</td>
+<td>返回x是否大于y</td>
+<td><code>5 &gt; 3</code>返回<code>True</code>。如果两个操作数都是数字，它们首先被转换为一个共同的类型。否则，它总是返回<code>False</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>&lt;=</code></td>
+<td>小于等于</td>
+<td>返回x是否小于等于y</td>
+<td><code>x = 3; y = 6; x &lt;= y</code>返回<code>True</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>&gt;=</code></td>
+<td>大于等于</td>
+<td>返回x是否大于等于y</td>
+<td><code>x = 4; y = 3; x &gt;= y</code>返回<code>True</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>==</code></td>
+<td>等于</td>
+<td>比较对象是否相等</td>
+<td><code>x = 2; y = 2; x == y</code>返回<code>True</code>。<code>x = 'str'; y = 'stR'; x == y</code>返回<code>False</code>。<code>x = 'str'; y = 'str'; x == y</code>返回<code>True</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>!=</code></td>
+<td>不等于</td>
+<td>比较两个对象是否不相等</td>
+<td><code>x = 2; y = 3; x != y</code>返回<code>True</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>not</code></td>
+<td>布尔“非”</td>
+<td>如果x为True，返回False。如果x为False，它返回True。</td>
+<td><code>x = True; not x</code>返回<code>False</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>and</code></td>
+<td>布尔“与”</td>
+<td>如果x为False，x and y返回False，否则它返回y的计算值。</td>
+<td><code>x = False; y = True; x and y</code>，由于x是<code>False</code>，返回<code>False</code>。在这里，Python不会计算y，因为它知道这个表达式的值肯定是<code>False</code>（因为x是False）。这个现象称为<strong>短路计算</strong>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>or</code></td>
+<td>布尔“或”</td>
+<td>如果x是True，它返回True，否则它返回y的计算值。</td>
+<td><code>x = True; y = False; x or y</code>返回<code>True</code>。短路计算在这里也适用。</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="注意">注意</h4>
+<ol>
+<li>还有 <code>is</code> 与 <code>is not</code> 这两个身份操作符，可用于检测两个对象的引用是否引用了同一个对象——在检测内置的None对象时，这两个操作符尤其有用。</li>
+<li>Python 支持标准的逻辑操作符 <code>and</code>、<code>or</code>、与<code>not</code>。<code>and</code>与<code>or</code>都是“短路”操作符，返回的是<strong>决定结果的操作数</strong>——这可能并非布尔类型值（尽管可以转换为布尔类型值）。<code>not</code>总是返回<code>True</code>或者<code>False</code>。例如：</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">4</span> <span class="keyword">and</span> <span class="number">5</span></span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">4</span> <span class="keyword">or</span> <span class="number">5</span></span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">not</span> <span class="number">5</span></span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">not</span> <span class="number">1</span></span><br><span class="line"><span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>Python 运行一次性进行多次比较，例如：</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>n = <span class="number">5</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">0</span> &lt; n &lt; <span class="number">10</span></span><br><span class="line"><span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<h3 id="操作符优先级">操作符优先级</h3>
+<p>从低到高排序：</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lambda</code></td>
+<td>Lambda表达式</td>
+</tr>
+<tr>
+<td><code>or</code></td>
+<td>布尔“或”</td>
+</tr>
+<tr>
+<td><code>and</code></td>
+<td>布尔“与”</td>
+</tr>
+<tr>
+<td><code>not x</code></td>
+<td>布尔“非”</td>
+</tr>
+<tr>
+<td><code>in</code>，<code>not in</code></td>
+<td>成员测试</td>
+</tr>
+<tr>
+<td><code>is</code>，<code>is not</code></td>
+<td>同一性测试</td>
+</tr>
+<tr>
+<td><code>&lt;</code>，<code>&lt;=</code>，<code>&gt;</code>，<code>&gt;=</code>，<code>!=</code>，<code>==</code></td>
+<td>比较</td>
+</tr>
+<tr>
+<td><code>|</code></td>
+<td>按位或</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>按位异或</td>
+</tr>
+<tr>
+<td><code>&amp;</code></td>
+<td>按位与</td>
+</tr>
+<tr>
+<td><code>&lt;&lt;</code>，<code>&gt;&gt;</code></td>
+<td>移位</td>
+</tr>
+<tr>
+<td><code>+</code>，<code>-</code></td>
+<td>加法与减法</td>
+</tr>
+<tr>
+<td><code>*</code>，<code>/</code>，<code>%</code></td>
+<td>乘法、除法与取余</td>
+</tr>
+<tr>
+<td><code>+x</code>，<code>-x</code></td>
+<td>正负号</td>
+</tr>
+<tr>
+<td><code>~x</code></td>
+<td>按位翻转</td>
+</tr>
+<tr>
+<td><code>**</code></td>
+<td>幂</td>
+</tr>
+<tr>
+<td><code>x.attribute</code></td>
+<td>属性参考</td>
+</tr>
+<tr>
+<td><code>x[index]</code></td>
+<td>下标</td>
+</tr>
+<tr>
+<td><code>x[index:index]</code></td>
+<td>寻址段</td>
+</tr>
+<tr>
+<td><code>f(arguments...)</code></td>
+<td>函数调用</td>
+</tr>
+<tr>
+<td><code>(experession,...)</code></td>
+<td>绑定或元组显示</td>
+</tr>
+<tr>
+<td><code>[expression,...]</code></td>
+<td>列表显示</td>
+</tr>
+<tr>
+<td><code>&#123;key:datum,...&#125;</code></td>
+<td>字典显示</td>
+</tr>
+<tr>
+<td><code>'expression,...'</code></td>
+<td>字符串转换</td>
+</tr>
+</tbody>
+</table>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  <strong>算术运算次序记忆秘诀</strong>： <strong>PEMDAS</strong> - 括号（<strong>P</strong>arentheses） &gt; 幂（<strong>Exponents</strong>） &gt; 乘除（<strong>M</strong>ultiplication, <strong>D</strong>ivision） &gt; 加减（<strong>A</strong>ddition, <strong>S</strong>ubstration）
+</div>
+<h4 id="计算顺序">计算顺序</h4>
+<p>默认地，运算符优先级表决定了哪个运算符在别的运算符之前计算。然而，如果你想要改变它们的计算顺序，你得使用圆括号。例如，你想要在一个表达式中让加法在乘法之前计算，那么你就得写成类似<code>(2 + 3) * 4</code>的样子。</p>
+<h4 id="结合规律">结合规律</h4>
+<p>运算符通常由左向右结合，即具有相同优先级的运算符按照从左向右的顺序计算。例如，2 + 3 + 4被计算成(2 + 3) + 4。一些如赋值运算符那样的运算符是由右向左结合的，即<code>a = b = c</code>被处理为<code>a = (b = c)</code>。</p>
+<h3 id="表达式">表达式</h3>
+<p>例子:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: expression.py</span></span><br><span class="line"></span><br><span class="line">length = <span class="number">5</span></span><br><span class="line">breadth = <span class="number">2</span></span><br><span class="line"></span><br><span class="line">area = length * breadth</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Area is&#x27;</span>, area)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Perimeter is&#x27;</span>, <span class="number">2</span> * (length + breadth))</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ python expression.py</span><br><span class="line">Area is 10</span><br><span class="line">Perimeter is 14</span><br></pre></td></tr></table></figure>
+<h4 id="工作原理">工作原理</h4>
+<p>矩形的长与宽存储在同名变量中。我们通过计算面积与周长的表达式得出这两个值。我们将表达式<code>length * breadth</code>的值存储在变量<code>area</code>中，并使用<code>print</code>函数打印变量值。在第二种情况中，我们直接使用<code>print</code>函数打印表达式<code>2 * (length + breadth)</code>的值。</p>
+<p>另外注意一下输出：即便我们没有专门在<code>'Area is'</code>与变量<code>area</code>中加入空格，Python仍美观地打印出了此输出。Python自动为我们生成了一个漂亮的输出格式并因此令程序更可读：我们不需要担心输出字符串中的空格。这是另一个Python简化程序员工作的例子。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  <strong>伟洲注</strong>：这也是逗号<code>,</code>和加号<code>+</code>用于连接字符串的区别，加号只会直接连接两字符串，不会进行空格的检测和处理。
+</div>
+<h2 id="编码方式">编码方式</h2>
+<p>Python 2 里，.py文件默认的编码方式为ASCII。而Python 3 的源码的默认编码方式为UTF‐8。</p>
+<p>如果想使用一种不同的编码方式来保存 Python 代码,我们可以在每个文件的第一行（或者hash-bang下）放置编码声明(encoding declaration)：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: &lt;encoding name&gt; -*-</span></span><br></pre></td></tr></table></figure>
+<p>了解更多信息，可以参阅 <a target="_blank" rel="noopener" href="http://www.python.org/dev/peps/pep-0263/">PEP 263: 指定Python源码的编码方式</a> 。</p>
+<h2 id="对象引用">对象引用</h2>
+<p>当你创建一个对象并将其赋给一个变量的时候，变量只是引用了这个对象，而变量并不代表这个对象本身！</p>
+<p>换言之，变量名指向你的计算机内存的一部分，而这部分内存用于存储实际的对象。这叫做<strong>名字到对象的绑定</strong>。</p>
+<p>通常你不用关心这些，但你应该知道由于引用造成的一些微妙的影响。</p>
+<h4 id="示例">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: reference.py</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Simple Assignment&#x27;</span>)</span><br><span class="line">shoplist = [<span class="string">&#x27;apple&#x27;</span>, <span class="string">&#x27;mango&#x27;</span>, <span class="string">&#x27;carrot&#x27;</span>, <span class="string">&#x27;banana&#x27;</span>]</span><br><span class="line">mylist = shoplist <span class="comment"># mylist只是指向相同对象的另一个名字</span></span><br><span class="line"><span class="keyword">del</span> shoplist[<span class="number">0</span>] <span class="comment"># 我购买了第一个水果，所以把它从清单中删除</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;shoplist is&#x27;</span>, shoplist)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;mylist is&#x27;</span>, mylist)</span><br><span class="line"><span class="comment"># 注意列表shoplist和mylist打印了相同的内容，其中都不包括&#x27;apple&#x27;，因为它们指向的是相同的对象。</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Copy by making a full slice&#x27;</span>)</span><br><span class="line">mylist = shoplist[:] <span class="comment"># 以全切片创造一个列表的完整拷贝</span></span><br><span class="line"><span class="keyword">del</span> mylist[<span class="number">0</span>] <span class="comment"># 删除第一个元素</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;shoplist is&#x27;</span>, shoplist)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;mylist is&#x27;</span>, mylist)</span><br><span class="line"><span class="comment"># 注意现在两个列表指向不同的对象（注：回忆一下，切片操作会返回一个新的对象！）</span></span><br></pre></td></tr></table></figure>
+<h4 id="输出">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ python reference.py</span><br><span class="line">Simple Assignment</span><br><span class="line">shoplist is [<span class="string">&#x27;mango&#x27;</span>, <span class="string">&#x27;carrot&#x27;</span>, <span class="string">&#x27;banana&#x27;</span>]</span><br><span class="line">mylist is [<span class="string">&#x27;mango&#x27;</span>, <span class="string">&#x27;carrot&#x27;</span>, <span class="string">&#x27;banana&#x27;</span>]</span><br><span class="line">Copy by making a full slice</span><br><span class="line">shoplist is [<span class="string">&#x27;mango&#x27;</span>, <span class="string">&#x27;carrot&#x27;</span>, <span class="string">&#x27;banana&#x27;</span>]</span><br><span class="line">mylist is [<span class="string">&#x27;carrot&#x27;</span>, <span class="string">&#x27;banana&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<h4 id="说明">说明</h4>
+<p>记住，如果你想创建一个诸如列表这样的序列或复杂对象(不是象整数那样的简单对象)的拷贝，必须使用切片操作（也可以是用copy函数）。</p>
+<p>如果你只是简单的用变量名指向另一个变量名，两者实际上将引用相同的对象，如果你不注意这点将会招来麻烦！</p>
+<h2 id="补充资料">补充资料</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://docs.python.org/2/reference/simple_stmts.html">Simple statements</a></li>
+</ol>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/python3-oop.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/python3-closure.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '基础'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

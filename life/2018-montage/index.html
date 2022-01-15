@@ -1,0 +1,1097 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2018 蒙太奇 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="以 montage 的形式，回顾我的 2018 年。本文所有内容仅代表个人观点，与雇主无关。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="2018 蒙太奇"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '2018 蒙太奇'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 2018 蒙太奇</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>以 montage 的形式，回顾我的 2018 年。本文所有内容仅代表个人观点，与雇主无关。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <p>眨眼就到了 2019 年了，每年这个时候我都在纠结要不要写点什么。纠结的原因是：如果今年开了个头，那就相当于欠下一笔技术债，那么以后的每年都应该坚持写一篇总结，而我又是一个很怕欠债的人。今年我决定停止纠结：一来觉得自己已经到而立之年了，想做的事情就该放手去做。二来总结首先是写给自己看的，每年年底好好写份总结，有助于回顾自己这一年的心路历程，也能及时发现自己这一年有哪些不足，有则改之无则加勉。三来如果能坚持写下去的话，等老了的时候，回过头来看每一年的回顾，应该会有更深的感触吧。Anyway，既然是有益的债务，那还是值得去背负的。</p>
+<p>2018 年依旧是比较充（mang）实（lu）的一年，这一年我完成了买房大计，开始在 GMTC 这类的技术会议上做分享交流，开始带团队，首次挑战并完成了一次鹅厂的技术通道答辩，开始尝试担任腾讯课堂的讲师对外授课……收获颇丰。与之相对应的也有一些失去，包括一段还没来得及开始就匆匆结束的感情。</p>
+<p>为了避免把总结写得太过于流水账，我想把总结拆成几个主题来回顾：正经事（工作、开源、博客、授课），不正经事（乐器、旅行、游戏、锻炼、看书、感情）。</p>
+<span id="more"></span>
+<h2 id="正经事">正经事</h2>
+<p>先说说正经事吧。</p>
+<h3 id="工作">工作</h3>
+<p>在去年我写了一篇<a href="/work/my-2-years-at-pingan/">在平安两年的总结</a>后，很多朋友都知道我跑来腾讯开发智能硬件了。我们做的这款产品叫做<a target="_blank" rel="noopener" href="https://qrobot.qq.com/">小Q机器人二代</a>。我刚来的时候，这个音箱其实已经开发得差不多了。恰好管理端没人维护，所以我就充当救火队员的角色接手了后台管理端的维护，并且为它开发了一套热更新系统，用于给智能硬件升级技能。另外为了提升闲聊对话的质量，我又写了一个闲聊优化平台，用于评估闲聊的对话质量。作为一个安卓开发工程师，我也负责做了一个系统应用的UI重构工作。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/qrobot.png" alt="小Q机器人二代" />
+        <figcaption>小Q机器人二代</figcaption>
+      </figure>
+    </p>
+<p>到了去年 10 月份，我们又多了一个新项目的机会：ABCmouse 腾讯版。ABCmouse 是一个在美国家喻户晓的儿童英语教育软件。我们与 ABCmouse 的研发公司 Age of Learning 公司开展了战略合作，以期开发出一款针对中国儿童的英语学习应用。我们希望它能提供更符合中国儿童使用习惯的学习路径和交互方式，并在里头融入腾讯的社交元素，从而带动儿童外语学习的积极性。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/cocos-based-high-performance-cross-platform-app-developing/abcmouse-tencent.png" alt="ABCmouse 腾讯版" />
+        <figcaption>ABCmouse 腾讯版</figcaption>
+      </figure>
+    </p>
+<p>当时在团队里头可以选择是否继续维护小Q机器人或者选择开发新项目，出于对教育这个方向的看好以及对从零开始开展一个新项目的兴奋感，我选择了后者。在那个时候，我们的开发人力算上 Jolt （我的 leader） 总共只有 4 个人，大家聚在一个小黑屋里就动手干了起来。在刚开始的阶段，因为没有后台，我也负责做了一些后台的工作。不过在大厂工作有个很重要的点：很多时候你要做的事情别人已经做过，这时候发现并且充分利用好已有轮子的能力就显得非常重要。作为一个客户端开发，要立马做到充分用好公司里的后台轮子，并且把美国团队已有的服务迁过来并和公司的整套框架轮子顺利对接，对我的挑战非常大。幸运的是 Jolt 也知道我一个人搞非常吃力，过了不久就安排了后台组的人力支持，紧接着前端也有同事加入到这个项目中。队伍越来越壮大，我就终于可以回归老本行搞起客户端的开发了。</p>
+<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=http://hahack-1253537070.file.myqcloud.com/images/darkroom.jpeg alt=' 小黑屋时期的工位。虽然通风不好，但窗外的风景很好。'></img><b>附图 1</b>  小黑屋时期的工位。虽然通风不好，但窗外的风景很好。</span></span></span>
+<p>虽然说是回归老本行，但正好遇到小Q机器人即将发布，所以我依然要经常抽身去支持小Q机器人的后台管理端维护和开发工作。一边搞A项目的客户端，一边搞B项目的后台，工作内容也变得很分裂。最坑的是有台小Q的 COS 服务器因为长期欠费，在某一天突然被回收，所以我只能到合作账户下购买新机器然后把 COS 服务迁移了一遍。但马上我又发现后台管理端所有 COS 的 SDK 都需要升级到新版本，相应的所有接口都得重写。恰好那时开发 ABCmouse 也陷入了跨平台的坑：开发一个音乐播放器的时候，Web 端和 Android 端调试都没问题，结果到了转体验的时候发现原来 iOS 端播放不了。于是那天晚上为了保证顺利转体验拉着 Nasky 调到凌晨五点才算解决。而为了避免影响小 Q 发布，第二天又自带鸡血地跑来搞 SDK 接口升级。大概是因为长时间处于比较高负荷而分裂的状态，有段期间脾气变得暴躁了起来，加上感情失意和我妈生病住院的双重打击，于是有一次因为控制不住脾气还向 Jolt 发了火。而 Jolt 也发现了我那段期间状态不太对，心平气和地把我拉去聊了下情绪控制的问题。现在想起来我真要非常谢谢他那次的警醒，我也因为那一次教训而更加意识到职场上的合作问题。</p>
+<p>当然，那段期间不止我一个人很忙碌，大家就像一个创业团队一样在拼搏。最有意思的是，小黑屋里的空气比较差，分坐我两边的 Jolt 和 Xepher 都患上了鼻炎，于是一个打完喷嚏另一个接着打，而且似乎可以无限循环下去……In one word，在小黑屋里头发生了不少故事。</p>
+<p>说说在腾讯的感受吧，刚从平安跳去腾讯的时候就和刚从百度跳去平安一样有着很大的落差。从百度到平安，工作节奏一下子放慢了下来，我花了挺长时间才适应没有高负荷工作带来的不踏实感（适应办法就是自己给自己找活干）。从平安来到腾讯，又自愿加入了一个初创团队，工作节奏一下子又上去了，Jolt 一开始还怕我适应不来。所幸自己在平安期间其实也没有闲过，过来这边依然能打。接手的活都能够如期交付，没有出现过 delay 的情况，并且还主动扛下了一些边界模糊的工作：比如通用组件的梳理和完善，或是一些有助于提高日常开发效率的工具开发以及流程优化措施。手上的包袱多了，自然而然就从一个打杂维护后台的客户端慢慢成为团队里的骨干了。</p>
+<p>总的而言腾讯的工作氛围的确是非常好的。刚入职的时候，负责培训的小姐姐问我知道腾讯里面什么最多，我故作肤浅地回答了一个字“钱”。她笑着说其实是公仔和文化T-shirt。在腾讯待这一年半下来，果然是通过各种渠道领了非常多的公仔和 T-shirt 。特别是到了司庆或者项目庆功宴的时候，穿上统一的 T-shirt 马上就成为朋友圈爆款。初此之外，腾讯里头还有许多贴心的福利，人文关怀做得相当不错。我更喜欢的是公司的内网建设，员工对公司内的大小事务有任何不满，真的可以直接在内网发声，而不用担心被打击报复。有这样的平台让大家 speak out ，员工也会真正得到一种被 respect 的感觉，从而也会更有主人翁意识。相比之下，在平安大家就显得比较拘谨，即使我给团队内部搭了一个<q>壹瓴阁</q>论坛让大家自由发言，还找上老大拨巨款鼓励多发帖，最后这个站点依然只停留在发技术文和征婚贴的地方（我甚至还给发征婚贴的同事颁发过奖金 😹）。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/prize.jpg" alt="在腾讯里的各种小福利" />
+        <figcaption>在腾讯里的各种小福利</figcaption>
+      </figure>
+    </p>
+<p>到了今年三月份，ABCmouse 终于发布了第一版。当晚我们很兴奋的聚在一起留了一张照。ABCmouse 也是我亲身参与并从零到一完成的第一个初创项目。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/release_v1.jpg" alt="ABCmouse发布" />
+        <figcaption>ABCmouse发布</figcaption>
+      </figure>
+    </p>
+<p>因为在整个过程中承担了比较多的工作，到了 6 月份，在 Jolt 和 Hebert 的推荐下，我代表团队去参加了今年的 <a target="_blank" rel="noopener" href="https://gmtc.geekbang.org/">GMTC 全球移动技术大会</a>，分享了<a href="/codes/cocos-based-high-performance-cross-platform-app-developing/">团队在整个项目开发过程中积累的一些经验</a>。在 GMTC 上遇到了很多前同事和老朋友，交谈之下发现大家过的都挺不错。当然还认识了不少志同道合的新朋友。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/friends.jpg" alt="新老朋友" />
+        <figcaption>新老朋友</figcaption>
+      </figure>
+    </p>
+<p>我也因为这段期间的工作表现拿到了一面小锦旗以及两块砖头。说到奖励，相比平安随便一个小奖就有奖杯拿，腾讯的各种奖项的纪念物显得格外朴素。季度奖发小旗子，四五星则是发一块砖。目前我只见到 Jolt 升 T4 的时候获得了 Ross 亲授的一个奖杯。这带来的好处是奖杯的含金量也因此显得很高的样子（至少短期来看我没机会拿到啦）。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/prizes.png" alt="一年下来拿到的若干奖项" />
+        <figcaption>一年下来拿到的若干奖项</figcaption>
+      </figure>
+    </p>
+<p>从 GMTC 回来后，团队发生了剧变。在一次团队聚餐上，Jolt 突然宣布即将升迁去另外一个部门当任总监，并安排我和 Xiangwen 代为管理好这支团队。虽然在这之前 Jolt 已经拉过我和 Xiangwen 大致说过后续的规划，但这个决定依然来得非常突然。于是从 7 月份开始，我的身份又一下子从一个普通骨干变成了团队的负责人。</p>
+<p>对我而言，带团队从来就不是一件轻松的事情，我自己仅有的一点管理经验只是在大学期间担任过班长和校学生会网络部的部长。那个时候为了管好团队，看了不少管理相关的书。我比较欣赏的是一本叫做《领导沟通力》上提倡的观点：它简单粗暴地把领导力分成四个象限：</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/leadership.png" alt="领导沟通力4象限" />
+        <figcaption>领导沟通力4象限</figcaption>
+      </figure>
+    </p>
+<ul>
+<li><strong>Q1：控制+随和型</strong> 。一方面对团队有足够的控制力，另一方面个性随和。这种领导往往是最容易做出稳定成效的类型。</li>
+<li><strong>Q2：随和+顺从型</strong> 。这种领导能和下级打成一片，但因为缺乏控制，管理过于松散，团队效率也很低。</li>
+<li><strong>Q3：顺从+敌意型</strong> 。这种领导既缺乏足够的控制力，又总是期望用苛责训斥来寄希望于提高团队产出。这种领导往往容易带出最低效的团队。</li>
+<li><strong>Q4：控制+敌意型</strong> 。这种领导能保持很强的控制力，做事雷厉风行，对下级也非常严格，喜欢通过训斥责备的手段来迫使下级达到自己期望的要求。这种领导往往能在短期内做出成效，但长期以往容易因为团队流动性变大或者员工更加消极进而导致团队产出降低。</li>
+</ul>
+<p>Q1 毫无疑问就是最理想的领导风格。因为这个观点简单有效，所以我在日常管理团队的时候总是暗自告诫自己既要能保持随和也要能维持足够的控制。但这只是一个基本的要求。具体到要做好一个开发岗的 leader ，控制力又体现到了技术驱动能力、决策能力、对风险的嗅觉、对下级成长的关注、上下级沟通能力等方方面面。所以说做好 leader 也是一个永远都学不完的学问。前阵子看到内网上有人在问 “什么样的leader才是称职的leader” ，有一个观点我非常赞同，也希望自己能往这方面努力：</p>
+<blockquote>
+<p>A boss uses people but leader develops people. A boss issues ultimatums but leader generates enthusiasm. A boss says “I” but leader says “we”. A boss takes credit but leader gives credit. A boss says “go” but leader says “Let’s go”. A boss make followers but leader makes leaders.</p>
+</blockquote>
+<p>开始带团队后还有一个变化就是感觉自己的时间更不够用了。以前虽然手里的需求更多，但毕竟有足够的 buffer 可以专心去完成。现在虽然花主要时间要用来带团队，但是依然希望自己能保持在开发前线，带着团队往前冲，所以每个版本都会给自己留一些需求去做。但实际操作下来，每周正常工作时间基本都被各种大大小小的会议给占满了，真正留给自己做需求的时间少得可怜，并且非常零散，恢复断点的成本随之变得很高。Seek 也看出了我的捉襟见肘，提醒我应该把握好自己的工作量，不要只顾着往前冲结果带头战死沙场。我现在也尽量避免给自己分配太多简单而琐碎的（trivial）的需求。一些一目了然知道怎么做的需求，我一般会交代给其他人去执行，而我所需要做的是跟他说清楚方案。而对于足够复杂的需求，我会思考这个活是不是最适合给我做。如果有更适合的人选，我会优先选择他去完成，但他需要跟我说清楚方案。</p>
+<p>到了年底的时候，回顾了一下这半年期间和 Xiangwen 一起带着团队做过的一些技术优化工作，以及在流程措施、代码质量、效率提升上做的改进，对整个团队的战斗力还是有点小自豪的（部分细节不便公开，所以做了删减）：</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/improvement.png" alt="下半年做过的技术优化" />
+        <figcaption>下半年做过的技术优化</figcaption>
+      </figure>
+    </p>
+<p>不过仅靠技术优化并不能保证产品能持久的做下去，技术也并非产品的第一推动力。Jolt 也私下批评过我太容易陷入对当前状态的满足。细细回想了一下我确实有这样的问题。明年除了做好技术优化，我还需要思考怎么跳出目前的边界，去推动产品往一个更好的方向发展，而不要轻易陷入满足。</p>
+<h3 id="开源">开源</h3>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/2018-github.png" alt="2018年的格子图" />
+        <figcaption>2018年的格子图</figcaption>
+      </figure>
+    </p>
+<p>因为工作比较忙碌的关系，整个 2018 年的格子数比起 2017 年少了很多，不过我也没有对涂满格子数有太深的执念。</p>
+<p>今年主要开源/维护了几个项目：</p>
+<table>
+<thead>
+<tr>
+<th>项目名</th>
+<th>简介</th>
+<th>今年的工作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="/codes/dingdang-robot-intro/">dingdang-robot</a></td>
+<td>开源的中文智能音箱项目</td>
+<td>社区化建设</td>
+</tr>
+<tr>
+<td><a href="/work/introducing-beamerstyleslides/">BeamerStyleSlides</a></td>
+<td>Beamer风格的幻灯片模板集，尤其适用于晋升述职、技术分享和学术汇报。</td>
+<td>新开源</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/wzpan/LiveCV">LiveCV</a></td>
+<td>可视化简历生成器，能抓取你的 Github 数据并生成精美的 PDF 格式简历</td>
+<td>业余开发中，未完整开源</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search">hexo-generator-search</a></td>
+<td>用于为 Hexo 生成本地搜索索引</td>
+<td>若干 bugfix，并支持忽略索引指定文章。</td>
+</tr>
+<tr>
+<td><a href="/codes/comment-js/">comment.js</a></td>
+<td>一个纯JS实现的静态站点评论系统</td>
+<td>若干 bugfix，特别是解决了 recent comment list 在不同浏览器展示效果不一致的问题。</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/CSIGer/cocos-jsc-endecryptor">cocos-jsc-endecryptor</a></td>
+<td>指导我的徒弟 khan 做的一个 Cocos Creator jsc 加解密工具。</td>
+<td>新开源</td>
+</tr>
+</tbody>
+</table>
+<p>dingdang-robot 在今年的一月份 star 数就已经超过了 1k，第三方插件数量超过了我自己提供的插件的两倍。过了不久 QQ 群用户也超过了 500 人，于是被逼着办了个 QQ 超级 VIP 升级成千人大群。</p>
+<p>在 QQ 群里经常能看到有一些用户拿 dingdang-robot 做出了很多有意思的应用。在淘宝上还看到有人在卖 dingdang-robot 和魔镜的结合品。六月份的时候了个 flag：当 dingdang-robot 的入群收入达到一万时将全部捐出给深圳壹基金等公益机构。半年过去了，现在看这个小目标已经达成了一半。</p>
+<p>不过，因为自己的业余时间比较少，而调试和维护 dingdang-robot 又很依赖硬件，有时候为了复现用户的问题，折腾起来非常耗时。看到项目上积压了一堆的 issues 没有去解，心里就觉得实在过意不去。所以在今年 3 月份我就将 wzpan/dingdang-robot 的代码迁移到了 dingdang-robot/dingdang-robot ，由更多的人一起维护。到了年底，dingdang-robot/dingdang-robot 和 wzpan/dingdang-robot 两个仓库的 star 数加起来已经超过了 2k 。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/dingdang-robot-montage.jpg" alt="dingdang-robot" />
+        <figcaption>dingdang-robot</figcaption>
+      </figure>
+    </p>
+<p>在春节期间，闲来无事又写了一个面向工程师的可视化简历生成器 LiveCV ，底层渲染器基于LaTeX，用YAML简化了LaTeX的语法，并且提供了一个可视化的编辑界面。<a target="_blank" rel="noopener" href="http://xn--web-f03ejfu74r.py">后台用web.py</a>，前端现学现卖用vue.js，用Docker包装镜像。亮点在于：</p>
+<ol>
+<li>渲染器可继承和定制，也就可以实现各种新的主题样式。</li>
+<li>支持动态拉取Github上的贡献数据加进简历中，为此我提供了一个 <code>$stars</code> 宏和一个 <code>$forks</code> 宏。</li>
+<li>还借鉴了Git的钩子思想，可以写钩子在渲染的各个阶段定制流程，通过钩子的灵活应用，可以弥补YAML过于简单的问题。</li>
+</ol>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/livecv.jpeg" alt="LiveCV" />
+        <figcaption>LiveCV</figcaption>
+      </figure>
+    </p>
+<p>目前这个项目进度大概是 80% ，还剩多用户、权限管理以及多语言支持没有完成。体验地址：<a target="_blank" rel="noopener" href="http://livecv.hahack.com:8021">http://livecv.hahack.com:8021</a> 。</p>
+<p>这是一份渲染出来的简历效果：</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/wukong.png" alt="LiveCV example" />
+        <figcaption>LiveCV example</figcaption>
+      </figure>
+    </p>
+<br/>
+<p>7 月初参与了一次鹅厂的技术通道晋升答辩，在准备 slides 的时候苦于没有找到一个简洁实用的 PPT 模板，于是仿照着 Beamer 做了一份 PPT 模板，后来干脆搞成了个开源项目 <a href="/work/introducing-beamerstyleslides/">BeamerStyleSlides</a> ，对大部分 Beamer 的模板主题进行复刻。这套模板的介绍文章上了公司内网的头条，获得了两百多个同事的收藏。</p>
+<p>
+      <figure>
+        <img src="https://raw.githubusercontent.com/wzpan/BeamerStyleSlides/master/preview/tile.png" alt="BeamerStyleSlides" />
+        <figcaption>BeamerStyleSlides</figcaption>
+      </figure>
+    </p>
+<p>自从开始带团队后，我更加珍惜业余时间动手做开源项目的机会。工作上处理技术需求的时候，如果脑海里已经有了个基本方案，我就更倾向于交给其他人去替我执行这个方案。但如果长期不注重细节实现，那么自己的动手能力就会下降。所以业余时间自己动手做点开源项目就是一个很好的避免眼高手低的方式，在做 prototype 实现自己的想法的时候，尽量给自己树立一个高标准，push 自己去达成自己的要求，并且在尽可能短的时间里实现出来 80% 的功能（以免自己三分钟热度过去就不想做了）。偶尔这样折磨一下自己，也会有很不错的收获。</p>
+<h3 id="博客">博客</h3>
+<p>博客基本是处于荒废状态：今年一共就发了三篇博客。</p>
+<p>我比较反感把网上随便一搜就能找到的知识点加工后写进自己的博客中，如果这么做了，我充其量只是沦为了一个知识的搬运工。所以对于自己的博客，我向来是宁缺毋滥，只写原创的内容。</p>
+<p>虽然自己的博客是荒废了，但我在公司内网上反而变得很高产。因为工作中就能产出非常多的原创内容，所以大概就是把写博客的习惯迁移到了内网里头。</p>
+<p>在这一年半里我一共在内网写了 27 篇文章。所以遇到部门文章数排名的时候，我往往都是处于遥遥领先的位置：</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/rank.png" alt="排名" />
+        <figcaption>排名</figcaption>
+      </figure>
+    </p>
+<p>因为分享比较勤快，也偶尔能有几篇文章登上内网的头条，所以在鹅厂一年半的时间里，我的内网影响力已经超过了 96% 的同事。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/influence.png" alt="KM影响力" />
+        <figcaption>KM影响力</figcaption>
+      </figure>
+    </p>
+<h3 id="授课">授课</h3>
+<p>严格意义上对外授课并不能算工作本分内的事情。不过既然选择了教育这个行业，所以除了开发教育App之外，制作课程对外分享也就变成了对自己所处的这个大行业的一个积极探索和实践。<a target="_blank" rel="noopener" href="https://www.ageoflearning.com/about-us/#leadership">Jerry</a> 说 Age of Learning 公司在招聘的时候，会首先考察的就是这个人对教育这个行业有没有热情。我也非常认同将行业方向当作择业的第一标准。多参与行业内的不同形式的实践，反过来也能够提升我对这个行业的投入积极性和洞察能力。所以我也把授课列入“正经事”这个大分类里头。</p>
+<p>在公司内，有一个做对外课程的平台，叫做<a target="_blank" rel="noopener" href="https://ke.qq.com">腾讯课堂</a>。如果收到腾讯课堂的邀请，只要我有信心能讲好，我都会尽量给予支持。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/education.jpeg" alt="腾讯的教育产业链" />
+        <figcaption>腾讯的教育产业链</figcaption>
+      </figure>
+    </p>
+<p>因为我们是最早一批使用 Cocos Creator 开发微信小游戏的团队，所以 6 月份我第一次收到了腾讯课堂的邀请，让我作为主要负责人来制作一套关于小游戏开发的课程，叫做《<a target="_blank" rel="noopener" href="https://ke.qq.com/course/326820?tuin=1b8113f4">微信小游戏入门与实战</a>》。</p>
+<p>收到这个任务的时候，心情大概是兴奋和焦虑并存：兴奋是因为看了多年的 Udacity 等线上课程，没想到自己也有机会成为一个公开课程的讲师（而且课酬也挺给力 😄 ）；焦虑是因为这相当于又欠了一笔技术债，而我平时的工作已经很忙了，担心因为业余时间不够而影响课程的交付时间和质量。</p>
+<p>为了提高交付效率，也为了把锻炼的机会多交给一些人，我把组里的大部分同事都拉来当讲师，根据各自所长来分配教学内容。为了保证整体的教学质量，我为这门课设计了一份<a href="/images/writing-2048-wechat-game-in-cocos-creator/mindmap.png">教学大纲</a>，并确定好每个讲师需要讲好的知识点，以及课后准备的练习项目，其他的交给各个讲师自由发挥。</p>
+<p>一直准备到 11 月，我们的课程的前四章终于制作出来并上架了腾讯课堂。这段期间我们经历了无数次的修改重录，甚至还临时更换了部分讲师。虽然离原来预期交付时间慢了很多，但我还是宁愿慢工出细活，把整套课程做出精品，这样才对得起购买课程的人。</p>
+<p>在 11 月底我又做了两场直播形式的公开课，<a href="/codes/writing-2048-wechat-game-in-cocos-creator/">在线直播分享如何使用 Cocos Creator 开发微信小游戏《2048》</a>。这个公开课可以看做是对小游戏开发系列课程的预热。</p>
+<p>让我比较欣慰的是，这两门课程目前都维持了 100% 的好评率，这说明我们的课程质量得到了学生们的认可。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/comments.png" alt="评论" />
+        <figcaption>评论</figcaption>
+      </figure>
+    </p>
+<p>除了这两门课程之外，我还当任了另一门 Python 课程的出品老师，负责评估这门课程的教学内容和质量。不过我这个出品老师一直没有起到任何实质性作用，因为一直到现在这门课的讲师都没有找过我。直到最近 Jeep 告诉其实这门课进度一直卡着，因为找不到合适的老师。他希望我能够转成主讲老师亲自去讲这门课。本来我已经打算不再讲课了，但在他的盛情邀请之下，我又有些被说动了。Python 一直是我业余时间最常用的玩具语言，它非常适合用做原型开发。我有不少开源项目，比如 dingdang-robot、LiveCV 都是用 Python 写的。如果把我所掌握的 Python 知识分享给更多人，让更多人能够自如的使用这门语言来满足他们的需求，那也算是我对 Python 这门语言的回馈。</p>
+<h2 id="不正经事">不正经事</h2>
+<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=http://hahack-1253537070.file.myqcloud.com/images/keyboards.jpeg alt=' 工位上的三块键盘'></img><b>附图 2</b>  工位上的三块键盘</span></span></span>
+<h3 id="乐器">乐器</h3>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/rainie.jpg" alt="Rainie Poet S-30L" />
+        <figcaption>Rainie Poet S-30L</figcaption>
+      </figure>
+    </p>
+<p>今年并没有去学习什么新乐器，主要是因为回家基本都比较晚，夜间玩乐器太扰民，而只用周末是不太可能掌握什么新乐器的。</p>
+<p>电子琴接近处于吃灰的状态。今年主要的收获是学会了一些常用的和弦，能够弹唱简单的歌曲。复杂点的琴谱还是弹不起来。要继续进阶还是得报班才行，自学永远都是半吊子，毕竟不是谁都能像 1900 那样无师即通。</p>
+<p>为了能够在周末时间在公司练会儿琴，我又买了一把折叠电子琴，但发现这玩意儿只能算玩具，触感非常差，没有弹几次也被我收起来吃灰了。</p>
+<p>唯一坚持下来的只有 Ukulele 了，它也是我平时最喜爱的玩具之一。今年主要的进步是开始玩指弹，慢慢地一些歌曲的前奏和间奏都能够很快地学会并流畅地弹出来（《<a target="_blank" rel="noopener" href="http://hahack-1253537070.coscd.myqcloud.com/videos/%E9%9D%92%E8%8A%B1%E7%93%B7.flv">一小段青花瓷</a>》）。</p>
+<p>另外，和弦摸熟了之后，也可以自己扒谱了。今年一共在有谱么（<a target="_blank" rel="noopener" href="http://yoopu.me">yoopu.me</a>）上写了五首谱子：</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/yoopu.png" alt="我的谱子" />
+        <figcaption>我的谱子</figcaption>
+      </figure>
+    </p>
+<p>扒谱是一件蛮有乐趣和成就感的事情。比如王力宏的《南京，南京》刚出来的时候，只有演唱会现场版，录音室版本都还没发布，更别提伴奏了。而我却可以很快扒出和弦来<a target="_blank" rel="noopener" href="https://kg3.qq.com/node/play?s=665je06JnB1ik6sW&amp;shareuid=639c9b80222e328a&amp;topsource=">自弹自唱</a>。</p>
+<p>扒谱的时候曾经萌生出给 Hexo 做一个绘制谱的插件的想法，最理想的就是在博客里可以用 tag-plugin 的形式直接绘制成 svg 格式的和弦，这样我就可以把我的博客变成歌谱本。经过搜索发现了 <a target="_blank" rel="noopener" href="https://github.com/Haixiang6123/guitar-editor">haixiang</a> 的几个有意思的 react.js 插件 <a target="_blank" rel="noopener" href="https://github.com/Haixiang6123/react-chord-generator">react-chord-generator</a> 和 <a target="_blank" rel="noopener" href="https://github.com/Haixiang6123/guitar-editor">Guitar-Editor</a>，他基本上就是用自己的技术栈复刻了一下有谱么。我挺欣赏他的动手能力和自驱力，于是加了他微信好友。然而我自己还没有开始动手去写这个 Hexo 的绘制谱插件，主要是它的实现成本有点高，而回报有点低（毕竟太小众，而且已经有“有谱么”了，我没有在博客上写谱的刚需），所以暂时还没有提到很高优先级的程度（如果你有兴趣，欢迎留言申请加入）。</p>
+<p>Ukulele 也让我对吉他重拾了兴趣。我曾在大学期间买了一把吉他，学了一段时间爬格子后就已经兴致索然。之后又在一次调琴弦的时候因为方法不当把弦弄断了，于是这把琴就被我带回家扔起来了。国庆的时候回了一趟家，找出了这把尘封多年的吉他，大概摸了半个小时很快就可以上手弹唱了。唯一遇到的困难是 F 和弦依然是按不下去，但我认为并不是自己的方法问题，而是这把琴质量太差，品距太高导致加大了 F 和弦的难度。我已经开始种草 <a target="_blank" rel="noopener" href="https://www.taylorguitars.com/guitars/acoustic/114ce">Taylor 114ce</a> ，说不定等搬到新房子后就拔草。不过在剁手前，我应该会先去逛下琴行看看有没有更适合自己的定制琴。<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=http://hahack-1253537070.file.myqcloud.com/images/bad.jpeg alt=' 像这种路边摊ukulele千万别买'></img><b>附图 3</b>  像这种路边摊ukulele千万别买</span></span></span></p>
+<img src="http://hahack-1253537070.file.myqcloud.com/images/taylor-114ce.jpg" class="" width="900" height="900" title="taylor 114ce">
+<p>说到买乐器这个话题，真的要相信“一分钱一分货”硬道理。不同价格的乐器，演奏效果的确有云泥之别。我的 Ukulele 是三年前 Allen 送我的 <a target="_blank" rel="noopener" href="http://www.rainieukulele.com/cn_product_view.php?id=10">Rainie Poet S-30L</a>，这把琴用桃花芯实木作为面板，音色饱满，琴头弦枕也很稳定，可以放好几个星期都不用调弦。弹久了之后，再去碰其他人的那种一两百块的 Ukulele ，就能明显感觉到劣质琴的廉价感——劣质琴因为用的是很差的面板，音色很单薄，拿在手上感觉很轻，而且面板和背侧板的衔接处往往都不会打磨，手臂放在上面会感觉很硌手。除此之外，劣质琴的和弦很不稳，放个一两天就又得重新调弦。用差的乐器绝对也会影响学习质量。所以我认为学习乐器并不存在所谓的“入门琴”的概念，要买就得买好一点的，这样才能真正的入门。当然，买什么价位的乐器需要量力而行，否则如果买来只是放着吃灰的话就浪费了。</p>
+<h3 id="旅行">旅行</h3>
+<p>今年一共去了几个城市：</p>
+<ul>
+<li>亚庇（马来西亚）</li>
+<li>仙本那（马来西亚）</li>
+<li>北京</li>
+<li>清迈（泰国）</li>
+<li>洛杉矶（美国）</li>
+</ul>
+<h4 id="亚庇-仙本那">亚庇&amp;仙本那</h4>
+<p>把 Galio 拉来腾讯后，战斗力爆表的他一下子就揽下了很多优化和重写组件和活动的活。对自己要求很高，又承担了很多的工作，所以他来团队不到半年就开始出现了失眠和头痛的症状。于是趁着五一，拉着 Galio 夫妇一起去了趟马来西亚。</p>
+<p>为了避免写流水账，直接说说这次自由行的感受吧。</p>
+<ol>
+<li>亚庇是一个海滨城市，所以就算在超市的停车场或者某个不起眼的楼梯口里都能看到非常漂亮的海景：</li>
+</ol>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/ocean-view.jpg" alt="Wisma Merdeka 的停车场" />
+        <figcaption>Wisma Merdeka 的停车场</figcaption>
+      </figure>
+    </p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/ocean-view2.jpg" alt="Wisma Merdeka 一角" />
+        <figcaption>Wisma Merdeka 一角</figcaption>
+      </figure>
+    </p>
+<p>不过，到了美人鱼岛和仙本那之后，先前看的海景就完全不值一提了。作为沿海地区长大的孩子，见到这么清澈的大海依然深深地被震撼到了。
+
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/ocean-view3.jpg" alt="美人鱼岛1" />
+        <figcaption>美人鱼岛1</figcaption>
+      </figure>
+    </p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/ocean-view5.jpg" alt="仙本那1" />
+        <figcaption>仙本那1</figcaption>
+      </figure>
+    </p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/ocean-view6.jpg" alt="仙本那2" />
+        <figcaption>仙本那2</figcaption>
+      </figure>
+    </p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/swing.jpg" alt="仙本那3" />
+        <figcaption>仙本那3</figcaption>
+      </figure>
+    </p>
+<p>如果说海上世界已经足够壮观，那么海底世界就更是绚烂神奇了。这是一个完全不同的世界。海龟踱步，鱼群翱翔；珊瑚林立，海星蹁跹。第一次浮潜的时候，看到一大批鱼从脚下游过，我惊呆到下巴都掉了，以至于忘了咬住吸气管，猛喝了口海水。幸好第一次潜水选择在较浅的地方进行，不至于需要呼救。到了后面掌握了技巧了，就敢独自游到离船比较远的地方观赏海底世界。不过后面往船方向游回去时才发现自己和船之间已经隔了一片较深的海域，游的过程中只能看到光束从背后射向一片深渊，这时候才感受到一种无比渗人的深海恐惧感。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/corel.jpg" alt="珊瑚海" />
+        <figcaption>珊瑚海</figcaption>
+      </figure>
+    </p>
+<ol start="2">
+<li>大马的人非常好客。拿导游来说，尽管带一次团能挣的钱并不多，但他们依然对旅客投入了百分百的热情。主动帮你拍照，跟你聊这边的风土人情，完全不是一副职业假笑的样子。另外，打 Grab 有时碰到会讲中文的司机也会非常热情地跟你聊天，为你推荐路线。</li>
+<li>海鲜非常便宜，可以吃到吐。我们一连吃了几天海鲜后都感觉好长一段时间不会再想吃了。相比之下，水果反而没有想象中便宜。</li>
+<li>因为马来西亚的华人比例很高，所以华人文化对大马的影响非常大。亚庇的菜市场上，一个中文说得不太麻利的卖菜小哥会唱《我们不一样》吸引你去买他的海鲜。在仙本那的路口，一群黝黑的马来人会围在一起玩《王者荣耀》。除此之外，英语在马来西亚是官方通行语言，遇到不会讲中文的印度人和马来人，用英语都能交流。不像在泰国，有时候会遇到中文和英文都不好的司机，只能靠 body language 和翻译软件交流。</li>
+<li>如果要说点不好的地方：首先是宰旅客的情况依然有。在仙本那吃饭的时候，会有一些人过来兜售海马等特产，但却不会跟你说私带海马出境是犯法的。于是我和 Galio、Alex 在不知情的情况下各买了一包海马，最后只能都拿去药店贱卖。若从阴谋论的角度想，从餐馆兜售到诱导药店卖出形成了一个完整闭环，一下子就从旅客里空手套白狼赚了不少银子，也是件细思恐极的事情；其次是夏天去确实太晒了，即使涂好防晒霜，出海浮潜被晒伤的几率依然很大。我回国的时候整个人黑了一大圈，还晒脱了一层皮。本来我的颜值就很不稳定，晒黑之后就更加不上镜了😭。</li>
+</ol>
+<p>总体来说，如果你很喜欢大海，也很爱吃海鲜，那么来亚庇和仙本那是很不错的选择。</p>
+<h4 id="北京">北京</h4>
+<p>6 月份因为参加 GMTC 的缘故去了一趟北京。每次去北京都是去参加比赛或者演讲，所以北京给我的印象并不是很好，大概还跟唯一一段比较正式的感情就是在北京这个伤心地结束有关吧。GMTC 在国际会议中心举办，和国家体育馆非常近。所以 GMTC 结束后，和 GMTC 上认识的一帮朋友去逛了下鸟巢和水立方，顺便吃了顿小吊梨汤。之后在北京又逗留了两天，和平安的几个老同事决定在京城再转悠一下。正值酷暑（summer），所以我们决定去下颐和园（the summer palace）感受下两百多年的避暑胜地。比较有趣的是还在那里巧遇了即将赴美留学的 <a target="_blank" rel="noopener" href="https://chaoyanghe.com/">Chaoyang</a> 。向来对帝王的豪宅没有太大的兴趣，所以关于颐和园的景色没什么好说的，看图就好。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/summer_palace.jpg" alt="颐和园" />
+        <figcaption>颐和园</figcaption>
+      </figure>
+    </p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/lion.jpg" alt="排云门的狮子" />
+        <figcaption>排云门的狮子</figcaption>
+      </figure>
+    </p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/wisdom-sea.jpg" alt="智慧海，是颐和园最高处的一座无梁佛殿" />
+        <figcaption>智慧海，是颐和园最高处的一座无梁佛殿</figcaption>
+      </figure>
+    </p>
+<p>比较让人印象深刻的是古人讲求的对称美。不仅建筑本身讲求对称，连布局也是严格对称的。这点在登上万寿山顶后以上帝视角往下看时能够明显的感受出来：</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/symmetry.jpg" alt="中国建筑讲求的对称性" />
+        <figcaption>中国建筑讲求的对称性</figcaption>
+      </figure>
+    </p>
+<p>算下来我来北京已经逛过故宫、天坛、颐和园、雁西湖、王府井几个地方，下次再来估计只有长城能勾起我游玩的兴致了吧？</p>
+<h4 id="清迈">清迈</h4>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/chiangmai-mosaic.jpg" alt="清迈马赛克" />
+        <figcaption>清迈马赛克</figcaption>
+      </figure>
+    </p>
+<p>今年十月份组织了一场泰国清迈团建。我在两年前已经去过一次清迈，所以这次自然而然成了团队的导游。</p>
+<p>对我而言，清迈是一个非常值得多去几次的城市。签证方便，东西好吃，重点是消费很便宜。如果你没有很强的购买欲的话，在国内定好酒店和机票后，再兑个一两千人民币就足够在清迈待上五天了。如果发现钱不够用，也能够找到很多ATM可以取款。我把这次的清迈之旅定义为我自己的佛系回忆之旅：基本就是重复一遍两年前的路线。本来还计划花两天跑去没去过的拜县，但大家担心行程太辛苦所以也取消了。</p>
+<p>虽然是回忆之旅，这一路却发现了很大的区别。大概是受到了登革热的影响，清迈的夜市冷清了很多。原先在夜市有各种小吃和街头表演，这次去就只剩下一些衣服饰品的常驻摊位了，以至于我不断怀疑自己是不是去错了地方。还有，上回在清迈吃了一家泳池边的高逼格餐馆 Ruen Tamarind ，这次心心念念也跑去吃，结果发现泳池都被封掉了，只能在厅内就餐，完全没有第一次来的惊艳感。</p>
+<p>说到美食，这回在泰国吃得最满意的是 Wangsingkham 路的 <a target="_blank" rel="noopener" href="https://www.tripadvisor.cn/Restaurant_Review-g293917-d11867322-Reviews-Wishing_Tree-Chiang_Mai.html">Wishing Tree</a> 餐厅，因为餐厅在河边，风景不错，而且东西是真的好吃。同样因为登革热的原因，前来就餐的人只有我们这群不怕死的旅客。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/wishing-tree.jpg" alt="Wishing Tree" />
+        <figcaption>Wishing Tree</figcaption>
+      </figure>
+    </p>
+<p>当然还有必吃的网红甜品店 Mango Tango ，第二次来发现清迈周边多开了好多家，蹿红程度大概相当于国内的喜茶了吧。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/mango-tango.jpg" alt="Mango Tango" />
+        <figcaption>Mango Tango</figcaption>
+      </figure>
+    </p>
+<p>永远维持不变的大概就只有清迈里的各种寺庙了。在泰国里有将近 95% 的当地人是上座部佛教徒，所以在泰国随处都可以看到各种壮观的佛教寺庙。所以每天我们几乎不是在找吃的就是在逛寺庙，中途累了就去做个 massage 。</p>
+<p>在柴迪隆寺和两年前的自己来了张“超时空合照”：</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/chiangmai-compare.jpg" alt="超时空合照" />
+        <figcaption>超时空合照</figcaption>
+      </figure>
+    </p>
+<h4 id="洛杉矶">洛杉矶</h4>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/los-angeles.jpg" alt="洛杉矶" />
+        <figcaption>洛杉矶</figcaption>
+      </figure>
+    </p>
+<p>洛杉矶之行严格上说其实是出差，主要的目的是跟 ABCmouse 的母公司 Age of Learning 公司商讨明年的运营计划以及技术交流。所以白天的时间我基本都是在 Age of Learning 的公司里头待着，给 Age of Learning 的 China team 讲关于 code standard、spine animation dynamically loading、input event system 等技术相关的东西。<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=http://hahack-1253537070.file.myqcloud.com/images/aofl.jpg alt=' 在 Age of Learning 的临时工位，桌子是可以上下移动的。China team 非常体贴地专门为我申请了一台外接显示器。'></img><b>附图 4</b>  在 Age of Learning 的临时工位，桌子是可以上下移动的。China team 非常体贴地专门为我申请了一台外接显示器。</span></span></span></p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/aofl-corner.jpg" alt="Age of Learning 一角" />
+        <figcaption>Age of Learning 一角</figcaption>
+      </figure>
+    </p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/aofl-china-team.jpg" alt="Age of Learning China team 的办公区堆满了腾讯的吉祥物" />
+        <figcaption>Age of Learning China team 的办公区堆满了腾讯的吉祥物</figcaption>
+      </figure>
+    </p>
+<p>第一次来美国，不可避免会遇到一些不适应的地方：</p>
+<ol>
+<li>美国很少有深夜开的餐馆，一般晚上十点就打烊了。而我们是半夜到的酒店，想吃点东只好跑去 711 买了两桶泡面，回来发现泡面里没有带叉子……</li>
+<li>美国的酒店不提供拖鞋，也没有提供牙膏牙刷。相比之下，国内的酒店服务真是人性化太多。</li>
+<li>加州的天气实在是太干了，而我并没有带润肤露，只好借同事的润肤露来用。</li>
+<li>美国的食物很少带青菜，如果需要蔬菜，比较直接的方法就是单独点份沙拉。</li>
+<li>最难以克服的是时差问题。到了下午四点多我就已经困得睁不开眼睛了，而第二天凌晨三点多钟我就已经清醒并且睡不下了。</li>
+</ol>
+<p>除去这些问题，加州的环境其实是挺舒适的。气候和深圳类似，不会特别冷，阳光充足，空气清新。</p>
+<p>Age of Learning 的办公大楼在 Glendale 市，离 the Americana at Brand 很近，所以有一天晚上我们去那里溜达了一圈并和 Age of Learning 的老板们聚了个餐。虽然距离圣诞还有两周的时间，但商城已经被打扮得非常有圣诞气氛，在路上 Jerry 告诉我们 ABCmouse 里的商城的设计灵感就取自 Americana ，顿时有种走进了 ABCmouse 世界里的奇妙感。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/the-americana-at-brand.jpg" alt="The Americana at brand VS ABCmouse Plaza" />
+        <figcaption>The Americana at brand VS ABCmouse Plaza</figcaption>
+      </figure>
+    </p>
+<p>Glendale 也离 <a target="_blank" rel="noopener" href="https://chaoyanghe.com/">Chaoyang</a> 正在就读的 USC 不远，所以有天晚上我打了个 Uber 去跟他续了叙旧。Chaoyang 是我在百度认识的同事何朝阳（人称何老师），后面我们都相继来了腾讯，之后他又放弃了腾讯的 leader 岗位举家来 USC 读博。我对他的求学精神深感佩服。巧的是，刚好碰上他当晚要赶飞机回国实习，所以我们只能找个就近的餐馆吃个饭。我开玩笑说花了六十刀的打车费去 “University Surrounded by Chinese” 就为了找他蹭了顿十刀的饭。</p>
+<p>完成了我们在 Age of Learning 里的 agenda 后，Neal 带着我和 Yul 去他在 Irvine 的房子玩，我也总算见识到了在美国住 house 有多爽：Neal 的房子总面积有两千尺，两层楼，总价格却只有我的房子的价格的一倍。相比之下，我的房子只是个六十平米的两房 department 。不过，在美国有钱的人喜欢住郊区，开车到上班的地方普遍要一两个小时。如果按这个距离算的话，到惠州、东莞买个 house 好像也可以达到类似的目的，但缺点就是学区不好。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/Irvine-houses.jpg" alt="尔湾的小区" />
+        <figcaption>尔湾的小区</figcaption>
+      </figure>
+    </p>
+<p>在 Neal 家住了一晚后，和 Age of Learning 的小伙伴们一起去了趟 Disneyland 。沾了 Age of Learning 的光，除了过了机动游戏的瘾之外，我们在 <a target="_blank" rel="noopener" href="http://www.disneylandclub33.com/">Disneyland club 33</a>  吃了顿大餐，这是一个隐藏在 Disneyland 里的西餐馆，只有会员才能进入。据说，想成为 club 33 的成员，不仅得交得起昂贵的会员费（坊间传言入会费为 2.5 万美元，每年年费为 1.2 万美元），而且等候入会的名单已经安排到十多年后了。说白了这就是一个饥饿营销的典型成功案例。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/club33.jpg" alt="club 33 外院" />
+        <figcaption>club 33 外院</figcaption>
+      </figure>
+    </p>
+<p>入会条件既然如此苛刻，里头的环境和服务就必须能足够与之相衬才行。实际体验下来，确实很有特色。比如会有个专业的合唱团在你周围唱歌给你听；另外，对私密的要求很高，不允许拿起手机拍摄周围的环境，只能拍自己或者菜品。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/clud33-food.jpg" alt="club 33" />
+        <figcaption>club 33</figcaption>
+      </figure>
+    </p>
+<p>至于味道……毕竟美国的西餐比较符合西方人的口味，所以中国人吃起来并不会觉得多么可口。加上我今年五月份曾经在 FutureOne 吃过了一顿又贵又尴尬的西餐，所以我对西餐没有多少好感。</p>
+<p>当然在 Disneyland 的重头戏还是那些机动游戏。但因为时差的原因，我到了下午依然是困得睁不开眼。所以我就一边排队一边站着打瞌睡，然后再利用各种 roller coaster 或者其他刺激项目提神，效果不错 😹 。<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=http://hahack-1253537070.file.myqcloud.com/images/golden-state-free-way.jpg alt=' Golden State Free Way，这里是电影《爱乐之城》第一段公路舞蹈《Another Day of Sun》的取景地。'></img><b>附图 5</b>  Golden State Free Way，这里是电影《爱乐之城》第一段公路舞蹈《Another Day of Sun》的取景地。</span></span></span></p>
+<p>回国的最后一天，Jerry 开车带我们在 LA 兜了一圈。我们沿着 Golden State Free Way 开去了一个叫做 Sunset Ranch 的农场，近距离打卡拍下了 HOLLYWOOD 的标志。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/hollywood.jpg" alt="LA 的 landmark 之一：HOLLYWOOD 标志" />
+        <figcaption>LA 的 landmark 之一：HOLLYWOOD 标志</figcaption>
+      </figure>
+    </p>
+<p>总的来说这次的 LA 之行最大的收获在于拓宽了我的眼界，了解了美国人的生活和工作方式，也让我设身处地的思考如果我在这边生活能不能适应下来。从目前来看，美国的生活方式其实挺适合我这种晚上不爱出门闲逛的人。而交流方面，虽然我的口语并没有特别厉害，但理解和用简单的英文回答是没有问题的。比如，在打 Uber 的时候我能够一路跟一个埃及的司机 Hishan 交谈彼此国家的文化、交通、政治，还跟他分享了来中国旅游的建议。当然我目前还没有感受到移民工作的必要性，一方面我还没有离开目前团队的打算；另一方面 H1B 的限制太大，在拿绿卡前一直不能回家见父母其实是一件很难熬的事情。</p>
+<h3 id="游戏">游戏</h3>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/games.jpg" alt="今年购买的游戏" />
+        <figcaption>今年购买的游戏</figcaption>
+      </figure>
+    </p>
+<p>我喜欢的游戏类型比较窄，主要爱玩 PC 上的角色扮演类游戏，而且我并不会把玩游戏作为平时的固定娱乐项目，只是突然心血来潮了就玩一下游戏，等玩上一段时间后，感到满足了就可以很长时间不玩。</p>
+<p>今年的总结之所以想分享有关游戏的话题，是因为我终于在今年入了 WeGame 和 Steam 的坑。在这两个平台上一共买了 5 款游戏。</p>
+<p>我是河洛工作室的粉丝，武林群侠传一直是我最喜欢的游戏。8 月份的他们的金庸群侠传续作《河洛群侠传》在 WeGame 上开始预售，于是我就二话不说就下了个 WeGame 购买。但距离游戏的真正发布要等两个月之久。心痒难耐之际，我看到河洛推荐了一款《天命奇御》，风格和武林群侠传类似，但战斗系统却是即时战斗的，这比武林群侠传的棋盘战斗要有趣很多（有意思的是这个游戏的开发商甲山林娱乐本身是一家台湾的知名房地产开发商）。于是我又在 WeGame 上买了这款游戏，作为《河洛群侠传》的前菜。</p>
+<p>实际玩起来，《天命奇御》的确是一款很有意思的游戏。这个游戏提供了类似《侠客风云传前传》的传闻系统，有着丰富的支线剧情可供挖掘。最有趣的就是物品出示系统——通过收集某个物品并出示给特性NPC可以触发特定剧情。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/provide.jpg" alt="《天命奇御》中的物品出示系统" />
+        <figcaption>《天命奇御》中的物品出示系统</figcaption>
+      </figure>
+    </p>
+<p>反而让我感到失望的是《河洛群侠传》，贴图粗糙，建模丑陋，而且战斗系统也设计得很糟糕。游戏刚发布的时候，优化做得非常差，以至于经常出现内存泄漏和卡顿的问题。后面通过升级有了很大改善，但各方面细节的不足已经是一个无法挽回的问题。比如画面总是给人一种糊糊的感觉：</p>
+<img src="http://hahack-1253537070.file.myqcloud.com/images/heluo-image.jpg" class="" width="900" height="900" title="河洛群侠传“糊糊”的画面">
+<p>还有战斗系统的设计也很一言难尽：使用手柄操作移动位置非常繁琐，误操作了又不能撤销。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/heluo-fight.jpg" alt="河洛群侠传的战斗系统" />
+        <figcaption>河洛群侠传的战斗系统</figcaption>
+      </figure>
+    </p>
+<p>游戏的最大亮点在于它是一个非常开放的沙盒游戏，整个地图所有场景都是无需读条和场景切换就可抵达，这大幅提高了游戏的代入感。在玩的过程中不难让人回想起沙盒游戏的其他代表作品。我曾经在四年前尝试了一次《上古卷轴5》（当年下的D版），但直接被河木镇的鸡神劝退了。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/chicken-god.jpg" alt="老滚5的“鸡神”" />
+        <figcaption>老滚5的“鸡神”</figcaption>
+      </figure>
+    </p>
+<p>但因为有了《河洛群侠传》的基础，也因为对《河洛群侠传》的不满，我决定弃坑，重新玩回《上古卷轴5》。于是，趁着黑色星期五 Steam 促销，我又注册了个 Steam 账号，买入了《上古卷轴5》。</p>
+<p>与《河洛群侠传》相比，《上古卷轴5》就是一个非常成熟的沙盒游戏。贴图细致，建模精致，而且有着更高的自由度。比如，在《河洛群侠传》里，战斗只在特定的条件下触发，你是不能随便去攻击 NPC 的。再比如，盗窃只会降低道德从而影响后续的剧情发展。而上古卷轴里，你能够随意攻击任何一个 NPC甚至屠城，而随意攻击NPC也会迁怒整个城镇的人从而攻击你。另外盗窃或者深夜潜入别人的房子如果被发现也会被满城通缉。</p>
+<p>除此之外，《上古卷轴5》还提供了非常多的有趣设计，比如当你在某个城市完成了当地领主委托的一些任务后，你就可以在当地购买或者建造房子。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/skyrim-hearthfire-house.jpg" alt="在老滚5里建造房屋" />
+        <figcaption>在老滚5里建造房屋</figcaption>
+      </figure>
+    </p>
+<p>有了房子之后，你可以带着祖拉项链去跟喜欢的 NPC 求爱并结婚，甚至还可以领养小孩。上古卷轴5把求爱过程设计得非常简单粗暴：碰到对你感兴趣的女孩，她会直接问你是否对她有意思，如果你回答“是”的话。你们就可以去登记结婚了😹……相比之下现实生活中的恋爱就复杂多了，直接告白往往难以奏效，多数人反而更喜欢玩欲擒故纵的套路，而且双方最终能否在一起要考虑非常多的因素，家庭背景、教育水平、兴趣爱好、沟通方式……所以爱情对我而言是一种接近玄学的存在。</p>
+<p>当然，游戏更重要的还是剧情本身，《上古卷轴5》本身是架构在中世纪背景的，所以有着诸多和《指环王》、《权力的游戏》相似的魔幻元素：龙、精灵、巫师、骷髅、幽灵、雪怪、吸血鬼、狼人、巨型蜘蛛等。此外游戏的主线和支线也是多到令人发指，每条主线细挖下去都可能会碰到一个强大的魔神要应付。在英灵殿迎战超强BOSS——巨龙奥杜因是游戏里头最振奋人心的时刻之一，在龙裔DLC中学会了<q>意志屈服</q>后御龙飞行又是一个成就感爆棚的时刻。</p>
+<p>如果说这个游戏的缺点，除了上手难度大、任务引导缺乏之外，大概就是太花时间了……我在这个游戏里已经花了 60 多个小时的时间，而且好像还有很多主线没有去完成。而我在游戏方面的兴致持续得比较短，也不太愿意投入更多时间，所以目前已经停玩了。除了上面提到的三款游戏，我其实还买了《巫师3》和《古剑奇谭3》，但也因为兴致和时间原因没有玩。毕竟“我都花钱买游戏了，为什么还要再花时间去玩？” 😄</p>
+<h3 id="锻炼">锻炼</h3>
+<p>大概因为睡眠不足的原因，来腾讯半年不到，我就虚胖了十斤。有段时间我几乎不敢发朋友圈照片，因为得到的评论清一色都是这样的：</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/comments.jpg" alt="评论" />
+        <figcaption>评论</figcaption>
+      </figure>
+    </p>
+<p>痛定思痛之下，我决定减肥。一开始是采用晚上不吃饭改吃水果的策略，但发现收效甚微。于是开始跑步。一开始我的跑步方式不正确，节奏过快，跑不到一公里就已经累到不行了。直到有一次被 Jolt 叫出去一起跑，才打通了任督二脉：他的理念是要控制好节奏。好的节奏就是在跑的过程中能自如谈话。经他这么一调教，我周末回家一次就跑了六公里，成就感爆棚。</p>
+<p>为了控制自己的体重，促进新成代谢，我开始尽量避免喝冰饮，改喝黄芪水。同时为了改善自己的睡眠，我把原来的弹簧床垫扔了，换成了乳胶床垫。如果晚上睡得比较晚，我还会吃一到两片褪黑素。这些或多或少都改善了一些睡眠质量。</p>
+<p>不过从全年来看，我的日均睡眠质量依然很少。只有在年初春节期间睡眠达到了8个小时以上，这是因为我是一个对睡眠极度缺乏自律的人，总是拖延睡眠时间去做各种事情，例如一写起博客或者业余项目的时候就容易停不下来，搞到大半夜，而后又很容易因此兴奋得睡不着觉。在家的时候因为有老妈监督，所以就不会轻易熬夜。所以将来结婚对我而言其中一大收益应该是能多一个在身边督促我去睡觉的人吧。Anyway，希望明年我的日均睡眠时长能够至少提高到6个小时以上。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/sleep-hours.jpeg" alt="日均睡眠质量" />
+        <figcaption>日均睡眠质量</figcaption>
+      </figure>
+    </p>
+<p>除了跑步之外，在夏天的时候我会尽量腾出时间保证每周去游一次泳，冬天则是每天饭后和同事绕着荔香公园或者深大走一圈步。为了督促大家运动，我们团队定了个规矩：每周步数少于四万步的罚红包。于是饭后刷步数就成了避免挨罚的“例行公事”。</p>
+<p>经过这些改善后，我的体重下降了 5 斤，目前维持在 120 斤左右。我的朋友圈也总算摆脱了“发福”、“双下巴”的标签。</p>
+<h3 id="看书">看书</h3>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/books.jpg" alt="books" />
+        <figcaption>books</figcaption>
+      </figure>
+    </p>
+<p>今年开始用上了微信读书，所以大部分的书都是通过手机来阅读。不过，这依然没有显著提高我阅读的数量：今年看的书依然少得可怜。如果把三体的三集算成三本的话，今年一共也就看了十本书。我只能用“看书在精不在多”来安慰自己了。按照喜欢程度由高到低的顺序往下评论吧：</p>
+<ul>
+<li>
+<p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/2567698/">三体</a>：终于把《三体》看了一遍。第一部大致讲述三体文明发现了地球文明，于是派出舰队意图侵略地球，并在舰队到达地球前通过智子技术限制地球科学的发展；然而三体人存在不善计谋的致命缺陷，于是在第二部中人类派出了四个面壁者来意图瞒过三体人的监视并阻止三体人的侵略，而三体人也在地球人中找到破壁者来识破面壁者的计划。最终其中一个面壁者罗辑成功地造出了能够在宇宙中通过引力波曝光地球和三体文明的开关，并利用黑暗森林法则来威慑三体人停止侵略；在第三部中，人类面对三体人的卷土重来终于启动了引力波向宇宙广播了三体文明和地球的位置，最终一起走向了被降维打击的命运。当然三言两语只能把基本的故事剧情讲得索然无味。要真正了解故事细节，依然推荐亲自阅读本书。全书充满了各种geek们一看就懂的梗，比如巴赫的音乐，牛顿-莱布尼茨公式的梗，对冯·诺依曼的人肉计算机模型工作原理的介绍堪称精彩绝伦。可见作者是有比较好的物理和计算机功底的。另外书里提出了黑暗森林法则、宇宙社会学等宇宙间生存的要领。相比《银河漫游指南》的 don’t panic 而言，大刘的这些法则显得更冰冷、残酷而现实，但却更有说服力。</p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/1095634/">小狗钱钱</a>：今年开始下意识地读一些关于理财相关的书籍，《小狗钱钱》就是一本非常值得推荐的科普读物。和其他的说教式书籍不同，这本书把理财知识写成一个童话故事，故事中的主人公吉娅跟她捡到的一只受伤的猎狗money学会了如何理财。通过这本书我了解了基金定投的基本操作概念，也开始定投起了基金。此外我非常喜欢书里的一段剧情：吉娅在学会了一些理财知识后，收到了银行职员海内女士的邀请，去给其他小朋友分享她的理财知识。起初她因为担心怯场而想拒绝。这时一个老者说了一句话改变了她的决定：</p>
+<blockquote>
+<p>我生命中出现了最美好的东西，是因为我做了原本不想做的事情。</p>
+</blockquote>
+<p>回顾这一年，大会分享、课程讲师、技术负责人……我在工作中也出现了各种各样的支线任务可以选择去做。而我除非不乐意，否则通常都会选择去做，因为我不知道会有什么美好的收获。</p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/1033778/">富爸爸穷爸爸</a>：Jolt 吐血推荐的书《富爸爸穷爸爸》。早在以前也经常有人推荐这本书，但一直以为又是一本成功学的书，再加上听说写这书的作者也破产了，所以一直没看。其实这是一本讲如何培养财商的书。从小到大我们受到的教育都是穷爸爸的教育“好好读书，将来找份好工作赚钱”，所以我们都被培养成为钱工作。这本书讲的是富爸爸的教育：如何让钱为你工作，成为钱的主人。虽然读完未必会暴富，但多一些富爸爸的思维，少一些韭菜思维和小鸡思想是很有益的。内容不厚，四个小时左右就可以读完。</p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/26954760/">月亮与六便士</a>：讲述了查尔斯·斯朱兰人到中年放弃了自己让人羡慕的银行家的事业以及美满的家庭选择去当画家的离奇一生。从世俗的眼光看来，查尔斯是一个极其让人讨厌的奇葩。但他丝毫没有受到外界的指责的影响，依然执着地追求自己的理想，甚至不惜为此忍受饥寒交迫的生活。从这个角度来看，他又是伟大的。想起了漫威之父 Stan Lee 对年轻人的告诫：</p>
+<blockquote>
+<p>I think whatever you do, you should do what you most want to do.</p>
+</blockquote>
+<p>看完这本书我也不禁在反思自己想要的究竟是什么，目前而言，通过写一些方便自己和他人的技术工具并开源分享也许是最让我感受到乐趣的事情。从这个角度上来看，我是幸运的，因为我的最主要兴趣和我的本职工作相关，我还不至于为了追求自己的“月亮”而放弃现在能赚到“六便士”的生活。</p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/27103997/">年糕妈妈轻松育儿百科</a> ：今年我哥生了个女儿，我们的大家庭迎来了一个新的生命。抱着小侄女的时候，我感受到了一种生命奇迹带给我的震撼和感动。儿童在初生阶段的养育方式正确与否可能会对将来她的一生产生着微妙的影响。所以为了帮助哥嫂分担，我阅读了一些育儿书籍。《年糕妈妈的育儿百科》就是其中一本我认真看完的工具书，通过这本书了解到了不少育儿的宝贵经验，并在适当时候分享给哥嫂，纸上谈兵地提供了一些参考意见，也顺便为我将来带娃做一个预热吧。当然，我需要先解决脱单问题了再说。</p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/27003014/">半小时漫画中国史</a>：以漫画的形式和现代化的语言重新解说历史，形式新颖，内容也很风趣幽默。缺点就是为了用半小时讲完中国史，内容作了极大地压缩，读起来感觉始终有种快餐感，就像是在突击期末考点大纲。另外，为了尽可能有趣，人物的刻画也做了脸谱化处理，阅读过程中就像是在用上帝视角看每个人物角色依次登台唱戏然后领个便当回家——你并不能指望通过本书了解这些历史人物做某件事的背后有什么复杂的心理动机。相比之下，一些历史题材的小说则用的是VR视角——例如当年明月的《明朝那些事儿》就把明朝的人物刻画得栩栩如生，阅读过程中置身在明朝的世界里，近距离观摩每个人的行为，解读他们的思想。所以，如果要更细致的了解历史，精读某个具体朝代的相关书籍依然是必不可少的。当然，《半小时漫画中国史》的目的也不在此，相反它只是希望用极简的篇幅带读者了解一些历史重点事件。从这点来看，它是成功的。</p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/3533221/">非暴力沟通</a>：看到标题就被吸引了。中国人比较注重婉转，过分担忧对方的感受，其实反而给沟通带来了障碍。这本书重点讲述了一种更加有效的沟通方式：观察-&gt;感受-&gt;需要-&gt;请求。并且提倡倾听的重要性（而这是我的弱项）。不过，要在日常中合理应用存在一定的难度，需要多多练习。</p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/30314653/">韭菜的自我修养</a>：书很薄，一个小时就能看完的篇幅，但定价19.9有点小贵。前面关于投资相关的内容也比较老生常谈。不过，既然是写给韭菜看的，确实也针对性了提出了不少韭菜的思维误区。有则改进，无则加勉。还是有所收获。<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=http://hahack-1253537070.file.myqcloud.com/images/a-good-book.jpeg alt=' 网播节目《一本好书》'></img><b>附图 6</b>  网播节目《一本好书》</span></span></span></p>
+</li>
+</ul>
+<p>顺便推荐《一本好书》这档网播综艺节目。这个节目的亮点在于通过舞台戏剧、片段朗读、影像图文插播等手段，还原了《三体》、《月亮与六便士》等11本经典作品的经典场景。我是先看了《三体》的书再看的综艺改编，一边看一边惊叹导演组的改编再创作的能力。《三体》的故事非常庞大，仅一集网播节目的篇幅肯定讲不完。所以导演组选取了第二部面壁者和破壁者之间对弈的桥段进行改编。有意思的是，为了突出重点，三个破壁者被合成了一个人，另外还通过插播了早前网友自制的水滴概念视频，很好地表现出了三体人的科技水平。而饰演罗辑的赵立新的表演就像在TED演讲一样，把整个浓缩版的故事串得非常清晰，也把宇宙社会学讲述得非常透彻。</p>
+<p>看完《一本好书》后我也对节目中介绍的其他书来了兴趣，《月亮与六便士》就是我在这档节目播出后开始阅读的。明年希望能把这季的《一本好书》中的书单都看完。</p>
+<h3 id="感情">感情</h3>
+<p>最后是感情生活。今年三月份我其实有很认真地谈了一段恋爱，然而从开始到结束只有短短两个月，对我打击非常地大。虽然事后还是做了不少挽回的努力，到了后面对方似乎也没有明确的拒绝了，但自己反而突然有了一种莫大的压力，怕再次搞砸，所以再也没敢约出口。有时一个人的时候会责备自己为什么不再约，为什么不厚着脸皮磨下去，但被拒绝的滋味又实在太难受。何况当周围的人都一致建议放弃的时候，放弃就成了一个非做不可的选择。</p>
+<p>事后我一直在反思自己究竟为什么没有成功。其实周边的人一旦知道我单身，多数都会表现得非常诧异，因为我并不像是一个会注孤生的人。实际上一个人感情是否顺遂和他的条件并没有必然的联系，否则就不会有很多钻石王老五的存在了。我想我就是属于那种特别不适合谈恋爱的人。我的业余兴趣不管是乐器、看书、写博客、业余小项目都比较宅，平时也没有一个人到处去玩的爱好和动力，所以一旦要约女孩子出来，就会为了去哪吃和去哪玩发愁。另外我追女孩子的手段简单而愚笨，居然会想到用情书来表白。以至于后面的约会对方变得不自在了起来，而我又没有能力去化解这种不自在。我就像《月亮与六便士》里的德克，即使付出了全部的感情，也始终不能赢得布兰奇的芳心。</p>
+<p>有些人的给建议是先随便找个人发展一下感情，锻炼下这方面的技能。这样遇到真正喜欢的人就不会表现得太怂。但我觉得这样自欺欺人的方式太流氓了，对待感情我还是坚持宁缺毋滥的态度。我也挺反感用一些欲擒故纵的套路来“泡妞”。喜欢就是喜欢，为什么非要假装不在乎？相比之下，我似乎更适合活在《上古卷轴5》的世界里，至少那个世界的人们从相识到结婚没有太多的套路。然而真实情况是，人们对越容易得到的东西越不会去珍惜。就像陈奕迅《红玫瑰》里的歌词：</p>
+<blockquote>
+<p>得不到的永远在骚动，被偏爱的都有恃无恐。</p>
+</blockquote>
+<p>所以我有时候会冒出用技术手段来帮助恋爱的念头，比如智能 match 合适人选，用 NLP 分析 IM 里对方的应答，提供化解尬聊的话题建议，或是自动根据双方喜好预定餐馆和菜式。无奈当前的 NLP 技术还不够成熟，而且这样的话似乎双方并不是真正地在交往，而是变成由机器人来确定恋爱关系——人在这场恋爱中反而成了傀儡了。就像《黑镜》第四季第 5 集《Hang the DJ》中的桥段，过度依赖技术来培养爱情其实是很容易弄巧成拙的。</p>
+<p>
+      <figure>
+        <img src="http://hahack-1253537070.file.myqcloud.com/images/match.jpg" alt="在《Hang the DJ》中，人们依靠一个长得像Google Nest的装置来匹配伴侣" />
+        <figcaption>在《Hang the DJ》中，人们依靠一个长得像Google Nest的装置来匹配伴侣</figcaption>
+      </figure>
+    </p>
+<p>不过这段感情对我而言还是带来了一定的收获的。除了反思自己在处理感情方面的天真和稚嫩之外，更重要的是更确定了自己喜欢什么类型的女孩子。亲戚朋友后面又陆陆续续介绍了不少女孩子，条件都很不错，但都因为没有那个人所带来的难以言喻的美好感觉而没有选择进行下去。大概我是很执着于第一感觉的人，感情如此，处理其他事情也这样。失恋后的那一周，心情糟糕得很，于是决定去看看房子散心，没想到一天不到就看上了一个房子，当天就谈好价钱并签了合同。我大概是周围所有人中看房最快的人了。</p>
+<p>不论如何，没有伴侣其实我一个人也能生活得很充实，所以恋爱和婚姻对我而言并不是特别迫切的东西。如我所说，我还是抱有宁缺毋滥的态度。只是一个人难免会有孤独的时候，而且会开始怀疑自己究竟在为了什么而忙碌。关于恋爱观，我比较赞同 pluskid 的观点，在这里直接摘抄一段出来：</p>
+<blockquote>
+<p>关于恋爱观，我也有考虑过一点。也许将来的想法会改变，不过现在我的态度是恋爱婚姻这些东西并不是人生目标甚至不是人生必须要经历的的一个 milestone，所以我大概不太会刻意去追求，当然也并不持反对态度。对我来说一个人和两个人大概就是不同的生活方式吧，一个选择问题，孰优孰劣无法定论。客观来讲我一个人就能开开心心地过，事实上我的生活看起来好像是非常充实的，甚至有时候非常亲密的朋友也会觉得我好像就不可能有空虚无聊的时候，然而事实并非如此，我想这大概就好比你再有钱也会有买不起东西的时候吧？——不同的人会有不同的烦恼。同理，两个人的生活也是有取有舍吧，我一点也不否认爱情的强大魔力显然也是这宇宙中独一无二的一种存在。</p>
+</blockquote>
+<h2 id="总结和期望">总结和期望</h2>
+<p>年底的忙碌程度超出了我的预期。本来希望赶在 2018 年的尾巴写完这篇总结，结果到接近写完的时候，2019 年的 1 月都已经快结束了。Anyway，2018 年依旧是非常充实的一年。有很多新的尝试和挑战。我还在年初组了一个合唱团，并当了一回合唱团的领唱，还进了次录音棚录唱。还有六月份终于跑去听了场喜欢了十三年的偶像王力宏的演唱会，唯一的遗憾是同行的人由喜欢的人换成了自己的哥哥。</p>
+<p>19 年有几个目标：</p>
+<ol>
+<li>继续改善睡眠。</li>
+<li>把《一本好书》里的推荐书单读完。</li>
+<li>买车，并成为一个合格的司机。</li>
+<li>完成至少一次说走就走的旅行。</li>
+</ol>
+<p>至于爱情，随缘吧。</p>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/codes/wukong-robot-intro/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/work/introducing-beamerstyleslides/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '2018 蒙太奇'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/2018-montage.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2019-01-20 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/life/">life<span>9</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/travel/">travel<span>1</span></a></li> <li><a href="/tags/comment/">comment<span>1</span></a></li> <li><a href="/tags/summary/">summary<span>3</span></a></li> <li><a href="/tags/games/">games<span>2</span></a></li> <li><a href="/tags/reading/">reading<span>2</span></a></li> <li><a href="/tags/music/">music<span>1</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%AD%A3%E7%BB%8F%E4%BA%8B"><span class="toc-article-text">正经事</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%B7%A5%E4%BD%9C"><span class="toc-article-text">工作</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%BC%80%E6%BA%90"><span class="toc-article-text">开源</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%8D%9A%E5%AE%A2"><span class="toc-article-text">博客</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%8E%88%E8%AF%BE"><span class="toc-article-text">授课</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%8D%E6%AD%A3%E7%BB%8F%E4%BA%8B"><span class="toc-article-text">不正经事</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B9%90%E5%99%A8"><span class="toc-article-text">乐器</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%97%85%E8%A1%8C"><span class="toc-article-text">旅行</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E4%BA%9A%E5%BA%87-%E4%BB%99%E6%9C%AC%E9%82%A3"><span class="toc-article-text">亚庇&amp;仙本那</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E5%8C%97%E4%BA%AC"><span class="toc-article-text">北京</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%B8%85%E8%BF%88"><span class="toc-article-text">清迈</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%B4%9B%E6%9D%89%E7%9F%B6"><span class="toc-article-text">洛杉矶</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%B8%B8%E6%88%8F"><span class="toc-article-text">游戏</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E9%94%BB%E7%82%BC"><span class="toc-article-text">锻炼</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%9C%8B%E4%B9%A6"><span class="toc-article-text">看书</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%84%9F%E6%83%85"><span class="toc-article-text">感情</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%80%BB%E7%BB%93%E5%92%8C%E6%9C%9F%E6%9C%9B"><span class="toc-article-text">总结和期望</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

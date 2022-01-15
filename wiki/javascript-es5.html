@@ -1,0 +1,865 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>ES5 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="ES5 的新特性
+
+元-对象编程（Meta-object programming）
+严格模式（Strict mode）
+标准库增强（Standard library enhancements）
+
+元对象编程
+ES3 中的属性
+缺少灵活性
+1234567var o = &amp;#123; foo: 17 &amp;">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="ES5"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: 'ES5'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> ES5</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="ES5-的新特性">ES5 的新特性</h2>
+<ul>
+<li>元-对象编程（Meta-object programming）</li>
+<li>严格模式（Strict mode）</li>
+<li>标准库增强（Standard library enhancements）</li>
+</ul>
+<h2 id="元对象编程">元对象编程</h2>
+<h3 id="ES3-中的属性">ES3 中的属性</h3>
+<p>缺少灵活性</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123; <span class="attr">foo</span>: <span class="number">17</span> &#125;;</span><br><span class="line"><span class="comment">// enumerable</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> p <span class="keyword">in</span> o) <span class="comment">// ⇒ &quot;foo&quot;</span></span><br><span class="line"><span class="comment">// writable</span></span><br><span class="line">o.foo = <span class="number">42</span>;      <span class="comment">// ⇒ o.foo == 42</span></span><br><span class="line"><span class="comment">// configurable</span></span><br><span class="line"><span class="keyword">delete</span> o.foo;    <span class="comment">// ⇒ &quot;foo&quot; in o == false</span></span><br></pre></td></tr></table></figure>
+<h3 id="ES5-中的属性">ES5 中的属性</h3>
+<p>在 ES5 里头你可以决定对象的一个属性是否是可枚举的，可变的，可删除的。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;&#125;;</span><br><span class="line"><span class="built_in">Object</span>.defineProperty(o, <span class="string">&quot;foo&quot;</span>,</span><br><span class="line">  &#123; <span class="attr">value</span>: <span class="number">17</span>,</span><br><span class="line">    enumerable: <span class="literal">false</span>,</span><br><span class="line">    configurable: <span class="literal">false</span>,</span><br><span class="line">    writable: <span class="literal">false</span> &#125;);</span><br></pre></td></tr></table></figure>
+<p>还可以定义类似其他面向对象语言的 getter 和 setter 。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> p = &#123; <span class="keyword">get</span> <span class="title">y</span>() &#123; <span class="keyword">return</span> <span class="string">&quot;y&quot;</span>; &#125;,</span><br><span class="line">          _z: <span class="number">2</span>,</span><br><span class="line">          <span class="keyword">get</span> <span class="title">z</span>() &#123; <span class="keyword">return</span> <span class="built_in">this</span>._z; &#125;,</span><br><span class="line">          <span class="keyword">set</span> <span class="title">z</span>(<span class="params">v</span>) &#123; <span class="built_in">this</span>._z = v; &#125; &#125;;</span><br><span class="line"><span class="built_in">Object</span>.defineProperty(p, <span class="string">&quot;prop&quot;</span>,</span><br><span class="line">  &#123; <span class="attr">get</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="number">2</span>; &#125; &#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="锁定属性">锁定属性</h3>
+<p>对象允许锁定属性，避免增加属性、删除属性和修改属性值。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;&#125;;</span><br><span class="line"><span class="comment">// no new properties</span></span><br><span class="line"><span class="built_in">Object</span>.preventExtensions(o);</span><br><span class="line"><span class="comment">// set of properties is fixed</span></span><br><span class="line"><span class="built_in">Object</span>.seal(o);</span><br><span class="line"><span class="comment">// property set fixed, values fixed</span></span><br><span class="line"><span class="built_in">Object</span>.freeze(o);</span><br></pre></td></tr></table></figure>
+<h2 id="严格模式">严格模式</h2>
+<p>ECMAScript 5 的严格模式是JavaScript中的一种限制性更强的变种方式。它的设计源自 Perl 语言的严格模式。</p>
+<p>严格模式在语义上与正常的JavaScript有一些不同。</p>
+<ul>
+<li>首先，严格模式会将JavaScript陷阱直接变成明显的错误。</li>
+<li>其次，严格模式修正了一些引擎难以优化的错误：同样的代码有些时候严格模式会比非严格模式下更快。</li>
+<li>第三，严格模式禁用了一些有可能在未来版本中定义的语法。</li>
+</ul>
+<h3 id="开启严格模式">开启严格模式</h3>
+<p>严格模式可以应用到整个script标签或个别函数中。不要在封闭大括弧（ {} ）内这样做;在这样的上下文中这么做是没有效果的。在eval 代码，Function 代码，事件处理属性，传入 setTimeout方法的字符串和包含整个脚本的块中开启严格模式会如预期一样工作。</p>
+<h4 id="为某个script标签开启严格模式">为某个script标签开启严格模式</h4>
+<p>为整个script标签开启严格模式，需要在所有语句之前放一个特定语句 <code>&quot;use strict&quot;;</code> （或 <code>'use strict';</code>）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 整个语句都开启严格模式的语法</span></span><br><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> v = <span class="string">&quot;Hi!  I&#x27;m a strict mode script!&quot;</span>;</span><br></pre></td></tr></table></figure>
+<p>但这么做要格外小心代码合并：合并均为严格模式的脚本或均为非严格模式的都没问题，只有在合并严格模式与非严格模式有可能有问题。建议按一个个函数去开启严格模式（至少在学习的过渡期要这样做）。</p>
+<h4 id="为某个函数开启严格模式">为某个函数开启严格模式</h4>
+<p>同样的，要给某个函数开启严格模式，得把 <code>&quot;use strict&quot;</code>;  (或 <code>'use strict';</code> )声明一字不漏地放在函数体所有语句之前。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">strict</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="comment">// 函数级别严格模式语法</span></span><br><span class="line"><span class="meta">  &#x27;use strict&#x27;</span>;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">nested</span>(<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="string">&quot;And so am I!&quot;</span>; &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&quot;Hi!  I&#x27;m a strict mode function!  &quot;</span> + nested();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">notStrict</span>(<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="string">&quot;I&#x27;m not strict.&quot;</span>; &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="严格模式有什么不同">严格模式有什么不同</h4>
+<p>严格模式同时改变了语法及运行时行为。变化通常分为这几类：</p>
+<ul>
+<li>将问题直接转化为错误（如语法错误或运行时错误）</li>
+<li>简化了如何为给定名称的特定变量计算</li>
+<li>简化了 eval 以及 arguments</li>
+<li>将写 “安全” JavaScript 的步骤变得更简单，以及改变了预测未来 ECMAScript 行为的方式。</li>
+</ul>
+<h5 id="将拼写错转成异常">将拼写错转成异常</h5>
+<p>首先，严格模式下无法再意外创建全局变量。在普通的JavaScript里面给一个拼写错误的变量名赋值会使全局对象新增一个属性并继续“工作”（尽管后面可能出错：在现在的JavaScript中有可能）。严格模式中意外创建全局变量被抛出错误替代：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line">                       <span class="comment">// 假如有一个全局变量叫做mistypedVariable</span></span><br><span class="line">mistypedVaraible = <span class="number">17</span>; <span class="comment">// 因为变量名拼写错误</span></span><br><span class="line">                       <span class="comment">// 这一行代码就会抛出 ReferenceError</span></span><br></pre></td></tr></table></figure>
+<p>其次，严格模式会使引起静默失败 (silently fail，注：不报错也没有任何效果) 的赋值操作抛出异常。例如，NaN 是一个不可写的全局变量。在正常模式下，给 NaN 赋值不会产生任何作用; 开发者也不会受到任何错误反馈。但在严格模式下，给 NaN 赋值会抛出一个异常。任何在正常模式下引起静默失败的赋值操作 (给不可写属性赋值，给只读属性(getter-only)赋值赋值，给不可扩展对象(non-extensible object)的新属性赋值) 都会抛出异常：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 给不可写属性赋值</span></span><br><span class="line"><span class="keyword">var</span> obj1 = &#123;&#125;;</span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj1, <span class="string">&quot;x&quot;</span>, &#123; <span class="attr">value</span>: <span class="number">42</span>, <span class="attr">writable</span>: <span class="literal">false</span> &#125;);</span><br><span class="line">obj1.x = <span class="number">9</span>; <span class="comment">// 抛出TypeError错误</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 给只读属性赋值</span></span><br><span class="line"><span class="keyword">var</span> obj2 = &#123; <span class="keyword">get</span> <span class="title">x</span>() &#123; <span class="keyword">return</span> <span class="number">17</span>; &#125; &#125;;</span><br><span class="line">obj2.x = <span class="number">5</span>; <span class="comment">// 抛出TypeError错误</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 给不可扩展对象的新属性赋值</span></span><br><span class="line"><span class="keyword">var</span> fixed = &#123;&#125;;</span><br><span class="line"><span class="built_in">Object</span>.preventExtensions(fixed);</span><br><span class="line">fixed.newProp = <span class="string">&quot;ohai&quot;</span>; <span class="comment">// 抛出TypeError错误</span></span><br></pre></td></tr></table></figure>
+<p>第三，在严格模式下，试图删除不可删除的属性时会抛出异常(之前这种操作不会产生任何效果):</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="keyword">delete</span> <span class="built_in">Object</span>.prototype; <span class="comment">// 抛出TypeError错误</span></span><br></pre></td></tr></table></figure>
+<p>第四，严格模式要求函数的参数名唯一。在正常模式下，最后一个重名参数名会掩盖之前的重名参数。之前的参数仍然可以通过 arguments[i] 来访问，还不是完全无法访问。然而，这种隐藏毫无意义而且可能是意料之外的 (比如它可能本来是打错了)，所以在严格模式下重名参数被认为是语法错误:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sum</span>(<span class="params">a, a, c</span>)</span>&#123; <span class="comment">// !!! 语法错误</span></span><br><span class="line"><span class="meta">  &quot;use strict&quot;</span>;</span><br><span class="line">  <span class="keyword">return</span> a + b + c; <span class="comment">// 代码运行到这里会出错</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第五，严格模式禁止八进制数字语法。ECMAScript并不包含八进制语法，但所有的浏览器都支持这种以零(0)开头的八进制语法: <code>0644 === 420</code> 还有 <code>&quot;\045&quot; === &quot;%&quot;</code>。 有些新手开发者认为数字的前导零没有语法意义，所以他们会用作对齐措施 — 但其实这会改变数字的意义! 八进制语法很少有用并且可能会错误使用，所以严格模式下八进制语法会引起语法错误:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> sum = <span class="number">015</span> + <span class="comment">// !!! 语法错误</span></span><br><span class="line">          <span class="number">197</span> +</span><br><span class="line">          <span class="number">142</span>;</span><br></pre></td></tr></table></figure>
+<h5 id="简化变量的使用">简化变量的使用</h5>
+<p>严格模式简化了代码中变量名字映射到变量定义的方式。很多编译器的优化是依赖存储变量X位置的能力：这对全面优化JavaScript代码至关重要。JavaScript有些情况会使得代码中名字到变量定义的基本映射只在运行时才产生。严格模式移除了大多数这种情况的发生，所以编译器可以更好的优化严格模式的代码。</p>
+<p>首先，<strong>严格模式禁用 with</strong>。 with 所引起的问题是块内的任何名称可以映射(map)到with传进来的对象的属性，也可以映射到包围这个块的作用域内的变量(甚至是全局变量)，这一切都是在运行时决定的: 在代码运行之前是无法得知的。严格模式下，使用 with 会引起语法错误，所以就不会存在 with 块内的变量在运行时才决定引用到哪里的情况了:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> x = <span class="number">17</span>;</span><br><span class="line"><span class="keyword">with</span> (obj) <span class="comment">// !!! 语法错误</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 如果没有开启严格模式，with中的这个x会指向with上面的那个x，还是obj.x？</span></span><br><span class="line">  <span class="comment">// 如果不运行代码，我们无法知道，因此，这种代码让引擎无法进行优化，速度也就会变慢。</span></span><br><span class="line">  x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一种取代 with 的简单方法是，将目标对象赋给一个短命名变量，然后访问这个变量上的相应属性。</p>
+<p>第二，严格模式下的 eval 不再为上层范围(surrounding scope，注：包围eval代码块的范围)引入新变量。在正常模式下， 代码 <code>eval(&quot;var x;&quot;)</code> 会给上层函数(surrounding function)或者全局引入一个新的变量 x 。这意味着，一般情况下， 在一个包含 eval 调用的函数内所有没有引用到参数或者局部变量的名称都必须在运行时才能被映射到特定的定义 (因为 eval 可能引入的新变量会覆盖它的外层变量)。在严格模式下 eval 仅仅为被运行的代码创建变量，所以 eval 不会影响到名称映射到外部变量或者其他局部变量:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="number">17</span>;</span><br><span class="line"><span class="keyword">var</span> evalX = <span class="built_in">eval</span>(<span class="string">&quot;&#x27;use strict&#x27;; var x = 42; x&quot;</span>);</span><br><span class="line">assert(x === <span class="number">17</span>);</span><br><span class="line">assert(evalX === <span class="number">42</span>);</span><br></pre></td></tr></table></figure>
+<p>相应的，如果函数 eval 被在被严格模式下的eval(…)以表达式的形式调用时，其代码会被当做严格模式下的代码执行。当然也可以在代码中显式开启严格模式，但这样做并不是必须的.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">strict1</span>(<span class="params">str</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="meta">  &quot;use strict&quot;</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">eval</span>(str); <span class="comment">// str中的代码在严格模式下运行</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">strict2</span>(<span class="params">f, str</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="meta">  &quot;use strict&quot;</span>;</span><br><span class="line">  <span class="keyword">return</span> f(str); <span class="comment">// 没有直接调用eval(...): 当且仅当str中的代码开启了严格模式时</span></span><br><span class="line">                 <span class="comment">// 才会在严格模式下运行</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">nonstrict</span>(<span class="params">str</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">eval</span>(str); <span class="comment">// 当且仅当str中的代码开启了&quot;use strict&quot;，str中的代码才会在严格模式下运行</span></span><br><span class="line">&#125;</span><br><span class="line">strict1(<span class="string">&quot;&#x27;Strict mode code!&#x27;&quot;</span>);</span><br><span class="line">strict1(<span class="string">&quot;&#x27;use strict&#x27;; &#x27;Strict mode code!&#x27;&quot;</span>);</span><br><span class="line">strict2(<span class="built_in">eval</span>, <span class="string">&quot;&#x27;Non-strict code.&#x27;&quot;</span>);</span><br><span class="line">strict2(<span class="built_in">eval</span>, <span class="string">&quot;&#x27;use strict&#x27;; &#x27;Strict mode code!&#x27;&quot;</span>);</span><br><span class="line">nonstrict(<span class="string">&quot;&#x27;Non-strict code.&#x27;&quot;</span>);</span><br><span class="line">nonstrict(<span class="string">&quot;&#x27;use strict&#x27;; &#x27;Strict mode code!&#x27;&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>因此在严格模式下eval执行的内容跟在非严格模式下eval执行的内容的结果是等同的。</p>
+<p>第三，严格模式禁止删除声明变量。delete name 在严格模式下会引起语法错误：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> x;</span><br><span class="line"><span class="keyword">delete</span> x; <span class="comment">// !!! 语法错误</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">eval</span>(<span class="string">&quot;var x; delete x;&quot;</span>); <span class="comment">// !!! 语法错误</span></span><br></pre></td></tr></table></figure>
+<h5 id="让eval和arguments变的简单">让eval和arguments变的简单</h5>
+<p>严格模式让arguments和eval少了一些奇怪的行为。两者在通常的代码中都包含了很多奇怪的行为： eval会添加删除绑定，改变绑定好的值，还会通过用它索引过的属性给形参取别名的方式修改形参。虽然在未来的ECMAScript版本解决这个问题之前，是不会有补丁来完全修复这个问题，但严格模式下将eval和arguments作为关键字对于此问题的解决是很有帮助的。</p>
+<p>首先，名称 eval 和 arguments 不能通过程序语法被绑定(be bound)或赋值。以下的所有尝试将引起语法错误:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="built_in">eval</span> = <span class="number">17</span>;</span><br><span class="line"><span class="built_in">arguments</span>++;</span><br><span class="line">++<span class="built_in">eval</span>;</span><br><span class="line"><span class="keyword">var</span> obj = &#123; <span class="keyword">set</span> <span class="title">p</span>(<span class="params"><span class="built_in">arguments</span></span>) &#123; &#125; &#125;;</span><br><span class="line"><span class="keyword">var</span> <span class="built_in">eval</span>;</span><br><span class="line"><span class="keyword">try</span> &#123; &#125; <span class="keyword">catch</span> (<span class="built_in">arguments</span>) &#123; &#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">x</span>(<span class="params"><span class="built_in">eval</span></span>) </span>&#123; &#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">arguments</span>(<span class="params"></span>) </span>&#123; &#125;</span><br><span class="line"><span class="keyword">var</span> y = <span class="function"><span class="keyword">function</span> <span class="title">eval</span>(<span class="params"></span>) </span>&#123; &#125;;</span><br><span class="line"><span class="keyword">var</span> f = <span class="keyword">new</span> <span class="built_in">Function</span>(<span class="string">&quot;arguments&quot;</span>, <span class="string">&quot;&#x27;use strict&#x27;; return 17;&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>第二，严格模式下，参数的值不会随 arguments 对象的值的改变而变化。在正常模式下，对于第一个参数是 arg 的函数，对 arg 赋值时会同时赋值给 arguments[0]，反之亦然（除非没有参数，或者 arguments[0] 被删除）。严格模式下，函数的 arguments 对象会保存函数被调用时的原始参数。arguments[i] 的值不会随与之相应的参数的值的改变而变化，同名参数的值也不会随与之相应的 arguments[i] 的值的改变而变化。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">a</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="meta">  &quot;use strict&quot;</span>;</span><br><span class="line">  a = <span class="number">42</span>;</span><br><span class="line">  <span class="keyword">return</span> [a, <span class="built_in">arguments</span>[<span class="number">0</span>]];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> pair = f(<span class="number">17</span>);</span><br><span class="line"><span class="built_in">console</span>.assert(pair[<span class="number">0</span>] === <span class="number">42</span>);</span><br><span class="line"><span class="built_in">console</span>.assert(pair[<span class="number">1</span>] === <span class="number">17</span>);</span><br></pre></td></tr></table></figure>
+<p>第三，不再支持 arguments.callee。正常模式下，arguments.callee 指向当前正在执行的函数。这个作用很小：直接给执行函数命名就可以了！此外，arguments.callee 十分不利于优化，例如内联函数，因为 arguments.callee 会依赖对非内联函数的引用。在严格模式下，arguments.callee 是一个不可删除属性，而且赋值和读取时都会抛出异常：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="built_in">arguments</span>.callee; &#125;;</span><br><span class="line">f(); <span class="comment">// 抛出类型错误</span></span><br></pre></td></tr></table></figure>
+<h5 id="“安全的”-JavaScript">“安全的” JavaScript</h5>
+<p>严格模式下更容易写出“安全”的JavaScript。现在有些网站提供了方式给用户编写能够被网站其他用户执行的JavaScript代码。在浏览器环境下，JavaScript能够获取用户的隐私信息，因此这类Javascript必须在运行前部分被转换成需要申请访问禁用功能的权限。没有很多的执行时检查的情况，Javascript的灵活性让它无法有效率地做这件事。一些语言中的函数普遍出现，以至于执行时检查他们会引起严重的性能损耗。做一些在严格模式下发生的小改动，要求用户提交的JavaScript开启严格模式并且用特定的方式调用，就会大大减少在执行时进行检查的必要。</p>
+<p>第一，在严格模式下通过this传递给一个函数的值不会被强制转换为一个对象。对一个普通的函数来说，this总会是一个对象：不管调用时this它本来就是一个对象；还是用布尔值，字符串或者数字调用函数时函数里面被封装成对象的this；还是使用undefined或者null调用函数式this代表的全局对象（使用call，apply或者bind方法来指定一个确定的this）。这种自动转化为对象的过程不仅是一种性能上的损耗，同时在浏览器中暴露出全局对象也会成为安全隐患，因为全局对象提供了访问那些所谓安全的JavaScript环境必须限制的功能的途径。所以对于一个开启严格模式的函数，指定的this不再被封装为对象，而且如果没有指定this的话它值是undefined：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fun</span>(<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="built_in">this</span>; &#125;</span><br><span class="line">assert(fun() === <span class="literal">undefined</span>);</span><br><span class="line">assert(fun.call(<span class="number">2</span>) === <span class="number">2</span>);</span><br><span class="line">assert(fun.apply(<span class="literal">null</span>) === <span class="literal">null</span>);</span><br><span class="line">assert(fun.call(<span class="literal">undefined</span>) === <span class="literal">undefined</span>);</span><br><span class="line">assert(fun.bind(<span class="literal">true</span>)() === <span class="literal">true</span>);</span><br></pre></td></tr></table></figure>
+<p>第二，在严格模式中再也不能通过广泛实现的ECMAScript扩展“游走于”JavaScript的栈中。在普通模式下用这些扩展的话，当一个叫fun的函数正在被调用的时候，fun.caller是最后一个调用fun的函数，而且fun.arguments包含调用fun时用的形参。这两个扩展接口对于“安全”JavaScript而言都是有问题的，因为他们允许“安全的”代码访问&quot;专有&quot;函数和他们的（通常是没有经过保护的）形参。如果fun在严格模式下，那么fun.caller和fun.arguments都是不可删除的属性而且在存值、取值时都会报错：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">restricted</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="meta">  &quot;use strict&quot;</span>;</span><br><span class="line">  restricted.caller;    <span class="comment">// 抛出类型错误</span></span><br><span class="line">  restricted.arguments; <span class="comment">// 抛出类型错误</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">privilegedInvoker</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> restricted();</span><br><span class="line">&#125;</span><br><span class="line">privilegedInvoker();</span><br></pre></td></tr></table></figure>
+<p>第三，严格模式下的arguments不会再提供访问与调用这个函数相关的变量的途径。在一些旧时的ECMAScript实现中arguments.caller曾经是一个对象，里面存储的属性指向那个函数的变量。这是一个安全隐患，因为它通过函数抽象打破了本来被隐藏起来的保留值；它同时也是引起大量优化工作的原因。出于这些原因，现在的浏览器没有实现它。但是因为它这种历史遗留的功能，arguments.caller在严格模式下同样是一个不可被删除的属性，在赋值或者取值时会报错：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fun</span>(<span class="params">a, b</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="meta">  &quot;use strict&quot;</span>;</span><br><span class="line">  <span class="keyword">var</span> v = <span class="number">12</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">arguments</span>.caller; <span class="comment">// 抛出类型错误</span></span><br><span class="line">&#125;</span><br><span class="line">fun(<span class="number">1</span>, <span class="number">2</span>); <span class="comment">// 不会暴露v（或者a，或者b）</span></span><br></pre></td></tr></table></figure>
+<h5 id="为未来的ECMAScript版本铺平道路">为未来的ECMAScript版本铺平道路</h5>
+<p>未来版本的ECMAScript很有可能会引入新语法，ECMAScript5中的严格模式就提早设置了一些限制来减轻之后版本改变产生的影响。如果提早使用了严格模式中的保护机制，那么做出改变就会变得更容易。</p>
+<p>首先，在严格模式中一部分字符变成了保留的关键字。这些字符包括implements, interface, let, package, private, protected, public, static和yield。在严格模式下，你不能再用这些名字作为变量名或者形参名。</p>
+<p>其次，严格模式禁止了不在脚本或者函数层面上的函数声明。在浏览器的普通代码中，在“所有地方”的函数声明都是合法的。这并不在ES5规范中（甚至是ES3）！这是一种针对不同浏览器中不同语义的一种延伸。未来的ECMAScript版本很有希望制定一个新的，针对不在脚本或者函数层面进行函数声明的语法。在严格模式下禁止这样的函数声明对于将来ECMAScript版本的推出扫清了障碍：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&quot;use strict&quot;</span>;</span><br><span class="line"><span class="keyword">if</span> (<span class="literal">true</span>)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>) </span>&#123; &#125; <span class="comment">// !!! 语法错误</span></span><br><span class="line">  f();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">f2</span>(<span class="params"></span>) </span>&#123; &#125; <span class="comment">// !!! 语法错误</span></span><br><span class="line">  f2();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">baz</span>(<span class="params"></span>) // 合法</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">eit</span>(<span class="params"></span>) </span>&#123; &#125; <span class="comment">// 同样合法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种禁止放到严格模式中并不是很合适，因为这样的函数声明方式从ES5中延伸出来的。但这是ECMAScript委员会推荐的做法，浏览器就实现了这一点。</p>
+<h3 id="总结">总结</h3>
+<p>严格模式主要有以下限制：</p>
+<ul>
+<li>变量必须声明后再使用</li>
+<li>函数的参数不能有同名属性，否则报错</li>
+<li>不能使用with语句</li>
+<li>不能对只读属性赋值，否则报错</li>
+<li>不能使用前缀0表示八进制数，否则报错</li>
+<li>不能删除不可删除的属性，否则报错</li>
+<li>不能删除变量delete prop，会报错，只能删除属性delete global[prop]</li>
+<li>eval不会在它的外层作用域引入变量</li>
+<li>eval和arguments不能被重新赋值</li>
+<li>arguments不会自动反映函数参数的变化</li>
+<li>不能使用arguments.callee</li>
+<li>不能使用arguments.caller</li>
+<li>禁止this指向全局对象</li>
+<li>不能使用fn.caller和fn.arguments获取函数调用的堆栈</li>
+<li>增加了保留字（比如protected、static和interface）</li>
+</ul>
+<h3 id="将旧代码转为严格模式">将旧代码转为严格模式</h3>
+<p>可以参考 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode">Transitioning to strict mode</a></p>
+<h2 id="标准库增强">标准库增强</h2>
+<p>ES5 将一些工程中常用的扩展功能放进了标准库。</p>
+<ul>
+<li>JSON</li>
+<li>对数组的接口扩展</li>
+<li><code>Date.now()</code> numeric timestamp</li>
+<li>提供 <code>bound</code> 方法：当被调用时，<code>this</code> 的值保持不变。</li>
+</ul>
+<h2 id="本文参考材料">本文参考材料</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Strict_mode">严格模式</a></li>
+<li><a target="_blank" rel="noopener" href="http://whereswalden.com/files/mozilla/es5-lightning/">Updating JavaScript ES5</a></li>
+</ul>
+<h2 id="深入阅读">深入阅读</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.ecma-international.org/ecma-262/5.1/">ES5 规范</a></li>
+</ul>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+			
+			
+			
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/javascript-es3.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/javascript-es6.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: 'ES5'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

@@ -1,0 +1,627 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>From WordPress to Ruhoh | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="从wordpress迁移到ruhoh的心得。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="From WordPress to Ruhoh"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: 'From WordPress to Ruhoh'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> From WordPress to Ruhoh</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>从wordpress迁移到ruhoh的心得。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <p>终于换成用 ruhoh 写博客了。</p>
+<p>之前的 blog 使用 WordPress 来编写。但使用 Wordpress 的在线编辑系统是非常低效的。为了加快效率，我习惯先使用 <a target="_blank" rel="noopener" href="http://orgmode.org">org-mode</a> 来编写内容。org-mode的强大不必多说，用它可以方便的生成本地页面，通过定制甚至还可以导出成pdf。为了在我编写文章的同时备份 org-mode 格式的草稿，我使用了与 Evernote 结合的方案：先利用 <a target="_blank" rel="noopener" href="http://emacs-evernote-mode.googlecode.com/svn/branches/0_41/doc/readme_en.html">emacs-evernote-mode</a> 在 Evernote 上创建笔记，然后开 org-mode 编辑内容。这样，编写的文章除了在博客上可以看到，也可以在 Evernote 上阅读。一旦博客托管的服务器出了问题甚至数据全部丢失，我还能从Evernote上找回我的所有文章。有些文章即使不想发布出去，我也可以保存在 Evernote 上，作为自己的私人笔记。这种方式一直用得挺爽，所以我坚持用了一年多的时间。</p>
+<p>但不幸的是，几个月前 Evernote 换了认证协议，以致于 emacs-evernote-mode 不再能够访问 Evernote 的数据。而该项目已然很久没有更新了。没有了 Evernote 的备份支持，我失去了编写文章的冲动，以至于从今年一月份到现在，我的文章产出率几乎为零。<span id="more"></span></p>
+<p>没办法之下，我只好选择弃用 WordPress，投入到 Static Blog Generator 的怀抱。接触静态网站并不是第一次，在这之前我曾经用 <a target="_blank" rel="noopener" href="http://webgen.rubyforge.org/">webgen</a> 写过一个个人主页，但搭建过程非常繁琐，依赖项太多，给我留下不太好的印象。后来那个项目也停止更新了，我就决定不再使用它。后来看到 <a target="_blank" rel="noopener" href="http://freemind.pluskid.org/">Pluskid</a> 又开了一个博客，一来就是一篇洋洋洒洒追述自己如何折腾静态博客的经历，看完之后我对他所使用的一个称为 <a target="_blank" rel="noopener" href="http://ruhoh.com">ruhoh</a> 的项目来了兴趣。于是自己克隆了一个 ruhoh 的 Github 仓库，按照官方说明简单执行了几条命令，就看到了成功生成的主页，顿时挺有好感。</p>
+<p>ruhoh 比起 WordPress ，有不少优点：</p>
+<ol>
+<li>简洁轻便。 WordPress太臃肿了，默认就加载一堆的脚本，不符合<q>简单就是美</q>的思想。相比之下，ruhoh 要清爽很多，只提供最基本的功能，剩下的交给用户决定是否添加。</li>
+<li>支持多种文档格式。ruhoh 默认使用 RedCarpet 作为格式转换器，以支持使用流行的 Markdown 来编写文档。只要你愿意，你也可以自己重写格式转换器，使之支持 Textile、reStructuredText、DocBook、MediaWiki 等格式。</li>
+<li>定制性强。使用 Mustache 来做模板语言。这样，高级用户可以很自由的对博客的功能进行定制，而不用担心会影响到文章的内容。</li>
+<li>免费托管。通过与 Github 等支持 Page 服务的托管商来免费托管你的博客，省下白花花的银两。同时依赖于Git（也可以方便的更换为mercurial），博客也能拥有强大的版本控制能力。</li>
+</ol>
+<p>不过，ruhoh 也不是十全十美的。不可否认 ruhoh 的学习成本较高，如果想要把它打造的更加顺手，那就更加需要花时间折腾了。而且 ruhoh 还处于开发阶段，比起同类的系统比如 <a target="_blank" rel="noopener" href="http://octopress.org/">Octopress</a> 而言成熟度要差一些。因此如果你只想尽快用上静态博客，我推荐你选择 Octopress。但如果你需要的是一个更为灵活的框架，那么不妨试试 ruhoh 。</p>
+<h2 id="安装配置-Ruhoh">安装配置 Ruhoh</h2>
+<p>安装 ruhoh 可以使用 <code>bundle</code> 安装和直接安装 <code>gem</code> 两种。前者的更新要快一些，而且用 bundle 升级 ruhoh 系统是采用全新安装的方式，不会覆盖原来的 ruhoh 系统，显得比较安全。特别是现在 ruhoh 还处于开发阶段，说不定某次升级就出问题了，所以强烈推荐使用第一种方案。</p>
+<h3 id="安装-Ruby">安装 Ruby</h3>
+<p>ruhoh依赖Ruby，Arch用户安装Ruby的方法非常简单，只需要一条命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> yaourt -S ruby</span></span><br></pre></td></tr></table></figure>
+<h3 id="换用淘宝-RubyGems-镜像">换用淘宝 RubyGems 镜像</h3>
+<p>由于国内网络原因（你懂的），导致 <a target="_blank" rel="noopener" href="http://rubygems.org">rubygems.org</a> 存放在 Amazon S3 上面的资源文件间歇性连接失败。为了避免安装 ruhoh 失败，最稳妥的方法还是将 rubygems 源改成淘宝的镜像。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> gem sources --remove https://rubygems.org/</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> gem sources -a http://ruby.taobao.org/</span></span><br></pre></td></tr></table></figure>
+<h3 id="安装-Ruhoh">安装 Ruhoh</h3>
+<p>先把 ruhoh 的github仓库克隆下来：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git <span class="built_in">clone</span> <span class="string">&#x27;git://github.com/ruhoh/blog.git&#x27;</span> <span class="string">&#x27;blog&#x27;</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">cd</span> blog</span></span><br></pre></td></tr></table></figure>
+<p>同样为了让ruhoh的安装顺利，修改一下 <code>Gemfile</code> 文件如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">source &#x27;http://ruby.taobao.org/&#x27;</span><br><span class="line">gem &#x27;psych&#x27;, &quot;~&gt; 1.3&quot;</span><br><span class="line">gem &#x27;ruhoh&#x27;, :git =&gt; &#x27;git://github.com/ruhoh/ruhoh.rb.git&#x27;</span><br></pre></td></tr></table></figure>
+<p>安装 bundle：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> gem install bundle</span></span><br></pre></td></tr></table></figure>
+<p>之后安装 ruhoh：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> bundle install</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> bundle <span class="built_in">exec</span> rackup -p 9292</span></span><br></pre></td></tr></table></figure>
+<p>如果遇到 psych 等依赖项没有安装报错的问题，手动 <code>gem install</code> 之。完成后打开 <a target="_blank" rel="noopener" href="http://localhost:9292/">http://localhost:9292/</a> 就可以看到本地的一个主页了。</p>
+<h3 id="端口占用问题的解决">端口占用问题的解决</h3>
+<p>有时候会遇到端口占用问题 <code>(Errno::EADDRINUSE) </code>而无法rackup成功，可以使用 <code>lsof</code> 命令查看 9292 端口被什么程序占用：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> lsof -i:9292</span></span><br></pre></td></tr></table></figure>
+<p>解决方法是换用其他端口即可：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> rackup -p &lt;其他端口&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="文章搬家">文章搬家</h2>
+<p>接下来要做的事情就是把 WordPress 上的内容搬到ruhoh上，包括文章和评论。如果你之前没有用过 WordPress 搭建过博客，可以跳过这一步。评论的搬家比较容易，使用 Disqus 就可以完成多个网站的同步。如何把WordPress上的文章导出并转成ruhoh这类静态博客所解析的 Markdown，也有不少文章已经讨论过：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://wendal.net/linux/%E4%BB%8EWordPress%E8%BF%81%E7%A7%BB%E5%88%B0Ruhoh%E7%9A%84%E7%BB%8F%E9%AA%8C/">从WordPress迁移到Ruhoh的经验</a></li>
+<li><a target="_blank" rel="noopener" href="http://dourok.info/2012/08/20/something-about-ruhoh/">Ruhoh札记</a></li>
+</ol>
+<p>大致是先利用 WordPress 自带的文章导出功能将文章导出成 xml 文件，然后利用 pandoc 将文档转换成 markdown 脚本。但要无痛完成转换是非常困难的。如果之前的 WordPress 文章添加了不少特殊的 shortcode 的话，你就需要自己修改转换脚本将这些 shortcode 转换成 Markdown 下该有的格式。反正这个过程真是挺折腾的。真是后悔当初不懂事，用了不少特殊的 shortcode，把自己的博客弄得太 <q>重量级</q> ，给以后的搬家带来不便。</p>
+<h2 id="定制-ruhoh">定制 ruhoh</h2>
+<p>下面简单罗列一下自己做了哪些定制吧。</p>
+<h3 id="更换Converter">更换Converter</h3>
+<p>标准的 Markdown 实在太简单，连对表格的支持都缺乏。关于这个问题已经有很多人吐槽过了。</p>
+<p>相比之下，<a target="_blank" rel="noopener" href="http://johnmacfarlane.net/pandoc/demo/example9/pandocs-markdown.html">Pandoc-Markdown</a> 就要强大许多。而且 Pandoc 支持很多格式的转换，所以选择使用 Pandoc 取代原来的 RedCarpet 对我而言更有诱惑力些。</p>
+<p>要改用 Pandoc 并不复杂，这要感谢 <a target="_blank" rel="noopener" href="https://github.com/alphabetum/pandoc-ruby">pandoc-ruby</a> 项目实现了 ruby 的接口。我只需要 blog 目录下新建 <code>plugins/converters</code> 目录，在里面编写一个 <code>pandoc.rb</code> 如下：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">require</span> <span class="string">&quot;pandoc-ruby&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Ruhoh</span></span></span><br><span class="line"></span><br><span class="line">  <span class="class"><span class="keyword">module</span> <span class="title">Converter</span></span></span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">module</span> <span class="title">Markdown</span></span></span><br><span class="line"></span><br><span class="line">      def <span class="keyword">self</span>.extensions</span><br><span class="line">        [<span class="string">&#x27;.md&#x27;</span>, <span class="string">&#x27;.markdown&#x27;</span>]</span><br><span class="line">      <span class="keyword">end</span> <span class="comment">#self.extensions</span></span><br><span class="line"></span><br><span class="line">      def <span class="keyword">self</span>.convert(content)</span><br><span class="line">    converter = PandocRuby.new(content).to_html(<span class="symbol">:smart</span>,<span class="symbol">:mathjax</span>,<span class="symbol">:email_obfuscation</span> =&gt; <span class="symbol">:javascript</span>)        </span><br><span class="line">        converter</span><br><span class="line">      <span class="keyword">end</span> <span class="comment">#self.convert</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">end</span> <span class="comment"># Markdown</span></span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">module</span> <span class="title">Textile</span></span></span><br><span class="line">      </span><br><span class="line">      def <span class="keyword">self</span>.extensions</span><br><span class="line">        [<span class="string">&#x27;.textile&#x27;</span>]</span><br><span class="line">      <span class="keyword">end</span> <span class="comment">#self.extensions</span></span><br><span class="line"></span><br><span class="line">      def <span class="keyword">self</span>.convert(content)</span><br><span class="line">        converter = PandocRuby.new(content).to_html(<span class="symbol">:smart</span>,<span class="symbol">:mathjax</span>,<span class="symbol">:<span class="string">&#x27;email-obfuscation&#x27;</span></span> =&gt; <span class="symbol">:javascript</span>)</span><br><span class="line">        converter</span><br><span class="line">      <span class="keyword">end</span> <span class="comment">#self.convert</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">end</span> <span class="comment"># Textile</span></span><br><span class="line">    </span><br><span class="line">    <span class="class"><span class="keyword">module</span> <span class="title">RST</span></span></span><br><span class="line"></span><br><span class="line">      def <span class="keyword">self</span>.extensions</span><br><span class="line">        [<span class="string">&#x27;.rst&#x27;</span>]</span><br><span class="line">      <span class="keyword">end</span> <span class="comment">#self.extensions</span></span><br><span class="line"></span><br><span class="line">      def <span class="keyword">self</span>.convert(content)</span><br><span class="line">        converter = PandocRuby.new(content).to_html(<span class="symbol">:smart</span>,<span class="symbol">:mathjax</span>,<span class="symbol">:<span class="string">&#x27;email-obfuscation&#x27;</span></span> =&gt; <span class="symbol">:javascript</span>)</span><br><span class="line">        converter</span><br><span class="line">      <span class="keyword">end</span> <span class="comment">#self.convert</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">end</span> <span class="comment"># RST</span></span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">module</span> <span class="title">Html</span></span></span><br><span class="line">      def <span class="keyword">self</span>.extensions</span><br><span class="line">        [<span class="string">&#x27;.htm&#x27;</span>, <span class="string">&#x27;.html&#x27;</span>]</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">      def <span class="keyword">self</span>.convert(content)</span><br><span class="line">        content</span><br><span class="line">      <span class="keyword">end</span> </span><br><span class="line">    <span class="keyword">end</span> <span class="comment"># Html</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="keyword">end</span> <span class="comment"># Converter</span></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="keyword">end</span> <span class="comment"># Ruhoh</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>重写后的 Converter 可以支持使用 Pandoc-Markdown、Textile、reStructuredText 等几种主流的格式来编写博文。与原来的 Markdown 相比强大多了 <span class='margin-note-marker'><sup>1</sup></span> 。<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><span class='margin-note-marker'>1</span> 考虑到以后 Markdown 可能会推出更加完善的标准，我也会尽量少用到 Pandoc-Markdown 的特殊标记。以保持向上兼容。</span></span></span></p>
+<h3 id="显示公式">显示公式</h3>
+<p>要在文章中显示公式，MathJax 依然是最优雅的方案。不过这一块也让我折腾了不少时间。鉴于 Pandoc 本身就支持生成 MathJax ，我一开始的想法是在转换器里添加 <code>--mathjax</code> 选项，但发现即使这样做还是不能渲染出公式。后来看了一下 Pandoc 的文档，试着加上 <code>-s</code> 选项为页面添加单独的头部信息就可以显示出公式了。但这样的做法又会使得文章出现了两处头部信息，显得很 ugly。最终我还是回到 Widget 的方案，手动实现了一个 MathJax 的 Widget，然后在 layouts 中引进来：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">version: &#x27;latest&#x27;</span><br><span class="line">style: &#x27;TeX-AMS-MML_HTMLorMML&#x27;</span><br><span class="line">---</span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/x-mathjax-config&quot;</span>&gt;</span></span><br><span class="line">        MathJax.Hub.Config(&#123;</span><br><span class="line">            tex2jax: &#123;</span><br><span class="line"><span class="javascript">                inlineMath: [[<span class="string">&quot;\\(&quot;</span>, <span class="string">&quot;\\)&quot;</span>]],</span></span><br><span class="line"><span class="javascript">                displayMath: [[<span class="string">&quot;\\[&quot;</span>, <span class="string">&quot;\\]&quot;</span>]]</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span></span></span><br><span class="line"><span class="tag">          <span class="attr">src</span>=<span class="string">&quot;http://cdn.mathjax.org/mathjax/&#123;&#123;this_config.version&#125;&#125;/MathJax.js?config=&#123;&#123;this_config.style&#125;&#125;&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这样，公式的插入就很很轻松了：</p>
+<ol>
+<li>对于 Markdown，行内公式的格式是 <code>$公式$</code> ，居中公式的格式是 <code>$$公式$$</code>；</li>
+<li>对于 restructedText，行内公式的格式是 <code>:math:公式</code>，居中公式的格式是 <code>..math::公式</code>；</li>
+<li>Textile 的公式插入比较蛋疼，因为 Pandoc 对 Textile 并没有完全支持，所以只好用 <code>&lt;notextile&gt;$公式$&lt;/notextile&gt;</code> 或者 <code>&lt;notextile&gt;$$公式$$&lt;/notextile&gt;</code> 来转义。</li>
+</ol>
+<p>在实际测试中，我发现 Pandoc 的 <code>--mathjax</code> 选项并不是一无是处的，因为它可以检测当前文档中是否有公式的标记，而决定是否在这一页加载 MathJax 脚本！这样就不会影响到没有公式的文章的加载速度了。</p>
+<h3 id="语法高亮">语法高亮</h3>
+<p>ruhoh 自己已经默认集成了 google_prettify 作为语法高亮的插件，但我在使用 ruhoh 2.1.1 版本的时候始终弄不出来高亮效果，后来看 ruhoh 的源码发现这是一个bug：在 ruhoh.rb 项目里有人提出将 google_prettify 移动到一个子目录里，相当于对它降了级，将它作为一个可选的高亮插件，以方便更换其他高亮插件，具体见 <a target="_blank" rel="noopener" href="https://github.com/ruhoh/ruhoh.rb/commit/fdeff636da2ec2deb3ce239651c2e52da7883df7#system/widgets">这个commit</a> 。但这个建议被采纳后随即引来了一个问题：原来的 <code>config.yml</code> 和 <code>layouts/default.html</code> 两个文件中对 google_prettify 的引用信息没有更新，致使 ruhoh 找不到被移动了位置的 google_prettify 插件。于是我就向 ruhoh 项目报了这个 bug ，作者 <a target="_blank" rel="noopener" href="https://github.com/plusjade">@plusjade</a> 很快就确认了这个问题，并且恢复了 google_prettify 的默认地位。现在这个 bug 在 ruhoh 2.2 里已经解决。不过这个解决方式并不彻底：plusjade 只是恢复了 google_prettify 作为默认的插件的设置，但实际上 <code>config.yml</code> 和 <code>layouts/default.html</code> 中对 google_prettify 的引用仍然是有问题的。我已经再次向该项目发了一个 <a target="_blank" rel="noopener" href="https://github.com/ruhoh/blog/pull/13">pull request</a> ，建议使用我的修改。</p>
+<h3 id="个性化">个性化</h3>
+<p>ruhoh 自带的主题比较单调。要想自己的主页更有个性一些，还是得手动调整一番。最理想的状态当然是找到个现有的主题，省的自己折腾。可惜，目前为止我所能搜索到的第三方主题都是基于 ruhoh 1.x 的。而 ruhoh 升级到2.0后就宣布不再兼容1.x版本的主题了 <code>--bb</code>。于是我只好动手。不得不赞一下 twitter-bootstrap ，真是很好很强大，让像我这种没有美工基础的 nerd 也可以做出很好看的页面。</p>
+<p>因为非常喜欢 pluskid 的页面布局，所以我的主题在很大程度上借鉴了他的样式 <span class='margin-note-marker'><sup>2</sup></span> <span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><span class='margin-note-marker'>2</span>为了表示感谢，我在 footer 处加上了 <q>theme inspired by pluskid</q> </span></span></span>
+，当然也加上了自己的一些调整。我的博客主题可以在 <a target="_blank" rel="noopener" href="https://github.com/wzpan/blog/tree/master/freemind">这里</a> 找到。</p>
+<h3 id="RSS">RSS</h3>
+<p>之前听说 ruhoh 生成 RSS 会有一堆没用的信息，但这个问题在 ruhoh 2.0 开始已经被解决了。但为了生成一个正确的 rss，首先你得在 <code>config.yml</code> 里设置好。比如你的文章基本都放在 posts 这个 collection 里，那么你就应该在 posts 那一部分将 rss 的 enable 选项设为 <code>true</code> 。千万不要把 _root 那一部分的 <code>rss</code> 选项开启。这样生成的 <code>rss.xml</code> 文件就只有标题和正文，而不会有其他无关的信息。文件存放在 <code>posts/rss.xml</code> 目录下。如果使用其他的 collection，同样使用类似的设置即可。</p>
+<h3 id="自动刷新">自动刷新</h3>
+<p>虽然 ruhoh 提供了预览的能力，但并不能实时预览用户的修改，这样就达不到所见即所得。最好的方式就是一边写文章，一边就能在另一个窗口里看到效果。为此，pluskid在他的文章里推荐使用 <a target="_blank" rel="noopener" href="https://github.com/guard/guard-livereload">guard-livereload</a> 来实现这个效果。试了一下，体验很好呀。这个小工具的原理也很简单，就是执行一个监听器，监听用户指定的文件，一旦检测到有文件发生改动，就向浏览器发送刷新指令。监听器就是 <a target="_blank" rel="noopener" href="https://github.com/guard/guard">Guard</a> ，负责发送刷新指令的就是 livereload。</p>
+<p>配置的过程也很简单，先安装好 Guard，然后安装 livereload。接收到刷新后还得让浏览器执行刷新指令，因为是 Chrome 的 heavy user，我选择了安装相应的 <a target="_blank" rel="noopener" href="http://feedback.livereload.com/knowledgebase/articles/86242-how-do-i-install-and-use-the-browser-extensions-">Chrome 插件</a> 来帮我完成刷新。你也可以根据你的需求选择 Safari/Firefox 的对应插件，或者直接使用 <a target="_blank" rel="noopener" href="https://github.com/johnbintz/rack-livereload">rack-livereload</a> 。安装完成后，进入博客目录，然后执行下面的命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> guard init livereload</span></span><br></pre></td></tr></table></figure>
+<p>将启动 Guard 监听器，同时会在当前目录下创建一个 <code>Guardfile</code> 文件。将里面的内容修改如下：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># A sample Guardfile</span></span><br><span class="line"><span class="comment"># More info at https://github.com/guard/guard#readme</span></span><br><span class="line">guard <span class="string">&#x27;livereload&#x27;</span> <span class="keyword">do</span></span><br><span class="line">  watch(<span class="regexp">%r&#123;\.(yml|ru)&#125;</span>)</span><br><span class="line">  watch(<span class="regexp">%r&#123;_root/.+\.(html|md)&#125;</span>)</span><br><span class="line">  watch(<span class="regexp">%r&#123;widgets/.+\.(html|md)&#125;</span>)</span><br><span class="line">  watch(<span class="regexp">%r&#123;posts/.+\.(md|textile|markdown|rst)&#125;</span>)</span><br><span class="line">  <span class="comment"># Rails Assets Pipeline</span></span><br><span class="line">  watch(<span class="regexp">%r&#123;(app|vendor)(/assets/\w+/(.+\.(css|js|html))).*&#125;</span>) &#123; <span class="params">|m|</span> <span class="string">&quot;/assets/<span class="subst">#&#123;m[<span class="number">3</span>]&#125;</span>&quot;</span> &#125;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>根据需要还可以继续添加规则，比如如果要监测 wiki 目录下的文件，可以添加下面这行：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">watch(<span class="regexp">%r&#123;wiki/.+\.(md|textile|markdown|rst)&#125;</span>)</span><br></pre></td></tr></table></figure>
+<p>完成后就可以在你的修改文章后自动刷新页面了。特别适合像我一样拥有两个显示器的人，可以用一个显示器编写文章，用另一个显示器直接预览效果。进一步提高写博客的效率。</p>
+<h2 id="其他技巧">其他技巧</h2>
+<p>因为使用 bundle 安装方式，ruhoh 的命令都变得好长，做什么都要在前面敲上长长的 <code>bundle exec</code> ，这点的确有点泯灭人性啊！作为一个热爱偷懒的人，当然是不允许这样的情况存在的。</p>
+<h3 id="设置-alias">设置 alias</h3>
+<p>首先先设置 alias ，将常用的几条命令用最简单的命令名称来替代。将这段文本加到终端配置文件里，如果用的是 bash，就加到 <code>~/.bashrc</code> ，如果用的是 zshell，就加到 <code>~/.zshrc</code> 里。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">export RUHOH=/home/ehome/Documents/blog</span><br><span class="line">export PUBLISH=/home/ehome/Documents/wzpan.github.io</span><br><span class="line">alias _rp=&#x27;cd $RUHOH &amp;&amp; bundle exec rackup -p 9294&#x27;</span><br><span class="line">alias _gd=&#x27;cd $RUHOH &amp;&amp; guard&#x27;</span><br><span class="line">alias _dft=&#x27;cd $RUHOH &amp;&amp; bundle exec ruhoh posts draft&#x27; # 快速添加草稿</span><br><span class="line">alias _tp=&#x27;cd $RUHOH &amp;&amp; bundle exec ruhoh posts titleize&#x27; # 快速为草稿文件命名</span><br></pre></td></tr></table></figure>
+<p>其中注意将 <code>$RUHOH</code> 和 <code>PUBLISH</code> 两个环境变量更改为你机器上对应的博客源文件仓库和存放编译后的页面的仓库。</p>
+<h3 id="交互式更新">交互式更新</h3>
+<p>因为使用 Github Page 服务来托管我的网站，每次 compile 后我还得手动将我的改动提交到 Github 上，才能在网站上看到最新的修改。为了进一步简化这个过程，我编写了一个 shell 脚本用于完成一系列编译和交互式更新的任务：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/zsh</span></span><br><span class="line">cd $RUHOH</span><br><span class="line">rm -r compiled</span><br><span class="line">bundle exec ruhoh compile</span><br><span class="line">cd -</span><br><span class="line">echo -n &quot;Copy the compiled result to your site repo?[y/n]&quot;</span><br><span class="line">read copy_yn</span><br><span class="line">if [ &quot;$copy_yn&quot; = &quot;y&quot; ]; then</span><br><span class="line">        cp -av $RUHOH/compiled/* $PUBLISH/</span><br><span class="line">        echo -n &quot;Update your site repo?[y/n]&quot;</span><br><span class="line">        read update_site_yn</span><br><span class="line">        case &quot;$update_site_yn&quot; in</span><br><span class="line">            y )</span><br><span class="line">                cd $PUBLISH</span><br><span class="line">                git add --all</span><br><span class="line">                echo -n &quot;Please enter commit message:&quot;</span><br><span class="line">                read commit_message</span><br><span class="line">                git commit -m $commit_message</span><br><span class="line">                git push</span><br><span class="line">                cd -</span><br><span class="line">                echo &quot;Congrats! The site repo has been updated&quot;</span><br><span class="line">                ;;</span><br><span class="line">            n )</span><br><span class="line">                echo &quot;Don&#x27;t copy them this time.&quot;</span><br><span class="line">                ;;</span><br><span class="line">            *)</span><br><span class="line">                echo &quot;Please enter y or n.&quot;</span><br><span class="line">                exit 1</span><br><span class="line">                ;;</span><br><span class="line">        esac</span><br><span class="line">elif [ &quot;$copy_yn&quot; = &quot;n&quot; ]; then</span><br><span class="line">        echo &quot;Don&#x27;t copy them this time.&quot;</span><br><span class="line">else</span><br><span class="line">        echo &quot;Please enter y or n.&quot;</span><br><span class="line">        exit 1</span><br><span class="line">fi    </span><br><span class="line">echo &quot;Update your blog repo?(y/n)&quot;</span><br><span class="line">read update_blog_yn</span><br><span class="line">if [ &quot;$update_blog_yn&quot; = &quot;y&quot; ]; then</span><br><span class="line">        cd $RUHOH</span><br><span class="line">        git add --all</span><br><span class="line">        git commit -m $commit_message</span><br><span class="line">        git push</span><br><span class="line">        cd -</span><br><span class="line">        echo &quot;Congrats! The blog repo has been updated&quot;</span><br><span class="line">elif [ &quot;$update_blog_yn&quot; = &quot;n&quot; ]; then</span><br><span class="line">        echo &quot;Don&#x27;t update the blog repo this time.&quot;</span><br><span class="line">else</span><br><span class="line">        echo &quot;Please enter y or n.&quot;</span><br><span class="line">        exit 1</span><br><span class="line">fi</span><br><span class="line">echo &quot;All done!&quot;</span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+<p>建议将上述脚本保存为 <code>~/ruhoh_compile</code> ，并执行下面的命令将之设为可执行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> chmod +x ~/ruhoh_compile <span class="comment"># 需要 root 权限</span></span></span><br></pre></td></tr></table></figure>
+<p>然后，可以将这个命令追加到 alias 设置中：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alias _cp=&#x27;ruhoh_compile&#x27; # 编译和交互式更新</span><br></pre></td></tr></table></figure>
+<p>这样，每次要编译只需要执行 <code>_cp</code> 指令，系统会自动完成编译工作，并询问是否将更新提交到远程仓库，根据情况回答 y/n 即可。</p>
+<h2 id="总结">总结</h2>
+<p>总的感觉，ruhoh 的定制性的确很强，逻辑视图也比较清晰，不过因为对 Mustache 不太熟悉，暂时还不能很自如的编写模块来实现其他一些想法。比如 Octopress 提供了简单的方法来方便的插入 gist 上的代码片段，但在 ruhoh 中这个功能暂时没有实现。虽然作者在 1.x 的时候就信誓旦旦地说要实现这个功能（见<a target="_blank" rel="noopener" href="http://ruhoh.com/docs/1/create/#toc_17">1.0的文档</a>），但到了 2.0 的时候还是没有实现它，而且作者索性把这个想法都从 2.0 的文档里删掉了<code>--bb</code> 。只能期待作者能够在未来的版本中提供更加丰富的模板功能，还有最重要的：一份更加清晰的文档 <span class='margin-note-marker'><sup>3</sup></span> <span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><span class='margin-note-marker'>3</span>在软件开发过程中，文档的滞后性真是一件残酷的事实。文档总是跟不上最新的改动，这点在 ruhoh 项目也可见一斑。比如现在 ruhoh 已经更新到 2.2 了，官方的文档还停留在 2.1 。</span></span></span>。</p>
+<p>最后罗列一下经过定制后，我经常用到的命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> _rp <span class="comment"># 启动ruhoh服务器</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> _gd <span class="comment"># 开始监听改动</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> _dft <span class="comment"># 快速添加草稿</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> _tp <span class="comment"># 快速为草稿命名</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> _cp <span class="comment"># 编译和交互式更新</span></span></span><br></pre></td></tr></table></figure>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/codes/handout-with-script/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/life/evogeo-video/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: 'From WordPress to Ruhoh'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/from-wordpress-to-ruhoh.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2013-06-02 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/codes/">codes<span>38</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/ruhoh/">ruhoh<span>3</span></a></li> <li><a href="/tags/HaHack/">HaHack<span>3</span></a></li> <li><a href="/tags/LiveReload/">LiveReload<span>2</span></a></li> <li><a href="/tags/ruby/">ruby<span>1</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE-Ruhoh"><span class="toc-article-text">安装配置 Ruhoh</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85-Ruby"><span class="toc-article-text">安装 Ruby</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%8D%A2%E7%94%A8%E6%B7%98%E5%AE%9D-RubyGems-%E9%95%9C%E5%83%8F"><span class="toc-article-text">换用淘宝 RubyGems 镜像</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85-Ruhoh"><span class="toc-article-text">安装 Ruhoh</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%AB%AF%E5%8F%A3%E5%8D%A0%E7%94%A8%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3"><span class="toc-article-text">端口占用问题的解决</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%96%87%E7%AB%A0%E6%90%AC%E5%AE%B6"><span class="toc-article-text">文章搬家</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%AE%9A%E5%88%B6-ruhoh"><span class="toc-article-text">定制 ruhoh</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%9B%B4%E6%8D%A2Converter"><span class="toc-article-text">更换Converter</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%98%BE%E7%A4%BA%E5%85%AC%E5%BC%8F"><span class="toc-article-text">显示公式</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E8%AF%AD%E6%B3%95%E9%AB%98%E4%BA%AE"><span class="toc-article-text">语法高亮</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B8%AA%E6%80%A7%E5%8C%96"><span class="toc-article-text">个性化</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#RSS"><span class="toc-article-text">RSS</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E8%87%AA%E5%8A%A8%E5%88%B7%E6%96%B0"><span class="toc-article-text">自动刷新</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%85%B6%E4%BB%96%E6%8A%80%E5%B7%A7"><span class="toc-article-text">其他技巧</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E8%AE%BE%E7%BD%AE-alias"><span class="toc-article-text">设置 alias</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%BA%A4%E4%BA%92%E5%BC%8F%E6%9B%B4%E6%96%B0"><span class="toc-article-text">交互式更新</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-article-text">总结</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

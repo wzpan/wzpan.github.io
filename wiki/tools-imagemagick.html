@@ -1,0 +1,980 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>ImageMagicK | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="格式转换
+  更多格式转换说明：http://www.imagemagick.org/script/convert.php
+
+将图像转成 png 格式
+1$ convert rose.jpg rose.png
+将 pdf 文档转成 png 格式，并设置精度为 300 dpi
+1$ convert l">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="ImageMagicK"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: 'ImageMagicK'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> ImageMagicK 常用命令</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="格式转换">格式转换</h2>
+<div class="alert alert-info"><i class="fas fa-info"></i>  更多格式转换说明：<a target="_blank" rel="noopener" href="http://www.imagemagick.org/script/convert.php">http://www.imagemagick.org/script/convert.php</a>
+</div>
+<h3 id="将图像转成-png-格式">将图像转成 png 格式</h3>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ convert rose.jpg rose.png</span><br></pre></td></tr></table></figure>
+<h3 id="将-pdf-文档转成-png-格式，并设置精度为-300-dpi">将 pdf 文档转成 png 格式，并设置精度为 300 dpi</h3>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ convert letter.pdf -density 300 letter.png</span><br></pre></td></tr></table></figure>
+<h2 id="缩放图像">缩放图像</h2>
+<h3 id="保持高宽比">保持高宽比</h3>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ convert dragon.gif -resize 64x64 resize_dragon.gif</span><br><span class="line">$ convert terminal.gif  -resize 64x64  resize_terminal.gif</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/resize1.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h3 id="不保持高宽比">不保持高宽比</h3>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ convert dragon.gif    -resize 64x64\!  exact_dragon.gif</span><br><span class="line">$ convert terminal.gif  -resize 64x64\!  exact_terminal.gif</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/resize2.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h3 id="只缩小大图">只缩小大图</h3>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ convert dragon.gif    -resize 64x64\&gt;  shrink_dragon.gif</span><br><span class="line">$ convert terminal.gif  -resize 64x64\&gt;  shrink_terminal.gif</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/resize3.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>只放大小图与此类似，但使用 <code>&lt;</code> 标记。</p>
+<h3 id="按比例缩放">按比例缩放</h3>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ convert dragon.gif    -resize 50%  half_dragon.gif</span><br><span class="line">$ convert terminal.gif  -resize 50%  half_terminal.gif</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/23097jwk.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h2 id="图像组合">图像组合</h2>
+<h3 id="图片拼接">图片拼接</h3>
+<div class="alert alert-info"><i class="fas fa-info"></i>  本节更多示例：<a target="_blank" rel="noopener" href="http://www.imagemagick.org/Usage/montage/">http://www.imagemagick.org/Usage/montage/</a>
+</div>
+<h4 id="拼接两张图">拼接两张图</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ montage -background #336699 -geometry +4+4 rose.jpg red-ball.png montage.jpg</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/montage1.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>加点装饰：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ montage -label %f -frame 5 -background #336699 -geometry +4+4 rose.jpg red-ball.png frame.jpg</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/montage2.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h4 id="拼接多张图">拼接多张图</h4>
+<p>可以通过 <code>-tile</code> 选项指定图片排列的方式。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ montage font_[1-7].gif  -tile 9x1  -geometry 16x16+1+1  tile_9x1.gif</span><br><span class="line">$ montage font_[1-7].gif  -tile 4x3  -geometry 16x16+1+1  tile_4x3.gif</span><br><span class="line">$ montage font_[1-7].gif  -tile 3x3  -geometry 16x16+1+1  tile_3x3.gif</span><br><span class="line">$ montage font_1.gif      -tile 2x3  -geometry 16x16+1+1  tile_2x3.gif</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/23097vOA.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h3 id="图层叠加">图层叠加</h3>
+<div class="alert alert-info"><i class="fas fa-info"></i>  本节更多示例：<a target="_blank" rel="noopener" href="http://www.imagemagick.org/Usage/annotating/#overlay">http://www.imagemagick.org/Usage/annotating/#overlay</a>
+</div>
+<h4 id="居中叠加">居中叠加</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ composite -gravity center  castle.gif  frame.gif  castle_button.gif</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/1369I1w.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h4 id="指定位置叠加">指定位置叠加</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ composite -geometry +31+105  hand_point.gif dragon.gif \</span><br><span class="line">            dragon_claw_pointed.jpg</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/1369V_2.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h3 id="图像水印">图像水印</h3>
+<div class="alert alert-info"><i class="fas fa-info"></i>  本节更多示例：<a target="_blank" rel="noopener" href="http://www.imagemagick.org/Usage/annotating/#watermarking">http://www.imagemagick.org/Usage/annotating/#watermarking</a>
+</div>
+<h4 id="简单文字水印">简单文字水印</h4>
+<p>先创建一个文字水印：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ convert -size 300x50 xc:grey30 -font Arial -pointsize 20 -gravity center \</span><br><span class="line">          -draw &quot;fill grey70  text 0,0  &#39;Copyright&#39;&quot; \</span><br><span class="line">          stamp_fgnd.png</span><br><span class="line">$ convert -size 300x50 xc:black -font Arial -pointsize 20 -gravity center \</span><br><span class="line">          -draw &quot;fill white  text  1,1  &#39;Copyright&#39;  \</span><br><span class="line">                             text  0,0  &#39;Copyright&#39;  \</span><br><span class="line">                 fill black  text -1,-1 &#39;Copyright&#39;&quot; \</span><br><span class="line">          +matte stamp_mask.png</span><br><span class="line">$ composite -compose CopyOpacity  stamp_mask.png  stamp_fgnd.png  stamp.png</span><br><span class="line">$ mogrify -trim +repage stamp.png</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/1369HJG.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>再把水印添加进图像：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ composite -gravity south -geometry +0+10 stamp.png  logo.jpg \</span><br><span class="line">            wmark_text_stamped.jpg</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/1369UTM.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h4 id="整幅图像加水印">整幅图像加水印</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$  convert -size 140x80 xc:none -fill grey \</span><br><span class="line">          -gravity NorthWest -draw <span class="string">&quot;text 10,10 &#x27;Copyright&#x27;&quot;</span> \</span><br><span class="line">          -gravity SouthEast -draw <span class="string">&quot;text 5,15 &#x27;Copyright&#x27;&quot;</span> \</span><br><span class="line">          miff:- |\</span><br><span class="line">    composite -tile - logo.jpg  wmark_text_tiled.jpg</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/1369hdS.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h3 id="更-fancy-的组合特效">更 fancy 的组合特效</h3>
+<h4 id="示例1">示例1</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ convert -page +5+5    holocaust_tn.gif \</span><br><span class="line">          -page +80+50  spiral_stairs_tn.gif \</span><br><span class="line">          -page +40+105 chinese_chess_tn.gif \</span><br><span class="line">          +page \</span><br><span class="line">          -alpha Set -virtual-pixel transparent \</span><br><span class="line">          -channel A -blur 0x10  -level 50,100% +channel \</span><br><span class="line">          \( -size 200x200 tile:tile_fabric.gif -alpha Set \) -insert 0 \</span><br><span class="line">          -background None -flatten  overlap_canvas.jpg</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/1369unY.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h4 id="示例2">示例2</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">center=0   <span class="comment"># Start position of the center of the first image.</span></span><br><span class="line">             <span class="comment"># This can be ANYTHING, as only relative changes are important.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> image <span class="keyword">in</span> ../img_photos/[a-m]*_orig.jpg</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># Add 70 to the previous images relative offset to add to each image</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line">  center=`convert xc: -format <span class="string">&quot;%[fx: <span class="variable">$center</span> +70 ]&quot;</span> info:`</span><br><span class="line"></span><br><span class="line">  <span class="comment"># read image, add fluff, and using centered padding/trim locate the</span></span><br><span class="line">  <span class="comment"># center of the image at the next location (relative to the last).</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line">  convert -size 500x500 <span class="string">&quot;<span class="variable">$image</span>&quot;</span> -thumbnail 240x240 \</span><br><span class="line">          -<span class="built_in">set</span> caption <span class="string">&#x27;%t&#x27;</span> -bordercolor Lavender -background black \</span><br><span class="line">          -pointsize 12  -density 96x96  +polaroid  -resize 30% \</span><br><span class="line">          -gravity center -background None -extent 100x100 -trim \</span><br><span class="line">          -repage +<span class="variable">$&#123;center&#125;</span>+0\!    MIFF:-</span><br><span class="line"></span><br><span class="line"><span class="keyword">done</span> |</span><br><span class="line">  <span class="comment"># read pipeline of positioned images, and merge together</span></span><br><span class="line">  convert -background skyblue   MIFF:-  -layers merge +repage \</span><br><span class="line">          -bordercolor skyblue -border 3x3   overlapped_polaroids.jpg</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/13697xe.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h4 id="示例3">示例3</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ convert thumbnail.gif \</span><br><span class="line">     -bordercolor white  -border 6 \</span><br><span class="line">     -bordercolor grey60 -border 1 \</span><br><span class="line">     -bordercolor none  -background  none \</span><br><span class="line">     \( -<span class="built_in">clone</span> 0 -rotate `convert null: -format <span class="string">&#x27;%[fx:rand()*30-15]&#x27;</span> info:` \) \</span><br><span class="line">     \( -<span class="built_in">clone</span> 0 -rotate `convert null: -format <span class="string">&#x27;%[fx:rand()*30-15]&#x27;</span> info:` \) \</span><br><span class="line">     \( -<span class="built_in">clone</span> 0 -rotate `convert null: -format <span class="string">&#x27;%[fx:rand()*30-15]&#x27;</span> info:` \) \</span><br><span class="line">     \( -<span class="built_in">clone</span> 0 -rotate `convert null: -format <span class="string">&#x27;%[fx:rand()*30-15]&#x27;</span> info:` \) \</span><br><span class="line">     -delete 0  -border 100x80  -gravity center \</span><br><span class="line">     -crop 200x160+0+0  +repage  -flatten  -trim +repage \</span><br><span class="line">     -background black \( +<span class="built_in">clone</span> -shadow 60x4+4+4 \) +swap \</span><br><span class="line">     -background none  -flatten \</span><br><span class="line">     poloroid_stack.png</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/1369I8k.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h4 id="示例4">示例4</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ convert -size 150x150 xc:none -background none \</span><br><span class="line">          -fill white -stroke grey60 \</span><br><span class="line">          -draw <span class="string">&quot;rectangle 0,0 130,100&quot;</span> thumbnail.gif \</span><br><span class="line">                -geometry +5+5 -composite -rotate -10 \</span><br><span class="line">          -draw <span class="string">&quot;rectangle 0,0 130,100&quot;</span> thumbnail.gif \</span><br><span class="line">                -geometry +5+5 -composite -rotate -10 \</span><br><span class="line">          -draw <span class="string">&quot;rectangle 0,0 130,100&quot;</span> thumbnail.gif \</span><br><span class="line">                -geometry +5+5 -composite -rotate +10 \</span><br><span class="line">          -trim +repage -background LightSteelBlue -flatten \</span><br><span class="line">          poloroid_spread.gif</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/1369VGr.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h2 id="图片装饰">图片装饰</h2>
+<h3 id="添加边框">添加边框</h3>
+<div class="alert alert-info"><i class="fas fa-info"></i>  本节更多示例：<a target="_blank" rel="noopener" href="http://www.imagemagick.org/Usage/crop/#frame">http://www.imagemagick.org/Usage/crop/#frame</a>
+</div>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ convert thumbnail.gif   -mattecolor peru  -frame 9x9+3+3  framed.gif</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/13697qq.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h3 id="添加阴影">添加阴影</h3>
+<div class="alert alert-info"><i class="fas fa-info"></i>  本节更多示例：<a target="_blank" rel="noopener" href="http://www.imagemagick.org/Usage/blur/#shadow">http://www.imagemagick.org/Usage/blur/#shadow</a>
+</div>
+<h4 id="柔化阴影">柔化阴影</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$  convert rose: \( +<span class="built_in">clone</span>  -background navy  -shadow 80x3+5+5 \) +swap \</span><br><span class="line">          -background none   -layers merge  +repage   shadow.png</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/136963L.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h4 id="硬阴影">硬阴影</h4>
+<p>通过改变 <code>-shadow</code> 的第二个变量 <code>sigmal</code> 来调节柔化程度。如果为 0 ，则产生硬阴影（hard shadow）。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ convert rose: \( +<span class="built_in">clone</span>  -background navy  -shadow 60x0+4+4 \) +swap \</span><br><span class="line">          -background none   -layers merge +repage  shadow_hard.png</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/1369HCS.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h4 id="控制阴影方向">控制阴影方向</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ convert rose: \( +<span class="built_in">clone</span> -background navy -shadow 80x3-5+5 \) +swap \</span><br><span class="line">          -background none  -layers merge +repage  shadow_other.png</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/1369UMY.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h4 id="与-montage-命令结合">与 <code>montage</code> 命令结合</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ montage balloon.gif medical.gif present.gif shading.gif \</span><br><span class="line">          -tile x1  -frame 5  -shadow  -geometry +5+5   frame_shadow.jpg</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/1369ugk.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>注意这个方法只能产生普通的柔化阴影效果，无法控制阴影的颜色、柔化程度、位置等。</p>
+<h3 id="添加文本标签">添加文本标签</h3>
+<div class="alert alert-info"><i class="fas fa-info"></i>  本节更多示例：<a target="_blank" rel="noopener" href="http://www.imagemagick.org/Usage/annotating/">http://www.imagemagick.org/Usage/annotating/</a>
+</div>
+<h4 id="在图像下方添加标签">在图像下方添加标签</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ convert dragon.gif   -background Khaki  label:<span class="string">&#x27;Faerie Dragon&#x27;</span> \</span><br><span class="line">          -gravity Center -append    anno_label.jpg</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/1369U-v.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h4 id="在图像上方添加标签">在图像上方添加标签</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$  convert dragon.gif   -background Orange  label:<span class="string">&#x27;Faerie Dragon&#x27;</span> \</span><br><span class="line">          +swap  -gravity Center -append    anno_label2.jpg</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/1369TSF.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h4 id="利用-montage-命令">利用 montage 命令</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ montage -label <span class="string">&quot;Faerie Dragon&quot;</span> dragon.gif \</span><br><span class="line">          -font Candice -pointsize 15 \</span><br><span class="line">          -frame 5  -geometry +0+0 anno_montage2.jpg</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/1369tmR.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h4 id="更炫的效果">更炫的效果</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ convert -caption <span class="string">&quot;Faerie Dragon&quot;</span> dragon.gif -gravity center \</span><br><span class="line">           -background black +polaroid anno_polaroid.png</span><br></pre></td></tr></table></figure>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/tools-imagemagick/1369H7d.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h2 id="深入阅读">深入阅读</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.imagemagick.org/Usage/">Examples of ImageMagicK Usage</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.imagemagick.org/script/command-line-tools.php">Common-Line Tools</a></li>
+</ul>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/tools-tmux.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/tools-docker.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: 'ImageMagicK'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

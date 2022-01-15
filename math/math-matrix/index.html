@@ -1,0 +1,759 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>机器学习的数学基础：矩阵篇 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="本文将总结线性代数中矩阵的基本知识点。同时理论结合实践，使用 Python 来进行实践。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="机器学习的数学基础：矩阵篇"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '机器学习的数学基础：矩阵篇'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 机器学习的数学基础：矩阵篇</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>本文将总结线性代数中矩阵的基本知识点。同时理论结合实践，使用 Python 来进行实践。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <h2 id="前言">前言</h2>
+<p>机器学习如火如荼，要学习机器学习，数学基础少不了。所以本系列将对机器学习所用到的线性代数、微积分和概率统计的基础知识做一个简单的概括。</p>
+<p>本文将总结线性代数中矩阵的基本知识点。同时理论结合实践，使用 Python 来进行实践。如果需要跟着进行编程实践，请先确保下列环境已安装：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.python.org/">Python</a> - 编程实践所使用的语言；</li>
+<li><a target="_blank" rel="noopener" href="https://pypi.python.org/pypi/numpy">Numpy</a> - Python 的数值计算库。</li>
+</ul>
+<p>矩阵（Matrix）是人为约定的一种数据的表示方法，在图像处理、人工智能等领域，使用矩阵来表示和处理数据非常常见。<span id="more"></span>一个矩阵的举例：</p>
+<p>\[\mathbf{A}_{2 \times 3}=\begin{bmatrix} 5 &amp; 2 &amp; 7 \\ 1 &amp; 3 &amp; 4  \end{bmatrix}\]</p>
+<p>其中，矩阵 \(\mathbf{A}\) 的下标 \(2 \times 3\) 表示 \(\mathbf{A}\) 是一个 2 行 3 列的矩阵。类似的，另一个示例：</p>
+<p>\[\mathbf{ B }_{ 4 \times 4 }=\begin{bmatrix} 5 &amp; 2 &amp; 7 &amp; 6 \\ 1 &amp; 3 &amp; 4 &amp; 2 \\ 7 &amp; -1 &amp; 9 &amp; 0 \\ 8  &amp; 2 &amp; -2 &amp; 3 \end{bmatrix}\]</p>
+<p>再看回矩阵 \(\mathbf{A}\) ，如果要表示第 2 行的第 2 个元素 3 ，可以使用 \(\mathbf{A}[2, 2]\) 或 \(a_{2,2}\)。</p>
+<p>Python 的 Numpy 库提供了 ndarray 类用于存储高维数组及普通的数组运算，另外提供 matrix 类用来支持矩阵运算。使用 Python 创建矩阵很简单：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a = np.matrix(<span class="string">&#x27;5 2 7;1 3 4&#x27;</span>)</span><br><span class="line">b = np.matrix(<span class="string">&#x27;5 2 7 6;1 3 4 2;8 2 -2 3&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>也可以用下面这种形式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a = np.matrix([[<span class="number">5</span>,<span class="number">2</span>,<span class="number">7</span>],[<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>]])</span><br><span class="line">b = np.matrix([[<span class="number">5</span>,<span class="number">2</span>,<span class="number">7</span>,<span class="number">6</span>],[<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">2</span>],[<span class="number">8</span>,<span class="number">2</span>,-<span class="number">2</span>,<span class="number">3</span>]])</span><br></pre></td></tr></table></figure>
+<p>两种形式完全等效。但第一种更简明直观，不容易犯错。因此推荐第一种方式。</p>
+<p>要把一个 matrix 对象转换为 ndarray 对象，可以直接用 <code>getA()</code> 方法。而把 ndarray 对象转成 matrix 对象可以用 <code>asmatrix()</code> 方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = a.getA()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span> b</span><br><span class="line">[[<span class="number">5</span> <span class="number">2</span> <span class="number">7</span>]</span><br><span class="line"> [<span class="number">1</span> <span class="number">3</span> <span class="number">4</span>]]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">type</span>(b)</span><br><span class="line">&lt;<span class="built_in">type</span> <span class="string">&#x27;numpy.ndarray&#x27;</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c = np.asmatrix(b)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span> c</span><br><span class="line">[[<span class="number">5</span> <span class="number">2</span> <span class="number">7</span>]</span><br><span class="line"> [<span class="number">1</span> <span class="number">3</span> <span class="number">4</span>]]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">type</span>(c)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">numpy</span>.<span class="title">matrixlib</span>.<span class="title">defmatrix</span>.<span class="title">matrix</span>&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
+<p>要取出矩阵中的某个值，可以使用类似数组的下标运算符。但要注意的是，计算机是以 0 开始计数的。例如，要取出 \(\mathbf{A}[2,2]\) ，应该使用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="number">1</span>,<span class="number">1</span>]</span><br><span class="line">a[<span class="number">1</span>,<span class="number">1</span>]</span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure>
+<h2 id="基本运算">基本运算</h2>
+<h3 id="加">加</h3>
+<p>矩阵加法的定义非常符合直觉。假设有 \(\mathbf{ A }_{ 3 \times 3 }=\begin{bmatrix} 1 &amp; 0 &amp; 1 \\ 1 &amp; 2 &amp; 1 \\ 2 &amp; 1 &amp; 1 \end{bmatrix}\) ， \(\mathbf{ B }_{ 3 \times 3 }=\begin{bmatrix} 2 &amp; 1 &amp; -1 \\ 0 &amp; -1 &amp; 2 \\ 2 &amp; -1 &amp; 0 \end{bmatrix}\) ，则:</p>
+<p>\[\mathbf{A}+\mathbf{B} = \begin{bmatrix} 1 &amp; 0 &amp; 1 \\ 1 &amp; 2 &amp; 1 \\ 2 &amp; 1 &amp; 1 \end{bmatrix} + \begin{bmatrix} 2 &amp; 1 &amp; -1 \\ 0 &amp; -1 &amp; 2 \\ 2 &amp; -1 &amp; 0 \end{bmatrix} = \begin{bmatrix} 1+2 &amp; 0+1 &amp; 1+(-1) \\ 1+ 0 &amp; 2+(-1) &amp; 1+2 \\ 2+2 &amp; 1+(-1) &amp; 1+0 \end{bmatrix} = \begin{bmatrix} 3 &amp; 1 &amp; 0 \\ 1 &amp; 1 &amp; 3 \\ 4 &amp; 0 &amp; 1 \end{bmatrix} \]</p>
+<p>要注意两个矩阵的行数和列数必须相同，否则无定义。</p>
+<p>Python 示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.matrix(<span class="string">&#x27;1 0 1;1 2 1;2 1 1&#x27;</span>)</span><br><span class="line">a = np.matrix(<span class="string">&#x27;1 0 1;1 2 1;2 1 1&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = np.matrix(<span class="string">&#x27;2 1 -1;0 -1 2;2 -1 0&#x27;</span>)</span><br><span class="line">b = np.matrix(<span class="string">&#x27;2 1 -1;0 -1 2;2 -1 0&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a + b</span><br><span class="line">a + b</span><br><span class="line">matrix([[<span class="number">3</span>, <span class="number">1</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">1</span>, <span class="number">3</span>],</span><br><span class="line">        [<span class="number">4</span>, <span class="number">0</span>, <span class="number">1</span>]])</span><br></pre></td></tr></table></figure>
+<p>很容易看出，矩阵的加法满足交换律和结合律，即 \(\mathbf{A} + \mathbf{B} = \mathbf{B} + \mathbf{A}\)， \((\mathbf{A} + \mathbf{B}) + \mathbf{C} = \mathbf{A} + (\mathbf{B} + \mathbf{C})\)。</p>
+<h3 id="减">减</h3>
+<p>矩阵减法也和加法一样简单。对于上面给出的 \(\mathbf{A}\) 和 \(\mathbf{B}\)，有：</p>
+<p>\[\mathbf{A}-\mathbf{B}=\begin{bmatrix} 1 &amp; 0 &amp; 1 \\ 1 &amp; 2 &amp; 1 \\ 2 &amp; 1 &amp; 1 \end{bmatrix}-\begin{bmatrix} 2 &amp; 1 &amp; -1 \\ 0 &amp; -1 &amp; 2 \\ 2 &amp; -1 &amp; 0 \end{bmatrix}=\begin{bmatrix} 1-2 &amp; 0-1 &amp; 1-(-1) \\ 1-0 &amp; 2-(-1) &amp; 1-2 \\ 2-2 &amp; 1-(-1) &amp; 1-0 \end{bmatrix}=\begin{bmatrix} -1 &amp; -1 &amp; 2 \\ 1 &amp; 3 &amp; -1 \\ 0 &amp; 2 &amp; 1 \end{bmatrix}\]</p>
+<p>同样，相减的两个矩阵行数和列数必须完全相同，否则无定义。</p>
+<p>Python 示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a - b</span><br><span class="line">a - b</span><br><span class="line">matrix([[-<span class="number">1</span>, -<span class="number">1</span>,  <span class="number">2</span>],</span><br><span class="line">        [ <span class="number">1</span>,  <span class="number">3</span>, -<span class="number">1</span>],</span><br><span class="line">        [ <span class="number">0</span>,  <span class="number">2</span>,  <span class="number">1</span>]])</span><br></pre></td></tr></table></figure>
+<h3 id="乘">乘</h3>
+<p>矩阵乘法的定义是 \(\mathbf{A}_{i \times j}\) 矩阵的每一行的元素分别与 $\mathbf{B}_{j \times k} $ 矩阵的每一列的元素两两相乘并相加，从而得到一个新的矩阵 \(\mathbf{C}_{i \times k}\) 。两个矩阵能相乘的充分必要条件是第一个矩阵的列数与第二个矩阵的行数相等，否则无定义。例如，对于上面给出的 \(\mathbf{A}\) 和 \(\mathbf{B}\)，有：</p>
+<p>\[\begin {aligned} 
+\mathbf{A} \times \mathbf{B} &amp;=\begin{bmatrix} 1 &amp; 0 &amp; 1 \\ 1 &amp; 2 &amp; 1 \\ 2 &amp; 1 &amp; 1 \end{bmatrix}\times \begin{bmatrix} 2 &amp; 1 &amp; -1 \\ 0 &amp; -1 &amp; 2 \\ 2 &amp; -1 &amp; 0 \end{bmatrix} \\\ &amp;=\begin{bmatrix} 1\cdot 2+0\cdot 0+1\cdot 2 &amp; 1\cdot 1+0\cdot (-1)+1\cdot (-1) &amp; 1\cdot (-1)+0\cdot 2+1\cdot 0 \\ 1\cdot 2+2\cdot 0+1\cdot 2 &amp; 1\cdot 1+2\cdot (-1)+1\cdot (-1) &amp; 1\cdot (-1)+2\cdot 2+1\cdot 0 \\ 2\cdot 2+1\cdot 0+1\cdot 2 &amp; 2\cdot 1+1\cdot (-1)+1\cdot (-1) &amp; 2\cdot (-1)+1\cdot 2+1\cdot 0 \end{bmatrix}\\\ &amp;=\begin{bmatrix} 4 &amp; 0 &amp; -1 \\ 4 &amp; -2 &amp; 3 \\ 6 &amp; 0 &amp; 0 \end{bmatrix}
+\end {aligned} \]</p>
+<p>再举一个行列数不同的例子， 假设有 \(\mathbf{C}_{2 \times 3} = \begin{bmatrix} 5 &amp; 7 &amp; 2 \\ 4 &amp; 3 &amp; 1 \end{bmatrix}\) 和 \(\mathbf{D}_{3 \times 1} = \begin{bmatrix} 1 \\ 5 \\ 6 \end{bmatrix}\)，则可以得出：</p>
+<p>\[
+\mathbf{C}\times \mathbf{D} = \begin{bmatrix} 5 &amp; 7 &amp; 2 \\ 4 &amp; 3 &amp; 1 \end{bmatrix}\times \begin{bmatrix} 1 \\ 5 \\ 6 \end{bmatrix}
+ =\begin{bmatrix} 5 \cdot 1+ 7 \cdot 5+ 2\cdot 6 \\ 4\cdot 1+3\cdot 5+1\cdot 6  \end{bmatrix} =\begin{bmatrix} 52 \\ 25 \end{bmatrix}
+\]</p>
+<p>与初等代数的乘法不同，矩阵的乘法并不满足交换律，即 \(\mathbf{A} \times \mathbf{B} \ne \mathbf{B} \times \mathbf{A}\)。但满足分配律，即 \((\mathbf{A} \times \mathbf{B}) \times \mathbf{C} = \mathbf{A} \times (\mathbf{B} \times \mathbf{C})\)。</p>
+<p>再介绍两个特殊的矩阵：</p>
+<ol>
+<li>单元矩阵 \(\mathbf{I}\) 。它的特点是行数列数相等，且在对角线上值为 1，其他地方值为 0 。它的一个特性是与其他矩阵相乘都等于那个矩阵本身。一个 \(3\times 3\) 的单元矩阵示例：\[\mathbf{I}_{3 \times 3} = \begin{bmatrix} 1 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \end{bmatrix}\]</li>
+<li>零矩阵。顾名思义就是全部元素都是 0 的矩阵。零矩阵乘以任何矩阵都为零矩阵，与任何矩阵相加都等于那个矩阵。</li>
+</ol>
+<p>Python 示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a * b</span><br><span class="line">a * b</span><br><span class="line">matrix([[ <span class="number">4</span>,  <span class="number">0</span>, -<span class="number">1</span>],</span><br><span class="line">        [ <span class="number">4</span>, -<span class="number">2</span>,  <span class="number">3</span>],</span><br><span class="line">        [ <span class="number">6</span>,  <span class="number">0</span>,  <span class="number">0</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b * a</span><br><span class="line">b * a</span><br><span class="line">matrix([[ <span class="number">1</span>,  <span class="number">1</span>,  <span class="number">2</span>],</span><br><span class="line">        [ <span class="number">3</span>,  <span class="number">0</span>,  <span class="number">1</span>],</span><br><span class="line">        [ <span class="number">1</span>, -<span class="number">2</span>,  <span class="number">1</span>]])        </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c = np.matrix(<span class="string">&#x27;5 7 2;4 3 1&#x27;</span>)</span><br><span class="line">c = np.matrix(<span class="string">&#x27;5 7 2;4 3 1&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d = np.matrix(<span class="string">&#x27;1;5;6&#x27;</span>)</span><br><span class="line">d = np.matrix(<span class="string">&#x27;1;5;6&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c*d</span><br><span class="line">c*d</span><br><span class="line">matrix([[<span class="number">52</span>],</span><br><span class="line">        [<span class="number">25</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a * b * d</span><br><span class="line">a * b * d</span><br><span class="line">matrix([[-<span class="number">2</span>],</span><br><span class="line">        [<span class="number">12</span>],</span><br><span class="line">        [ <span class="number">6</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a * (b * d)</span><br><span class="line">a * (b * d)</span><br><span class="line">matrix([[-<span class="number">2</span>],</span><br><span class="line">        [<span class="number">12</span>],</span><br><span class="line">        [ <span class="number">6</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>I = np.eye(<span class="number">3</span>)  <span class="comment"># 创建一个3阶单元矩阵</span></span><br><span class="line">I = np.np.eye(<span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a * I</span><br><span class="line">a * I</span><br><span class="line">matrix([[<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>],</span><br><span class="line">        [<span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>I * a</span><br><span class="line">I * a</span><br><span class="line">matrix([[<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line">        [<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>],</span><br><span class="line">        [<span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a * z</span><br><span class="line">a * z</span><br><span class="line">matrix([[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b * z</span><br><span class="line">b * z</span><br><span class="line">matrix([[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c * z</span><br><span class="line">c * z</span><br><span class="line">matrix([[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">        [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]])</span><br></pre></td></tr></table></figure>
+<p>注意上面创建单元矩阵用了 ‘eye()’ 函数，它等同于下面的写法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>I = np.matrix(<span class="string">&#x27;1 0 0;0 1 0;0 0 1&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="除（求逆）">除（求逆）</h3>
+<p>矩阵并没有一个直接叫除法的操作。但有个与之相似的运算，叫做求逆运算。</p>
+<p>矩阵 \(\mathbf{A}\) 的逆 \(\mathbf{A}^{-1}\) 被定义为一个与 \(\mathbf{A}\) 相乘后能得到一个单元矩阵的矩阵。即：\(\mathbf{A} \times \mathbf{A}^{-1} = \mathbf{I}\)。求逆这个操作本身是可逆的，一个矩阵的逆的逆也是这个矩阵本身。因此 \(\mathbf{A}^{-1} \times \mathbf{A} = \mathbf{I}\)。根据这个特点我们可以推断出能求逆的矩阵，其行数和列数也必然相同。</p>
+<p>为什么说这个求逆操作很像除等代数的除法呢？因为矩阵的逆很像数的倒数，一个数乘以它的倒数等于 1。而拿倒数与其他数相乘，就相当于被其他数除。</p>
+<p>矩阵的求逆有很多种方法。常见的有伴随阵法、初等变换法、分块矩阵求逆法等。</p>
+<h4 id="伴随阵法">伴随阵法</h4>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  <strong>定理</strong> \(n\) 阶矩阵 \(\mathbf{A}=\begin{bmatrix}a_{ij}\end{bmatrix}\) 为可逆的充分必要条件是 \(\mathbf{A}\) 非奇异。且
+<p>\[\mathbf{A}^{-1}=\frac{1}{|\mathbf{A}|}\begin{bmatrix}A_{11} &amp; A_{21} &amp; \ldots &amp; A_{n1} \\ A_{12} &amp; A_{22} &amp; \ldots &amp; A_{n2} \\ \ldots &amp; \ldots &amp; \ldots &amp; \ldots \\ A_{1n} &amp; A_{2n} &amp; \ldots &amp; A_{nn} \end{bmatrix}\]</p>
+<p>其中 \(\mathbf{A}_{ij}\) 是 \(|\mathbf{A}|\) 中元素 \(a_{ij}\) 的代数余子式。</p>
+</div>
+<p>矩阵 \(\begin{bmatrix}A_{11} &amp; A_{21} &amp; \ldots &amp; A_{n1} \\ A_{12} &amp; A_{22} &amp; \ldots &amp; A_{n2} \\ \ldots &amp; \ldots &amp; \ldots &amp; \ldots \\ A_{1n} &amp; A_{2n} &amp; \ldots &amp; A_{nn} \end{bmatrix}\) 称为矩阵 \(\mathbf{A}\) 的伴随矩阵，记作 \(\mathbf{A}^{*}\) ，于是有 \(\mathbf{A}^{-1}=\frac{1}{|\mathbf{A}|}\mathbf{A}^{*}\)。</p>
+<p>对于二阶矩阵，使用伴随阵法比较简单。</p>
+<p>假定一个矩阵 \(\mathbf{M}=\begin{bmatrix} a &amp; b \\ c &amp; d \end{bmatrix}\)，则</p>
+<p>\[\mathbf{M}^{-1}=\frac{1}{|\mathbf{M}|}\begin{bmatrix} d &amp; -b \\ -c &amp; a \end{bmatrix}\]</p>
+<p>，其中 \(|\mathbf{M}|\) 称为矩阵 \(\mathbf{M}\) 的行列式：</p>
+<p>\[|\mathbf{M}| = ad - bc\]</p>
+<p>，而 \(\begin{bmatrix} d &amp; -b \\ -c &amp; a \end{bmatrix}\) 就是矩阵 \(\mathbf{M}\) 的伴随矩阵。</p>
+<p>例如，对于矩阵 \(A = \begin{bmatrix} 5 &amp; 7 \\ 3 &amp; 2 \end{bmatrix}\)，那么有：</p>
+<p>\[|\mathbf{A}|=5\cdot 2-7\cdot 3=-11\]</p>
+<p>，则</p>
+<p>\[\mathbf{A}^{ -1 }=\frac { 1 }{ -11 } \begin{bmatrix} 2 &amp; -7 \\ -3 &amp; 5 \end{bmatrix}=\begin{bmatrix} -\frac { 2 }{ 11 }  &amp; \frac { 7 }{ 11 }  \\ \frac { 3 }{ 11 }  &amp; -\frac { 5 }{ 11 }  \end{bmatrix}\]</p>
+<p>验证一下 \(\mathbf{A} \times \mathbf{A}^{-1}\) 的值是否等于 \(\mathbf{I}\) ，有：</p>
+<p>\[\mathbf{A}\times \mathbf{A}^{ -1 }=\begin{bmatrix} 5 &amp; 7 \\ 3 &amp; 2 \end{bmatrix}\times \begin{bmatrix} -\frac { 2 }{ 11 }  &amp; \frac { 7 }{ 11 }  \\ \frac { 3 }{ 11 }  &amp; -\frac { 2 }{ 11 }  \end{bmatrix}=\begin{bmatrix} 5\cdot \left( -\frac { 2 }{ 11 }  \right) +7\cdot \frac { 3 }{ 11 }  &amp; 5\cdot \frac { 7 }{ 11 } +\left( -7\cdot \frac { 5 }{ 11 }  \right)  \\ 3\cdot \left( -\frac { 2 }{ 11 }  \right) +2\cdot \frac { 3 }{ 11 }  &amp; 3\cdot \frac { 7 }{ 11 } +2\cdot \left( -\frac { 5 }{ 11 }  \right)  \end{bmatrix}=\begin{bmatrix} 1 &amp; 0 \\ 0 &amp; 1 \end{bmatrix} = \mathbf{I}\]</p>
+<h4 id="初等变换法">初等变换法</h4>
+<p>求元素为具体数字的矩阵的逆矩阵，常用初等变换法（又称为高斯·约当消去法）。用矩阵表示 $(\mathbf{A} \mathbf{I})\xrightarrow [  ]{ 初等变换 } (\mathbf{I} \mathbf{A}^{-1}) $ ，就是求逆矩阵的初等行变换法。\((\mathbf{A} \mathbf{I})\) 被称为矩阵 \(\mathbf{A}\) 的增广矩阵。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  矩阵的初等行变换和初等列变换，统称矩阵的初等变换。下面的三种变换称为矩阵的初等行变换：
+<ol>
+<li>对调两行；</li>
+<li>以数 \(k \ne 0\) 乘某一行的所有元素；</li>
+<li>把某一行所有元素的 \(k\) 倍加到另一行对应的元素上去。</li>
+</ol>
+</div>
+<p>把上面定义中的“行”换成“列”，既得矩阵的初等列变换的定义。如果矩阵A经过有限次初等变换变成矩阵B，就称矩阵A与B等价。</p>
+<p>三阶以上的伴随矩阵如果使用伴随阵法求逆，需要求9个或9个以上的代数余子式，以及一个三阶或三阶以上的行列式，过程比较繁琐。相比之下，使用初等变换就简单很多。</p>
+<p>假定有三阶矩阵 \({ \mathbf{A} }_{ 3 \times 3 }=\begin{bmatrix} 1 &amp; 0 &amp; 1 \\ 1 &amp; 2 &amp; 1 \\ 2 &amp; 1 &amp; 1 \end{bmatrix}\) ，则：</p>
+<p>\[
+\begin{aligned}
+\begin{bmatrix}\mathbf{A} \mathbf{I}\end{bmatrix} 
+&amp; \rightarrow 
+\begin{bmatrix} 
+1 &amp; 0 &amp; 1 &amp; 1 &amp; 0 &amp; 0 \\
+1 &amp; 2 &amp; 1 &amp; 0 &amp; 1 &amp; 0 \\
+2 &amp; 1 &amp; 1 &amp; 0 &amp; 0 &amp; 1
+\end{bmatrix}
+\rightarrow 
+\begin{bmatrix} 
+1 &amp; 0 &amp; 1 &amp; 1 &amp; 0 &amp; 0 \\
+0 &amp; 2 &amp; 0 &amp; -1 &amp; 1 &amp; 0 \\
+2 &amp; 1 &amp; 1 &amp; 0 &amp; 0 &amp; 1
+\end{bmatrix}
+\rightarrow 
+\begin{bmatrix} 
+1 &amp; 0 &amp; 1 &amp; 1 &amp; 0 &amp; 0 \\
+0 &amp; 1 &amp; 0 &amp; -0.5 &amp; 0.5 &amp; 0 \\
+2 &amp; 1 &amp; 1 &amp; 0 &amp; 0 &amp; 1
+\end{bmatrix}\\
+&amp; \rightarrow 
+\begin{bmatrix} 
+1 &amp; 0 &amp; 1 &amp; 1 &amp; 0 &amp; 0 \\
+0 &amp; 1 &amp; 0 &amp; -0.5 &amp; 0.5 &amp; 0 \\
+1 &amp; 1 &amp; 0 &amp; -1 &amp; 0 &amp; 1
+\end{bmatrix}
+\rightarrow 
+\begin{bmatrix} 
+1 &amp; 0 &amp; 1 &amp; 1 &amp; 0 &amp; 0 \\
+0 &amp; 1 &amp; 0 &amp; -0.5 &amp; 0.5 &amp; 0 \\
+1 &amp; 0 &amp; 0 &amp; -0.5 &amp; -0.5 &amp; 1
+\end{bmatrix}
+\rightarrow 
+\begin{bmatrix} 
+0 &amp; 0 &amp; 1 &amp; 1.5 &amp; 0.5 &amp; -1 \\
+0 &amp; 1 &amp; 0 &amp; 0 &amp; 0.5 &amp; 0 \\
+1 &amp; 0 &amp; 0 &amp; -0.5 &amp; -0.5 &amp; 1
+\end{bmatrix}\\
+&amp;\rightarrow 
+\begin{bmatrix} 
+1 &amp; 0 &amp; 0 &amp; -0.5 &amp; -0.5 &amp; 1 \\
+0 &amp; 1 &amp; 0 &amp; -0.5 &amp; 0.5 &amp; 0 \\
+0 &amp; 0 &amp; 1 &amp; 1.5 &amp; 0.5 &amp; -1
+\end{bmatrix}
+\end{aligned}
+\]</p>
+<p>因此</p>
+<p>\[\mathbf{A}^{-1}=\begin{bmatrix}-0.5 &amp; -0.5 &amp; 1 \\ -0.5 &amp; 0.5 &amp; 0 \\ 1.5 &amp; 0.5 &amp; -1\end{bmatrix}\]</p>
+<h4 id="奇异矩阵">奇异矩阵</h4>
+<p>要注意的是，<strong>矩阵并不一定都可逆的</strong>。从定义来看，只要矩阵 \(\mathbf{M}\) 的行列式 \(|\mathbf{M}|\) 为 0 ，则 \[\mathbf{M}^{-1}=\frac{1}{|\mathbf{M}|}\begin{bmatrix} d &amp; -b \\ -c &amp; a \end{bmatrix}\] 的值就无定义。我们把这种矩阵叫做 <strong>奇异矩阵</strong> 。</p>
+<p>例如矩阵 \(\begin{bmatrix}0 &amp; 0\\ 0 &amp; 1\end{bmatrix}\) ，其行列式的值为 \(0 \cdot 1 - 0 \cdot 0 = 0\) ，因此无法求逆。</p>
+<p>Python 求逆示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.matrix(<span class="string">&#x27;1 0 1; 1 2 1; 2 1 1&#x27;</span>)</span><br><span class="line">a = np.matrix(<span class="string">&#x27;1 0 1; 1 2 1; 2 1 1&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.I</span><br><span class="line">a.I</span><br><span class="line">matrix([[-<span class="number">0.5</span>, -<span class="number">0.5</span>,  <span class="number">1.</span> ],</span><br><span class="line">        [-<span class="number">0.5</span>,  <span class="number">0.5</span>,  <span class="number">0.</span> ],</span><br><span class="line">        [ <span class="number">1.5</span>,  <span class="number">0.5</span>, -<span class="number">1.</span> ]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a * a.I</span><br><span class="line">a * a.I</span><br><span class="line">matrix([[ <span class="number">1.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>],</span><br><span class="line">        [ <span class="number">0.</span>,  <span class="number">1.</span>,  <span class="number">0.</span>],</span><br><span class="line">        [ <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">1.</span>]]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.I * a</span><br><span class="line">a.I * a</span><br><span class="line">matrix([[ <span class="number">1.</span>,  <span class="number">0.</span>,  <span class="number">0.</span>],</span><br><span class="line">        [ <span class="number">0.</span>,  <span class="number">1.</span>,  <span class="number">0.</span>],</span><br><span class="line">        [ <span class="number">0.</span>,  <span class="number">0.</span>,  <span class="number">1.</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f = np.matrix(<span class="string">&#x27;0 1;0 0&#x27;</span>)</span><br><span class="line">f = np.matrix(<span class="string">&#x27;0 1;0 0&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.I</span><br><span class="line">f.I</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">  File <span class="string">&quot;/Library/Python/2.7/site-packages/numpy/matrixlib/defmatrix.py&quot;</span>, line <span class="number">972</span>, <span class="keyword">in</span> getI</span><br><span class="line">    <span class="keyword">return</span> asmatrix(func(self))</span><br><span class="line">  File <span class="string">&quot;/Library/Python/2.7/site-packages/numpy/linalg/linalg.py&quot;</span>, line <span class="number">526</span>, <span class="keyword">in</span> inv</span><br><span class="line">    ainv = _umath_linalg.inv(a, signature=signature, extobj=extobj)</span><br><span class="line">  File <span class="string">&quot;/Library/Python/2.7/site-packages/numpy/linalg/linalg.py&quot;</span>, line <span class="number">90</span>, <span class="keyword">in</span> _raise_linalgerror_singular</span><br><span class="line">    <span class="keyword">raise</span> LinAlgError(<span class="string">&quot;Singular matrix&quot;</span>)</span><br><span class="line">numpy.linalg.linalg.LinAlgError: Singular matrix</span><br></pre></td></tr></table></figure>
+<h3 id="矩阵的转置">矩阵的转置</h3>
+<p>矩阵 \(\underset{m\times n}{\mathbf{A}} = \begin{bmatrix}a_{11} &amp; a_{12} &amp; \ldots &amp; a_{1n} \\ a_{21} &amp; a_{22} &amp; \ldots &amp; a_{2n} \\ \ldots \\ a_{m1} &amp; a_{m2} &amp; \ldots &amp; a_{mn}\end{bmatrix}\) 的转置定义为 \(\underset{n\times n}{A^{T}} = \begin{bmatrix}a_{11} &amp; a_{21} &amp; \ldots &amp; a_{m1} \\ a_{12} &amp; a_{22} &amp; \ldots &amp; a_{m2} \\ \ldots \\ a_{1n} &amp; a_{2n} &amp; \ldots &amp; a_{mn}\end{bmatrix}\)</p>
+<p>例如矩阵 \(\mathbf{A} = \begin{bmatrix} 2 &amp; 4 \\ 1 &amp; 3\end{bmatrix}\) 的转置矩阵就是 \(\mathbf{A}^T = \begin{bmatrix} 2 &amp; 1 \\ 4 &amp; 3\end{bmatrix}\)；矩阵 \(\mathbf{B} = \begin{bmatrix} 1 &amp; 2 &amp; 3 \\ 4 &amp; 5 &amp; 6 \end{bmatrix}\) 的转置矩阵就是 \(\mathbf{B}^T = \begin{bmatrix} 1 &amp; 4 \\ 2 &amp; 5 \\ 3 &amp; 6\end{bmatrix}\)。</p>
+<p>Python 示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.matrix(<span class="string">&#x27;2 4;1 3&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.T</span><br><span class="line">matrix([[<span class="number">2</span>, <span class="number">1</span>],</span><br><span class="line">        [<span class="number">4</span>, <span class="number">3</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = np.matrix(<span class="string">&#x27;1 2 3;4 5 6&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.T</span><br><span class="line">matrix([[<span class="number">1</span>, <span class="number">4</span>],</span><br><span class="line">        [<span class="number">2</span>, <span class="number">5</span>],</span><br><span class="line">        [<span class="number">3</span>, <span class="number">6</span>]])</span><br></pre></td></tr></table></figure>
+<p>矩阵的转置有一个性质：矩阵乘积的转置等于矩阵调换后分别做转置的乘积，即 \[(\mathbf{A}\cdot \mathbf{B})^T = \mathbf{B}^T\cdot \mathbf{A}^T\]</p>
+<p>Python 示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.matrix(<span class="string">&#x27;2 4;1 3&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = np.matrix(<span class="string">&#x27;1 6;2 5&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a*b</span><br><span class="line">matrix([[<span class="number">10</span>, <span class="number">32</span>],</span><br><span class="line">        [ <span class="number">7</span>, <span class="number">21</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.T*a.T</span><br><span class="line">matrix([[<span class="number">10</span>,  <span class="number">7</span>],</span><br><span class="line">        [<span class="number">32</span>, <span class="number">21</span>]])</span><br></pre></td></tr></table></figure>
+<h2 id="应用举例">应用举例</h2>
+<p>矩阵是一种非常通用的数据表示方法，只要能用矩阵来表示数据，就能够用矩阵的这套运算来解决问题。下面列举几种常见的数学问题，它们都能够使用矩阵的思路来解决。</p>
+<h3 id="求解方程组">求解方程组</h3>
+<p>例如一个二元方程组</p>
+<p>\[\left\{ \begin{eqnarray} 3x+2y &amp; = &amp; 7 \\ -x+y &amp; = &amp; 1 \end{eqnarray} \right.\]</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig1.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>可以用矩阵表示成：</p>
+<p>\[\begin{bmatrix}3 &amp; 2 \\-1 &amp; 1\end{bmatrix}\begin{bmatrix}x \\y\end{bmatrix}=\begin{bmatrix}7\\1\end{bmatrix}\]</p>
+<p>设公式里的 \(\begin{bmatrix} 3 &amp; 2 \\ -1 &amp; 1\end{bmatrix}\) 为矩阵 \(A\)，将等式两边左乘一个 \(A\) 的逆得到：</p>
+<p>\[
+\begin{aligned}
+A^{-1}A
+\begin{bmatrix}
+x \\ y
+\end{bmatrix}
+&amp;= 
+A^{-1}
+\begin{bmatrix}
+7\\
+1
+\end{bmatrix}\\\
+&amp;=
+\frac{1}{|A|}\begin{bmatrix}1 &amp; -2 \\ 1 &amp; 3\end{bmatrix}
+\begin{bmatrix}
+7\\
+1
+\end{bmatrix}\\\
+&amp;=
+\frac{1}{5}\begin{bmatrix}1 &amp; -2 \\ 1 &amp; 3\end{bmatrix}
+\begin{bmatrix}
+7\\
+1
+\end{bmatrix}\\\
+&amp;=
+\frac{1}{5}\begin{bmatrix}5 \\ 10\end{bmatrix}
+\end{aligned}
+\]</p>
+<p>因此：
+\(\begin{bmatrix}x \\ y\end{bmatrix}=\begin{bmatrix}1 \\ 2\end{bmatrix}\)</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig1-answer.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>虽然这个例子给出的方法用于二元一次矩阵求解还不如直接用初中就学到的消元法，但矩阵的好处在于对于更高维的数据，比如有成百上千个未知数，这个解法依然有效。</p>
+<p>在 Python 中，可以使用 Numpy 的线性代数算法库 <code>linalg</code> 提供的 <code>solve</code> 方法求解方程组。示例如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.matrix(<span class="string">&#x27;3 2; -1 1&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = np.matrix(<span class="string">&#x27;7; 1&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.linalg.solve(a, b)</span><br><span class="line">matrix([[ <span class="number">1.</span>],</span><br><span class="line">        [ <span class="number">2.</span>]])</span><br></pre></td></tr></table></figure>
+<h3 id="求向量组合">求向量组合</h3>
+<p>假设有向量 \(\vec { a }  =  \begin{bmatrix} 3 \\ -1 \end{bmatrix}\) ，\(\vec { b }  =  \begin{bmatrix} 2 \\ 1 \end{bmatrix}\) ，求二者如何组合成向量 \(\vec { c }  =  \begin{bmatrix} 7 \\ 1 \end{bmatrix}\) ？</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig2.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>如果用 \(x\) 和 \(y\) 分别表示两个向量的倍数，这个问题就同样可以用矩阵表示成：</p>
+<p>\[\begin{bmatrix}3 \\-1 \end{bmatrix}x + \begin{bmatrix}2 \\1\end{bmatrix}y=\begin{bmatrix}7\\1\end{bmatrix}\]</p>
+<p>这样就得到了一个和上一个问题完全同构的问题，使用相同解法解决得出
+\(\begin{bmatrix}x \\ y\end{bmatrix}=\begin{bmatrix}1 \\ 2\end{bmatrix}\)。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig2-answer.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h2 id="深入阅读">深入阅读</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://www.doc88.com/p-086655362651.html">逆矩阵的几种求法与解析</a></li>
+</ol>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/math/math-vector/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/work/enterprise-class-git-version-control-3/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '机器学习的数学基础：矩阵篇'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/math-matrix.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2017-01-31 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/math/">math<span>3</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Linear-Algebra/">Linear Algebra<span>2</span></a></li> <li><a href="/tags/Math/">Math<span>2</span></a></li> <li><a href="/tags/Matrix/">Matrix<span>1</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-article-text">前言</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97"><span class="toc-article-text">基本运算</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%8A%A0"><span class="toc-article-text">加</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%87%8F"><span class="toc-article-text">减</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B9%98"><span class="toc-article-text">乘</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E9%99%A4%EF%BC%88%E6%B1%82%E9%80%86%EF%BC%89"><span class="toc-article-text">除（求逆）</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E4%BC%B4%E9%9A%8F%E9%98%B5%E6%B3%95"><span class="toc-article-text">伴随阵法</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E5%88%9D%E7%AD%89%E5%8F%98%E6%8D%A2%E6%B3%95"><span class="toc-article-text">初等变换法</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E5%A5%87%E5%BC%82%E7%9F%A9%E9%98%B5"><span class="toc-article-text">奇异矩阵</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%9F%A9%E9%98%B5%E7%9A%84%E8%BD%AC%E7%BD%AE"><span class="toc-article-text">矩阵的转置</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%BA%94%E7%94%A8%E4%B8%BE%E4%BE%8B"><span class="toc-article-text">应用举例</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%B1%82%E8%A7%A3%E6%96%B9%E7%A8%8B%E7%BB%84"><span class="toc-article-text">求解方程组</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%B1%82%E5%90%91%E9%87%8F%E7%BB%84%E5%90%88"><span class="toc-article-text">求向量组合</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%B7%B1%E5%85%A5%E9%98%85%E8%AF%BB"><span class="toc-article-text">深入阅读</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

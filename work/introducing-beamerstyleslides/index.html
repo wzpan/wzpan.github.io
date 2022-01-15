@@ -1,0 +1,651 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>使用 BeamerStyleSlides 制作你的技术答辩 PPT | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="介绍一套开源的Beamer风格幻灯片模板集 BeamerStyleSlides 。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="使用 BeamerStyleSlides 制作你的技术答辩 PPT"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '使用 BeamerStyleSlides 制作你的技术答辩 PPT'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 使用 BeamerStyleSlides 制作你的技术答辩 PPT</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>介绍一套开源的Beamer风格幻灯片模板集 BeamerStyleSlides 。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <h2 id="背景：PPT之痛">背景：PPT之痛</h2>
+<p>年末，又到了很多朋友准备答辩晋升 slides 的时候。<q>PPT工程</q> 应该是很多技术人的天敌之一，不少人为了在工作之余折腾出一份既有内容又美观的 slides 弄得焦头烂额。</p>
+<p>其实，大家对 <q>PPT工程</q> 之所以这么惶恐，主要是因为技术人更习惯跟代码打交道，更习惯用技术思维去解决问题。而做材料考察的是信息的提取整合能力、审美品味以及口头表达能力，而这些都不是做技术的必要条件。</p>
+<p>然而，也不必对使用 slides 答辩过于深恶痛绝，它只是一个用来说你的故事的工具：我们不应该被工具所束缚，而应该把它用好，将它变成你的优势。我私下里也看过不少同事的答辩材料，发现了一个很有趣的现象：往往内容非常好的材料，美观度也很高，看起来赏心悦目。而内容一般的材料，排版、美观度也比较糟糕，缺乏美感。工程师的素养，在做 slides 花的心思上面也能够体现出来。</p>
+<span id="more"></span>
+<h2 id="为什么要做-BeamerStyleSlides">为什么要做 BeamerStyleSlides</h2>
+<p>其实，做一个大方美观的 slides 并不简单，我在准备今年年中的答辩的时候，花费最多的时间居然是工具和模板主题的选择上。</p>
+<p>做 slides 有非常多种选择，PowerPoint、Keynote、LaTeX+Beamer、reveal.js、Emacs org-mode、Jupyter Notebook……抛开过于花哨的 H5 系和不顺手的 Keynote，我的选择就在 PowerPoint 和 LaTeX Beamer 上。</p>
+<p>LaTeX + Beamer 一开始是我的首选，因为 Beamer 的主题大方简洁，非常适合用作学术汇报和晋升述职。这是 beamer 的官方主题：<a target="_blank" rel="noopener" href="http://www.hartwork.org/beamer-theme-matrix/">http://www.hartwork.org/beamer-theme-matrix/</a> 可以看到这些主题全都非常精美大方。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/introducing-beamerstyleslides/beamer.jpg" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>我也用 Beamer 做过非常多的 slides ，对它的排版效果可以说是爱不释手：<a target="_blank" rel="noopener" href="https://github.com/wzpan/wzpan.github.io/wiki/slides">https://github.com/wzpan/wzpan.github.io/wiki/slides</a></p>
+<p>正当我兴高采烈地写了很多页之后，我发现我忘了一个很严重的问题：Beamer 不支持直接插入视频。要播放视频，你需要先将视频转成帧图像，然后使用 animation 包来实现播放，而且只支持 Adobe Reader。体验非常糟糕。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/introducing-beamerstyleslides/challenge.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>于是我放弃了 LaTeX ，转回使用 PowerPoint 。但是我又花了非常多时间在寻找一个好看简洁的模板。我发现一个看上眼的都没有。</p>
+<p>网上找了一些模板，都太过华丽，不符合工程师的气质：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/introducing-beamerstyleslides/fashion1.jpg" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/introducing-beamerstyleslides/fashion2.jpg" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>最终我决定复刻一个 Beamer 的主题作为模板，有了一份称手的模板，写 slides 真的是效率大增，最终的效果个人是挺满意的。这里挑其中几页做个示例：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/introducing-beamerstyleslides/josephpan.jpg" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>为了让像我一样审美较差的码农也能用 powerpoint/keynote 做出媲美 LaTeX Beamer 的 slides，成为一名合格的PPT工程师，轻松应对答辩晋升、技术分享和学术交流的任务，我从答辩结束后就开始了一个名为 BeamerStyleSlides 项目：对 Beamer 的更多官方主题进行复刻，并且在 Github 上开源：<a target="_blank" rel="noopener" href="https://github.com/wzpan/BeamerStyleSlides">https://github.com/wzpan/BeamerStyleSlides</a> 。这就是 BeamerStyleSlides 的由来。</p>
+<p>另外，选择在 Github 上开源还有一个目的：就是让更多的人参与进来，贡献他们的模板。有很多人私下里收藏了一些非常美观实用的模板，与其独享，不如共享。</p>
+<h2 id="BeamerStyleSlides-介绍">BeamerStyleSlides 介绍</h2>
+<p>
+      <figure>
+        <img src="https://raw.githubusercontent.com/wzpan/BeamerStyleSlides/master/preview/tile.png" alt="BeamerStyleSlides" />
+        <figcaption>BeamerStyleSlides</figcaption>
+      </figure>
+    </p>
+<p>BeamerStyleSlides 是 LaTeX Beamer 风格的幻灯片模板集。包含了PowerPoint和Keynote两套格式。尤其适用于晋升述职、技术分享和学术汇报。</p>
+<ul>
+<li>官方主页：<a href="http://www.hahack.com/BeamerStyleSlides/">http://www.hahack.com/BeamerStyleSlides/</a></li>
+<li>Github地址：<a target="_blank" rel="noopener" href="https://github.com/wzpan/BeamerStyleSlides">https://github.com/wzpan/BeamerStyleSlides</a></li>
+</ul>
+<h2 id="克隆方法">克隆方法</h2>
+<ol>
+<li>安装 git-lfs。为了节省仓库大小，项目使用 git-lfs 来对 <code>*.key</code> 和 <code>*.pptx</code> 文件进行版本控制。所以，在克隆前，要求先 <a target="_blank" rel="noopener" href="https://git-lfs.github.com/">安装好 git-lfs</a> 。</li>
+<li>安装完成后再执行 git clone 操作：</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/wzpan/BeamerStyleSlides.git</span><br></pre></td></tr></table></figure>
+<h2 id="使用技巧">使用技巧</h2>
+<ol>
+<li>首先可以在 <a target="_blank" rel="noopener" href="https://hartwork.org/beamer-theme-matrix/">beamer-theme-matrix</a> 中找找看有没有心仪的样式；</li>
+<li>在上面的主题列表中看看对应的主题是否已经完成了复刻。</li>
+<li>如果有，可以点击查看预览图，看看效果是否满意。</li>
+<li>一些底部带有包含作者信息（author）、标题（title）字段的主题，可以通过编辑母板修改对应字段的值。</li>
+</ol>
+<h2 id="设计思路">设计思路</h2>
+<p>所有主题的风格尽力与 Beamer 所提供的风格保持一致。可以在 <a target="_blank" rel="noopener" href="https://hartwork.org/beamer-theme-matrix/">beamer-theme-matrix</a> 中查看对应的主题样式。</p>
+<p>不过，我做了一些取舍：</p>
+<ol>
+<li>去掉了深色背景主题。个人认为深色背景主题在处理白底的图片时很不美观，所以我没有制作深色背景的 slides 的动力。当然，我愿意接受深色背景主题的pull request。</li>
+<li>PowerPoint 和 Keynote 并没有提供类似 Beamer 那样酷炫的导航栏功能，所以带导航栏的主题都不会进行复刻。</li>
+</ol>
+<p>要注意的是模板并没有做到 100% 遵循原始的效果，毕竟 PowerPoint、Keynote 和 Beamer 各自的支持的能力有差异。我更希望做到的是在保留 Beamer 原有的风格的基础上因地制宜地做些调整。</p>
+<h2 id="我需要帮忙！">我需要帮忙！</h2>
+<p>BeamerStylesSlides 的目标是复刻 Beamer 上的 252 套主题，而因为个人精力有限，目前大概以每周两套主题的龟速，暂时先完成了 51 套主题的复刻。如果你对这个项目感兴趣，欢迎 fork 这个项目并参与复刻。</p>
+<p>参与方式：</p>
+<ol>
+<li>安装配置好 LaTeX + Beamer 环境，并安装好用于生成封面图的 imageMagicK。例如 Mac 下可以这么安装：</li>
+</ol>
+  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install imagemagick</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li><a target="_blank" rel="noopener" href="https://github.com/wzpan/BeamerStyleSlides/tree/master/benchmark">benchmark</a> 目录中包含了一份 LaTeX + Beamer 制作的 slides ，作为整套模板制作的参照。将里头的 <code>theme</code> 和 <code>colortheme</code> 分别修改为你要参与复刻的主题 collection 名和 colortheme 名：</li>
+</ol>
+  <figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\usetheme</span>&#123;Antibes&#125;</span><br><span class="line"><span class="keyword">\usecolortheme</span>&#123;lily&#125;</span><br></pre></td></tr></table></figure>
+<p>然后使用 <code>xelatex slides.tex</code> 编译得到 slides.pdf 文件。
+3. 对照这个 slides.pdf，编辑一个 pptx 母版，使之在排版、配色、列表项风格上尽量接近于这个 benchmark 。完成后保存，并导出一份 pdf 文件，以 colortheme + <code>.pdf</code> 的命名方式放进 preview 目录中，例如 <code>lily.pdf</code> 。
+4. 使用 keynote 导入这个 PPT，调整下个人经历这一节中的层级即可另存为 <code>.key</code> 模板。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/introducing-beamerstyleslides/adjust.jpg" alt="调整层级" />
+        <figcaption>调整层级</figcaption>
+      </figure>
+    
+5. <code>cd</code> 进入 preview 目录，执行如下命令生成封面图和预览图：</p>
+  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh montage.sh theme名 colortheme名</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh montage.sh Antibes lily</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>编辑 <a target="_blank" rel="noopener" href="http://README.md">README.md</a> ，加入你复刻的主题，提交并给我发 pull request 。</li>
+</ol>
+<h2 id="如何贡献其他主题">如何贡献其他主题</h2>
+<ul>
+<li>欢迎 fork 这个项目，并通过 pull request 的形式贡献你的主题！
+<ol>
+<li>第三方模板请分别保存到 Keynote / PowerPoint 目录里的 Contrib 目录中；</li>
+<li>比较省事的制作方式是先制作一个 PowerPoint 的模板，然后在 Keynote 里导入 PowerPoint 模板再另存为 Keynote 模板；</li>
+<li>完成后别忘了在 <a target="_blank" rel="noopener" href="https://github.com/wzpan/BeamerStyleSlides#%E7%AC%AC%E4%B8%89%E6%96%B9%E4%B8%BB%E9%A2%98">第三方主题</a> 里添加你的大作。</li>
+<li>主题的存放必须遵循按照现有的目录形式：</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[-] ~&#x2F;Documents&#x2F;projects&#x2F;BeamerStyleSlides&#x2F;</span><br><span class="line"> |-[-] Keynote</span><br><span class="line"> |  |-[-] Contrib</span><br><span class="line"> |  |  |-  mycustom.key  # 你的主题名</span><br><span class="line"> |  |  ‘-  ...</span><br><span class="line"> |  ‘-  ...</span><br><span class="line"> |-[-] PowerPoint</span><br><span class="line"> |  |-[-] Contrib</span><br><span class="line"> |  |  |-  mycustom.pptx # 你的主题名</span><br><span class="line"> |  |  ‘-  ...</span><br><span class="line"> |  ‘-  ...</span><br><span class="line"> |-[-] preview</span><br><span class="line"> |  |-  ...</span><br><span class="line"> |  |-  Contrib-mycustom-cover.jpg  # 你的主题封面图</span><br><span class="line"> |  |-  Contrib-mycustom.jpg        # 你的主题预览图</span><br><span class="line"> |  ‘-  ...</span><br><span class="line"> ‘-  README.md  # 完成后编辑这个README，在第三方主题中插入你的主题说明。</span><br></pre></td></tr></table></figure>
+<p>最后，祝愿参与晋升答辩的朋友都能取得最终的胜利！</p>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/life/2018-montage/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/codes/writing-2048-wechat-game-in-cocos-creator/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '使用 BeamerStyleSlides 制作你的技术答辩 PPT'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/introducing-beamerstyleslides.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2018-12-27 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/work/">work<span>7</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/LaTeX/">LaTeX<span>4</span></a></li> <li><a href="/tags/beamer/">beamer<span>1</span></a></li> <li><a href="/tags/PowerPoint/">PowerPoint<span>1</span></a></li> <li><a href="/tags/Keynote/">Keynote<span>1</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E8%83%8C%E6%99%AF%EF%BC%9APPT%E4%B9%8B%E7%97%9B"><span class="toc-article-text">背景：PPT之痛</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%81%9A-BeamerStyleSlides"><span class="toc-article-text">为什么要做 BeamerStyleSlides</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#BeamerStyleSlides-%E4%BB%8B%E7%BB%8D"><span class="toc-article-text">BeamerStyleSlides 介绍</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%85%8B%E9%9A%86%E6%96%B9%E6%B3%95"><span class="toc-article-text">克隆方法</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7"><span class="toc-article-text">使用技巧</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF"><span class="toc-article-text">设计思路</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%88%91%E9%9C%80%E8%A6%81%E5%B8%AE%E5%BF%99%EF%BC%81"><span class="toc-article-text">我需要帮忙！</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%A6%82%E4%BD%95%E8%B4%A1%E7%8C%AE%E5%85%B6%E4%BB%96%E4%B8%BB%E9%A2%98"><span class="toc-article-text">如何贡献其他主题</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

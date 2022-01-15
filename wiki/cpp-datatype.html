@@ -1,0 +1,1101 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>变量和数据类型 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="基本内置类型
+
+
+
+类型
+含义
+最小存储空间
+
+
+
+
+bool
+boolean
+NA
+
+
+char
+character
+8 bits
+
+
+wchar_t
+wide character
+16 bits
+
+
+short
+short integer
+16 bits
+
+
+int
+integer
+16 bit">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="变量和数据类型"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '变量和数据类型'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 变量和数据类型</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="基本内置类型">基本内置类型</h2>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>含义</th>
+<th>最小存储空间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bool</code></td>
+<td>boolean</td>
+<td>NA</td>
+</tr>
+<tr>
+<td><code>char</code></td>
+<td>character</td>
+<td>8 bits</td>
+</tr>
+<tr>
+<td><code>wchar_t</code></td>
+<td>wide character</td>
+<td>16 bits</td>
+</tr>
+<tr>
+<td><code>short</code></td>
+<td>short integer</td>
+<td>16 bits</td>
+</tr>
+<tr>
+<td><code>int</code></td>
+<td>integer</td>
+<td>16 bits</td>
+</tr>
+<tr>
+<td><code>long</code></td>
+<td>long integer</td>
+<td>32 bits</td>
+</tr>
+<tr>
+<td><code>float</code></td>
+<td>single-precision floating-point</td>
+<td>6 significant digits</td>
+</tr>
+<tr>
+<td><code>double</code></td>
+<td>double-precision floating-point</td>
+<td>10 significant digits</td>
+</tr>
+<tr>
+<td><code>long double</code></td>
+<td>externded-precision floating-point</td>
+<td>10 significant digits</td>
+</tr>
+</tbody>
+</table>
+<h3 id="整型">整型</h3>
+<p>表示 <strong>整数</strong> 、 <strong>字符</strong> 和 <strong>布尔值</strong> 的算术类型合称为整型。</p>
+<ul>
+<li>字符类型：有 <code>char</code> 和 <code>wchar_t</code> 两种。<code>char</code> 类型保证了有足够的空间，能够存储机器基本字符集中任何字符相应的数值，因此， <strong>char 类型通常是单个机器字节（byte）</strong> 。wchar_t 类型用于扩展字符集，比如汉字和日语，这些字符集中的一些字符不能用单个 char 表示。</li>
+<li>整型值： <code>short</code> 、 <code>int</code> 和 <code>long</code> 类型都表示整型值，存储空间的大小不同。一般， <strong>short 类型为半个机器字长，int 类型为一个机器字长，而 long 类型为一个或两个机器字长</strong> （在 32 位机器中 int 类型和 long 类型通常字长是相同的）。</li>
+<li>布尔值： <code>bool</code> 类型表示真值 <code>true</code> 和 <code>false</code>。可以将算术类型的任何值赋给 bool 对象。0 值算术类型代表 false， <strong>任何非 0 的值</strong> 都代表 true。</li>
+</ul>
+<h4 id="处理溢出">处理溢出</h4>
+<ul>
+<li>unsigned 类型：unsigned类型的数总是正值或0，负数总是超出其取值范围<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>。并遵守 <strong>算数模 2<sup>n</sup> 定律</strong> ，其中n是该类型占用的位数。例如，如果试图将 336 存储到 8 位的 unsigned char 中，则实际赋值为 80，因为 80 是 336 对 256 求模后的值。</li>
+<li>signed 类型：由编译器决定实际赋的值。在实际操作中，很多的编译器处理 signed 类型的方式和 unsigned 类型类似。也就是说，赋值时是取该值对该类型取值数目求模后的值。然而我们不能保证编译器都会这样处理 signed 类型。</li>
+</ul>
+<h3 id="浮点型">浮点型</h3>
+<p>类型 float、 double 和 long double 分别表示单精度浮点数、双精度浮点数和扩展精度浮点数。一般 float 类型用一个字（32 位）来表示，double 类型用两个字（64 位）来表示，long double 类型用三个或四个字（96 或 128 位）来表示。类型的取值范围决定了浮点数所含的有效数字位数。</p>
+<p>对于实际的程序来说， <strong>float 类型精度通常是不够的——float 型只能保证 6 位有效数字</strong> ，而 double 型至少可以保证 10 位有效数字，能满足大多数计算的需要。</p>
+<h2 id="类型转换">类型转换</h2>
+<h3 id="隐式类型转换">隐式类型转换</h3>
+<p>编译器在必要时将类型转换规则应用到内置类型和类类型的对象上。在下列情况下，将发生隐式类型转换：</p>
+<ul>
+<li>在混合类型的表达式中，其操作数被转换为相同的类型：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ival; </span><br><span class="line"><span class="keyword">double</span> dval; </span><br><span class="line">ival &gt;= dval <span class="comment">// ival converted to double      </span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>用作条件的表达式被转换为 bool 类型：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ival; </span><br><span class="line"><span class="keyword">if</span> (ival)   <span class="comment">// ival converted to bool </span></span><br><span class="line"><span class="keyword">while</span> (cin) <span class="comment">// cin converted to bool      </span></span><br></pre></td></tr></table></figure>
+<p>条件操作符（?:）中的第一个操作数以及逻辑非（!）、逻辑与（&amp;&amp;）和逻辑或（||）的操作数都是条件表达式。出现在 if、while、for 和 do while 语句中的同样也是条件表达式。</p>
+<ul>
+<li>用一表达式初始化某个变量，或将一表达式赋值给某个变量，则该表达式被转换为该变量的类型：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ival = <span class="number">3.14</span>; <span class="comment">// 3.14 converted to int </span></span><br><span class="line"><span class="keyword">int</span> *ip; </span><br><span class="line">ip = <span class="number">0</span>; <span class="comment">// the int 0 converted to a null pointer of type int *</span></span><br></pre></td></tr></table></figure>
+<p>另外，在函数调用中也可能发生隐式类型转换。</p>
+<ul>
+<li>算术转换</li>
+</ul>
+<p>算术转换保证在执行操作之前，将二元操作符（如算术或逻辑操作符）的两个操作数转换为同一类型，并使表达式的值也具有相同的类型。</p>
+<p>算术转换规则定义了一个类型转换层次，该层次规定了操作数应按什么次序转换为表达式中最宽的类型。在包含多种类型的表达式中，转换规则要确保计算值的精度。例如，如果一个操作数的类型是 long double，则无论另一个操作数是什么类型，都将被转换为 long double。</p>
+<p>最简单的转换为 <strong>整型提升</strong> ：对于所有比 int 小的整型，包括 char、signed char、unsigned char、short 和 unsigned short，如果该类型的所有可能的值都能包容在 int 内，它们就会被提升为 int 型，否则，它们将被提升为 unsigned int。如果将 bool 值提升为 int ，则 false 转换为 0，而 true 则转换为 1。</p>
+<p>下面大部分例题中，要么是将操作数转换为表达式中的最大类型，要么是在赋值表达式中将右操作数转换为左操作数的类型。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bool</span>      flag;         <span class="keyword">char</span>           cval; </span><br><span class="line"><span class="keyword">short</span>     sval;         <span class="keyword">unsigned</span> <span class="keyword">short</span> usval; </span><br><span class="line"><span class="keyword">int</span>       ival;         <span class="keyword">unsigned</span> <span class="keyword">int</span>   uival; </span><br><span class="line"><span class="keyword">long</span>      lval;         <span class="keyword">unsigned</span> <span class="keyword">long</span>  ulval; </span><br><span class="line"><span class="keyword">float</span>     fval;         <span class="keyword">double</span>         dval; </span><br><span class="line"><span class="number">3.14159L</span> + <span class="string">&#x27;a&#x27;</span>; <span class="comment">// promote &#x27;a&#x27; to int, then convert to long double </span></span><br><span class="line">dval + ival;    <span class="comment">// ival converted to double </span></span><br><span class="line">dval + fval;    <span class="comment">// fval converted to double </span></span><br><span class="line">ival = dval;    <span class="comment">// dval converted (by truncation) to int </span></span><br><span class="line">flag = dval;    <span class="comment">// if dval is 0, then flag is false, otherwise true </span></span><br><span class="line">cval + fval;    <span class="comment">// cval promoted to int, that int converted to float </span></span><br><span class="line">sval + cval;    <span class="comment">// sval and cval promoted to int </span></span><br><span class="line">cval + lval;    <span class="comment">// cval converted to long </span></span><br><span class="line">ival + ulval;   <span class="comment">// ival converted to unsigned long </span></span><br><span class="line">usval + ival;   <span class="comment">// promotion depends on size of unsigned short and int </span></span><br><span class="line">uival + lval;   <span class="comment">// conversion depends on size of unsigned int and long     </span></span><br></pre></td></tr></table></figure>
+<h3 id="显式类型转换">显式类型转换</h3>
+<p>显式转换也称为 <strong>强制类型转换（cast）</strong> ，包括以下列名字命名的强制类型转换操作符： <code>static_cast</code> 、<code>dynamic_cast</code> 、 <code>const_cast</code> 和 <code>reinterpret_cast</code> 。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  <ol>
+<li> 不要使用 C 风格类型转换。 而应该使用 C++ 风格。</li>
+<li> 用 [static\_cast](#static\_cast) 替代 C 风格的值转换， 或某个类指针需要明确的向上转换为父类指针时。</li>
+<li> 用 [const\_cast](#const\_cast) 去掉 const 限定符。</li>
+<li> 用 [reinterpret\_cast](#reinterpret\_cast) 指针类型和整型或其它指针之间进行不安全的相互转换。仅在你对所做一切了然于心时使用。</li>
+<li> [dynamic\_cast](#dynamic\_cast) 测试代码以外不要使用。 除非是单元测试， 如果你需要在运行时确定类型信息， 说明有设计缺陷。</li>
+</ol></div>
+<h4 id="何时需要强制类型转换">何时需要强制类型转换</h4>
+<ol>
+<li>因为要覆盖通常的标准转换，所以需显式使用强制类型转换。</li>
+<li>可能存在多种转换时，需要选择一种特定的类型转换。</li>
+</ol>
+<h4 id="命名的强制类型转换">命名的强制类型转换</h4>
+<p>命名的强制类型转换符号的一般形式如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cast-name&lt;type&gt;(expression); </span><br></pre></td></tr></table></figure>
+<p>其中 cast-name 为 <code>static_cast</code>、<code>dynamic_cast</code>、const_cast<code> 和 reinterpret_cast</code> 之一，type 为转换的目标类型，而 expression 则是被强制转换的值。强制转换的类型指定了在 expression 上执行某种特定类型的转换。</p>
+<h4 id="static-cast">static_cast</h4>
+<p>编译器 <strong>隐式执行的任何类型转换</strong> 都可以由 static_cast` <strong>显式完成</strong>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">double</span> d = <span class="number">97.0</span>; </span><br><span class="line"><span class="comment">// cast specified to indicate that the conversion is intentional </span></span><br><span class="line"><span class="keyword">char</span> ch = <span class="keyword">static_cast</span>&lt;<span class="keyword">char</span>&gt;(d);     </span><br></pre></td></tr></table></figure>
+<p>当需要将一个较大的算术类型赋值给较小的类型时，使用强制转换非常有用。此时，强制类型转换告诉程序的读者和编译器：我们知道并且不关心潜在的精度损失。对于从一个较大的算术类型到一个较小类型的赋值，编译器通常会产生警告。当我们显式地提供强制类型转换时，警告信息就会被关闭。</p>
+<p>如果编译器不提供自动转换，使用 <code>static_cast</code> 来执行类型转换也是很有用的。例如，下面的程序使用 <code>static_cast</code> 找回存放在 <code>void *</code> 指针中的值：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span>* p = &amp;d; <span class="comment">// ok: address of any data object can be stored in a void* </span></span><br><span class="line"><span class="comment">// ok: converts void* back to the original pointer type </span></span><br><span class="line"><span class="keyword">double</span> *dp = <span class="keyword">static_cast</span>&lt;<span class="keyword">double</span>*&gt;(p); </span><br></pre></td></tr></table></figure>
+<p>可通过 <code>static_cast</code> 将存放在 <code>void *</code> 中的指针值强制转换为原来的指针类型，此时我们应确保保持指针值。也就是说，强制转换的结果应与原来的地址值相等。</p>
+<h4 id="reinterpret-cast">reinterpret_cast</h4>
+<p><code>reinterpret_cast</code> 通常为操作数的位模式提供 <strong>较低层次的重新解释</strong> 。</p>
+<div class="alert alert-warning"><i class="far fa-bell"></i>  <code>reinterpret_cast</code> 本质上依赖于机器。为了安全地使用 <code>reinterpret_cast</code>，要求程序员完全理解所涉及的数据类型，以及编译器实现强制类型转换的细节。
+</div>
+<p>例如，对于下面的强制转换：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> *ip; </span><br><span class="line"><span class="keyword">char</span> *pc = <span class="keyword">reinterpret_cast</span>&lt;<span class="keyword">char</span>*&gt;(ip);     </span><br></pre></td></tr></table></figure>
+<p>程序员必须永远记得 pc 所指向的真实对象其实是 int 型，而并非字符数组。任何假设 pc 是普通字符指针的应用，都有可能带来有趣的运行时错误。例如，下面语句用 pc 来初始化一个 string 对象：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">string <span class="title">str</span><span class="params">(pc)</span></span>; </span><br></pre></td></tr></table></figure>
+<p>它可能会引起运行时的怪异行为。</p>
+<h4 id="const-cast">const_cast</h4>
+<p><code>const_cast</code> ，顾名思义，将 <strong>转换掉</strong> 表达式的 const 性质。例如，假设有函数 <code>string_copy</code>，只有唯一的参数，为 <code>char *</code>     类型，我们对该函数只读不写。在访问该函数时，最好的选择是修改它让它接受 <code>const char *</code> 类型的参数。如果不行，可通过 <code>const_cast</code> 用一个 const 值调用 <code>string_copy</code> 函数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *pc_str;</span><br><span class="line"><span class="keyword">char</span> *pc = <span class="built_in">string_copy</span>(<span class="keyword">const_cast</span>&lt;<span class="keyword">char</span>*&gt;(pc_str)); </span><br></pre></td></tr></table></figure>
+<p>只有使用 <code>const_cast</code> 才能将 const 性质转换掉。在这种情况下，试图使用其他三种形式的强制转换都会导致编译时的错误。类似地，除了添加或删除 const 特性，用 <code>const_cast</code> 符来执行其他任何类型转换，都会引起编译错误。</p>
+<h4 id="dynamic-cast">dynamic_cast</h4>
+<p><code>dynamic_cast</code> 支持运行时识别指针或引用所指向的对象。</p>
+<h3 id="旧式强制类型转换">旧式强制类型转换</h3>
+<p>旧式强制转换符号有下列两种形式：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">type</span> (expr); <span class="comment">// Function-style cast notation </span></span><br><span class="line">(type) expr; <span class="comment">// C-language-style cast notation    </span></span><br></pre></td></tr></table></figure>
+<p>旧式强制转换依赖于所涉及的数据类型，具有与 <code>const_cast</code>、<code>static_cast</code> 和 <code>reinterpret_cast</code> 一样的行为。在合法使用 <code>static_cast</code> 或 <code>const_cast</code> 的地方，旧式强制转换提供了与各自对应的命名强制转换一样的功能。如果这两种强制转换均不合法，则旧式强制转换执行 <code>reinterpret_cast</code> 功能。例如，我们可用旧式符号重写上一节的强制转换：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ival; <span class="keyword">double</span> dval; </span><br><span class="line">ival += <span class="built_in"><span class="keyword">int</span></span> (dval); <span class="comment">// static_cast: converts double to int </span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span>* pc_str; </span><br><span class="line"><span class="built_in">string_copy</span>((<span class="keyword">char</span>*)pc_str); <span class="comment">// const_cast: casts away const </span></span><br><span class="line"><span class="keyword">int</span> *ip; </span><br><span class="line"><span class="keyword">char</span> *pc = (<span class="keyword">char</span>*)ip; <span class="comment">// reinterpret_cast: treats int* as char*    </span></span><br></pre></td></tr></table></figure>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  支持旧式强制转换符号是为了对“在标准 C++ 之前编写的程序”保持向后兼容性，并保持与 C 语言的兼容性。虽然标准 C++ 仍然支持旧式强制转换符号，但是我们建议， <strong>只有在 C 语言或标准 C++ 之前的编译器上编写代码时</strong> ，才使用这种语法。
+</div>
+<h2 id="变量">变量</h2>
+<p>变量名，即变量的标识符，可以由字母、数字和下划线组成。变量名必须以字母或下划线开头，并且区分大小写字母：C++ 中的标识符都是大小写敏感的。</p>
+<h3 id="C-关键字">C++ 关键字</h3>
+<p>C++ 保留了一组词用作该语言的关键字。关键字不能用作程序的标识符。下表列出了 C++ 所有的关键字。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>asm</td>
+<td>do</td>
+<td>if</td>
+<td>return</td>
+<td>try</td>
+</tr>
+<tr>
+<td>auto</td>
+<td>double</td>
+<td>inline</td>
+<td>short</td>
+<td>typedef</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>dynamic_cast</td>
+<td>int</td>
+<td>signed</td>
+<td>typeid</td>
+</tr>
+<tr>
+<td>break</td>
+<td>else</td>
+<td>long</td>
+<td>sizeof</td>
+<td>typename</td>
+</tr>
+<tr>
+<td>case</td>
+<td>enum</td>
+<td>mutable</td>
+<td>static</td>
+<td>union</td>
+</tr>
+<tr>
+<td>catch</td>
+<td>explicit</td>
+<td>namespace</td>
+<td>static_cast</td>
+<td>unsigned</td>
+</tr>
+<tr>
+<td>char</td>
+<td>export</td>
+<td>new</td>
+<td>struct</td>
+<td>using</td>
+</tr>
+<tr>
+<td>class</td>
+<td>extern</td>
+<td>operator</td>
+<td>switch</td>
+<td>virtual</td>
+</tr>
+<tr>
+<td>const</td>
+<td>false</td>
+<td>private</td>
+<td>template</td>
+<td>void</td>
+</tr>
+<tr>
+<td>const_cast</td>
+<td>float</td>
+<td>protected</td>
+<td>this</td>
+<td>volatile</td>
+</tr>
+<tr>
+<td>continue</td>
+<td>for</td>
+<td>public</td>
+<td>throw</td>
+<td>wchar_t</td>
+</tr>
+<tr>
+<td>default</td>
+<td>friend</td>
+<td>register</td>
+<td>true</td>
+<td>while</td>
+</tr>
+<tr>
+<td>delete</td>
+<td>goto</td>
+<td>reinterpret_cast</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>C++ 还保留了一些词用作各种操作符的替代名。这些替代名用于支持某些不支持标准 C++操作符号集的字符集。它们也不能用作标识符。下表列出了这些替代名。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>and</td>
+<td>bitand</td>
+<td>compl</td>
+<td>no</td>
+<td>or_eq</td>
+<td>xor_eq</td>
+</tr>
+<tr>
+<td>and_eq</td>
+<td>bitor</td>
+<td>not</td>
+<td>or</td>
+<td>xor</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>除了关键字，C++ 标准还保留了一组标识符用于标准库。 标识符不能包含两个连续的下划线，也不能以下划线开头后面紧跟一个大写字母。有些标识符（在函数外定义的标识符）不能以下划线开头 。</p>
+<h2 id="常量">常量</h2>
+<h3 id="字面值常量">字面值常量</h3>
+<p>像 42 这样的值，在程序中被当作字面值常量。称之为字面值是因为只能用它的值称呼它，称之为常量是因为它的值不能修改。每个字面值都有相应的类型，例如：0 是 int 型，3.14159 是 double 型。只有内置类型存在字面值，没有类类型的字面值。因此，也没有任何标准库类型的字面值。</p>
+<h4 id="整型字面值规则">整型字面值规则</h4>
+<p>定义字面值整数常量可以使用以下三种进制中的任一种：十进制、八进制和十六进制。当然这些进制不会改变其二进制位的表示形式。例如，我们能将值 20 定义成下列三种形式中的任意一种：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">20</span>     <span class="comment">// decimal </span></span><br><span class="line"><span class="number">024</span>    <span class="comment">// octal </span></span><br><span class="line"><span class="number">0x14</span>   <span class="comment">// hexadecimal </span></span><br></pre></td></tr></table></figure>
+<p>以 0（零）开头的字面值整数常量表示八进制，以 0x 或 0X 开头的表示十六进制。</p>
+<p>字面值整数常量的类型默认为 int 或 long 类型<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>。其精度类型决定于字面值——其值适合 int 就是 int 类型，比 int 大的值就是 long 类型。通过增加后缀，能够强制将字面值整数常量转换为 long、unsigned 或 unsigned long 类型。通过在数值后面加 L 或者 l（字母“l”大写或小写）指定常量为 long 类型。</p>
+<p>定义长整型时，应该使用大写字母 L。小写字母 l 很容易和数值 1 混淆。</p>
+<p>类似地，可通过在数值后面加 U 或 u 定义 unsigned 类型。同时加 L 和 U 就能够得到 unsigned long 类型的字面值常量。但其后缀不能有空格：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">128u</span>     <span class="comment">/* unsigned   */</span>          <span class="number">1024UL</span>    <span class="comment">/* unsigned long   */</span> </span><br><span class="line"><span class="number">1L</span>       <span class="comment">/* long    */</span>             <span class="number">8Lu</span>        <span class="comment">/* unsigned long */</span> </span><br></pre></td></tr></table></figure>
+<h3 id="const-常量">const 常量</h3>
+<ol>
+<li>在 C++ 程序中尽量使用 const 常量而不使用宏常量，即 <strong>const 常量完全取代宏常量</strong> 。</li>
+<li>除非特别说明， <strong>在全局作用域声明的 const 变量是定义该对象的文件的局部变量</strong> 。此变量只存在于那个文件中，不能被其他文件访问。通过指定 const 变更为 <code>extern</code> ，就可以在整个程序中访问 const 对象：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// file_1.cc </span></span><br><span class="line"><span class="comment">// defines and initializes a const that is accessible to other files </span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">const</span> <span class="keyword">int</span> bufSize = fcn(); </span><br><span class="line"><span class="comment">// file_2.cc </span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">const</span> <span class="keyword">int</span> bufSize; <span class="comment">// uses bufSize from file_1 </span></span><br><span class="line"><span class="comment">// uses bufSize defined in file_1 </span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> index = <span class="number">0</span>; index != bufSize; ++index) </span><br><span class="line">  <span class="comment">// ... </span></span><br></pre></td></tr></table></figure>
+<p>本程序中，file_1.cc 通过函数 fcn 的返回值来定义和初始化 bufSize。而 bufSize 定义为 extern，也就意味着 bufSize 可以在其他的文件中使用。file_2.cc 中 extern 的声明同样是 extern；这种情况下，extern 标志着 bufSize 是一个声明，所以没有初始化式。</p>
+<h2 id="声明和定义">声明和定义</h2>
+<ul>
+<li>定义（definition）：用于为变量分配存储空间，还可以为变量指定初始值。在一个程序中，变量有且只有一个定义。</li>
+<li>声明（declaration）：用于向程序表明变量的类型和名字。定义也是声明：当定义变量时我们声明了它的类型和名字。 <strong>可以通过使用extern关键字声明变量而不定义它</strong> 。</li>
+<li>在 C++ 语言中，变量必须且仅能定义一次，而且在使用变量之前必须定义或声明变量。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> i;    <span class="comment">//  declares but does not define i</span></span><br><span class="line"><span class="keyword">int</span> i;              <span class="comment">//  declares and defines i</span></span><br></pre></td></tr></table></figure>
+<p><strong>extern声明不是定义，也不分配存储空间</strong> 。事实上，它 <strong>只是说明变量定义在程序的其他地方</strong> 。程序中变量可以声明多次，但只能定义一次。</p>
+<p>只有当声明也是定义时，声明才可以有初始化式，因为只有定义才分配存储空间。如果声明有初始化式，那么它可被当作是定义，即使声明标记为extern：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">double</span> pi = <span class="number">3.1416</span>;    <span class="comment">// definition</span></span><br></pre></td></tr></table></figure>
+<p>虽然使用了extern，但是这条语句还是定义了pi，分配并初始化了存储空间。 <strong>只有当extern声明位于函数外部时，才可以含有初始化式</strong> 。</p>
+<p>因为已初始化的extern声明被当作是定义，所以该变量任何随后的定义都是错误的：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">double</span> pi = <span class="number">3.1416</span>;    <span class="comment">// definition</span></span><br><span class="line"><span class="keyword">double</span> pi;                    <span class="comment">// error: redefinition of pi</span></span><br></pre></td></tr></table></figure>
+<p>同样，随后的含初始化式的extern声明也是错误的：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">double</span> pi = <span class="number">3.1416</span>;    <span class="comment">// definition</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">double</span> pi;             <span class="comment">// ok: declaration not definition</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">double</span> pi = <span class="number">3.1416</span>;    <span class="comment">// error: redefinition of pi</span></span><br></pre></td></tr></table></figure>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>C++ 中，把负值赋给 unsigned 对象是完全合法的，其结果是该负数对该类型的取值个数求模后的值。所以，如果把 -1 赋给 8 位的 unsigned char，那么结果是 255，因为 255 是 -1 对 256 求模后的值。 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>没有 short 类型的字面值常量。 <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/cpp-intro.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/cpp-function.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '变量和数据类型'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

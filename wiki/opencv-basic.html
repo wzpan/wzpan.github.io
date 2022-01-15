@@ -1,0 +1,843 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>基础 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="命名空间
+OpenCV 的 C++ API 里的所有类和函数都是定义在 cv 命名空间中的。因此，你可以通过两种方式使用这些类和函数：
+
+使用 cv:: 前缀：
+
+1234#include &amp;quot;opencv2/core/core.hpp&amp;quot;...cv::Mat H = cv::fin">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="基础"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '基础'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 基础</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="命名空间">命名空间</h2>
+<p>OpenCV 的 C++ API 里的所有类和函数都是定义在 <code>cv</code> 命名空间中的。因此，你可以通过两种方式使用这些类和函数：</p>
+<ol>
+<li>使用 <code>cv::</code> 前缀：</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;opencv2/core/core.hpp&quot;</span></span></span><br><span class="line">...</span><br><span class="line">cv::Mat H = cv::<span class="built_in">findHomography</span>(points1, points2, CV_RANSAC, <span class="number">5</span>);</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>使用全局命名空间：</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;opencv2/core/core.hpp&quot;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line">...</span><br><span class="line">Mat H = <span class="built_in">findHomography</span>(points1, points2, CV_RANSAC, <span class="number">5</span> );</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>不过这种方案可能会导致部分命名和 STL 或其他库的命名产生冲突。不过这依然可以使用前缀的方法解决。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Mat <span class="title">a</span><span class="params">(<span class="number">100</span>, <span class="number">100</span>, CV_32F)</span></span>;</span><br><span class="line"><span class="built_in">randu</span>(a, Scalar::<span class="built_in">all</span>(<span class="number">1</span>), Scalar::<span class="built_in">all</span>(std::<span class="built_in">rand</span>()));</span><br><span class="line">cv::<span class="built_in">log</span>(a, a);</span><br><span class="line">a /= std::<span class="built_in">log</span>(<span class="number">2.</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="Mat">Mat</h2>
+<p>用于储存图像（或其他数组型的数据）的容器。</p>
+<h3 id="声明">声明</h3>
+<h4 id="一维数组">一维数组</h4>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Mat a_mat;</span><br></pre></td></tr></table></figure>
+<p>将声明一个大小为 0 的 Mat 对象。也可以直接指定初始大小：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Mat <span class="title">a_mat</span><span class="params">(nrows, ncols, type[, fillValue])</span></span>;</span><br></pre></td></tr></table></figure>
+<p>这里的 <code>type</code> 是矩阵数据类型。格式为：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CV_&lt;bit_depth&gt;(S|U|F)C&lt;number_of_channels&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">S &#x3D; 符号整型</span><br><span class="line">U &#x3D; 无符号整型</span><br><span class="line">F &#x3D; 浮点型</span><br></pre></td></tr></table></figure>
+<p>根据这个可以灵活定义多种数据类型，例如：</p>
+<ul>
+<li><code>CV_8U</code>：8位无符号整型单通道矩阵，等价于 <code>CV_8UC1</code> 。</li>
+<li><code>CV_8UC3</code>：8位无符号整型三通道矩阵；</li>
+<li><code>CV_32FC2</code>：32位浮点型双通道矩阵。</li>
+</ul>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  要获得某个 Mat 对象的数据类型，可以使用 <code>Mat:type()</code> 函数。
+</div>
+<h4 id="高维数组">高维数组</h4>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// create a 100x100x100 8-bit array</span></span><br><span class="line"><span class="keyword">int</span> sz[] = &#123;<span class="number">100</span>, <span class="number">100</span>, <span class="number">100</span>&#125;;</span><br><span class="line"><span class="function">Mat <span class="title">bigCube</span><span class="params">(<span class="number">3</span>, sz, CV_8U, Scalar::all(<span class="number">0</span>))</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="其他创建方法">其他创建方法</h3>
+<ol>
+<li>使用 <code>cv::create()</code> 函数</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Mat a_mat;</span><br><span class="line">a_mat.<span class="built_in">create</span>(nrows, ncols, type);</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>通过赋值操作复制一个 Mat 对象。</li>
+</ol>
+<p>这种方法只是简单的复制头指针的地址，因此得到的 Mat 对象与原来的 Mat 对象共享同样的数据空间，整个赋值过程只是一个 \(O(1)\) 操作。或者通过 <code>Mat::copyTo()</code> 或 <code>Mat::clone()</code> 操作拷贝一个 Mat 对象，这种方法得到的 Mat 对象申请了新的空间并拷贝了原 Mat 对象的数据。详见 <a href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6">内存管理机制</a> 。</p>
+<ol start="3">
+<li>声明一个 Mat 对象，将其头指针并指向另一个数组对象的部分元素。</li>
+</ol>
+<p>同样也是个 \(O(1)\) 操作。对该 Mat 对象操作会影响原来的数组。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// add the 5-th row, multiplied by 3 to the 3rd row</span></span><br><span class="line">M.<span class="built_in">row</span>(<span class="number">3</span>) = M.<span class="built_in">row</span>(<span class="number">3</span>) + M.<span class="built_in">row</span>(<span class="number">5</span>)*<span class="number">3</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// now copy the 7-th column to the 1-st column</span></span><br><span class="line"><span class="comment">// M.col(1) = M.col(7); // this will not work</span></span><br><span class="line">Mat M1 = M.<span class="built_in">col</span>(<span class="number">1</span>);</span><br><span class="line">M.<span class="built_in">col</span>(<span class="number">7</span>).<span class="built_in">copyTo</span>(M1);</span><br><span class="line"></span><br><span class="line"><span class="comment">// create a new 320x240 image</span></span><br><span class="line"><span class="function">Mat <span class="title">img</span><span class="params">(Size(<span class="number">320</span>,<span class="number">240</span>),CV_8UC3)</span></span>;</span><br><span class="line"><span class="comment">// select a ROI</span></span><br><span class="line"><span class="function">Mat <span class="title">roi</span><span class="params">(img, Rect(<span class="number">10</span>,<span class="number">10</span>,<span class="number">100</span>,<span class="number">100</span>))</span></span>;</span><br><span class="line"><span class="comment">// fill the ROI with (0,255,0) (which is green in RGB space);</span></span><br><span class="line"><span class="comment">// the original 320x240 image will be modified</span></span><br><span class="line">roi = <span class="built_in">Scalar</span>(<span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>声明一个 Mat 对象，并将头指针指向用户分配的数据。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">double</span> m[<span class="number">3</span>][<span class="number">3</span>] = &#123; &#123;a, b, c&#125;, &#123;d, e, f&#125;, &#123;g, h, i&#125; &#125;;</span><br><span class="line">Mat M = <span class="built_in">Mat</span>(<span class="number">3</span>, <span class="number">3</span>, CV_64F, m).<span class="built_in">inv</span>();</span><br></pre></td></tr></table></figure>
+<p>将 C API 的 CvMat 和 IplImage 转换到 Mat 也是用到这个方式：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Mat img = <span class="built_in">imread</span>(<span class="string">&quot;image.jpg&quot;</span>);</span><br><span class="line">IplImage img1 = img;</span><br><span class="line">CvMat m = img;</span><br></pre></td></tr></table></figure>
+<p>注意上面的命令并没有拷贝数据。</p>
+<ol start="5">
+<li>使用类 Matlab 风格的数组初始化函数 <code>zeros()</code>，<code>ones()</code>，<code>eye()</code> 。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// create a double-precision identity martix and add it to M.</span></span><br><span class="line">M += Mat::<span class="built_in">eye</span>(M.rows, M.cols, CV_64F);</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>使用逗号分割的初始化方式：</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// create a 3x3 double-precision identity matrix</span></span><br><span class="line">Mat M = (Mat_&lt;<span class="keyword">double</span>&gt;(<span class="number">3</span>,<span class="number">3</span>) &lt;&lt; <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="内存管理机制">内存管理机制</h3>
+<p>Mat 使用<a href="/wiki/cpp-oop.html#%E5%BC%95%E5%85%A5%E4%BD%BF%E7%94%A8%E8%AE%A1%E6%95%B0">计数指针</a>的方式来实现智能指针，以使得多个 Mat 对象可以共享同一份数据，这样可以大幅节省空间。我们可以看看它的定义：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CV_EXPORTS</span> <span class="title">Mat</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// ... a lot of methods ...</span></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*! includes several bit-fields:</span></span><br><span class="line"><span class="comment">         - the magic signature</span></span><br><span class="line"><span class="comment">         - continuity flag</span></span><br><span class="line"><span class="comment">         - depth</span></span><br><span class="line"><span class="comment">         - number of channels</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">int</span> flags;</span><br><span class="line">    <span class="comment">//! the array dimensionality, &gt;= 2</span></span><br><span class="line">    <span class="keyword">int</span> dims;</span><br><span class="line">    <span class="comment">//! the number of rows and columns or (-1, -1) when the array has more than 2 dimensions</span></span><br><span class="line">    <span class="keyword">int</span> rows, cols;</span><br><span class="line">    <span class="comment">//! pointer to the data</span></span><br><span class="line">    uchar* data;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//! pointer to the reference counter;</span></span><br><span class="line">    <span class="comment">// when array points to user-allocated data, the pointer is NULL</span></span><br><span class="line">    <span class="keyword">int</span>* refcount;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// other members</span></span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>其中 <code>refcount</code> 指针用来对该对象的引用次数计数。当引用次数减少到 0 时，说明此时的数据已经没有用了，可以放心的删除，从而释放空间。但这样可能带来的一个问题：对其中一个Mat的数据操作，有可能会对其他指向同一块数据的 Mat 产生灾难性的影响。</p>
+<p>因此，如果想要重新拷贝一份原有的 Mat 的数据，不要直接赋值，而应该是用 <code>Mat::copyTo()</code> 或 <code>Mat::clone()</code> 操作：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Mat img = <span class="built_in">imread</span>(<span class="string">&quot;image.jpg&quot;</span>);</span><br><span class="line">Mat img1 = img.<span class="built_in">clone</span>();</span><br></pre></td></tr></table></figure>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  要强制释放某个 Mat 对象所指向的数据，可以使用 <code>Mat::release()</code> 函数。
+</div>
+<h2 id="矩阵操作">矩阵操作</h2>
+<p>OpenCV 所支持的矩阵操作如下（其中 <code>A</code>、<code>B</code> 代表 Mat 类型，<code>s</code> 代表 Scalar 类型，<code>alpha</code> 代表 Double 类型）：</p>
+<ul>
+<li>Addition, subtraction, negation: <code>A+B</code>, <code>A-B</code>, <code>A+s</code>, <code>A-s</code>, <code>s+A</code>, <code>s-A</code>, <code>-A</code></li>
+<li>Scaling: <code>A*alpha</code></li>
+<li>Per-element multiplication and division: <code>A.mul(B)</code>, <code>A/B</code>, <code>alpha/A</code></li>
+<li>Matrix multiplication: <code>A*B</code></li>
+<li>Transposition: <code>A.t()</code> (means \(A^T\))</li>
+<li>Matrix inversion and pseudo-inversion, solving linear systems and least-squares problems: <code>A.inv([method])</code> (\(\sim A^{-1}\)) ,   <code>A.inv([method])*B</code> (\(\sim X: AX=B\))</li>
+<li>Comparison: <code>A cmpop B</code>, <code>A cmpop alpha</code>, <code>alpha cmpop A</code>, where <code>cmpop</code> is one of :  <code>&gt;</code>, <code>&gt;=</code>, <code>==</code>, <code>!=</code>, <code>&lt;=</code>, <code>&lt;</code>. The result of comparison is an 8-bit single channel mask whose elements are set to 255 (if the particular element or pair of elements satisfy the condition) or 0.</li>
+<li>Bitwise logical operations: <code>A logicop B</code>, <code>A logicop s</code>, <code>s logicop A</code>, <code>~A</code>, where <code>logicop</code> is one of :  <code>&amp;</code>, <code>|</code>, <code>^</code>.</li>
+<li>Element-wise minimum and maximum: <code>min(A, B)</code>, <code>min(A, alpha)</code>, <code>max(A, B)</code>, <code>max(A, alpha)</code></li>
+<li>Element-wise absolute value: <code>abs(A)</code></li>
+<li>Cross-product, dot-product: <code>A.cross(B)</code> <code>A.dot(B)</code></li>
+<li>Any function of matrix or matrices and scalars that returns a matrix or a scalar, such as <code>norm</code>, <code>mean</code>, <code>sum</code>, <code>countNonZero</code>, <code>trace</code>, <code>determinant</code>, <code>repeat</code>, and others.</li>
+<li>Matrix initializers ( <code>Mat::eye()</code>, <code>Mat::zeros()</code>, <code>Mat::ones()</code> ), matrix comma-separated initializers, matrix constructors and operators that extract sub-matrices (see Mat description).</li>
+<li><code>Mat_&lt;destination_type&gt;()</code> constructors to cast the result to the proper type.</li>
+</ul>
+<h3 id="示例">示例</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// compute pseudo-inverse of A, equivalent to A.inv(DECOMP_SVD)</span></span><br><span class="line"><span class="function">SVD <span class="title">svd</span><span class="params">(A)</span></span>;</span><br><span class="line">Mat pinvA = svd.vt.<span class="built_in">t</span>()*Mat::<span class="built_in">diag</span>(<span class="number">1.</span>/svd.w)*svd.u.<span class="built_in">t</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// compute the new vector of parameters in the Levenberg-Marquardt algorithm</span></span><br><span class="line">x -= (A.<span class="built_in">t</span>()*A + lambda*Mat::<span class="built_in">eye</span>(A.cols,A.cols,A.<span class="built_in">type</span>())).<span class="built_in">inv</span>(DECOMP_CHOLESKY)*(A.<span class="built_in">t</span>()*err);</span><br><span class="line"></span><br><span class="line"><span class="comment">// sharpen image using &quot;unsharp mask&quot; algorithm</span></span><br><span class="line">Mat blurred; <span class="keyword">double</span> sigma = <span class="number">1</span>, threshold = <span class="number">5</span>, amount = <span class="number">1</span>;</span><br><span class="line"><span class="built_in">GaussianBlur</span>(img, blurred, <span class="built_in">Size</span>(), sigma, sigma);</span><br><span class="line">Mat lowConstrastMask = <span class="built_in">abs</span>(img - blurred) &lt; threshold;</span><br><span class="line">Mat sharpened = img*(<span class="number">1</span>+amount) + blurred*(-amount);</span><br><span class="line">img.<span class="built_in">copyTo</span>(sharpened, lowContrastMask);</span><br></pre></td></tr></table></figure>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+			
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/opencv-tables.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/opencv-image.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '基础'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

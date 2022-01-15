@@ -1,0 +1,713 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>学习 React Native for Android：环境搭建 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="学习 React Native for Android 的开发环境搭建。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="学习 React Native for Android：环境搭建"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '学习 React Native for Android：环境搭建'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 学习 React Native for Android：环境搭建</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>学习 React Native for Android 的开发环境搭建。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <p>Facebook 于 2015 年 9 月 15 日发布了 React Native for Android 。React Native 让开发者使用 JavaScript 和 React 编写应用，利用相同的核心代码就可以创建 Web，iOS 和 Android 平台的原生应用。注意这里的 <q>核心</q> 两个词，它指的是那些底层的、与界面无关的逻辑。与 ionic / PhoneGap 这类 Web App 开发框架不同，React Native 主张使用 React 的开发方式来开发 Native 应用，因为在现阶段 Web App 还无法达到 Native App 的体验。所以，React Native 并不强调 <q>write Once, run everywhere</q> ，而是 <q>learn once, write everywhere</q> ：上层使用 JS 和 React 开发不同平台的 UI，下层则可以编写能够复用的核心代码，从而大幅提高开发效率。</p>
+<p>关于 React Native 的好处，唐巧在 《<a target="_blank" rel="noopener" href="http://blog.devtang.com/blog/2015/02/01/talk-about-react-native/">谈谈 React Native</a>》 里已经有比较深刻的总结，本文不再赘述。本文将作为一个 React Native for Android 学习系列的一个开篇，从零开始学习 React Native 。我尽量不偷懒，保证文章及时更新。</p>
+<span id="more"></span>
+<h2 id="准备工作">准备工作</h2>
+<ol>
+<li>操作系统：当前仅支持 OS X；</li>
+<li>由于 atom 的 package 服务 apm 国内不可用，因此国内的朋友需要做好 Cross the Wall 的准备。</li>
+</ol>
+<h2 id="基本开发环境搭建">基本开发环境搭建</h2>
+<h3 id="安装-Homebrew">安装 Homebrew</h3>
+<p>Homebrew 是一个方便开发者在 MAC OS X 系统上面安装 Linux 工具包的 ruby 脚本，如果你的机器还没有安装 Homebrew ，则需要执行下面的命令安装：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ruby -e <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>&quot;</span></span><br></pre></td></tr></table></figure>
+<p>完成后可以试试执行 <code>brew -v</code> 检查下 brew 是否安装成功。</p>
+<p>如果你的机器已经安装过 Homebrew ，<strong>强烈建议</strong> 对 Homebrew 的包做一下更新：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew update &amp;&amp; brew upgrade</span><br></pre></td></tr></table></figure>
+<h3 id="安装-Node-js">安装 Node.js</h3>
+<p>建议使用 Node 的版本管理器 nvm 来安装新版本的 Node.js 。</p>
+<h4 id="安装-nvm">安装 nvm</h4>
+<p>首先需要安装 nvm 。官方推荐的做法是通过 <code>curl</code> 或者 <code>wget</code> 来安装：</p>
+<h5 id="通过-curl-安装">通过 curl 安装</h5>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ brew install curl  <span class="comment"># 确保安装了 curl</span></span><br><span class="line">$ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.29.0/install.sh | bash</span><br></pre></td></tr></table></figure>
+<h5 id="通过-wget-安装">通过 wget 安装</h5>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ brew install wget  <span class="comment"># 确保安装了 wget</span></span><br><span class="line">$ wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.29.0/install.sh | bash</span><br></pre></td></tr></table></figure>
+<p>完成后可以试试执行 <code>nvm --version</code> 检查下 nvm 是否安装成功。</p>
+<h4 id="安装-Node-js-v2">安装 Node.js</h4>
+<p>使用 nvm 安装 Node.js：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nvm install node &amp;&amp; nvm <span class="built_in">alias</span> default node</span><br></pre></td></tr></table></figure>
+<h3 id="安装-watchman">安装 watchman</h3>
+<p><a target="_blank" rel="noopener" href="https://facebook.github.io/watchman/docs/install.html">watchman</a> 是 Facebook 的一个用于监控文件变更并触发指定操作的工具：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install watchman</span><br></pre></td></tr></table></figure>
+<h3 id="安装-flow">安装 flow</h3>
+<p><a target="_blank" rel="noopener" href="http://flowtype.org/">Flow</a> 是一个 JavaScript 的静态类型检查器，建议安装它，以方便找出代码中可能存在的类型错误：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install flow</span><br></pre></td></tr></table></figure>
+<h3 id="安装-Android-SDK">安装 Android SDK</h3>
+<p>如果你之前已经装过 Android SDK ，打开 Android SDK Manager，确保如下工具和开发包已经安装：</p>
+<p>SDK：</p>
+<ul>
+<li>Android SDK Build-tools version 23.0.1</li>
+<li>Android 6.0 (API 23)</li>
+<li>Android Support Repository</li>
+</ul>
+<p>模拟器：</p>
+<ul>
+<li>Intel x86 Atom System Image (for Android 5.1.1 - API 22)</li>
+<li>Intel x86 Emulator Accelerator (HAXM installer)</li>
+</ul>
+<p>如果之前没有装过 Android SDK ，可以通过如下步骤安装：</p>
+<ol>
+<li>安装最新的 JDK.</li>
+<li>使用 <code>brew install android-sdk</code> 来安装安卓 SDK。</li>
+<li>将它添加到 ~/.bashrc, ~/.zshrc 或者任何其他您的 shell 所使用的路径：<code>export ANDROID_HOME=/usr/local/opt/android-sdk</code></li>
+<li>启动一个新的 shell 并且运行 <code>android</code> ，在出现窗口中勾选上面列出的 SDK 和模拟器。</li>
+<li>点击 “Install Packages”。</li>
+</ol>
+<p>详细介绍可以参考 <a target="_blank" rel="noopener" href="http://wiki.jikexueyuan.com/project/react-native/DevelopmentSetupAndroid.html">这篇文章</a> 。</p>
+<h3 id="安装-React-Native">安装 React Native</h3>
+<p>最后到了关键一步，安装 React Native：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g react-native-cli</span><br></pre></td></tr></table></figure>
+<p>至此完成 React Native 基本开发环境的搭建。</p>
+<h2 id="Nuclide-IDE-的安装和配置（可选）">Nuclide IDE 的安装和配置（可选）</h2>
+<p>Nuclide 是 Facebook 专门为 React 开发的 IDE ，既然是官方提供的 IDE ，就意味着拥有更好的语法补全、类型检查等支持。为了开发效率，不妨尝试一下这个 IDE 。</p>
+<h3 id="安装-Atom">安装 Atom</h3>
+<p>本质上，Nuclide 其实是在 Atom 的基础上提供的一系列插件集。要使用 Nuclide ，首先需要先安装 Atom 。Atom 是 Github 所推出的一个开源编辑器，其最大的特点是使用 node.js 来作为其插件语言。</p>
+<p>到<a target="_blank" rel="noopener" href="https://atom.io/">Atom的官网</a>下载 Atom 并安装。</p>
+<h3 id="安装-Nuclide">安装 Nuclide</h3>
+<p>安装完 Atom 后，打开 Settings 面板，并点击 Install 选项卡，然后在搜索框中键入 nuclide-installer ，如图所示：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/learn-react-native-for-android-01/nuclide-installer.png" alt="搜索 nuclide-installer" />
+        <figcaption>搜索 nuclide-installer</figcaption>
+      </figure>
+    </p>
+<p>第一个结果就是我们需要安装的插件，点击该插件旁边的蓝色 Install 按钮进行安装。</p>
+<p>另一种方法是直接利用 Atom 的包管理器 <code>apm</code> 安装：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ apm install nuclide-installer</span><br></pre></td></tr></table></figure>
+<p>完成后重启一下 Atom ，Atom 就会开始完成对 Nuclide 所有插件的下载安装，这个过程可能耗时比较长。完成后可以再次进入 Setting 面板，并点击 Packages 选项卡，你将可以看到一堆的 <code>Nuclide-</code> 开头的插件。</p>
+<p>为了方便编译 React Native 的工程，建议再安装一个终端插件，用于快速打开终端并定位到当前项目根路径。根据你的操作系统版本选择安装如下插件之一：</p>
+<ul>
+<li>atom-terminal：适合 Mac OSX 10.9 （Mavericks） 及以下的操作系统；</li>
+<li>atomerinal：atom-terminal 在 Mac OSX Yosmite 和 EI Capitan 下不能准确定位路径，这个插件是对 atom-terminal 的 fork 和修改，适合版本更高的操作系统；</li>
+</ul>
+<h3 id="其他推荐插件">其他推荐插件</h3>
+<p>除了 Nuclide 之外，还可以根据你的需求安装其他的一些插件，这里推荐一些插件：</p>
+<ul>
+<li>react：React 的语法补全和智能重排；</li>
+<li>react-snippets：React 的代码段；</li>
+<li>highlight-selected：高亮当前双击选中的标记；</li>
+<li>jshint：检查 JavaScript 的语法，支持 JSX （需要在插件设置中开启 Support Linting JSX）；</li>
+<li>emmet：用 emmet （Zen Coding）方式快速编写页面；</li>
+<li>save-session：让 Atom 记住上一次打开的会话；</li>
+<li>browser-plus：在 Atom 中内嵌一个浏览器窗口，方便页面调试（其实 Atom 本身就是一个浏览器）；</li>
+<li>minimap：如果你对 Sublime Text 的 minimap 念念不忘；</li>
+<li>atomic-emacs：Emacs 键盘布局，适合 Emacs 用户使用；</li>
+<li>vim-mode：Vim 键盘布局，适合 Vim 用户使用。</li>
+</ul>
+<p>但要注意，Atom 目前的性能还比较差强人意，安装太多的插件会影响整个编辑器的启动速度，所以建议只安装必需的插件。</p>
+<h2 id="第一个小程序：AwesomeProject">第一个小程序：AwesomeProject</h2>
+<p>执行如下命令生成一个工程：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ react-native init AwesomeProject</span><br></pre></td></tr></table></figure>
+<p>该命令将会下载 React Native 工程源码和依赖，生成的工程文件如下图所示：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/learn-react-native-for-android-01/project-skeleton.png" alt="生成的示例工程" />
+        <figcaption>生成的示例工程</figcaption>
+      </figure>
+    </p>
+<p>仔细观察这个工程，你会发现如下的内容：</p>
+<ul>
+<li><code>node_modules</code> 文件夹，这是 Node.js 用来存放和管理 npm 包的文件夹，现在这里包含了 React Native 框架。</li>
+<li>index.android.js 文件和 index.ios.js 文件。这是 React Native CLI 工具分别为 Android 和 iOS 创建的空壳应用。</li>
+<li>android 文件夹和 ios 文件夹。包含了用于生成两个平台的 App 的 Bootstrap 型项目。</li>
+</ul>
+<p>现在打开 Atom ，点击 File 菜单的 【Add Project Folder…】 菜单项，导入 AwesomeProject 工程文件夹，如下图所示：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/learn-react-native-for-android-01/atom-awesomeproject.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>通过终端插件快速打开终端（快捷键是 <code>Alt</code> + <code>Shift</code> + <code>t</code>），然后执行如下命令运行 Android 应用程序：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ react-native run-android</span><br></pre></td></tr></table></figure>
+<p>React Native 会开始构建这个工程，同时会启动 Running Packager 用于调试。如下图所示：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/learn-react-native-for-android-01/run-project.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>如果 Running Packager 提示 “Packager can’t listen on port 8081” ，说明 8081 端口被占用，可以检查是什么程序占用了这个端口并杀掉它：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo lsof -n -i4TCP:8081 | grep LISTEN</span><br><span class="line">$ <span class="built_in">kill</span> -9 &lt;进程id&gt;</span><br></pre></td></tr></table></figure>
+<p>构建完成后，手机或模拟器将会自动运行这个 App 。如果你看到的是这样的画面：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/learn-react-native-for-android-01/unable-to-download-js-bundle.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>你还需要进行如下设置：</p>
+<ol>
+<li>更新 brew 和 watchman ：<code>brew update &amp;&amp; brew upgrade watchman</code>；</li>
+<li>摇动手机或按下菜单按钮呼出菜单，然后点击 【DeviceID Settings】 菜单项进入应用的选项界面，再点击 【Debug server host for device】 选项，填入你的 Mac 主机的 ip ；
+
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/learn-react-native-for-android-01/app-setup.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </li>
+<li>完成后重启一下应用，或者回到主界面再次呼出菜单，点击 【Reload JS】 。应用就会开始抓取主机上的 JS Bundle 并显示如下的界面：
+
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/learn-react-native-for-android-01/hello-world.png" alt="Hello World" />
+        <figcaption>Hello World</figcaption>
+      </figure>
+    </li>
+</ol>
+<p>我们的第一个应用就成功执行起来了！</p>
+<p>现在试试对我们的工程做点改动。在 Atom 下打开 index.android.js 文件，并将第 20 行附件的</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello World!</span><br></pre></td></tr></table></figure>
+<p>改成</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello HaHack!</span><br></pre></td></tr></table></figure>
+<p>然后再次呼出菜单，点击 【Reload JS】 刷新下界面，此时界面中的 <code>Hello World!</code> 就变成了 <code>Hello HaHack!</code> ：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/learn-react-native-for-android-01/hello-hahack.png" alt="Hello HaHack" />
+        <figcaption>Hello HaHack</figcaption>
+      </figure>
+    </p>
+<h2 id="小技巧">小技巧</h2>
+<h3 id="添加-Alias">添加 Alias</h3>
+<p>React Native 运行一个 App 的命令有点长，可以为其编写一些 Alias ，节省时间，方便记忆。将下面两行代码添加到你的 Shell 配置文件中（<code>.bashrc</code> 或 <code>.zshrc</code>）：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">alias</span> rna=<span class="string">&quot;react-native run-android&quot;</span></span><br><span class="line"><span class="built_in">alias</span> rni=<span class="string">&quot;react-native run-ios&quot;</span></span><br></pre></td></tr></table></figure>
+<p>完成后重新打开终端，即可使用 <code>rna</code> 命令运行 React Native for Android 项目，用 <code>rni</code> 命令运行 React Native for iOS 项目。</p>
+<h3 id="自动刷新界面">自动刷新界面</h3>
+<p>如果希望每次修改 JS 脚本后自动刷新应用的界面，可以再次进入应用的选项界面，把 【Auto reload on JS Change】 选项打开：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/learn-react-native-for-android-01/auto-reload.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>这样当 watchman 发现你的 JS 文件发生更改时，就会让 Running Packager 重新加载应用的界面。</p>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/codes/learn-react-native-for-android-02/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/codes/local-search-engine-for-hexo/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '学习 React Native for Android：环境搭建'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/learn-react-native-for-android-01.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2015-10-17 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/codes/">codes<span>38</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/React-Native/">React-Native<span>1</span></a></li> <li><a href="/tags/Android/">Android<span>1</span></a></li> <li><a href="/tags/Atom/">Atom<span>1</span></a></li> <li><a href="/tags/Nuclide/">Nuclide<span>1</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-article-text">准备工作</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%9F%BA%E6%9C%AC%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-article-text">基本开发环境搭建</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85-Homebrew"><span class="toc-article-text">安装 Homebrew</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85-Node-js"><span class="toc-article-text">安装 Node.js</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85-nvm"><span class="toc-article-text">安装 nvm</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-5"><a class="toc-article-link" href="#%E9%80%9A%E8%BF%87-curl-%E5%AE%89%E8%A3%85"><span class="toc-article-text">通过 curl 安装</span></a></li><li class="toc-article-item toc-article-level-5"><a class="toc-article-link" href="#%E9%80%9A%E8%BF%87-wget-%E5%AE%89%E8%A3%85"><span class="toc-article-text">通过 wget 安装</span></a></li></ol></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85-Node-js-v2"><span class="toc-article-text">安装 Node.js</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85-watchman"><span class="toc-article-text">安装 watchman</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85-flow"><span class="toc-article-text">安装 flow</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85-Android-SDK"><span class="toc-article-text">安装 Android SDK</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85-React-Native"><span class="toc-article-text">安装 React Native</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#Nuclide-IDE-%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="toc-article-text">Nuclide IDE 的安装和配置（可选）</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85-Atom"><span class="toc-article-text">安装 Atom</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85-Nuclide"><span class="toc-article-text">安装 Nuclide</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%85%B6%E4%BB%96%E6%8E%A8%E8%8D%90%E6%8F%92%E4%BB%B6"><span class="toc-article-text">其他推荐插件</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%B0%8F%E7%A8%8B%E5%BA%8F%EF%BC%9AAwesomeProject"><span class="toc-article-text">第一个小程序：AwesomeProject</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%B0%8F%E6%8A%80%E5%B7%A7"><span class="toc-article-text">小技巧</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%B7%BB%E5%8A%A0-Alias"><span class="toc-article-text">添加 Alias</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E8%87%AA%E5%8A%A8%E5%88%B7%E6%96%B0%E7%95%8C%E9%9D%A2"><span class="toc-article-text">自动刷新界面</span></a></li></ol></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

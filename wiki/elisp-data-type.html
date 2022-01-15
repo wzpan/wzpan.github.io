@@ -1,0 +1,1021 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>数据类型 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="elisp 里的对象都是有类型的，而且每一个对象它们知道自己是什么类型。得到一个变量名之后可以用一系列检测方法来测试这个变量是什么类型。
+内建的 emacs 数据类型称为 primitive types，包括整数、浮点数、cons、符号（symbol）、字符串、向量（vector）、散列表（hash">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="数据类型"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '数据类型'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 数据类型</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<p>elisp 里的对象都是有类型的，而且每一个对象它们知道自己是什么类型。得到一个变量名之后可以用一系列检测方法来测试这个变量是什么类型。</p>
+<p>内建的 emacs 数据类型称为 primitive types，包括整数、浮点数、cons、符号（symbol）、字符串、向量（vector）、散列表（hash-table）、subr（内建函数，比如 cons, if, and 之类）、byte-code function，和其它特殊类型，例如缓冲区（buffer）。</p>
+<h2 id="数字">数字</h2>
+<p>emacs 的数字分为整数和浮点数。</p>
+<p>1，1.，+1, -1, 536870913, 0, -0 这些都是整数。整数的范围是和机器是有关的，一般来最小范围是在 -268435456 to 268435455（29 位，-2^28 ~ 2^28-1）。可以从 <code>most-positive-fixnum</code> 和 <code>most-negative-fixnum</code> 两个变量得到整数的范围。</p>
+<p>你可以用多种进制来输入一个整数。比如：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">#b101100</span> =&gt; <span class="number">44</span>      <span class="comment">; 二进制</span></span><br><span class="line"><span class="number">#o54</span> =&gt; <span class="number">44</span>          <span class="comment">; 八进制</span></span><br><span class="line"><span class="number">#x2c</span> =&gt; <span class="number">44</span>          <span class="comment">; 十进制</span></span><br></pre></td></tr></table></figure>
+<p>最神奇的是你可以用 2 到 36 之间任意一个数作为基数，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#24r1k &#x3D;&gt; 44        ; 二十四进制</span><br></pre></td></tr></table></figure>
+<p>1500.0, 15e2, 15.0e2, 1.5e3, 和 .15e4 都可以用来表示一个浮点数 1500.。遵循 IEEE 标准，elisp 也有一个特殊类型的值称为 NaN (not-a-number)。你可以用 <code>(/ 0.0 0.0)</code> 产生这个数。</p>
+<h3 id="测试函数">测试函数</h3>
+<p>整数类型测试函数是 integerp，浮点数类型测试函数是 floatp。数字类型测试用 numberp。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">integerp</span> <span class="number">1</span>.)                           <span class="comment">; =&gt; t</span></span><br><span class="line">(<span class="name">integerp</span> <span class="number">1.0</span>)                          <span class="comment">; =&gt; nil</span></span><br><span class="line">(<span class="name">floatp</span> <span class="number">1</span>.)                             <span class="comment">; =&gt; nil</span></span><br><span class="line">(<span class="name">floatp</span> <span class="number">-0.0</span>e+NaN)                      <span class="comment">; =&gt; t</span></span><br><span class="line">(<span class="name">numberp</span> <span class="number">1</span>)                             <span class="comment">; =&gt; t</span></span><br></pre></td></tr></table></figure>
+<p>还提供一些特殊测试，比如测试是否是零的 zerop，还有非负整数测试的 wholenump。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  elisp 测试函数一般都是用 p 来结尾，p 是 predicate 的第一个字母。如果函数名是一个单词，通常只是在这个单词后加一个 p，如果是多个单词，一般是加 -p。
+</div>
+<h3 id="数的比较">数的比较</h3>
+<p>常用的比较操作符号是我们在其它言中都很熟悉的，比如 &lt;, &gt;, &gt;=, &lt;=，不一样的是，由于赋值是使用 set 函数，所以 = 不再是一个赋值运算符了，而是测试数字相等符号。和其它语言类似，对于浮点数的相等测试都是不可靠的。比如：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> foo (<span class="name">-</span> (<span class="name">+</span> <span class="number">1.0</span> <span class="number">1.0e-3</span>) <span class="number">1.0</span>))       <span class="comment">; =&gt; 0.0009999999999998899</span></span><br><span class="line">(<span class="name">setq</span> bar <span class="number">1.0e-3</span>)                       <span class="comment">; =&gt; 0.001</span></span><br><span class="line">(<span class="name">=</span> foo bar)                             <span class="comment">; =&gt; nil</span></span><br></pre></td></tr></table></figure>
+<p>所以一定要确定两个浮点数是否相同，是要在一定误差内进行比较。这里给出一个函数：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defvar</span> fuzz-factor <span class="number">1.0e-6</span>)</span><br><span class="line">(<span class="name">defun</span> approx-equal (<span class="name">x</span> y)</span><br><span class="line">  (<span class="name">or</span> (<span class="name">and</span> (<span class="name">=</span> x <span class="number">0</span>) (<span class="name">=</span> y <span class="number">0</span>))</span><br><span class="line">      (<span class="name">&lt;</span> (<span class="name">/</span> (<span class="name">abs</span> (<span class="name">-</span> x y))</span><br><span class="line">            (<span class="name">max</span> (<span class="name">abs</span> x) (<span class="name">abs</span> y)))</span><br><span class="line">         fuzz-factor)))</span><br><span class="line">(<span class="name">approx-equal</span> foo bar)                  <span class="comment">; =&gt; t</span></span><br></pre></td></tr></table></figure>
+<p>还有一个测试数字是否相等的函数 eql，这是函数不仅测试数字的值是否相等，还测试数字类型是否一致，比如：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">=</span> <span class="number">1.0</span> <span class="number">1</span>)                               <span class="comment">; =&gt; t</span></span><br><span class="line">(<span class="name">eql</span> <span class="number">1.0</span> <span class="number">1</span>)                             <span class="comment">; =&gt; nil</span></span><br></pre></td></tr></table></figure>
+<p>elisp 没有 +=, -=, /=, *= 这样的命令式语言里常见符号，如果你想实现类似功能的语句，只能用赋值函数 setq 来实现了。 /= 符号被用来作为不等于的测试了。</p>
+<h3 id="数的转换">数的转换</h3>
+<p>整数向浮点数转换是通过 float 函数进行的。而浮点数转换成整数有这样几个函数：</p>
+<ul>
+<li><strong>truncate</strong> 转换成靠近~0 的整数</li>
+<li><strong>floor</strong> 转换成最接近的不比本身大的整数</li>
+<li><strong>ceiling</strong> 转换成最接近的不比本身小的整数</li>
+<li><strong>round</strong> 四舍五入后的整数，换句话说和它的差绝对值最小的整数</li>
+</ul>
+<h3 id="数的运算">数的运算</h3>
+<h4 id="">+ - * /</h4>
+<p>四则运算 有什 好说的,就是 + - * /。值得注意的是，和 C 语言类似，如果参数都是整数，作除法时要记住 (/ 5 6) 是会等于 0 的。如果参数中有浮点数，整数会自动转换成浮点数进行运算，所以 (/ 5 6.0) 的值才会是 5/6。</p>
+<h4 id="1-和-1">1+ 和 1-</h4>
+<p>没有 ++ 和 – 操作了，类似的两个函数是 1+ 和 1-。可以用 setq 赋值来代替 ++ 和 --：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> foo <span class="number">10</span>)                           <span class="comment">; =&gt; 10</span></span><br><span class="line">(<span class="name">setq</span> foo (<span class="number">1</span>+ foo))                     <span class="comment">; =&gt; 11</span></span><br><span class="line">(<span class="name">setq</span> foo (<span class="number">1</span>- foo))                     <span class="comment">; =&gt; 10</span></span><br></pre></td></tr></table></figure>
+<h4 id="abs">abs</h4>
+<p>取数的绝对值。</p>
+<h4 id="和-mod">% 和 mod</h4>
+<p>有两个取整的函数，一个是符号 %，一个是函数 mod。这两个函数有什么差别呢？一是 % 的第一个参数必须是整数，而 mod 的第一个参数可以是整数也可以是浮点数。二是即使对相同的参数，两个函数也不一定有相同的返回值：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">+</span> (% DIVIDEND DIVISOR)</span><br><span class="line">   (<span class="name">*</span> (<span class="name">/</span> DIVIDEND DIVISOR) DIVISOR))</span><br></pre></td></tr></table></figure>
+<p>和 DIVIDEND 是相同的。而：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">+</span> (<span class="name">mod</span> DIVIDEND DIVISOR)</span><br><span class="line">   (<span class="name">*</span> (<span class="name">floor</span> DIVIDEND DIVISOR) DIVISOR))</span><br></pre></td></tr></table></figure>
+<p>和 DIVIDEND 是相同的。</p>
+<h4 id="三角运算">三角运算</h4>
+<p>三角运算有函数：sin, cos, tan, asin, acos, atan。</p>
+<h4 id="乘方和开方">乘方和开方</h4>
+<p>expt 可以指定底数的指数运算。开方函数是 sqrt。exp 是以 e 为底的指数运算，expt 可以指定底数的指数运算。log 默认底数是 e，但是也可以指定底数。log10 就是 (log x 10)。logb 是以 2 为底数运算，但是返回的是一个整数。这个函数是用来计算数的位。</p>
+<h4 id="随机数">随机数</h4>
+<p>random 可以产生随机数。可以用 (random t) 来产生一个新种子。虽然 emacs 每次启动后调用 random 总是产生相同的随机数，但是运行过程中，你不知道调用了多少次，所以使用时还是不需要再调用一次 (random t) 来产生新的种子。</p>
+<h3 id="函数列表">函数列表</h3>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; 测试函数</span></span><br><span class="line">(<span class="name">integerp</span> OBJECT)</span><br><span class="line">(<span class="name">floatp</span> OBJECT)</span><br><span class="line">(<span class="name">numberp</span> OBJECT)</span><br><span class="line">(<span class="name">zerop</span> NUMBER)</span><br><span class="line">(<span class="name">wholenump</span> OBJECT)</span><br><span class="line"><span class="comment">;; 比较函数</span></span><br><span class="line">(<span class="name">&gt;</span> NUM1 NUM2)</span><br><span class="line">(<span class="name">&lt;</span> NUM1 NUM2)</span><br><span class="line">(<span class="name">&gt;=</span> NUM1 NUM2)</span><br><span class="line">(<span class="name">&lt;=</span> NUM1 NUM2)</span><br><span class="line">(<span class="name">=</span> NUM1 NUM2)</span><br><span class="line">(<span class="name">eql</span> OBJ1 OBJ2)</span><br><span class="line">(<span class="name">/=</span> NUM1 NUM2)</span><br><span class="line"><span class="comment">;; 转换函数</span></span><br><span class="line">(<span class="name">float</span> ARG)</span><br><span class="line">(<span class="name">truncate</span> ARG <span class="symbol">&amp;optional</span> DIVISOR)</span><br><span class="line">(<span class="name">floor</span> ARG <span class="symbol">&amp;optional</span> DIVISOR)</span><br><span class="line">(<span class="name">ceiling</span> ARG <span class="symbol">&amp;optional</span> DIVISOR)</span><br><span class="line">(<span class="name">round</span> ARG <span class="symbol">&amp;optional</span> DIVISOR)</span><br><span class="line"><span class="comment">;; 运算</span></span><br><span class="line">(<span class="name">+</span> <span class="symbol">&amp;rest</span> NUMBERS-OR-MARKERS)</span><br><span class="line">(<span class="name">-</span> <span class="symbol">&amp;optional</span> NUMBER-OR-MARKER <span class="symbol">&amp;rest</span> MORE-NUMBERS-OR-MARKERS)</span><br><span class="line">(<span class="name">*</span> <span class="symbol">&amp;rest</span> NUMBERS-OR-MARKERS)</span><br><span class="line">(<span class="name">/</span> DIVIDEND DIVISOR <span class="symbol">&amp;rest</span> DIVISORS)</span><br><span class="line">(<span class="number">1</span>+ NUMBER)</span><br><span class="line">(<span class="number">1</span>- NUMBER)</span><br><span class="line">(<span class="name">abs</span> ARG)</span><br><span class="line">(% X Y)</span><br><span class="line">(<span class="name">mod</span> X Y)</span><br><span class="line">(<span class="name">sin</span> ARG)</span><br><span class="line">(<span class="name">cos</span> ARG)</span><br><span class="line">(<span class="name">tan</span> ARG)</span><br><span class="line">(<span class="name">asin</span> ARG)</span><br><span class="line">(<span class="name">acos</span> ARG)</span><br><span class="line">(<span class="name">atan</span> Y <span class="symbol">&amp;optional</span> X)</span><br><span class="line">(<span class="name">sqrt</span> ARG)</span><br><span class="line">(<span class="name">exp</span> ARG)</span><br><span class="line">(<span class="name">expt</span> ARG1 ARG2)</span><br><span class="line">(<span class="name">log</span> ARG <span class="symbol">&amp;optional</span> BASE)</span><br><span class="line">(<span class="name">log10</span> ARG)</span><br><span class="line">(<span class="name">logb</span> ARG)</span><br><span class="line"><span class="comment">;; 随机数</span></span><br><span class="line">(<span class="name">random</span> <span class="symbol">&amp;optional</span> N)</span><br></pre></td></tr></table></figure>
+<h3 id="变量列表">变量列表</h3>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">most-positive-fixnum</span><br><span class="line">most-negative-fixnum</span><br></pre></td></tr></table></figure>
+<h2 id="字符和字符串">字符和字符串</h2>
+<p>在 emacs 里字符串是有序的字符数组。和 c 语言的字符串数组不同，emacs 的字符串可以容纳任何字符，包括 <code>\0</code> :</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> foo <span class="string">&quot;abc\000abc&quot;</span>)                 <span class="comment">; =&gt; &quot;abc^@abc&quot;</span></span><br></pre></td></tr></table></figure>
+<p>首先构成字符串的字符其实就是一个整数。一个字符 <code>A</code> 就是一个整数 65。但是目前字符串中的字符被限制在 0-524287 之间。字符的读入语法是在字符前加上一个问号，比如 <code>?A</code> 代表字符 <code>A</code>。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?A                                      ; =&gt; 65</span><br><span class="line">?a                                      ; =&gt; 97</span><br></pre></td></tr></table></figure>
+<p>对于标点来说，也可以用同样的语法，但是最好在前面加上转义字符 <code>\</code>，因为有些标点会有岐义，比如 <code>?|'。 </code>` 必须用 <code>?\\'</code> 表示。控制字符，退格、制表符，换行符，垂直制表符，换页符，空格，回车，删除和 escape 表示为 <code>?\a</code>, <code>?\b</code>，<code>?\t</code>，<code>?\n</code>，<code>?\v</code>，<code>?\f</code>，<code>?\s</code>，<code>?\r</code>，<code>?\d</code> 和 <code>?\e</code>。对于没有特殊意义的字符，加上转义字符 <code>\</code> 是没有副作用的，比如 <code>?\+</code> 和 <code>?+</code> 是完全一样的。所以标点还是都用转义字符来表示吧。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">?\a =&gt; 7                 ; control-g, `C-g&#x27;</span><br><span class="line">?\b =&gt; 8                 ; backspace, &lt;BS&gt;, `C-h&#x27;</span><br><span class="line">?\t =&gt; 9                 ; tab, &lt;TAB&gt;, `C-i&#x27;</span><br><span class="line">?\n =&gt; 10                ; newline, `C-j&#x27;</span><br><span class="line">?\v =&gt; 11                ; vertical tab, `C-k&#x27;</span><br><span class="line">?\f =&gt; 12                ; formfeed character, `C-l&#x27;</span><br><span class="line">?\r =&gt; 13                ; carriage return, &lt;RET&gt;, `C-m&#x27;</span><br><span class="line">?\e =&gt; 27                ; escape character, &lt;ESC&gt;, `C-[&#x27;</span><br><span class="line">?\s =&gt; 32                ; space character, &lt;SPC&gt;</span><br><span class="line">?\\ =&gt; 92                ; backslash character, `\&#x27;</span><br><span class="line">?\d =&gt; 127               ; delete character, &lt;DEL&gt;</span><br></pre></td></tr></table></figure>
+<p>控制字符可以有多种表示方式，比如 <code>C-i</code> ，这些都是对的：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?\^I  ?\^i  ?\C-I  ?\C-i </span><br></pre></td></tr></table></figure>
+<p>它们都对应数字 9。meta 字符是用 <code>&lt;META&gt;</code> 修饰键（通常就是 Alt 键）输入的字符。之所以称为修饰键，是因为这样输入的字符就是在其修饰字符的第 27 位由 0 变成 1 而成，也就是如下操作：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">logior</span> (<span class="name">lsh</span> <span class="number">1</span> <span class="number">27</span>) ?A)                  <span class="comment">; =&gt; 134217793</span></span><br><span class="line">?\M-A                                   ; =&gt; 134217793</span><br></pre></td></tr></table></figure>
+<p>你可以用 ‘\M-’ 代表 meta 键，加上修饰的字符就是新生成的字符。比如：<code>?\M-A</code>, <code>?\M-\C-b</code>. 后面这个也可以写成 <code>?\C-\M-b</code>。</p>
+<p>如果你还记得前面说过字符串里的字符不能超过 524287 的话，这就可以看出字符串是不能放下一个 meta 字符的。所以按键序列在这时只能用 vector 来储存。</p>
+<p>其它的修饰键也是类似的。emacs 用 2^25 位来表示 shift 键，2^24 对应 hyper，2^23 对应 super，2^22 对应 alt。</p>
+<h3 id="测试函数-v2">测试函数</h3>
+<p>字符串测试使用 stringp（没有 charp，因为字符就是整数）。<code>string-or-null-p</code> 当对象是一个字符或 nil 时返回 t。<code>char-or-string-p</code> 测试是否是字符串或者字符类型。</p>
+<p>emacs 没有测试字符串是否为空的函数，可以通过 length 获取字符串的长度来判断是否为一个空字符串。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> a-string <span class="literal">nil</span>)</span><br><span class="line">(<span class="name">length</span> a-string)		<span class="comment">; =&gt; 0</span></span><br></pre></td></tr></table></figure>
+<h3 id="构造函数">构造函数</h3>
+<p>产生一个字符串可以用 <code>make-string</code>。这样生成的字符串包含的字符都是一样的。要生成不同的字符串可以用 <code>string</code> 函数。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">make-string</span> <span class="number">5</span> ?x)                      <span class="comment">; =&gt; &quot;xxxxx&quot;</span></span><br><span class="line">(<span class="name">string</span> ?a ?b ?c)                       <span class="comment">; =&gt; &quot;abc&quot;</span></span><br></pre></td></tr></table></figure>
+<p>在已有的字符串生成新的字符串的方法有 substring, concat。substring 的后两个参数是起点和终点的位置。如果终点越界或者终点比起点小都会产生一个错误。这个在使用 substring 时要特别小心。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">substring</span> <span class="string">&quot;0123456789&quot;</span> <span class="number">3</span>)              <span class="comment">; =&gt; &quot;3456789&quot;</span></span><br><span class="line">(<span class="name">substring</span> <span class="string">&quot;0123456789&quot;</span> <span class="number">3</span> <span class="number">5</span>)            <span class="comment">; =&gt; &quot;34&quot;</span></span><br><span class="line">(<span class="name">substring</span> <span class="string">&quot;0123456789&quot;</span> <span class="number">-3</span> <span class="number">-1</span>)          <span class="comment">; =&gt; &quot;78&quot;</span></span><br></pre></td></tr></table></figure>
+<p>concat 函数相对简单，就是把几个字符串连接起来。</p>
+<h3 id="字符串比较">字符串比较</h3>
+<p>char-equal 可以比较两个字符是否相等。与整数比较不同，这个函数还考虑了大小写。如果 case-fold-search 变量是 t 时，这个函数的字符比较是忽略大小写的。编程时要小心，因为通常 case-fold-search 都是 t，这样如果要考虑字符的大小写时就不能用 char-equal 函数了。</p>
+<p>字符串比较使用 string=，string-equal 是一个别名。 string&lt; 是按字典序比较两个字符串，string-less 是它的别名。空字符串小于所有字符串，除了空字符串。没有 string&gt; 函数。</p>
+<h3 id="转换函数">转换函数</h3>
+<p>字符转换成字符串可以用 char-to-string 函数，字符串转换成字符可以用 string-to-char。当然只是返回字符串的第一个字符。</p>
+<p>数字和字符串之间的转换可以用 number-to-string 和 string-to-number。其中 string-to-number 可以设置字符串的进制，可以从 2 到 16。</p>
+<p>number-to-string 只能转换成 10 进制的数字。如果要输出八进制或者十六进制，可以用 format 函数：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">string-to-number</span> <span class="string">&quot;256&quot;</span>)                <span class="comment">; =&gt; 256</span></span><br><span class="line">(<span class="name">number-to-string</span> <span class="number">256</span>)                  <span class="comment">; =&gt; &quot;256&quot;</span></span><br><span class="line">(<span class="name">format</span> <span class="string">&quot;%#o&quot;</span> <span class="number">256</span>)                      <span class="comment">; =&gt; &quot;0400&quot;</span></span><br><span class="line">(<span class="name">format</span> <span class="string">&quot;%#x&quot;</span> <span class="number">256</span>)                      <span class="comment">; =&gt; &quot;0x100&quot;</span></span><br></pre></td></tr></table></figure>
+<p>如果要输出成二进制，好像没有现成的函数了。可以利用 calculator 库：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> number-to-bin-string (<span class="name">number</span>)</span><br><span class="line">  (<span class="name">require</span> &#x27;calculator)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">calculator-output-radix</span> &#x27;bin)</span><br><span class="line">        (<span class="name">calculator-radix-grouping-mode</span> <span class="literal">nil</span>))</span><br><span class="line">    (<span class="name">calculator-number-to-string</span> number)))</span><br><span class="line">(<span class="name">number-to-bin-string</span> <span class="number">256</span>)              <span class="comment">; =&gt; &quot;100000000&quot;</span></span><br></pre></td></tr></table></figure>
+<p>concat 可以把一个字符构成的列表或者向量转换成字符串，vconcat 可以把一个字符串转换成一个向
+量，append 可以把一个字符串转换成一个列表。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">concat</span> &#x27;(?a ?b ?c ?d ?e))              <span class="comment">; =&gt; &quot;abcde&quot;</span></span><br><span class="line">(<span class="name">concat</span> [?a ?b ?c ?d ?e])               <span class="comment">; =&gt; &quot;abcde&quot;</span></span><br><span class="line">(<span class="name">vconcat</span> <span class="string">&quot;abdef&quot;</span>)                       <span class="comment">; =&gt; [97 98 100 101 102]</span></span><br><span class="line">(<span class="name">append</span> <span class="string">&quot;abcdef&quot;</span> <span class="literal">nil</span>)                   <span class="comment">; =&gt; (97 98 99 100 101 102)</span></span><br></pre></td></tr></table></figure>
+<p>大小写转换使用的是 downcase 和 upcase 两个函数。capitalize 可以使字符串中单词的第一个字符大写，其它字符小写。upcase-initials 只使第一个单词的第一个字符大写，其它字符小写。这两个函数的参数如果是一个字符，那么只让这个字符大写。比如：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">downcase</span> <span class="string">&quot;The cat in the hat&quot;</span>)         <span class="comment">; =&gt; &quot;the cat in the hat&quot;</span></span><br><span class="line">(<span class="name">downcase</span> ?X)                           <span class="comment">; =&gt; 120</span></span><br><span class="line">(<span class="name">upcase</span> <span class="string">&quot;The cat in the hat&quot;</span>)           <span class="comment">; =&gt; &quot;THE CAT IN THE HAT&quot;</span></span><br><span class="line">(<span class="name">upcase</span> ?x)                             <span class="comment">; =&gt; 88</span></span><br><span class="line">(<span class="name">capitalize</span> <span class="string">&quot;The CAT in tHe hat&quot;</span>)       <span class="comment">; =&gt; &quot;The Cat In The Hat&quot;</span></span><br><span class="line">(<span class="name">upcase-initials</span> <span class="string">&quot;The CAT in the hAt&quot;</span>)  <span class="comment">; =&gt; &quot;The CAT In The HAt&quot;</span></span><br></pre></td></tr></table></figure>
+<h3 id="格式化字符串">格式化字符串</h3>
+<p>format 类似于 C 语言里的 printf 可以实现对象的字符串化。数字的格式化和 printf 的参数差不多，值得一提的是 “%S” 这个格式化形式，它可以把对象的输出形式转换成字符串，这在调试时是很有用的。</p>
+<h3 id="查找和替换">查找和替换</h3>
+<h4 id="查找">查找</h4>
+<p>字符串查找的核心函数是 string-match。这个函数可以从指定的位置对字符串进行正则表达式匹配，如果匹配成功，则返回匹配的起点，如：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">string-match</span> <span class="string">&quot;34&quot;</span> <span class="string">&quot;01234567890123456789&quot;</span>)    <span class="comment">; =&gt; 3</span></span><br><span class="line">(<span class="name">string-match</span> <span class="string">&quot;34&quot;</span> <span class="string">&quot;01234567890123456789&quot;</span> <span class="number">10</span>) <span class="comment">; =&gt; 13</span></span><br></pre></td></tr></table></figure>
+<p>注意 string-match 的参数是一个正则式。如果想把 string-match 作为一个查找子串的函数，可以先用 <code>regexp-quote</code> 函数先处理一下子串。比如：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">string-match</span> <span class="string">&quot;2* &quot;</span><span class="number">232</span>*3=696&quot;)			; =&gt; 0</span><br><span class="line">(string-match (regexp-quote &quot;2*<span class="string">&quot;) &quot;</span><span class="number">232</span>*3=696&quot;)	; =&gt; 2</span><br></pre></td></tr></table></figure>
+<p>事实上，string-match 不只是查找字符串，它更重要的功能是捕捉匹配的字符串。string-match 在查找的同时，还会记录下每个要捕捉的字符串的位置。这个位置可以在匹配后用 match-data、match-beginning 和 match-end 等函数来获得。先看一下例子：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">progn</span></span><br><span class="line">  (<span class="name">string-match</span> <span class="string">&quot;3\\(4\\)&quot;</span> <span class="string">&quot;01234567890123456789&quot;</span>)</span><br><span class="line">  (<span class="name">match-data</span>))                         <span class="comment">; =&gt; (3 5 4 5)</span></span><br></pre></td></tr></table></figure>
+<p>最后返回这个数字是什么意思呢？正则表达式捕捉的字符串按括号的顺序对应一个序号，整个模式对应序号 0，第一个括号对应序号 1，第二个括号对应序号 2，以此类推。所以 “3\(4\)” 这个正则表达式中有序号 0 和 1，最后 match-data 返回的一系列数字对应的分别是要捕捉字符串的起点和终点位置，也就是说子串 “34” 起点从位置 3 开始，到位置 5 结束，而捕捉的字符串 “4” 的起点是从 4 开始，到 5 结束。这些位置可以用 match-beginning 和 match-end 函数用对应的序号得到。</p>
+<p>要注意的是，起点位置是捕捉字符串的第一个字符的位置，而终点位置不是捕捉的字符串最后一个字符的位置，而是下一个字符的位置。这个性质对于循环是很方便的。比如要查找上面这个字符串中所有 34 出现的位置：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">start</span> <span class="number">0</span>))</span><br><span class="line">  (<span class="name">while</span> (<span class="name">string-match</span> <span class="string">&quot;34&quot;</span> <span class="string">&quot;01234567890123456789&quot;</span> start)</span><br><span class="line">    (<span class="name">princ</span> (<span class="name">format</span> <span class="string">&quot;find at %d\n&quot;</span> (<span class="name">match-beginning</span> <span class="number">0</span>)))</span><br><span class="line">    (<span class="name">setq</span> start (<span class="name">match-end</span> <span class="number">0</span>))))</span><br></pre></td></tr></table></figure>
+<h4 id="替换">替换</h4>
+<p>替换使用的函数是 replace-match。这个函数既可以用于字符串的替换，也可以用于缓冲区的文本替换。对于字符串的替换，replace-match 只是按给定的序号把字符串中的那一部分用提供的字符串替换了而已：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">str</span> <span class="string">&quot;01234567890123456789&quot;</span>))</span><br><span class="line">  (<span class="name">string-match</span> <span class="string">&quot;34&quot;</span> str)</span><br><span class="line">  (<span class="name">princ</span> (<span class="name">replace-match</span> <span class="string">&quot;x&quot;</span> <span class="literal">nil</span> <span class="literal">nil</span> str <span class="number">0</span>))</span><br><span class="line">  (<span class="name">princ</span> <span class="string">&quot;\n&quot;</span>)</span><br><span class="line">  (<span class="name">princ</span> str))</span><br></pre></td></tr></table></figure>
+<p>可以看出 replace-match 返回的字符串是替换后的新字符串，原字符串被没有改变。</p>
+<h3 id="函数列表-v2">函数列表</h3>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; 测试函数</span></span><br><span class="line">(<span class="name">stringp</span> OBJECT)</span><br><span class="line">(<span class="name">string-or-null-p</span> OBJECT)</span><br><span class="line">(<span class="name">char-or-string-p</span> OBJECT)</span><br><span class="line"><span class="comment">;; 构建函数</span></span><br><span class="line">(<span class="name">make-string</span> LENGTH INIT)</span><br><span class="line">(<span class="name">string</span> <span class="symbol">&amp;rest</span> CHARACTERS)</span><br><span class="line">(<span class="name">substring</span> STRING FROM <span class="symbol">&amp;optional</span> TO)</span><br><span class="line">(<span class="name">concat</span> <span class="symbol">&amp;rest</span> SEQUENCES)</span><br><span class="line"><span class="comment">;; 比较函数</span></span><br><span class="line">(<span class="name">char-equal</span> C1 C2)</span><br><span class="line">(<span class="name">string=</span> S1 S2)</span><br><span class="line">(<span class="name">string-equal</span> S1 S2)</span><br><span class="line">(<span class="name">string&lt;</span> S1 S2)</span><br><span class="line"><span class="comment">;; 转换函数</span></span><br><span class="line">(<span class="name">char-to-string</span> CHAR)</span><br><span class="line">(<span class="name">string-to-char</span> STRING)</span><br><span class="line">(<span class="name">number-to-string</span> NUMBER)</span><br><span class="line">(<span class="name">string-to-number</span> STRING <span class="symbol">&amp;optional</span> BASE)</span><br><span class="line">(<span class="name">downcase</span> OBJ)</span><br><span class="line">(<span class="name">upcase</span> OBJ)</span><br><span class="line">(<span class="name">capitalize</span> OBJ)</span><br><span class="line">(<span class="name">upcase-initials</span> OBJ)</span><br><span class="line">(<span class="name">format</span> STRING <span class="symbol">&amp;rest</span> OBJECTS)</span><br><span class="line"><span class="comment">;; 查找与替换</span></span><br><span class="line">(<span class="name">string-match</span> REGEXP STRING <span class="symbol">&amp;optional</span> START)</span><br><span class="line">(<span class="name">replace-match</span> NEWTEXT <span class="symbol">&amp;optional</span> FIXEDCASE LITERAL STRING SUBEXP)</span><br><span class="line">(<span class="name">replace-regexp-in-string</span> REGEXP REP STRING <span class="symbol">&amp;optional</span> FIXEDCASE LITERAL SUBEXP START)</span><br><span class="line">(<span class="name">subst-char-in-string</span> FROMCHAR TOCHAR STRING <span class="symbol">&amp;optional</span> INPLACE)</span><br></pre></td></tr></table></figure>
+<h2 id="cons-cell-和列表">cons cell 和列表</h2>
+<h3 id="cons-cell">cons cell</h3>
+<p>cons cell 就是两个有顺序的元素。第一个叫 CAR，第二个叫 CDR。</p>
+<ul>
+<li>CAR 指令用于取出地址部分，表示(Contents of Address part of Register)；</li>
+<li>CDR 指令用于取出地址的减量部分 (Contents of the Decrement part of Register)。</li>
+</ul>
+<p>cons cell 的读入语法是用 . 分开两个部分，比如：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x27;(<span class="number">1</span> . <span class="number">2</span>)                                <span class="comment">; =&gt; (1 . 2)</span></span><br><span class="line">&#x27;(?a . <span class="number">1</span>)                               <span class="comment">; =&gt; (97 . 1)</span></span><br><span class="line">&#x27;(<span class="number">1</span> . <span class="string">&quot;a&quot;</span>)                              <span class="comment">; =&gt; (1 . &quot;a&quot;)</span></span><br><span class="line">&#x27;(<span class="number">1</span> . nil)                              <span class="comment">; =&gt; (1)</span></span><br><span class="line">&#x27;(nil . nil)                            <span class="comment">; =&gt; (nil)</span></span><br></pre></td></tr></table></figure>
+<p>前面的 <code>'</code> 是引用（quote）符号，它的作用是将它的参数返回而不作求值。</p>
+<h3 id="列表">列表</h3>
+<p>列表包括了 cons cell。但是列表中有一个特殊的元素──空表 nil。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">nil</span>                                     <span class="comment">; =&gt; nil</span></span><br><span class="line">&#x27;()                                     <span class="comment">; =&gt; nil</span></span><br></pre></td></tr></table></figure>
+<p>空表不是一个 cons cell，因为它没有 car 和 cdr 两个部分，事实上空表里没有任何内容。但是为了编程的方便，可以认为 nil 的 car 和 cdr 都是 nil：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">car</span> <span class="literal">nil</span>)                               <span class="comment">; =&gt; nil</span></span><br><span class="line">(<span class="name">cdr</span> <span class="literal">nil</span>)                               <span class="comment">; =&gt; nil</span></span><br></pre></td></tr></table></figure>
+<p>按列表最后一个 cons cell 的 cdr 部分的类型分，可以把列表分为三类。如果它是 nil 的话，这个列表也称为“真列表”(true list)。如果既不是 nil 也不是一个 cons cell，则这个列表称为“点列表”(dotted list)。还有一种可能，它指向列表中之前的一个 cons cell，则称为环形列表 (circular list)。
+这里分别给出一个例子：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x27;(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> . nil)                          <span class="comment">; =&gt; (1 2 3)</span></span><br><span class="line">&#x27;(<span class="number">1</span> <span class="number">2</span> . <span class="number">3</span>)                              <span class="comment">; =&gt; (1 2 . 3)</span></span><br><span class="line">&#x27;(<span class="number">1</span> . #1=(<span class="number">2</span> <span class="number">3</span> . #1#))                   <span class="comment">; =&gt; (1 2 3 . #1)</span></span><br></pre></td></tr></table></figure>
+<p>从这个例子可以看出前两种列表的读入语法和输出形式都是相同的，而环形列表的读入语法是很古怪的，输出形式不能作为环形列表的读入形式。</p>
+<h3 id="测试函数-v3">测试函数</h3>
+<p>测试一个对象是否是 cons cell 用 consp，是否是列表用 listp。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">consp</span> &#x27;(<span class="number">1</span> . <span class="number">2</span>))                        <span class="comment">; =&gt; t</span></span><br><span class="line">(<span class="name">consp</span> &#x27;(<span class="number">1</span> . (<span class="number">2</span> . <span class="literal">nil</span>)))                <span class="comment">; =&gt; t</span></span><br><span class="line">(<span class="name">consp</span> <span class="literal">nil</span>)                             <span class="comment">; =&gt; nil</span></span><br><span class="line">(<span class="name">listp</span> &#x27;(<span class="number">1</span> . <span class="number">2</span>))                        <span class="comment">; =&gt; t</span></span><br><span class="line">(<span class="name">listp</span> &#x27;(<span class="number">1</span> . (<span class="number">2</span> . <span class="literal">nil</span>)))                <span class="comment">; =&gt; t</span></span><br><span class="line">(<span class="name">listp</span> <span class="literal">nil</span>)                             <span class="comment">; =&gt; t</span></span><br></pre></td></tr></table></figure>
+<p>没有内建的方法测试一个列表是不是一个真列表。通常如果一个函数需要一个真列表作为参数，都是在运行时发出错误，而不是进行参数检查，因为检查一个列表是真列表的代价比较高。</p>
+<p>测试一个对象是否是 nil 用 null 函数。只有当对象是空表时，null 才返回空值。</p>
+<h3 id="构造函数-v2">构造函数</h3>
+<p>生成一个 cons cell 可以用 cons 函数。比如：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cons</span> <span class="number">1</span> <span class="number">2</span>)                              <span class="comment">; =&gt; (1 . 2)</span></span><br><span class="line">(<span class="name">cons</span> <span class="number">1</span> &#x27;())                            <span class="comment">; =&gt; (1)</span></span><br></pre></td></tr></table></figure>
+<p>这也是在列表前面增加元素的方法。比如：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> foo &#x27;(a b))                       <span class="comment">; =&gt; (a b)</span></span><br><span class="line">(<span class="name">cons</span> &#x27;x foo)                           <span class="comment">; =&gt; (x a b)</span></span><br></pre></td></tr></table></figure>
+<p>生成一个列表的函数是 list。比如：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">list</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span>)                            <span class="comment">; =&gt; (1 2 3)</span></span><br><span class="line">(<span class="name">list</span> &#x27;a &#x27;b &#x27;c)                         <span class="comment">; =&gt; (a b c)</span></span><br></pre></td></tr></table></figure>
+<p>在列表后端增加元素的函数是用 append。比如：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">append</span> &#x27;(a b) &#x27;(c))                    <span class="comment">; =&gt; (a b c)</span></span><br><span class="line">(<span class="name">append</span> &#x27;(a b) &#x27;(c) &#x27;(d))               <span class="comment">; =&gt; (a b c d)</span></span><br></pre></td></tr></table></figure>
+<p>append 的功能可以认为它是把第一个参数最后一个列表的 nil 换成第二个参数。一般来说 append 的参数都要是列表，但是最后一个参数可以不是一个列表，这也不违背前面说的，因为 cons cell 的 CDR 部分本来就可以是任何对象：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">append</span> &#x27;(a b) &#x27;c)                      <span class="comment">; =&gt; (a b . c)</span></span><br></pre></td></tr></table></figure>
+<p>这样得到的结果就不再是一个真列表了，如果再进行 append 操作就会产生一个错误。</p>
+<h3 id="把列表当数组用">把列表当数组用</h3>
+<p>要得到列表或者 cons cell 里元素，可以使用 car 和 cdr 函数。很容易明白，car 就是取得 cons cell 的 CAR 部分（第一个元素），cdr 函数就是取得 cons cell 的 CDR 部分（第二个元素）。再往后就没有这样的函数了，可以用 nth 函数来访问：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">car</span> &#x27;(<span class="number">0</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span>))                    <span class="comment">; =&gt; 0</span></span><br><span class="line">(<span class="name">cdr</span> &#x27;(<span class="number">0</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span>))                    <span class="comment">; =&gt; (1 2 3 4 5)</span></span><br><span class="line">(<span class="name">nth</span> <span class="number">3</span> &#x27;(<span class="number">0</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span>))                  <span class="comment">; =&gt; 3</span></span><br></pre></td></tr></table></figure>
+<p>获得列表一个区间的函数有 nthcdr、last 和 butlast。nthcdr 和 last 比较类似，它们都是返回列表后端的列表。</p>
+<p>nthcdr 函数返回第 n 个元素后的列表：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">nthcdr</span> <span class="number">2</span> &#x27;(<span class="number">0</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span>))               <span class="comment">; =&gt; (2 3 4 5)</span></span><br></pre></td></tr></table></figure>
+<p>last 函数返回倒数 n 个长度的列表：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">last</span> &#x27;(<span class="number">0</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span>) <span class="number">2</span>)                 <span class="comment">; =&gt; (4 5)</span></span><br></pre></td></tr></table></figure>
+<p>butlast 和前两个函数不同，返回的除了倒数 n 个元素的列表。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">butlast</span> &#x27;(<span class="number">0</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span>) <span class="number">2</span>)              <span class="comment">; =&gt; (0 1 2 3)</span></span><br></pre></td></tr></table></figure>
+<div class="alert alert-warning"><i class="far fa-bell"></i>  以上所列举的几个函数都是<strong>非破坏性</strong>的——也就是说，它们不改变所作用的列表。
+</div>
+<p>setcar 和 setcdr 可以修改一个 cons cell 的 CAR 部分和 CDR 部分。比如：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> foo &#x27;(a b c))                     <span class="comment">; =&gt; (a b c)</span></span><br><span class="line">(<span class="name">setcar</span> foo &#x27;x)                         <span class="comment">; =&gt; x</span></span><br><span class="line">foo                                     <span class="comment">; =&gt; (x b c)</span></span><br><span class="line">(<span class="name">setcdr</span> foo &#x27;(y z))                     <span class="comment">; =&gt; (y z)</span></span><br><span class="line">foo                                     <span class="comment">; =&gt; (x y z)</span></span><br></pre></td></tr></table></figure>
+<p>使用 setcar 和 nthcdr 的组合可以修改列表中的任一元素：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> foo &#x27;(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>))                     <span class="comment">; =&gt; (1 2 3)</span></span><br><span class="line">(<span class="name">setcar</span> foo &#x27;a)                         <span class="comment">; =&gt; a</span></span><br><span class="line">(<span class="name">setcar</span> (<span class="name">cdr</span> foo) &#x27;b)                   <span class="comment">; =&gt; b</span></span><br><span class="line">(<span class="name">setcar</span> (<span class="name">nthcdr</span> <span class="number">2</span> foo) &#x27;c)              <span class="comment">; =&gt; c</span></span><br><span class="line">foo                                     <span class="comment">; =&gt; (a b c)</span></span><br></pre></td></tr></table></figure>
+<h3 id="把列表当堆栈用">把列表当堆栈用</h3>
+<p>push 和 pop 可以把列表当做堆栈来使用：分别实现堆栈的入栈和出栈操作：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> foo <span class="literal">nil</span>)                          <span class="comment">; =&gt; nil</span></span><br><span class="line">(<span class="name">push</span> &#x27;a foo)                           <span class="comment">; =&gt; (a)</span></span><br><span class="line">(<span class="name">push</span> &#x27;b foo)                           <span class="comment">; =&gt; (b a)</span></span><br><span class="line">(<span class="name">pop</span> foo)                               <span class="comment">; =&gt; b</span></span><br><span class="line">foo                                     <span class="comment">; =&gt; (a)</span></span><br></pre></td></tr></table></figure>
+<h3 id="重排列表">重排列表</h3>
+<p>reverse 函数和 nreverse 可以将列表反序，两者的区别在于一个是非破坏性的，一个是破坏性的：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> foo &#x27;(a b c))                     <span class="comment">; =&gt; (a b c)</span></span><br><span class="line">(<span class="name">reverse</span> foo)                           <span class="comment">; =&gt; (c b a)</span></span><br><span class="line">foo                                     <span class="comment">; =&gt; (a b c)</span></span><br><span class="line">(<span class="name">nreverse</span> foo)                          <span class="comment">; =&gt; (c b a)</span></span><br><span class="line">foo                                     <span class="comment">; =&gt; (a)</span></span><br></pre></td></tr></table></figure>
+<p>为什么现在 foo 指向的是列表的末端呢？如果你实现过链表就知道，逆序操作是可以在原链表上进行的，这样原来头部指针会变成链表的尾端。</p>
+<p>elisp 还有一些是具有破坏性的函数。最常用的就是 sort 函数：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> foo &#x27;(<span class="number">3</span> <span class="number">2</span> <span class="number">4</span> <span class="number">1</span> <span class="number">5</span>))                 <span class="comment">; =&gt; (3 2 4 1 5)</span></span><br><span class="line">(<span class="name">sort</span> foo &#x27;&lt;)                           <span class="comment">; =&gt; (1 2 3 4 5)</span></span><br><span class="line">foo                                     <span class="comment">; =&gt; (3 4 5)</span></span><br></pre></td></tr></table></figure>
+<p>如果既要保留原列表，又要进行 sort 操作，可以用 copy-sequence 函数。这个函数只对列表进行复制，返回的列表的元素还是原列表里的元素，不会拷贝列表的元素。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> foo &#x27;(<span class="number">3</span> <span class="number">2</span> <span class="number">4</span> <span class="number">1</span> <span class="number">5</span>))                 <span class="comment">; =&gt; (3 2 4 1 5)</span></span><br><span class="line">(<span class="name">sort</span> (<span class="name">copy-sequence</span> foo) &#x27;&lt;)           <span class="comment">; =&gt; (1 2 3 4 5)</span></span><br><span class="line">foo                                     <span class="comment">; =&gt; (3 2 4 1 5)</span></span><br></pre></td></tr></table></figure>
+<p>nconc 和 append 功能相似，但是它会修改除最后一个参数以外的所有的参数， nbutlast 和 butlast 功能相似，也会修改参数。这些函数都是在效率优先时才使用。总而言之，以 n 开头的函数都要慎用。</p>
+<div class="alert alert-danger"><i class="fas fa-bug"></i>  以 n 开头的函数大多是破坏性的，都要慎用。
+</div>
+<h3 id="把列表当集合用">把列表当集合用</h3>
+<p>列表可以作为无序的集合。合并集合用 append 函数。去除重复的 equal 元素用 delete-dups。查找一个元素是否在列表中，如果测试函数是用 eq，就用 memq，如果测试用 equal，可以用 member。删除列表中的指定的元素，测试函数为 eq 对应 delq 函数，equal 对应 delete。还有两个函数 remq 和 remove 也是删除指定元素。它们的差别是 delq 和 delete 可能会修改参数，而 remq 和 remove 总是返回删除后列表的拷贝。注意前面这是说的是可能会修改参数的值，也就是说可能不会，所以保险起见，用 delq 和 delete 函数要么只用返回值，要么用 setq 设置参数的值为返回值。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> foo &#x27;(a b c))                     <span class="comment">; =&gt; (a b c)</span></span><br><span class="line">(<span class="name">remq</span> &#x27;b foo)                           <span class="comment">; =&gt; (a c)</span></span><br><span class="line">foo                                     <span class="comment">; =&gt; (a b c)</span></span><br><span class="line">(<span class="name">delq</span> &#x27;b foo)                           <span class="comment">; =&gt; (a c)</span></span><br><span class="line">foo                                     <span class="comment">; =&gt; (a c)</span></span><br><span class="line">(<span class="name">delq</span> &#x27;a foo)                           <span class="comment">; =&gt; (c)</span></span><br><span class="line">foo                                     <span class="comment">; =&gt; (a c)</span></span><br></pre></td></tr></table></figure>
+<h3 id="把列表当关联表">把列表当关联表</h3>
+<p>在 elisp 编程中，列表最常用的形式应该是作为一个关联表了。所谓关联表，就是可以用一个字符串（通常叫关键字，key）来查找对应值的数据结构。由列表实现的关联表有一个专门的名字叫 association list。在 association list 中关键字是放在元素的 CAR 部分，与它对应的数据放在这个元素的 CDR 部分。根据比较方法的不同，有 assq 和 assoc 两个函数，它们分别对应查找使用 eq 和 equal 两种方法。例如：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">assoc</span> <span class="string">&quot;a&quot;</span> &#x27;((<span class="string">&quot;a&quot;</span> <span class="number">97</span>) (<span class="string">&quot;b&quot;</span> <span class="number">98</span>)))        <span class="comment">; =&gt; (&quot;a&quot; 97)</span></span><br><span class="line">(<span class="name">assq</span> &#x27;a &#x27;((a . <span class="number">97</span>) (b . <span class="number">98</span>)))          <span class="comment">; =&gt; (a . 97)</span></span><br></pre></td></tr></table></figure>
+<p>通常我们只需要查找对应的数据，所以一般来说都要用 cdr 来得到对应的数据：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cdr</span> (<span class="name">assoc</span> <span class="string">&quot;a&quot;</span> &#x27;((<span class="string">&quot;a&quot;</span> <span class="number">97</span>) (<span class="string">&quot;b&quot;</span> <span class="number">98</span>))))  <span class="comment">; =&gt; (97)</span></span><br><span class="line">(<span class="name">cdr</span> (<span class="name">assq</span> &#x27;a &#x27;((a . <span class="number">97</span>) (b . <span class="number">98</span>))))    <span class="comment">; =&gt; 97</span></span><br></pre></td></tr></table></figure>
+<p>assoc-default 可以一步完成这样的操作：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">assoc-default</span> <span class="string">&quot;a&quot;</span> &#x27;((<span class="string">&quot;a&quot;</span> <span class="number">97</span>) (<span class="string">&quot;b&quot;</span> <span class="number">98</span>)))          <span class="comment">; =&gt; (97)</span></span><br></pre></td></tr></table></figure>
+<p>如果查找用的键值（key）对应的数据也可以作为一个键值的话，还可以用 rassoc 和 rassq 来根据数据查找键值：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">rassoc</span> &#x27;(<span class="number">97</span>) &#x27;((<span class="string">&quot;a&quot;</span> <span class="number">97</span>) (<span class="string">&quot;b&quot;</span> <span class="number">98</span>)))     <span class="comment">; =&gt; (&quot;a&quot; 97)</span></span><br><span class="line">(<span class="name">rassq</span> &#x27;<span class="number">97</span> &#x27;((a . <span class="number">97</span>) (b . <span class="number">98</span>)))        <span class="comment">; =&gt; (a . 97)</span></span><br></pre></td></tr></table></figure>
+<p>如果要修改关键字对应的值，最省事的作法就是用 cons 把新的键值对加到列表的头端。但是这会让列表越来越长，浪费空间。如果要替换已经存在的值，一个想法就是用 setcdr 来更改键值对应的数据。但是在更改之前要先确定这个键值在对应的列表里，否则会产生一个错误。另一个想法是用 assoc 查找到对应的元
+素，再用 delq 删除这个数据，然后用 cons 加到列表里：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> foo &#x27;((<span class="string">&quot;a&quot;</span> . <span class="number">97</span>) (<span class="string">&quot;b&quot;</span> . <span class="number">98</span>)))     <span class="comment">; =&gt; ((&quot;a&quot; . 97) (&quot;b&quot; . 98))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">;; update value by setcdr</span></span><br><span class="line">(<span class="name">if</span> (<span class="name">setq</span> bar (<span class="name">assoc</span> <span class="string">&quot;a&quot;</span> foo))</span><br><span class="line">    (<span class="name">setcdr</span> bar <span class="string">&quot;this is a&quot;</span>)</span><br><span class="line">  (<span class="name">setq</span> foo (<span class="name">cons</span> &#x27;(<span class="string">&quot;a&quot;</span> . <span class="string">&quot;this is a&quot;</span>) foo))) <span class="comment">; =&gt; &quot;this is a&quot;</span></span><br><span class="line">foo                         <span class="comment">; =&gt; ((&quot;a&quot; . &quot;this is a&quot;) (&quot;b&quot; . 98))</span></span><br><span class="line"><span class="comment">;; update value by delq and cons</span></span><br><span class="line">(<span class="name">setq</span> foo (<span class="name">cons</span> &#x27;(<span class="string">&quot;a&quot;</span> . <span class="number">97</span>)</span><br><span class="line">                (<span class="name">delq</span> (<span class="name">assoc</span> <span class="string">&quot;a&quot;</span> foo) foo))) <span class="comment">; =&gt; ((&quot;a&quot; . 97) (&quot;b&quot; . 98))</span></span><br></pre></td></tr></table></figure>
+<p>如果不对顺序有要求的话，推荐用后一种方法吧。这样代码简洁，而且让最近更新的元素放到列表前端，查找更快。</p>
+<h3 id="把列表当树用">把列表当树用</h3>
+<p>列表的第一个元素如果作为结点的数据，其它元素看作是子节点，就是一个树了。</p>
+<h3 id="遍历列表">遍历列表</h3>
+<p>遍历列表最常用的函数就是 mapc 和 mapcar 了。它们的第一个参数都是一个函数，这个函数只接受一个参数，每次处理一个列表里的元素。这两个函数唯一的差别是前者返回的还是输入的列表，而 mapcar 返回的函数返回值构成的列表：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">mapc</span> &#x27;<span class="number">1</span>+ &#x27;(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>))                     <span class="comment">; =&gt; (1 2 3)</span></span><br><span class="line">(<span class="name">mapcar</span> &#x27;<span class="number">1</span>+ &#x27;(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>))                   <span class="comment">; =&gt; (2 3 4)</span></span><br></pre></td></tr></table></figure>
+<p>另一个比较常用的遍历列表的方法是用 dolist。它的形式是：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">dolist</span> (<span class="name">var</span> list [result]) body...)</span><br></pre></td></tr></table></figure>
+<p>其中 var 是一个临时变量，在 body 里可以用来得到列表中元素的值。使用 dolist 的好处是不用写 lambda 函数。一般情况下它的返回值是 nil，但是你也可以指定一个值作为返回值：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">dolist</span> (<span class="name">foo</span> &#x27;(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">  (<span class="name">incf</span> foo))                           <span class="comment">; =&gt; nil</span></span><br><span class="line">(<span class="name">setq</span> bar <span class="literal">nil</span>)</span><br><span class="line">(<span class="name">dolist</span> (<span class="name">foo</span> &#x27;(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>) bar)</span><br><span class="line">  (<span class="name">push</span> (<span class="name">incf</span> foo) bar))                <span class="comment">; =&gt; (4 3 2)</span></span><br></pre></td></tr></table></figure>
+<h3 id="其他常用函数">其他常用函数</h3>
+<p>产生数列常用的方法是用 number-sequence 。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">number-sequence</span> <span class="number">0</span> <span class="number">10</span> <span class="number">2</span>)                <span class="comment">; =&gt; (0 2 4 6 8 10)</span></span><br></pre></td></tr></table></figure>
+<p>解析文本时一个很常用的操作是把字符串按分隔符分解，可以用 split-string 函数：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">split-string</span> <span class="string">&quot;key = val&quot;</span> <span class="string">&quot;\\s-*=\\s-*&quot;</span>)  <span class="comment">; =&gt; (&quot;key&quot; &quot;val&quot;)</span></span><br></pre></td></tr></table></figure>
+<p>与 split-string 对应是把几个字符串用一个分隔符连接起来，这可以用 mapconcat 完成。比如：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">mapconcat</span> &#x27;identity &#x27;(<span class="string">&quot;a&quot;</span> <span class="string">&quot;b&quot;</span> <span class="string">&quot;c&quot;</span>) <span class="string">&quot;\t&quot;</span>) <span class="comment">; =&gt; &quot;a	b	c&quot;</span></span><br></pre></td></tr></table></figure>
+<p>identity 是一个特殊的函数，它会直接返回参数。mapconcat 第一个参数是一个函数，可以很灵活的使用。</p>
+<h3 id="函数列表-v3">函数列表</h3>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; 列表测试</span></span><br><span class="line">(<span class="name">consp</span> OBJECT)</span><br><span class="line">(<span class="name">listp</span> OBJECT)</span><br><span class="line">(<span class="name">null</span> OBJECT)</span><br><span class="line"><span class="comment">;; 列表构造</span></span><br><span class="line">(<span class="name">cons</span> CAR CDR)</span><br><span class="line">(<span class="name">list</span> <span class="symbol">&amp;rest</span> OBJECTS)</span><br><span class="line">(<span class="name">append</span> <span class="symbol">&amp;rest</span> SEQUENCES)</span><br><span class="line"><span class="comment">;; 访问列表元素</span></span><br><span class="line">(<span class="name">car</span> LIST)</span><br><span class="line">(<span class="name">cdr</span> LIST)</span><br><span class="line">(<span class="name">cadr</span> X)</span><br><span class="line">(<span class="name">caar</span> X)</span><br><span class="line">(<span class="name">cddr</span> X)</span><br><span class="line">(<span class="name">cdar</span> X)</span><br><span class="line">(<span class="name">nth</span> N LIST)</span><br><span class="line">(<span class="name">nthcdr</span> N LIST)</span><br><span class="line">(<span class="name">last</span> LIST <span class="symbol">&amp;optional</span> N)</span><br><span class="line">(<span class="name">butlast</span> LIST <span class="symbol">&amp;optional</span> N)</span><br><span class="line"><span class="comment">;; 修改 cons cell</span></span><br><span class="line">(<span class="name">setcar</span> CELL NEWCAR)</span><br><span class="line">(<span class="name">setcdr</span> CELL NEWCDR)</span><br><span class="line"><span class="comment">;; 列表操作</span></span><br><span class="line">(<span class="name">push</span> NEWELT LISTNAME)</span><br><span class="line">(<span class="name">pop</span> LISTNAME)</span><br><span class="line">(<span class="name">reverse</span> LIST)</span><br><span class="line">(<span class="name">nreverse</span> LIST)</span><br><span class="line">(<span class="name">sort</span> LIST PREDICATE)</span><br><span class="line">(<span class="name">copy-sequence</span> ARG)</span><br><span class="line">(<span class="name">nconc</span> <span class="symbol">&amp;rest</span> LISTS)</span><br><span class="line">(<span class="name">nbutlast</span> LIST <span class="symbol">&amp;optional</span> N)</span><br><span class="line"><span class="comment">;; 集合函数</span></span><br><span class="line">(<span class="name">delete-dups</span> LIST)</span><br><span class="line">(<span class="name">memq</span> ELT LIST)</span><br><span class="line">(<span class="name">member</span> ELT LIST)</span><br><span class="line">(<span class="name">delq</span> ELT LIST)</span><br><span class="line">(<span class="name">delete</span> ELT SEQ)</span><br><span class="line">(<span class="name">remq</span> ELT LIST)</span><br><span class="line">(<span class="name">remove</span> ELT SEQ)</span><br><span class="line"><span class="comment">;; 关联列表</span></span><br><span class="line">(<span class="name">assoc</span> KEY LIST)</span><br><span class="line">(<span class="name">assq</span> KEY LIST)</span><br><span class="line">(<span class="name">assoc-default</span> KEY ALIST <span class="symbol">&amp;optional</span> TEST DEFAULT)</span><br><span class="line">(<span class="name">rassoc</span> KEY LIST)</span><br><span class="line">(<span class="name">rassq</span> KEY LIST)</span><br><span class="line"><span class="comment">;; 遍历函数</span></span><br><span class="line">(<span class="name">mapc</span> FUNCTION SEQUENCE)</span><br><span class="line">(<span class="name">mapcar</span> FUNCTION SEQUENCE)</span><br><span class="line">(<span class="name">dolist</span> (<span class="name">VAR</span> LIST [RESULT]) BODY...)</span><br><span class="line"><span class="comment">;; 其它</span></span><br><span class="line">(<span class="name">number-sequence</span> FROM <span class="symbol">&amp;optional</span> TO INC)</span><br><span class="line">(<span class="name">split-string</span> STRING <span class="symbol">&amp;optional</span> SEPARATORS OMIT-NULLS)</span><br><span class="line">(<span class="name">mapconcat</span> FUNCTION SEQUENCE SEPARATOR)</span><br><span class="line">(<span class="name">identity</span> ARG)</span><br></pre></td></tr></table></figure>
+<h2 id="序列和数组">序列和数组</h2>
+<p>序列是列表和数组的统称，也就是说列表和数组都是序列。它们的共性是内部的元素都是有序的。elisp 里的数组包括字符串、向量、char-table 和布尔向量。它们的关系可以用下面图表示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> _____________________________________________</span><br><span class="line">|                                             |</span><br><span class="line">|          Sequence                           |</span><br><span class="line">|  ______   ________________________________  |</span><br><span class="line">| |      | |                                | |</span><br><span class="line">| | List | |             Array              | |</span><br><span class="line">| |      | |    ________       ________     | |</span><br><span class="line">| |______| |   |        |     |        |    | |</span><br><span class="line">|          |   | Vector |     | String |    | |</span><br><span class="line">|          |   |________|     |________|    | |</span><br><span class="line">|          |  ____________   _____________  | |</span><br><span class="line">|          | |            | |             | | |</span><br><span class="line">|          | | Char-table | | Bool-vector | | |</span><br><span class="line">|          | |____________| |_____________| | |</span><br><span class="line">|          |________________________________| |</span><br><span class="line">|_____________________________________________|</span><br></pre></td></tr></table></figure>
+<p>数组有这样一些特性：</p>
+<ul>
+<li>数组内的元素都对应一个下标，第一个元素下标为 0，接下来是 1。数组内的元素可以在常数时间内访问。</li>
+<li>数组在创建之后就无法改变它的长度。</li>
+<li>数组是自求值的。</li>
+<li>数组里的元素都可以用 aref 来访问，用 aset 来设置。</li>
+</ul>
+<p>向量可以看成是一种通用的数组，它的元素可以是任意的对象。而字符串是一种特殊的数组，它的元素只能是字符。如果元素是字符时，使用字符串相比向量更好，因为字符串需要的空间更少（只需要向量的 1/4），输出更直观，能用文本属性（text property），能使用 emacs 的 IO 操作。但是有时必须使用向量，比如存储按键序列。</p>
+<h3 id="测试函数-v4">测试函数</h3>
+<p>sequencep 用来测试一个对象是否是一个序列。arrayp 测试对象是否是数组。vectorp、char-table-p 和 bool-vector-p 分别测试对象是否是向量、 char-table、bool-vector。</p>
+<h3 id="序列的通用函数">序列的通用函数</h3>
+<p>一直没有提到一个重要的函数 length，它可以得到序列的长度。但是这个函数只对真列表有效。对于一个点列表和环形列表这个函数就不适用了。点列表会出参数类型不对的错误，而环形列表就更危险，会陷入死循环。如果不确定参数类型，不妨用 safe-length。比如：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">safe-length</span> &#x27;(a . b))                  <span class="comment">; =&gt; 1</span></span><br><span class="line">(<span class="name">safe-length</span> &#x27;#1=(<span class="number">1</span> <span class="number">2</span> . #1#))           <span class="comment">; =&gt; 3</span></span><br></pre></td></tr></table></figure>
+<p>取得序列里第 n 个元素可以用 elt 函数。但是我建议，对于已知类型的序列，还是用对应的函数比较好。也就是说，如果是列表就用 nth，如果是数组就用 aref。这样一方面是省去 elt 内部的判断，另一方面读代码时能很清楚知道序列的类型。</p>
+<p>copy-sequence 在前面已经提到了。不过同样 copy-sequence 不能用于点列表和环形列表。对于点列表可以用 copy-tree 函数。环形列表就没有办法复制了。好在这样的数据结构很少用到。</p>
+<h3 id="数组操作">数组操作</h3>
+<p><a href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0">创建字符串</a>已经说过了。创建向量可以用 vector 函数：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">vector</span> &#x27;foo <span class="number">23</span> [bar baz] <span class="string">&quot;rats&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>当然也可以直接用向量的读入语法创建向量，但是由于数组是自求值的，所以这样得到的向量和原来是一样的，也就是说参数不进行求值，看下面的例子就明白了：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">foo                                     <span class="comment">; =&gt; (a b)</span></span><br><span class="line">[foo]                                   ; =&gt; [foo]</span><br><span class="line">(<span class="name">vector</span> foo)                            <span class="comment">; =&gt; [(a b)]</span></span><br></pre></td></tr></table></figure>
+<p>用 make-vector 可以生成元素相同的向量。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">make-vector</span> <span class="number">9</span> &#x27;Z)                      <span class="comment">; =&gt; [Z Z Z Z Z Z Z Z Z]</span></span><br></pre></td></tr></table></figure>
+<p>fillarray 可以把整个数组用某个元素填充。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">fillarray</span> (<span class="name">make-vector</span> <span class="number">3</span> &#x27;Z) <span class="number">5</span>)        <span class="comment">; =&gt; [5 5 5]</span></span><br></pre></td></tr></table></figure>
+<p>aref 和 aset 可以用于访问和修改数组的元素。如果使用下标超出数组长度的话，会产生一个错误。所以要先确定数组的长度才能用这两个函数。</p>
+<p>vconcat 可以把多个序列用 vconcat 连接成一个向量。但是这个序列必须是真列表。这也是把列表转换成向量的方法。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">vconcat</span> [A B C] <span class="string">&quot;aa&quot;</span> &#x27;(foo (<span class="number">6</span> <span class="number">7</span>)))     <span class="comment">; =&gt; [A B C 97 97 foo (6 7)]</span></span><br></pre></td></tr></table></figure>
+<h3 id="函数列表-v4">函数列表</h3>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; 测试函数</span></span><br><span class="line">(<span class="name">sequencep</span> OBJECT)</span><br><span class="line">(<span class="name">arrayp</span> OBJECT)</span><br><span class="line">(<span class="name">vectorp</span> OBJECT)</span><br><span class="line">(<span class="name">char-table-p</span> OBJECT)</span><br><span class="line">(<span class="name">bool-vector-p</span> OBJECT)</span><br><span class="line"><span class="comment">;; 序列函数</span></span><br><span class="line">(<span class="name">length</span> SEQUENCE)</span><br><span class="line">(<span class="name">safe-length</span> LIST)</span><br><span class="line">(<span class="name">elt</span> SEQUENCE N)</span><br><span class="line">(<span class="name">copy-sequence</span> ARG)</span><br><span class="line">(<span class="name">copy-tree</span> TREE <span class="symbol">&amp;optional</span> VECP)</span><br><span class="line"><span class="comment">;; 数组函数</span></span><br><span class="line">(<span class="name">vector</span> <span class="symbol">&amp;rest</span> OBJECTS)</span><br><span class="line">(<span class="name">make-vector</span> LENGTH INIT)</span><br><span class="line">(<span class="name">aref</span> ARRAY IDX)</span><br><span class="line">(<span class="name">aset</span> ARRAY IDX NEWELT)</span><br><span class="line">(<span class="name">vconcat</span> <span class="symbol">&amp;rest</span> SEQUENCES)</span><br><span class="line">(<span class="name">append</span> <span class="symbol">&amp;rest</span> SEQUENCES)</span><br></pre></td></tr></table></figure>
+<h2 id="符号">符号</h2>
+<p>符号是有名字的对象。</p>
+<p>首先必须知道的是符号的命名规则。符号名字可以含有任何字符。大多数的符号名字只含有字母、数字和标点 <code>-+=*/</code> 。这样的名字不需要其它标点。名字前缀要足够把符号名和数字区分开来，如果需要的话，可以在前面用 <code>\</code> 表示为符号，比如：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">symbolp</span> &#x27;+1)                           <span class="comment">; =&gt; nil</span></span><br><span class="line">(<span class="name">symbolp</span> &#x27;\<span class="number">+1</span>)                          <span class="comment">; =&gt; t</span></span><br><span class="line">(<span class="name">symbol-name</span> &#x27;\<span class="number">+1</span>)                      <span class="comment">; =&gt; &quot;+1&quot;</span></span><br></pre></td></tr></table></figure>
+<p>其它字符 <code>_~!@$%^&amp;amp;:&lt;&gt;&#123;&#125;?</code> 用的比较少。但是也可以直接作为符号的名字。任何其它字符都可以用 <code>\</code> 转义后用在符号名字里。但是和字符串里字符表示不同，<code>\</code> 转义后只是表示其后的字符，比如 <code>\t</code> 代表的字符 t，而不是制表符。如果要在符号名里使用制表符，必须在 <code>\</code> 后加上制表符本身。</p>
+<p>符号名是<strong>区分大小写</strong>的。这里有一些符号名的例子：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">foo                 <span class="comment">; 名为 `foo&#x27; 的符号</span></span><br><span class="line">FOO                 <span class="comment">; 名为 `FOO&#x27; 的符号，和 `foo&#x27; 不同</span></span><br><span class="line">char-to-string      <span class="comment">; 名为 `char-to-string&#x27; 的符号</span></span><br><span class="line"><span class="number">1</span>+                  <span class="comment">; 名为 `1+&#x27; 的符号 (不是整数 `+1&#x27;)</span></span><br><span class="line">\+1                 ; 名为 `+1&#x27; 的符号 (可读性很差的名字)</span><br><span class="line">\(*\ 1\ 2\)         ; 名为 `(* 1 2)&#x27; 的符号 (更差劲的名字).</span><br><span class="line">+-*/_~!@$%^&amp;=:&lt;&gt;&#123;&#125;  ; 名为 `+-*/_~!@$%^&amp;=:&lt;&gt;&#123;&#125;&#x27; 的符号.</span><br><span class="line">                    <span class="comment">;   这些字符无须转义</span></span><br></pre></td></tr></table></figure>
+<h3 id="创建符号">创建符号</h3>
+<p>符号名要有唯一性，所以一定会有一个表与名字关联，这个表在 elisp 里称为 obarray。当 emacs 创建一个符号时，首先会对这个名字求 hash 值以得到一个在 obarray 这个向量中查找值所用的下标。hash 是查找字符串的很有效的方法。也可以自己建立向量，把这个向量作为 obarray 来使用。这是一种代替散列的一种方法。它比直接使用散列有这样一些好处：</p>
+<ul>
+<li>符号不仅可以有一个值，还可以用属性列表，后者又可以相当于一个关联列表。这样有很高的扩展性，而且可以表达更高级的数据结构。</li>
+<li>emacs 里有一些函数可以接受 obarray 作为参数，比如补全相关的函数。</li>
+</ul>
+<p>当 lisp 读入一个符号时，通常会先查找这个符号是否在 obarray 里出现过，如果没有则会把这个符号加入到 obarray 里。这样查找并加入一个符号的过程称为是 intern。intern 函数可以查找或加入一个名字到 obarray 里，返回对应的符号。默认是全局的 obarray，也可以指定一个 obarray。intern-soft 与 intern 不同的是，当名字不在 obarray 里时，intern-soft 会返回 nil，而 intern 会加入到 obarray 里。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> foo (<span class="name">make-vector</span> <span class="number">10</span> <span class="number">0</span>))           <span class="comment">; =&gt; [0 0 0 0 0 0 0 0 0 0]</span></span><br><span class="line">(<span class="name">intern-soft</span> <span class="string">&quot;abc&quot;</span> foo)                 <span class="comment">; =&gt; nil</span></span><br><span class="line">(<span class="name">intern</span> <span class="string">&quot;abc&quot;</span> foo)                      <span class="comment">; =&gt; abc</span></span><br><span class="line">(<span class="name">intern-soft</span> <span class="string">&quot;abc&quot;</span> foo)                 <span class="comment">; =&gt; abc</span></span><br></pre></td></tr></table></figure>
+<p>lisp 每读入一个符号都会 intern 到 obarray 里，如果想避免，可以用在符号名前加上 <code>#:</code> ：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">intern-soft</span> <span class="string">&quot;abc&quot;</span>)                     <span class="comment">; =&gt; nil</span></span><br><span class="line">&#x27;abc                                    <span class="comment">; =&gt; abc</span></span><br><span class="line">(<span class="name">intern-soft</span> <span class="string">&quot;abc&quot;</span>)                     <span class="comment">; =&gt; abc</span></span><br><span class="line">(<span class="name">intern-soft</span> <span class="string">&quot;abcd&quot;</span>)                    <span class="comment">; =&gt; nil</span></span><br><span class="line">&#x27;#:abcd                                 ; =&gt; abcd</span><br><span class="line">(<span class="name">intern-soft</span> <span class="string">&quot;abcd&quot;</span>)                    <span class="comment">; =&gt; nil</span></span><br></pre></td></tr></table></figure>
+<p>如果想除去 obarray 里的符号，可以用 unintern 函数。unintern 可以用符号名或符号作参数在指定的 obarray 里去除符号，成功去除则返回 t，如果没有查找到对应的符号则返回 nil：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">intern-soft</span> <span class="string">&quot;abc&quot;</span> foo)                 <span class="comment">; =&gt; abc</span></span><br><span class="line">(<span class="name">unintern</span> <span class="string">&quot;abc&quot;</span> foo)                    <span class="comment">; =&gt; t</span></span><br><span class="line">(<span class="name">intern-soft</span> <span class="string">&quot;abc&quot;</span> foo)                 <span class="comment">; =&gt; nil</span></span><br></pre></td></tr></table></figure>
+<p>和 hash-table 一样，obarray 也提供一个 mapatoms 函数来遍历整个~obarray。比如要计算~obarray 里所有的符号数量：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> count <span class="number">0</span>)                          <span class="comment">; =&gt; 0</span></span><br><span class="line">(<span class="name">defun</span> count-syms (<span class="name">s</span>)</span><br><span class="line">  (<span class="name">setq</span> count (<span class="number">1</span>+ count)))              <span class="comment">; =&gt; count-syms</span></span><br><span class="line">(<span class="name">mapatoms</span> &#x27;count-syms)                  <span class="comment">; =&gt; nil</span></span><br><span class="line">count                                   <span class="comment">; =&gt; 28371</span></span><br><span class="line">(<span class="name">length</span> obarray)                        <span class="comment">; =&gt; 1511</span></span><br></pre></td></tr></table></figure>
+<h3 id="符号的组成">符号的组成</h3>
+<p>每个符号可以对应四个组成部分，一是符号的名字，可以用 symbol-name 访问。二是符号的值。符号的值可以通过 set 函数来设置，用 symbol-value 来访问。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">set</span> (<span class="name">intern</span> <span class="string">&quot;abc&quot;</span> foo) <span class="string">&quot;I&#x27;m abc&quot;</span>)      <span class="comment">; =&gt; &quot;I&#x27;m abc&quot;</span></span><br><span class="line">(<span class="name">symbol-value</span> (<span class="name">intern</span> <span class="string">&quot;abc&quot;</span> foo))       <span class="comment">; =&gt; &quot;I&#x27;m abc&quot;</span></span><br></pre></td></tr></table></figure>
+<p>如果一个符号的值已经有设置过的话，则 boundp 测试返回 t，否则为 nil。对于 boundp 测试返回 nil 的符号，使用符号的值会引起一个变量值为 void 的错误。</p>
+<p>符号的第三个组成部分是函数。它可以用 symbol-function 来访问，用 fset来设置：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">fset</span> (<span class="name">intern</span> <span class="string">&quot;abc&quot;</span> foo) (<span class="name">symbol-function</span> &#x27;car)) <span class="comment">; =&gt; #&lt;subr car&gt;</span></span><br><span class="line">(<span class="name">funcall</span> (<span class="name">intern</span> <span class="string">&quot;abc&quot;</span> foo) &#x27;(a . b))            <span class="comment">; =&gt; a</span></span><br></pre></td></tr></table></figure>
+<p>类似的，可以用 fboundp 测试一个符号的函数部分是否有设置。</p>
+<p>符号的第四个组成部分是属性列表(property list)。通常属性列表用于存储和符号相关的信息，比如变量和函数的文档，定义的文件名和位置，语法类型。属性名和值可以是任意的 lisp 对象，但是通常名字是符号，可以用 get 和 put来访问和修改属性值，用 symbol-plist 得到所有的属性列表：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">put</span> (<span class="name">intern</span> <span class="string">&quot;abc&quot;</span> foo) &#x27;doc <span class="string">&quot;this is abc&quot;</span>)      <span class="comment">; =&gt; &quot;this is abc&quot;</span></span><br><span class="line">(<span class="name">get</span> (<span class="name">intern</span> <span class="string">&quot;abc&quot;</span> foo) &#x27;doc)                    <span class="comment">; =&gt; &quot;this is abc&quot;</span></span><br><span class="line">(<span class="name">symbol-plist</span> (<span class="name">intern</span> <span class="string">&quot;abc&quot;</span> foo))                <span class="comment">; =&gt; (doc &quot;this is abc&quot;)</span></span><br></pre></td></tr></table></figure>
+<p>关联列表和属性列表很相似。符号的属性列表在内部表示上是用 (prop1 value1 prop2 value2 …) 的形式，和关联列表也是很相似的。属性列表在查找和这个符号相关的信息时，要比直接用关联列表要简单快捷的多。所以变量的文档等信息都是放在符号的属性列表里。但是关联表在头端加入元素是很快的，而且它可以删除表里的元素。而属性列表则不能删除一个属性。</p>
+<p>如果已经把属性列表取出，那么还可以用 plist-get 和 plist-put 的方法来访问和设置属性列表：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">plist-get</span> &#x27;(foo <span class="number">4</span>) &#x27;foo)               <span class="comment">; =&gt; 4</span></span><br><span class="line">(<span class="name">plist-get</span> &#x27;(foo <span class="number">4</span> bad) &#x27;bar)           <span class="comment">; =&gt; nil</span></span><br><span class="line">(<span class="name">setq</span> my-plist &#x27;(bar t foo <span class="number">4</span>))          <span class="comment">; =&gt; (bar t foo 4)</span></span><br><span class="line">(<span class="name">setq</span> my-plist (<span class="name">plist-put</span> my-plist &#x27;foo <span class="number">69</span>)) <span class="comment">; =&gt; (bar t foo 69)</span></span><br><span class="line">(<span class="name">setq</span> my-plist (<span class="name">plist-put</span> my-plist &#x27;quux &#x27;(a))) <span class="comment">; =&gt; (bar t foo 69 quux (a))</span></span><br></pre></td></tr></table></figure>
+<h3 id="函数列表-v5">函数列表</h3>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">symbolp</span> OBJECT)</span><br><span class="line">(<span class="name">intern-soft</span> NAME <span class="symbol">&amp;optional</span> OBARRAY)</span><br><span class="line">(<span class="name">intern</span> STRING <span class="symbol">&amp;optional</span> OBARRAY)</span><br><span class="line">(<span class="name">unintern</span> NAME <span class="symbol">&amp;optional</span> OBARRAY)</span><br><span class="line">(<span class="name">mapatoms</span> FUNCTION <span class="symbol">&amp;optional</span> OBARRAY)</span><br><span class="line">(<span class="name">symbol-name</span> SYMBOL)</span><br><span class="line">(<span class="name">symbol-value</span> SYMBOL)</span><br><span class="line">(<span class="name">boundp</span> SYMBOL)</span><br><span class="line">(<span class="name">set</span> SYMBOL NEWVAL)</span><br><span class="line">(<span class="name">setq</span> SYM VAL SYM VAL ...)</span><br><span class="line">(<span class="name">symbol-function</span> SYMBOL)</span><br><span class="line">(<span class="name">fset</span> SYMBOL DEFINITION)</span><br><span class="line">(<span class="name">fboundp</span> SYMBOL)</span><br><span class="line">(<span class="name">symbol-plist</span> SYMBOL)</span><br><span class="line">(<span class="name">get</span> SYMBOL PROPNAME)</span><br><span class="line">(<span class="name">put</span> SYMBOL PROPNAME VALUE)</span><br></pre></td></tr></table></figure>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+			
+			
+			
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/elisp-control-flow.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/elisp-eval.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '数据类型'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

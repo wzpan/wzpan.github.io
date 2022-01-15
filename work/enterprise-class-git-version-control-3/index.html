@@ -1,0 +1,661 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>化繁为简的企业级 Git 管理实战（三）：分支管理策略 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="本文将简单讨论下我们在开发过程中尝试的各种分支管理策略，在面对各种复杂场景下呈现的优势与不足，以及我们的妥协和后续期望。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="化繁为简的企业级 Git 管理实战（三）：分支管理策略"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '化繁为简的企业级 Git 管理实战（三）：分支管理策略'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 化繁为简的企业级 Git 管理实战（三）：分支管理策略</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>本文将简单讨论下我们在开发过程中尝试的各种分支管理策略，在面对各种复杂场景下呈现的优势与不足，以及我们的妥协和后续期望。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <p>说到版本控制，就不得不提到分支管理策略。就像学开车必须学学交通规则。分支管理策略是代码版本控制的基础组成部分。为团队定制一套合适的分支管理策略，就好比制定了一套合理的交通规则，可以让团队的代码的更加有序地演进，尽可能降低多分支带来的复杂度，并避免由于分支混乱引发的各种“车祸”。本文将简单讨论下我们在开发过程中尝试的各种分支管理策略，在面对各种复杂场景下呈现的优势与不足，以及我们的妥协和后续期望。</p>
+<h2 id="Github-Flow">Github-Flow</h2>
+<p>作为 Github 的重度用户，我首先考虑的当然是 <a target="_blank" rel="noopener" href="https://guides.github.com/introduction/flow/index.html">Github-Flow</a> 。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-3/github-flow.png" alt="Github-Flow" />
+        <figcaption>Github-Flow</figcaption>
+      </figure>
+    </p>
+<p>Github-Flow 是一种非常简单的分支管理方案。它的流程只有如下几步：</p>
+<ol>
+<li>拉出一个新分支；</li>
+<li>在新分支上进行修改，并提交和推送你的改动；</li>
+<li>发起一个 Pull Request ，向代码管理员申请将你提交的分支合并到原来的分支；</li>
+<li>讨论并接受 Code Review。在这个过程中，你依然可以继续推送新的代码到你的开发分支上，并且新的提交在推送后会出现在未完成合并的 Pull Request 页面中；</li>
+<li>合并和发布。Review 通过后，代码管理员将该分支合并到原来的主分支上。</li>
+</ol>
+<span id="more"></span>
+<p>在 Gitlab 中同样可以使用 Github-Flow，唯一的区别是叫法从 <q>Pull Request</q> 变成了 <q>Merge Request</q> 。下图是一个被成功合并的 Merge Request：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-3/merge-request.png" alt="Gitlab 中的 Merge Request" />
+        <figcaption>Gitlab 中的 Merge Request</figcaption>
+      </figure>
+    </p>
+<p>Github-Flow 有如下几个让人着迷的优点：</p>
+<ol>
+<li>简单好操作。只有主分支和开发分支。不像 Git-Flow 那样需要引入一堆的辅助分支。</li>
+<li>推动 Code Review 。通过 Pull Request 的方式，使得 Code Review 成为了日常开发的必经流程，有助于。</li>
+<li>确保可编译。所有 Pull Request 都会触发持续集成测试，只有通过测试的才允许并入主分支。这就杜绝了代码编译不过的情况。</li>
+</ol>
+<p>然而，面对复杂的项目，Github-Flow 暴露出了如下的不足：</p>
+<ol>
+<li>解决冲突困难。多人协作的项目难免会出现冲突，一旦遇到冲突，Merge Request 就没法被直接被合并了。这个时候只能再从目标分支拉出一个分支→合并这个分支→解决完冲突→推上远程仓库再次发起 Merge Request 。对于大多数习惯了用 Merge Request 合并分支的人来说，这个过程一下子复杂了起来。
+
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-3/conflict.png" alt="存在冲突的 Merge Request" />
+        <figcaption>存在冲突的 Merge Request</figcaption>
+      </figure>
+    </li>
+<li>Code Review 容易流于形式。虽然 Github-Flow 加入了 Code Review 的过程，但这依然取决于双方对待 Code Review 的积极性。如果没有充分的讨论代码的细节，仍然无法保证代码的质量。实际团队开发中，我们发现在线进行的 Code Review 并不如面对面讨论高效。更严重的是一旦双方没有 keep moving 的意识，大量 Merge Request 被积压，而这些 Merge Request 会不断包含新的 commit 进来，这就会使得 Merge Request 更加难以合并。</li>
+<li>持续集成测试无法保证子模块可编译。持续集成可以作为 Merge Request 的准入条件，但这仅仅只是主工程的“福利”。而如<a href="/work/enterprise-class-git-version-control-2/">上一篇文章</a>所说，子模块的持续集成远比主工程复杂得多，难以直接在 Merge Request 页面中给出持续集成测试结果。而对于我们的项目，主工程基本没有多少业务代码，大部分的功能开发都是在子模块上，这就使得 Merge Request 的持续集成功能显得鸡肋了。</li>
+<li>还有一些 Gitlab 的交互问题。在 Gitlab 中，默认的合并目标分支是 master 分支：
+
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-3/default-branch.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    
+当你花上一分钟填完合并描述，选完指派人后，发现目标分支忘了改。此时就只能点击页面下方的 “Change Branches” 链接进入分支选择页重新选择分支。回来后你会发现你所填写的所有内容，包括指派人都被清空了：
+
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-3/empty.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    
+不细心的人往往没注意到这个问题，于是提交了一个没有指派人的 Merge Request ，这带来的后果是这个 Merge Request 永远没人关注和合并。<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/enterprise-class-git-version-control-3/Cathedral-and-the-Bazaar-book-cover.jpg alt=' 《大教堂与集市》这本书讨论了两种软件开发模式及背后的哲学。'></img><b>附图 1</b>  《大教堂与集市》这本书讨论了两种软件开发模式及背后的哲学。</span></span></span></li>
+</ol>
+<p>综上所述，Github-Flow 更适用于那些只以 master 分支为主分支，更注重迅速发布的简单项目。这使其非常适合用在维护 Github 上的这些<q>集市型</q>的的开源项目，而不适用于<q>大教堂型</q>的企业级项目。正如 Github 的 <a target="_blank" rel="noopener" href="http://scottchacon.com/">Scott Chancon</a> 大神所说：</p>
+<blockquote>
+<p>For teams that have to do formal releases on a longer term interval (a few weeks to a few months between releases), and be able to do hot-fixes and maintenance branches and other things that arise from shipping so infrequently, git-flow makes sense and I would highly advocate it’s use.</p>
+<p>For teams that have set up a culture of shipping, who push to production every day, who are constantly testing and deploying, I would advocate picking something simpler like GitHub Flow.</p>
+<p><strong>Scott Chancon</strong>, <a target="_blank" rel="noopener" href="http://scottchacon.com/2011/08/31/github-flow.html"><em>Issues with git-flow</em></a></p>
+</blockquote>
+<h2 id="Git-Flow">Git-Flow</h2>
+<p>Git-Flow 是由 <a target="_blank" rel="noopener" href="http://nvie.com/about/">Vincent Driessen</a> 在他的一篇文章 《<a target="_blank" rel="noopener" href="http://nvie.com/posts/a-successful-git-branching-model/">A successful Git branching model</a>》 中提出的分支管理策略。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-3/git-flow.png" alt="Git-Flow" />
+        <figcaption>Git-Flow</figcaption>
+      </figure>
+    </p>
+<p>与 Github-Flow 相比，Git-Flow 拥有更多的分支：</p>
+<ul>
+<li><strong>master</strong>：可以提供给用户使用的正式版本；</li>
+<li><strong>develop</strong>：用来生成代码的隔夜版本（nightly）；</li>
+<li>feature：用于开发某个功能；</li>
+<li>hotfix：用于修复线上代码的 bug；</li>
+<li>release：用于正式发布版本前的测试分支。</li>
+</ul>
+<p>Git-Flow 提出的分支管理策略完整而实用，它甚至已经成为了一个通用开发流程标准。开发者们可以在多个团队和项目中遵守同一套流程。但 Git-Flow 也不是万金油。遇到复杂的项目，它也未必能完全适用：</p>
+<ol>
+<li>
+<p>容易出现冲突。Git-Flow 设计了多个分支各司其职，但多分支带来的苦恼是容易出现冲突。最常见的问题是，由于我们实现了<a href="/work/enterprise-class-git-version-control-2/">子模块 commit id 的自动更新</a>，主分支与开发分支的子模块 commit id 经常变动，导致 develop 分支向 master 分支合并的时候出现大量冲突，阻塞发版进度。</p>
+</li>
+<li>
+<p>多产品线的问题。</p>
+<p>我们的主工程存在多条产品线：master 分支仅仅维护一个基础模板，而 jilin 、taishan 等分支才是用于产出真正产品的分支。每条产品线的各自有一套 Git-Flow 分支体系，并用前缀区分产品线。例如 jilin 的 develop 分支就叫 jilin-dev 。而子模块既可能和主工程一样多个产品分支，也可能是一个通用模块。对于通用模块，只需要维护一套 Git-Flow 分支体系。例如 common 子模块就只有标准的 master、dev 等分支。</p>
+<p>对于多产品分支的主工程和子模块，当改动了某个分支的代码，你就要非常慎重的考虑这部分改动是否通用，是否需要并入其他产品线的分支。而 Git-Flow 并没有探讨多个产品线并存情况下的代码合并方案。</p>
+<p>对于通用的子模块，拉 release 分支时又存在<q>锁</q>的问题。比如，负责 jilin 产品线的同事即将发版，于是把 common 子模块拉出了一个 release 分支。其他产品线的同事依然可以继续为 common 子模块的 develop 分支提交 feature 。但还没等 jilin 产品线完成发版。taishan 产品线的同事也准备发版了，此时 release 分支早已经被 jilin 的同事拉出来，而这个 release 分支却没有 taishan 产品线要发版需要的 feature 。这就阻碍了 taishan 产品线的发版。</p>
+</li>
+</ol>
+<h2 id="妥协与期望">妥协与期望</h2>
+<p>为了化繁为简，我们做了些妥协：</p>
+<ol>
+<li>产品线取消 develop 分支。每条产品线取消 develop 分支，并放开产品线的主分支的提交权限。这种方案大幅减少了合并冲突的苦恼，避免发版受阻，而稳定性依然可以通过 feature 分支来保证。我们相信只要日后我们的模板足够完善，产品线的开发成本会越来越低，稳定性也会越来越强。</li>
+<li>用 cherry-pick 来同步多条产品线的代码改动。对于通用的改动，可以使用 cherry-pick 来将改动同步到其他分支上。我们扩展了 <a href="/work/enterprise-class-git-version-control-1/#%E9%80%A0%E4%B8%AA%E8%BD%AE%E5%AD%90%EF%BC%9Afmanager">fmanager</a> 的功能，为其实现一个 cherry-pick 命令：</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fmanager cherry-pick &lt;commit id&gt; &lt;分支列表&gt;</span><br></pre></td></tr></table></figure>
+<p>例如，假如希望把 weihai 分支上的一个提交同步到其他分支，可以使用如下命令：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ fmanager cherry-pick 023e937d master,jilin,taishan</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>
+<p>通用的子模块发版时，始终拉出产品 release 分支。</p>
+<p>例如，jilin 产品线需要发版了，于是从 common 模块的 master_dev 拉出了 jilin-release 分支：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-3/common-1.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>拉出分支后，与 jilin 分支有关的临时改动可以在 jilin-release 中进行。同时 common 模块依然可以给负责其他产品线的同事提交新 feature 。此时 taishan 产品线的同事如果要发版，可以拉出 taishan-release 分支：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-3/common-2.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>之后，如果 jilin 产品线的同事修改了一个通用的 bug，同样可以将这个提交 cherry-pick 到其他分支：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-3/common-3.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+</li>
+</ol>
+<p>其实，与其说是 Github-Flow 和 Git-Flow 的问题，不如说是现阶段我们的产品架构的问题。用分支来实现产品线的差异化使得一个仓库出现了多个主分支，而这种复杂的模式已经超出了通用的分支管理流程所能解决的范畴。另外，现阶段子模块的不稳定也导致开发过程中不断需要跨产品线同步代码，给产品线的开发造成负担。</p>
+<p>日后我们希望对工程的架构进行调整，通过配置文件来实现产品差异化，而不再创建产品分支。另外，子模块也会越来越稳定，可以低成本接入到各个产品线中，而不再需要频繁迭代。到了那一天，我们的项目就能够重新回归到严格的 Git-Flow ，将 <q>化繁为简</q> 做到极致。</p>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/math/math-matrix/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/work/enterprise-class-git-version-control-2/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '化繁为简的企业级 Git 管理实战（三）：分支管理策略'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/enterprise-class-git-version-control-3.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2016-04-29 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/work/">work<span>7</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Git/">Git<span>5</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#Github-Flow"><span class="toc-article-text">Github-Flow</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#Git-Flow"><span class="toc-article-text">Git-Flow</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%A6%A5%E5%8D%8F%E4%B8%8E%E6%9C%9F%E6%9C%9B"><span class="toc-article-text">妥协与期望</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

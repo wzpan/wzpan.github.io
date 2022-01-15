@@ -1,0 +1,998 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>MySQL | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="参考材料
+
+MySQL 5.1 参考手册
+
+连接与断开服务器
+连接服务器
+12345678shell&amp;gt; mysql -h host -u user -pEnter password: ********Welcome to the MySQL monitor.  Commands end wit">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="MySQL"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: 'MySQL'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> MySQL</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc', 2, 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="参考材料">参考材料</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://dev.mysql.com/doc/refman/5.1/zh/tutorial.html#connecting-disconnecting">MySQL 5.1 参考手册</a></li>
+</ol>
+<h2 id="连接与断开服务器">连接与断开服务器</h2>
+<h3 id="连接服务器">连接服务器</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">shell&gt; mysql -h host -u user -p</span><br><span class="line">Enter password: ********</span><br><span class="line">Welcome to the MySQL monitor.  Commands end with ; or \g.</span><br><span class="line">Your MySQL connection id is 25338 to server version: 5.1.2-alpha-standard</span><br><span class="line"> </span><br><span class="line">Type &#39;help;&#39; or &#39;\h&#39; for help. Type &#39;\c&#39; to clear the buffer.</span><br><span class="line"> </span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="断开服务器">断开服务器</h3>
+<p>成功地连接后，可以在mysql&gt;提示下输入QUIT (或)随时退出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; QUIT</span><br><span class="line">Bye</span><br></pre></td></tr></table></figure>
+<p>在Unix中，也可以按control-D键断开服务器。</p>
+<h2 id="输入查询">输入查询</h2>
+<ul>
+<li>一个命令通常由SQL语句组成，随后跟着一个分号。（有一些例外不需要分号。早先提到的QUIT是一个例子。后面我们将看到其它的例子。）</li>
+<li>当发出一个命令时，mysql将它发送给服务器并显示执行结果，然后显示另一个mysql&gt;显示它准备好接受其它命令。</li>
+<li>mysql用表格(行和列)方式显示查询输出。第一行包含列的标签，随后的行是查询结果。通常，列标签是你取自数据库表的列的名字。如果你正在检索一个表达式而非表列的值(如刚才的例子)，mysql用表达式本身标记列。</li>
+<li>mysql显示返回了多少行，以及查询花了多长时间，它给你提供服务器性能的一个大致概念。因为他们表示时钟时间(不是
+CPU
+或机器时间)，并且因为他们受到诸如服务器负载和网络延时的影响，因此这些值是不精确的。（为了简洁，在本章其它例子中不再显示“集合中的行”。）</li>
+</ul>
+<h3 id="示例1">示例1</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT VERSION(), CURRENT_DATE;</span><br><span class="line">+-----------------|--------------+</span><br><span class="line">| VERSION()       | CURRENT_DATE |</span><br><span class="line">+-----------------|--------------+</span><br><span class="line">| 5.1.2-alpha-log | 2005-10-11   |</span><br><span class="line">+-----------------|--------------+</span><br><span class="line">1 row in set (0.01 sec)</span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="示例2：简单计算器">示例2：简单计算器</h3>
+<p>这是另外一个查询，它说明你能将mysql用作一个简单的计算器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT SIN(PI()&#x2F;4), (4+1)*5;</span><br><span class="line">+------------------|---------+</span><br><span class="line">| SIN(PI()&#x2F;4)      | (4+1)*5 |</span><br><span class="line">+------------------|---------+</span><br><span class="line">| 0.70710678118655 |      25 |</span><br><span class="line">+------------------|---------+</span><br><span class="line">1 row in set (0.02 sec)</span><br></pre></td></tr></table></figure>
+<h3 id="示例3：分号和多条语句">示例3：分号和多条语句</h3>
+<p>至此显示的命令是相当短的单行语句。你可以在一行上输入多条语句，只需要以一个分号间隔开各语句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT VERSION(); SELECT NOW();</span><br><span class="line">+-----------------+</span><br><span class="line">| VERSION()       |</span><br><span class="line">+-----------------+</span><br><span class="line">| 5.1.2-alpha-log |</span><br><span class="line">+-----------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">+---------------------+</span><br><span class="line">| NOW()               |</span><br><span class="line">+---------------------+</span><br><span class="line">| 2005-10-11 15:15:00 |</span><br><span class="line">+---------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<h3 id="示例4：多行语句">示例4：多行语句</h3>
+<p>不必全在一个行内给出一个命令，较长命令可以输入到多个行中。mysql通过寻找终止分号而不是输入行的结束来决定语句在哪儿结束。（换句话说，mysql接受自由格式的输入：它收集输入行但直到看见分号才执行。）</p>
+<p>这里是一个简单的多行语句的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT</span><br><span class="line">    -&gt; USER()</span><br><span class="line">    -&gt; ,</span><br><span class="line">    -&gt; CURRENT_DATE;</span><br><span class="line">+---------------|--------------+</span><br><span class="line">| USER()        | CURRENT_DATE |</span><br><span class="line">+---------------|--------------+</span><br><span class="line">| jon@localhost | 2005-10-11   |</span><br><span class="line">+---------------|--------------+</span><br></pre></td></tr></table></figure>
+<p>在这个例子中，在输入多行查询的第一行后，要注意提示符如何从 <code>mysql&gt;</code> 变为
+<code>-&gt;</code>
+，这正是mysql如何指出它没见到完整的语句并且正在等待剩余的部分。提示符是你的朋友，因为它提供有价值的反馈，如果使用该反馈，将总是知道mysql正在等待什么。</p>
+<p>如果你决定不想执行正在输入过程中的一个命令，输入 <code>\c</code> 取消它：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT</span><br><span class="line">    -&gt; USER()</span><br><span class="line">    -&gt; \c</span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
+<p>这里也要注意提示符，在你输入 <code>\c</code> 以后，它切换回到 <code>mysql&gt;</code>
+，提供反馈以表明mysql准备接受一个新命令。</p>
+<h2 id="创建并使用数据库">创建并使用数据库</h2>
+<h3 id="查看当前服务器上所有MySQL数据库">查看当前服务器上所有MySQL数据库</h3>
+<figure class="highlight plain"><figcaption><span>.sql&#125;</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW DATABASES;</span><br><span class="line">+----------+</span><br><span class="line">| Database |</span><br><span class="line">+----------+</span><br><span class="line">| mysql    |</span><br><span class="line">| test     |</span><br><span class="line">| tmp      |</span><br><span class="line">+----------+</span><br></pre></td></tr></table></figure>
+<p>请注意如果没有SHOW DATABASES权限，则不能看见所有数据库。</p>
+<h3 id="分配数据库管理权限">分配数据库管理权限</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; GRANT ALL ON menagerie.* TO &#39;your_mysql_name&#39;@&#39;your_client_host&#39;;</span><br></pre></td></tr></table></figure>
+<p>这里 <code>your_mysql_name</code> 是分配给你的MySQL用户名， <code>your_client_host</code>
+是所连接的服务器所在的主机。</p>
+<h3 id="创建并选择数据库">创建并选择数据库</h3>
+<p>如果管理员在设置权限时为你创建了数据库，你可以开始使用它。否则，你需要自己创建数据库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; CREATE DATABASE menagerie;</span><br></pre></td></tr></table></figure>
+<p>在Unix下，数据库名称是 <strong>区分大小写的</strong>
+(不像SQL关键字)，因此你必须总是以menagerie访问数据库，而不能用Menagerie、MENAGERIE或其它一些变量。对表名也是这样的。</p>
+<h3 id="访问数据库">访问数据库</h3>
+<figure class="highlight plain"><figcaption><span>.sql&#125;</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; USE menagerie</span><br><span class="line">Database changed</span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong>： <code>USE</code> ，类似 <code>QUIT</code>
+，不需要一个分号。（如果你喜欢，你可以用一个分号终止这样的语句；这无碍）
+<code>USE</code> 语句在使用上也有另外一个特殊的地方：它必须在一个单行上给出。</p>
+<h3 id="创建表">创建表</h3>
+<p>使用一个CREATE TABLE语句指定你的数据库表的布局。例如给 “宠物” 建一个表：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; CREATE TABLE pet (name VARCHAR(20), owner VARCHAR(20),</span><br><span class="line">    -&gt; species VARCHAR(20), sex CHAR(1), birth DATE, death DATE);</span><br></pre></td></tr></table></figure>
+<p>VARCHAR适合于name、owner和species列，因为列值是变长的。这些列的长度不必都相同，而且不必是20。你可以挑选从1到65535的任何长度，从中选择一个最合理的值。（如果选择得不合适，后来证明你需要一个更长的字段，MySQL提供一个ALTER
+TABLE语句。）</p>
+<p>可以用多种类型的值来表示动物记录中的性别，例如，“m”和“f”，或“male”和“female”。使用单字符“m”和“f”是最简单的方法。</p>
+<p>很显然，birth和death列应选用DATE数据类。</p>
+<p>创建了数据库表后，SHOW TABLES应该产生一些输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW TABLES;</span><br><span class="line">+---------------------+</span><br><span class="line">| Tables in menagerie |</span><br><span class="line">+---------------------+</span><br><span class="line">| pet                 |</span><br><span class="line">+---------------------+</span><br></pre></td></tr></table></figure>
+<p>为了验证你的表是按你期望的方式创建，使用一个DESCRIBE语句：</p>
+<pre><code>mysql&gt; DESCRIBE pet;
++---------|-------------|------|-----|---------|-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------|-------------|------|-----|---------|-------+
+| name    | varchar(20) | YES  |     | NULL    |       |
+| owner   | varchar(20) | YES  |     | NULL    |       |
+| species | varchar(20) | YES  |     | NULL    |       |
+| sex     | char(1)     | YES  |     | NULL    |       |
+| birth   | date        | YES  |     | NULL    |       |
+| death   | date        | YES  |     | NULL    |       |
++---------|-------------|------|-----|---------|-------+
+</code></pre>
+<h2 id="增">增</h2>
+<p>创建表后，需要填入内容。通过 <code>LOAD DATA</code> 和 <code>INSERT</code>
+语句可以完成该任务。</p>
+<h4 id="方法1：LOAD-DATA-从文本导入">方法1：<code>LOAD DATA</code> 从文本导入</h4>
+<p>因为你是从一个空表开始的，填充它的一个简易方法是创建一个文本文件，每个动物各一行，然后用一个语句将文件的内容装载到表中。</p>
+<p>你可以创建一个文本文件“pet.txt”，每行包含一个记录，用定位符(tab)把值分开，并且以<code>CREATE TABLE</code>语句中列出的列次序给出。对于丢失的值(例如未知的性别，或仍然活着的动物的死亡日期)，你可以使用NULL值。为了在你的文本文件中表示这些内容，使用<code>\N</code>（反斜线，字母N）。例如，Whistler鸟的记录应为(这里值之间的空白是一个定位符)：</p>
+<p>name       owner   species   sex   birth        death</p>
+<hr>
+<p>Whistler   Gwen    bird            1997-12-09</p>
+<p>要想将文本文件“pet.txt”装载到pet表中，使用这个命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; LOAD DATA LOCAL INFILE &#39;&#x2F;path&#x2F;pet.txt&#39; INTO TABLE pet;</span><br></pre></td></tr></table></figure>
+<p>请注意如果用Windows中的编辑器（使用）创建文件，应使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; LOAD DATA LOCAL INFILE &#39;&#x2F;path&#x2F;pet.txt&#39; INTO TABLE pet</span><br><span class="line">    -&gt; LINES TERMINATED BY &#39;\r\n&#39;;</span><br></pre></td></tr></table></figure>
+<p>（在运行OS X的Apple机上，应使用行结束符’’。）</p>
+<p>如果你愿意，你能明确地在 <code>LOAD DATA</code>
+语句中指出列值的分隔符和行尾标记，但是默认标记是定位符和换行符。这对读入文件“pet.txt”的语句已经足够。</p>
+<h4 id="方法2-INSERT-语句新增记录">方法2. <code>INSERT</code> 语句新增记录</h4>
+<p>用 <code>INSERT</code> 语句一次增加一个新记录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; INSERT INTO pet</span><br><span class="line">    -&gt; VALUES (&#39;Puffball&#39;,&#39;Diane&#39;,&#39;hamster&#39;,&#39;f&#39;,&#39;1999-03-30&#39;,NULL);</span><br></pre></td></tr></table></figure>
+<p>注意，这里字符串和日期值均为引号扩起来的字符串。另外，可以直接用<code>INSERT</code>语句插入NULL代表不存在的值。不能使用<code>LOAD DATA</code>中所示的的<code>\N</code>。</p>
+<h2 id="删">删</h2>
+<p>删除 pet 表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; DELETE FROM pet;</span><br></pre></td></tr></table></figure>
+<h2 id="改">改</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; UPDATE pet SET birth &#x3D; &#39;1989-08-31&#39; WHERE name &#x3D; &#39;Bowser&#39;;</span><br></pre></td></tr></table></figure>
+<h2 id="查">查</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT what_to_select</span><br><span class="line">FROM which_table</span><br><span class="line">WHERE conditions_to_satisfy;</span><br></pre></td></tr></table></figure>
+<p><code>what_to_select</code> 指出你想要看到的内容，可以是列的一个表，或 <code>*</code>
+表示“所有的列”。<code>which_table</code>指出你想要从其检索数据的表。<code>WHERE</code>子句是可选项，如果选择该项，<code>conditions_to_satisfy</code>指定行必须满足的检索条件。</p>
+<h4 id="查全部">查全部</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM pet;</span><br><span class="line">+----------|--------|---------|------|------------|------------+</span><br><span class="line">| name     | owner  | species | sex  | birth      | death      |</span><br><span class="line">+----------|--------|---------|------|------------|------------+</span><br><span class="line">| Fluffy   | Harold | cat     | f    | 1993-02-04 | NULL       |</span><br><span class="line">| Claws    | Gwen   | cat     | m    | 1994-03-17 | NULL       |</span><br><span class="line">| Buffy    | Harold | dog     | f    | 1989-05-13 | NULL       |</span><br><span class="line">| Fang     | Benny  | dog     | m    | 1990-08-27 | NULL       |</span><br><span class="line">| Bowser   | Diane  | dog     | m    | 1979-08-31 | 1995-07-29 |</span><br><span class="line">| Chirpy   | Gwen   | bird    | f    | 1998-09-11 | NULL       |</span><br><span class="line">| Whistler | Gwen   | bird    | NULL | 1997-12-09 | NULL       |</span><br><span class="line">| Slim     | Benny  | snake   | m    | 1996-04-29 | NULL       |</span><br><span class="line">| Puffball | Diane  | hamster | f    | 1999-03-30 | NULL       |</span><br><span class="line">+----------|--------|---------|------|------------|------------+</span><br></pre></td></tr></table></figure>
+<h4 id="查某一行">查某一行</h4>
+<p>查询名字叫做 Bowser 的一只宠物的记录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM pet WHERE name &#x3D; &#39;Bowser&#39;;</span><br><span class="line">+--------|-------|---------|------|------------|------------+</span><br><span class="line">| name   | owner | species | sex  | birth      | death      |</span><br><span class="line">+--------|-------|---------|------|------------|------------+</span><br><span class="line">| Bowser | Diane | dog     | m    | 1989-08-31 | 1995-07-29 |</span><br><span class="line">+--------|-------|---------|------|------------|------------+</span><br></pre></td></tr></table></figure>
+<p>查询哪个动物在 1998 年后出生：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM pet WHERE birth &gt; &#39;1998-1-1&#39;;</span><br><span class="line">+----------|-------|---------|------|------------|-------+</span><br><span class="line">| name     | owner | species | sex  | birth      | death |</span><br><span class="line">+----------|-------|---------|------|------------|-------+</span><br><span class="line">| Chirpy   | Gwen  | bird    | f    | 1998-09-11 | NULL  |</span><br><span class="line">| Puffball | Diane | hamster | f    | 1999-03-30 | NULL  |</span><br><span class="line">+----------|-------|---------|------|------------|-------+</span><br></pre></td></tr></table></figure>
+<h4 id="组合条件-AND-和-OR">组合条件 AND 和 OR</h4>
+<p>组合条件，例如，找出雌性的狗：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM pet WHERE species &#x3D; &#39;dog&#39; AND sex &#x3D; &#39;f&#39;;</span><br><span class="line">+-------|--------|---------|------|------------|-------+</span><br><span class="line">| name  | owner  | species | sex  | birth      | death |</span><br><span class="line">+-------|--------|---------|------|------------|-------+</span><br><span class="line">| Buffy | Harold | dog     | f    | 1989-05-13 | NULL  |</span><br><span class="line">+-------|--------|---------|------|------------|-------+</span><br></pre></td></tr></table></figure>
+<p>上面的查询使用AND逻辑操作符，也有一个OR操作符：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM pet WHERE species &#x3D; &#39;snake&#39; OR species &#x3D; &#39;bird&#39;;</span><br><span class="line">+----------|-------|---------|------|------------|-------+</span><br><span class="line">| name     | owner | species | sex  | birth      | death |</span><br><span class="line">+----------|-------|---------|------|------------|-------+</span><br><span class="line">| Chirpy   | Gwen  | bird    | f    | 1998-09-11 | NULL  |</span><br><span class="line">| Whistler | Gwen  | bird    | NULL | 1997-12-09 | NULL  |</span><br><span class="line">| Slim     | Benny | snake   | m    | 1996-04-29 | NULL  |</span><br><span class="line">+----------|-------|---------|------|------------|-------+</span><br></pre></td></tr></table></figure>
+<p>AND和OR可以混用，但AND比OR具有更高的优先级。
+如果你使用两个操作符，使用圆括号指明如何对条件进行分组是一个好主意：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM pet WHERE (species &#x3D; &#39;cat&#39; AND sex &#x3D; &#39;m&#39;)</span><br><span class="line">    -&gt; OR (species &#x3D; &#39;dog&#39; AND sex &#x3D; &#39;f&#39;);</span><br><span class="line">+-------|--------|---------|------|------------|-------+</span><br><span class="line">| name  | owner  | species | sex  | birth      | death |</span><br><span class="line">+-------|--------|---------|------|------------|-------+</span><br><span class="line">| Claws | Gwen   | cat     | m    | 1994-03-17 | NULL  |</span><br><span class="line">| Buffy | Harold | dog     | f    | 1989-05-13 | NULL  |</span><br><span class="line">+-------|--------|---------|------|------------|-------+</span><br></pre></td></tr></table></figure>
+<h4 id="查一列">查一列</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT name, birth FROM pet;</span><br><span class="line">+----------|------------+</span><br><span class="line">| name     | birth      |</span><br><span class="line">+----------|------------+</span><br><span class="line">| Fluffy   | 1993-02-04 |</span><br><span class="line">| Claws    | 1994-03-17 |</span><br><span class="line">| Buffy    | 1989-05-13 |</span><br><span class="line">| Fang     | 1990-08-27 |</span><br><span class="line">| Bowser   | 1989-08-31 |</span><br><span class="line">| Chirpy   | 1998-09-11 |</span><br><span class="line">| Whistler | 1997-12-09 |</span><br><span class="line">| Slim     | 1996-04-29 |</span><br><span class="line">| Puffball | 1999-03-30 |</span><br><span class="line">+----------|------------+</span><br></pre></td></tr></table></figure>
+<p>找出谁拥有宠物，使用这个查询：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT owner FROM pet;</span><br><span class="line">+--------+</span><br><span class="line">| owner  |</span><br><span class="line">+--------+</span><br><span class="line">| Harold |</span><br><span class="line">| Gwen   |</span><br><span class="line">| Harold |</span><br><span class="line">| Benny  |</span><br><span class="line">| Diane  |</span><br><span class="line">| Gwen   |</span><br><span class="line">| Gwen   |</span><br><span class="line">| Benny  |</span><br><span class="line">| Diane  |</span><br><span class="line">+--------+</span><br></pre></td></tr></table></figure>
+<p>请注意该查询只是简单地检索每个记录的owner列，并且他们中的一些出现多次。为了使输出减到最少，增加关键字
+<code>DISTINCT</code> 检索出每个唯一的输出记录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT DISTINCT owner FROM pet;</span><br><span class="line">+--------+</span><br><span class="line">| owner  |</span><br><span class="line">+--------+</span><br><span class="line">| Benny  |</span><br><span class="line">| Diane  |</span><br><span class="line">| Gwen   |</span><br><span class="line">| Harold |</span><br><span class="line">+--------+</span><br></pre></td></tr></table></figure>
+<p>可以使用一个WHERE子句结合行选择与列选择。例如，要想查询狗和猫的出生日期，使用这个查询：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT name, species, birth FROM pet</span><br><span class="line">    -&gt; WHERE species &#x3D; &#39;dog&#39; OR species &#x3D; &#39;cat&#39;;</span><br><span class="line">+--------|---------|------------+</span><br><span class="line">| name   | species | birth      |</span><br><span class="line">+--------|---------|------------+</span><br><span class="line">| Fluffy | cat     | 1993-02-04 |</span><br><span class="line">| Claws  | cat     | 1994-03-17 |</span><br><span class="line">| Buffy  | dog     | 1989-05-13 |</span><br><span class="line">| Fang   | dog     | 1990-08-27 |</span><br><span class="line">| Bowser | dog     | 1989-08-31 |</span><br><span class="line">+--------|---------|------------+</span><br></pre></td></tr></table></figure>
+<h4 id="模式查找">模式查找</h4>
+<p>MySQL提供标准的SQL模式匹配 <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>，以及一种基于象Unix实用程序如vi、grep和sed的扩展正则表达式模式匹配的格式。</p>
+<h4 id="标准的-SQL-模式匹配以及-LIKE-操作符">标准的 SQL 模式匹配以及 LIKE 操作符</h4>
+<ul>
+<li>“_”匹配任何单个字符</li>
+<li>“%”匹配任意数目字符(包括零字符)</li>
+<li>比较时不能使用<code>=</code>或<code>!=</code>；而应使用<code>LIKE</code>或<code>NOT LIKE</code>比较操作符。</li>
+</ul>
+<p>要想找出以“b”开头的名字：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM pet WHERE name LIKE &#39;b%&#39;;</span><br><span class="line">+--------|--------|---------|------|------------|------------+</span><br><span class="line">| name   | owner  | species | sex  | birth      | death      |</span><br><span class="line">+--------|--------|---------|------|------------|------------+</span><br><span class="line">| Buffy  | Harold | dog     | f    | 1989-05-13 | NULL       |</span><br><span class="line">| Bowser | Diane  | dog     | m    | 1989-08-31 | 1995-07-29 |</span><br><span class="line">+--------|--------|---------|------|------------|------------+</span><br></pre></td></tr></table></figure>
+<p>要想找出以“fy”结尾的名字：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM pet WHERE name LIKE &#39;%fy&#39;;</span><br><span class="line">+--------|--------|---------|------|------------|-------+</span><br><span class="line">| name   | owner  | species | sex  | birth      | death |</span><br><span class="line">+--------|--------|---------|------|------------|-------+</span><br><span class="line">| Fluffy | Harold | cat     | f    | 1993-02-04 | NULL  |</span><br><span class="line">| Buffy  | Harold | dog     | f    | 1989-05-13 | NULL  |</span><br><span class="line">+--------|--------|---------|------|------------|-------+</span><br></pre></td></tr></table></figure>
+<p>要想找出包含“w”的名字：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM pet WHERE name LIKE &#39;%w%&#39;;</span><br><span class="line">+----------|-------|---------|------|------------|------------+</span><br><span class="line">| name     | owner | species | sex  | birth      | death      |</span><br><span class="line">+----------|-------|---------|------|------------|------------+</span><br><span class="line">| Claws    | Gwen  | cat     | m    | 1994-03-17 | NULL       |</span><br><span class="line">| Bowser   | Diane | dog     | m    | 1989-08-31 | 1995-07-29 |</span><br><span class="line">| Whistler | Gwen  | bird    | NULL | 1997-12-09 | NULL       |</span><br><span class="line">+----------|-------|---------|------|------------|------------+</span><br></pre></td></tr></table></figure>
+<p>要想找出正好包含5个字符的名字，使用“_”模式字符：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM pet WHERE name LIKE &#39;_____&#39;;</span><br><span class="line">+-------|--------|---------|------|------------|-------+</span><br><span class="line">| name  | owner  | species | sex  | birth      | death |</span><br><span class="line">+-------|--------|---------|------|------------|-------+</span><br><span class="line">| Claws | Gwen   | cat     | m    | 1994-03-17 | NULL  |</span><br><span class="line">| Buffy | Harold | dog     | f    | 1989-05-13 | NULL  |</span><br><span class="line">+-------|--------|---------|------|------------|-------+</span><br></pre></td></tr></table></figure>
+<h4 id="正则表达式-REGEXP-操作符">正则表达式 REGEXP 操作符</h4>
+<p>由MySQL提供的模式匹配的其它类型是使用扩展正则表达式
+<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>(#fn1)^。当你对这类模式进行匹配测试时，使用 <code>REGEXP</code> 和 <code>NOT REGEXP</code>
+操作符(或<code>RLIKE</code>和<code>NOT RLIKE</code>，它们是同义词)。</p>
+<p>为了找出以“b”开头的名字，使用“^”匹配名字的开始：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM pet WHERE name REGEXP &#39;^b&#39;;</span><br><span class="line">+--------|--------|---------|------|------------|------------+</span><br><span class="line">| name   | owner  | species | sex  | birth      | death      |</span><br><span class="line">+--------|--------|---------|------|------------|------------+</span><br><span class="line">| Buffy  | Harold | dog     | f    | 1989-05-13 | NULL       |</span><br><span class="line">| Bowser | Diane  | dog     | m    | 1989-08-31 | 1995-07-29 |</span><br><span class="line">+--------|--------|---------|------|------------|------------+</span><br></pre></td></tr></table></figure>
+<p>如果你想强制使REGEXP比较区分大小写，使用 <code>BINARY</code>
+关键字使其中一个字符串变为二进制字符串。该查询只匹配名称首字母的小写‘b’。</p>
+<pre><code>mysql&gt; SELECT * FROM pet WHERE name REGEXP BINARY '^b';
+</code></pre>
+<p>为了找出以“fy”结尾的名字，使用“$”匹配名字的结尾：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM pet WHERE name REGEXP &#39;fy$&#39;;</span><br><span class="line">+--------|--------|---------|------|------------|-------+</span><br><span class="line">| name   | owner  | species | sex  | birth      | death |</span><br><span class="line">+--------|--------|---------|------|------------|-------+</span><br><span class="line">| Fluffy | Harold | cat     | f    | 1993-02-04 | NULL  |</span><br><span class="line">| Buffy  | Harold | dog     | f    | 1989-05-13 | NULL  |</span><br><span class="line">+--------|--------|---------|------|------------|-------+</span><br></pre></td></tr></table></figure>
+<p>为了找出包含一个“w”的名字，使用以下查询：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM pet WHERE name REGEXP &#39;w&#39;;</span><br><span class="line">+----------|-------|---------|------|------------|------------+</span><br><span class="line">| name     | owner | species | sex  | birth      | death      |</span><br><span class="line">+----------|-------|---------|------|------------|------------+</span><br><span class="line">| Claws    | Gwen  | cat     | m    | 1994-03-17 | NULL       |</span><br><span class="line">| Bowser   | Diane | dog     | m    | 1989-08-31 | 1995-07-29 |</span><br><span class="line">| Whistler | Gwen  | bird    | NULL | 1997-12-09 | NULL       |</span><br><span class="line">+----------|-------|---------|------|------------|------------+</span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong>：
+如果REGEXP模式与被测试值的任何地方匹配，模式就匹配(这不同于LIKE模式匹配，只有与整个值匹配，模式才匹配)。</p>
+<p>既然如果一个正则表达式出现在值的任何地方，其模式匹配了，就不必在先前的查询中在模式的两侧放置一个通配符以使得它匹配整个值，就像你使用了一个SQL模式那样。</p>
+<p>为了找出包含正好5个字符的名字，使用“^”和“$”匹配名字的开始和结尾，和5个“.”实例在两者之间：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM pet WHERE name REGEXP &#39;^.....$&#39;;</span><br><span class="line">+-------|--------|---------|------|------------|-------+</span><br><span class="line">| name  | owner  | species | sex  | birth      | death |</span><br><span class="line">+-------|--------|---------|------|------------|-------+</span><br><span class="line">| Claws | Gwen   | cat     | m    | 1994-03-17 | NULL  |</span><br><span class="line">| Buffy | Harold | dog     | f    | 1989-05-13 | NULL  |</span><br><span class="line">+-------|--------|---------|------|------------|-------+</span><br></pre></td></tr></table></figure>
+<p>你也可以使用“{n}”“重复n次”操作符重写前面的查询：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM pet WHERE name REGEXP &#39;^.&#123;5&#125;$&#39;;</span><br><span class="line">+-------|--------|---------|------|------------|-------+</span><br><span class="line">| name  | owner  | species | sex  | birth      | death |</span><br><span class="line">+-------|--------|---------|------|------------|-------+</span><br><span class="line">| Claws | Gwen   | cat     | m    | 1994-03-17 | NULL  |</span><br><span class="line">| Buffy | Harold | dog     | f    | 1989-05-13 | NULL  |</span><br><span class="line">+-------|--------|---------|------|------------|-------+</span><br></pre></td></tr></table></figure>
+<h4 id="查找结果排序">查找结果排序</h4>
+<p>为了排序结果，使用 <code>ORDER BY</code> 子句。</p>
+<p>这里是动物生日，按日期排序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT name, birth FROM pet ORDER BY birth;</span><br><span class="line">+----------|------------+</span><br><span class="line">| name     | birth      |</span><br><span class="line">+----------|------------+</span><br><span class="line">| Buffy    | 1989-05-13 |</span><br><span class="line">| Bowser   | 1989-08-31 |</span><br><span class="line">| Fang     | 1990-08-27 |</span><br><span class="line">| Fluffy   | 1993-02-04 |</span><br><span class="line">| Claws    | 1994-03-17 |</span><br><span class="line">| Slim     | 1996-04-29 |</span><br><span class="line">| Whistler | 1997-12-09 |</span><br><span class="line">| Chirpy   | 1998-09-11 |</span><br><span class="line">| Puffball | 1999-03-30 |</span><br><span class="line">+----------|------------+</span><br></pre></td></tr></table></figure>
+<p>在字符类型列上，与所有其他比较操作类似，分类功能正常情况下是以区分大小写的方式执行的。这意味着，对于等同但大小写不同的列，并未定义其顺序。</p>
+<p>对于某一列，可以使用 <code>BINARY</code> 强制执行区分大小写的分类功能，如：
+<code>ORDER BY BINARY col_name</code> .</p>
+<p>默认排序是升序，最小的值在第一。要想以降序排序，在你正在排序的列名上增加
+<code>DESC</code> （降序 ）关键字：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT name, birth FROM pet ORDER BY birth DESC;</span><br><span class="line">+----------|------------+</span><br><span class="line">| name     | birth      |</span><br><span class="line">+----------|------------+</span><br><span class="line">| Puffball | 1999-03-30 |</span><br><span class="line">| Chirpy   | 1998-09-11 |</span><br><span class="line">| Whistler | 1997-12-09 |</span><br><span class="line">| Slim     | 1996-04-29 |</span><br><span class="line">| Claws    | 1994-03-17 |</span><br><span class="line">| Fluffy   | 1993-02-04 |</span><br><span class="line">| Fang     | 1990-08-27 |</span><br><span class="line">| Bowser   | 1989-08-31 |</span><br><span class="line">| Buffy    | 1989-05-13 |</span><br><span class="line">+----------|------------+</span><br></pre></td></tr></table></figure>
+<p>可以对多个列进行排序，并且可以按不同的方向对不同的列进行排序。例如，按升序对动物的种类进行排序，然后按降序根据生日对各动物种类进行排序（最年轻的动物在最前面），使用下列查询：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT name, species, birth FROM pet</span><br><span class="line">    -&gt; ORDER BY species, birth DESC;</span><br><span class="line">+----------|---------|------------+</span><br><span class="line">| name     | species | birth      |</span><br><span class="line">+----------|---------|------------+</span><br><span class="line">| Chirpy   | bird    | 1998-09-11 |</span><br><span class="line">| Whistler | bird    | 1997-12-09 |</span><br><span class="line">| Claws    | cat     | 1994-03-17 |</span><br><span class="line">| Fluffy   | cat     | 1993-02-04 |</span><br><span class="line">| Fang     | dog     | 1990-08-27 |</span><br><span class="line">| Bowser   | dog     | 1989-08-31 |</span><br><span class="line">| Buffy    | dog     | 1989-05-13 |</span><br><span class="line">| Puffball | hamster | 1999-03-30 |</span><br><span class="line">| Slim     | snake   | 1996-04-29 |</span><br><span class="line">+----------|---------|------------+</span><br></pre></td></tr></table></figure>
+<p>注意<code>DESC</code>关键字仅适用于在它前面的列名(birth)；不影响species列的排序顺序。</p>
+<h4 id="日期计算">日期计算</h4>
+<p>MySQL提供了几个函数，可以用来计算日期。</p>
+<ul>
+<li>CURDATE() 获取现在的日期</li>
+<li>NOW() 获取现在的日期和时间</li>
+<li>YEAR() 提取日期的年部分</li>
+<li>MONTH() 提取日期的月部分</li>
+<li>DAYOFMONTH() 提取</li>
+<li>RIGHT() 提取日期的 MM-DD (日历年)部分的最右面5个字符</li>
+<li>DATE_ADD() 允许在一个给定的日期上加上时间间隔</li>
+</ul>
+<ol>
+<li>示例1：计算年龄</li>
+</ol>
+<p>要想确定每个宠物有多大，可以计算当前日期的年和出生日期之间的差。如果当前日期的日历年比出生日期早，则减去一年。以下查询显示了每个宠物的出生日期、当前日期和年龄数值的年数字。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT name, birth, CURDATE(),</span><br><span class="line">    -&gt; (YEAR(CURDATE())-YEAR(birth))</span><br><span class="line">    -&gt; - (RIGHT(CURDATE(),5)&lt;RIGHT(birth,5))</span><br><span class="line">    -&gt; AS age</span><br><span class="line">    -&gt; FROM pet;</span><br><span class="line">+----------|------------|------------|------+</span><br><span class="line">| name     | birth      | CURDATE()  | age  |</span><br><span class="line">+----------|------------|------------|------+</span><br><span class="line">| Fluffy   | 1993-02-04 | 2003-08-19 |   10 |</span><br><span class="line">| Claws    | 1994-03-17 | 2003-08-19 |    9 |</span><br><span class="line">| Buffy    | 1989-05-13 | 2003-08-19 |   14 |</span><br><span class="line">| Fang     | 1990-08-27 | 2003-08-19 |   12 |</span><br><span class="line">| Bowser   | 1989-08-31 | 2003-08-19 |   13 |</span><br><span class="line">| Chirpy   | 1998-09-11 | 2003-08-19 |    4 |</span><br><span class="line">| Whistler | 1997-12-09 | 2003-08-19 |    5 |</span><br><span class="line">| Slim     | 1996-04-29 | 2003-08-19 |    7 |</span><br><span class="line">| Puffball | 1999-03-30 | 2003-08-19 |    4 |</span><br><span class="line">+----------|------------|------------|------+</span><br></pre></td></tr></table></figure>
+<p>此处，比较MM-DD值的表达式部分的值一般为1或0，如果CURDATE()的年比birth的年早，则年份应减去1。整个表达式有些难懂，使用
+<code>alias (age)</code> 来使输出的列标记更有意义。</p>
+<ol start="2">
+<li>示例2：找出每个动物生日的月份</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT name, birth, MONTH(birth) FROM pet;</span><br><span class="line">+----------|------------|--------------+</span><br><span class="line">| name     | birth      | MONTH(birth) |</span><br><span class="line">+----------|------------|--------------+</span><br><span class="line">| Fluffy   | 1993-02-04 |            2 |</span><br><span class="line">| Claws    | 1994-03-17 |            3 |</span><br><span class="line">| Buffy    | 1989-05-13 |            5 |</span><br><span class="line">| Fang     | 1990-08-27 |            8 |</span><br><span class="line">| Bowser   | 1989-08-31 |            8 |</span><br><span class="line">| Chirpy   | 1998-09-11 |            9 |</span><br><span class="line">| Whistler | 1997-12-09 |           12 |</span><br><span class="line">| Slim     | 1996-04-29 |            4 |</span><br><span class="line">| Puffball | 1999-03-30 |            3 |</span><br><span class="line">+----------|------------|--------------+</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>示例3：找出下个月生日的动物</li>
+</ol>
+<ul>
+<li>方法1：使用 <code>DATE_ADD()</code> 函数</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT name, birth FROM pet</span><br><span class="line">    -&gt; WHERE MONTH(birth) &#x3D; MONTH(DATE_ADD(CURDATE(),INTERVAL 1 MONTH));</span><br></pre></td></tr></table></figure>
+<ul>
+<li>方法2：加1以得出当前月份的下一个月(在使用取模函数(MOD)后，如果月份当前值是12，则“回滚”到值0)：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT name, birth FROM pet</span><br><span class="line">    -&gt; WHERE MONTH(birth) &#x3D; MOD(MONTH(CURDATE()), 12) + 1;</span><br></pre></td></tr></table></figure>
+<h3 id="分类和统计">分类和统计</h3>
+<p>COUNT() 和GROUP BY以各种方式分类你的数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT COUNT(*) FROM pet;</span><br><span class="line">+----------+</span><br><span class="line">| COUNT(*) |</span><br><span class="line">+----------+</span><br><span class="line">|        9 |</span><br><span class="line">+----------+</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT owner, COUNT(*) FROM pet GROUP BY owner;</span><br><span class="line">+--------|----------+</span><br><span class="line">| owner  | COUNT(*) |</span><br><span class="line">+--------|----------+</span><br><span class="line">| Benny  |        2 |</span><br><span class="line">| Diane  |        2 |</span><br><span class="line">| Gwen   |        3 |</span><br><span class="line">| Harold |        2 |</span><br><span class="line">+--------|----------+</span><br></pre></td></tr></table></figure>
+<p>注意： 使用 <code>GROUP BY</code>
+对每个owner的所有记录分组，没有它，你会得到错误消息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT owner, COUNT(*) FROM pet;</span><br><span class="line">ERROR 1140 (42000): Mixing of GROUP columns (MIN(),MAX(),COUNT(),...) </span><br><span class="line">with no GROUP columns is illegal if there is no GROUP BY clause</span><br></pre></td></tr></table></figure>
+<p>下列例子显示出进行动物普查操作的不同方式。</p>
+<p>每种动物的数量：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT species, COUNT(*) FROM pet GROUP BY species;</span><br><span class="line">+---------|----------+</span><br><span class="line">| species | COUNT(*) |</span><br><span class="line">+---------|----------+</span><br><span class="line">| bird    |        2 |</span><br><span class="line">| cat     |        2 |</span><br><span class="line">| dog     |        3 |</span><br><span class="line">| hamster |        1 |</span><br><span class="line">| snake   |        1 |</span><br><span class="line">+---------|----------+</span><br></pre></td></tr></table></figure>
+<p>每种性别的动物数量：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT sex, COUNT(*) FROM pet GROUP BY sex;</span><br><span class="line">+------|----------+</span><br><span class="line">| sex  | COUNT(*) |</span><br><span class="line">+------|----------+</span><br><span class="line">| NULL |        1 |</span><br><span class="line">| f    |        4 |</span><br><span class="line">| m    |        4 |</span><br><span class="line">+------|----------+</span><br></pre></td></tr></table></figure>
+<p>（在这个输出中，NULL表示“未知性别”。）</p>
+<p>按种类和性别组合的动物数量：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT species, sex, COUNT(*) FROM pet GROUP BY species, sex;</span><br><span class="line">+---------|------|----------+</span><br><span class="line">| species | sex  | COUNT(*) |</span><br><span class="line">+---------|------|----------+</span><br><span class="line">| bird    | NULL |        1 |</span><br><span class="line">| bird    | f    |        1 |</span><br><span class="line">| cat     | f    |        1 |</span><br><span class="line">| cat     | m    |        1 |</span><br><span class="line">| dog     | f    |        1 |</span><br><span class="line">| dog     | m    |        2 |</span><br><span class="line">| hamster | f    |        1 |</span><br><span class="line">| snake   | m    |        1 |</span><br><span class="line">+---------|------|----------+</span><br></pre></td></tr></table></figure>
+<h3 id="使用1个以上的表">使用1个以上的表</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT pet.name,</span><br><span class="line">    -&gt; (YEAR(date)-YEAR(birth)) - (RIGHT(date,5)&lt;RIGHT(birth,5)) AS age,</span><br><span class="line">    -&gt; remark</span><br><span class="line">    -&gt; FROM pet, event</span><br><span class="line">    -&gt; WHERE pet.name &#x3D; event.name AND event.type &#x3D; &#39;litter&#39;;</span><br><span class="line">+--------|------|-----------------------------+</span><br><span class="line">| name   | age  | remark                      |</span><br><span class="line">+--------|------|-----------------------------+</span><br><span class="line">| Fluffy |    2 | 4 kittens, 3 female, 1 male |</span><br><span class="line">| Buffy  |    4 | 5 puppies, 2 female, 3 male |</span><br><span class="line">| Buffy  |    5 | 3 puppies, 3 female         |</span><br><span class="line">+--------|------|-----------------------------+</span><br></pre></td></tr></table></figure>
+<p>同一个表与自身的连接也是常见的。例如，为了在你的宠物之中繁殖配偶，你可以用pet联结自身来进行相似种类的雄雌配对：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT p1.name, p1.sex, p2.name, p2.sex, p1.species</span><br><span class="line">    -&gt; FROM pet AS p1, pet AS p2</span><br><span class="line">    -&gt; WHERE p1.species &#x3D; p2.species AND p1.sex &#x3D; &#39;f&#39; AND p2.sex &#x3D; &#39;m&#39;;</span><br><span class="line">+--------|------|--------|------|---------+</span><br><span class="line">| name   | sex  | name   | sex  | species |</span><br><span class="line">+--------|------|--------|------|---------+</span><br><span class="line">| Fluffy | f    | Claws  | m    | cat     |</span><br><span class="line">| Buffy  | f    | Fang   | m    | dog     |</span><br><span class="line">| Buffy  | f    | Bowser | m    | dog     |</span><br><span class="line">+--------|------|--------|------|---------+</span><br></pre></td></tr></table></figure>
+<h2 id="获得数据库和表的信息">获得数据库和表的信息</h2>
+<p>可以用 <code>SHOW TABLES</code> 来查看数据库的表：</p>
+<pre><code>mysql&gt; SHOW TABLES;
+Empty set (0.00 sec)
+</code></pre>
+<p>为了找出当前选择了哪个数据库，使用DATABASE( )函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT DATABASE();</span><br><span class="line">+------------+</span><br><span class="line">| DATABASE() |</span><br><span class="line">+------------+</span><br><span class="line">| menagerie  |</span><br><span class="line">+------------+</span><br><span class="line">如果你还没选择任何数据库，结果是NULL。</span><br></pre></td></tr></table></figure>
+<p>为了找出当前的数据库包含什么表(例如，当你不能确定一个表的名字)，使用这个命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW TABLES;</span><br><span class="line">+---------------------+</span><br><span class="line">| Tables in menagerie |</span><br><span class="line">+---------------------+</span><br><span class="line">| event               |</span><br><span class="line">| pet                 |</span><br><span class="line">+---------------------+</span><br></pre></td></tr></table></figure>
+<p>如果你想要知道一个表的结构，可以使用DESCRIBE命令；它显示表中每个列的信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; DESCRIBE pet;</span><br><span class="line">+---------|-------------|------|-----|---------|-------+</span><br><span class="line">| Field   | Type        | Null | Key | Default | Extra |</span><br><span class="line">+---------|-------------|------|-----|---------|-------+</span><br><span class="line">| name    | varchar(20) | YES  |     | NULL    |       |</span><br><span class="line">| owner   | varchar(20) | YES  |     | NULL    |       |</span><br><span class="line">| species | varchar(20) | YES  |     | NULL    |       |</span><br><span class="line">| sex     | char(1)     | YES  |     | NULL    |       |</span><br><span class="line">| birth   | date        | YES  |     | NULL    |       |</span><br><span class="line">| death   | date        | YES  |     | NULL    |       |</span><br><span class="line">+---------|-------------|------|-----|---------|-------+</span><br></pre></td></tr></table></figure>
+<h2 id="补完">补完</h2>
+<h3 id="使用mysql脚本">使用mysql脚本</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell&gt; mysql &lt; batch-file</span><br></pre></td></tr></table></figure>
+<h3 id="NULL值">NULL值</h3>
+<p>概念上，NULL意味着“没有值”或“未知值”，且它被看作与众不同的值。为了测试NULL，你可以使用<code>IS NULL</code>和<code>IS NOT NULL</code>操作符：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT 1 IS NULL, 1 IS NOT NULL;</span><br><span class="line">+-----------|---------------+</span><br><span class="line">| 1 IS NULL | 1 IS NOT NULL |</span><br><span class="line">+-----------|---------------+</span><br><span class="line">|         0 |             1 |</span><br><span class="line">+-----------|---------------+</span><br></pre></td></tr></table></figure>
+<h3 id="使用用户变量">使用用户变量</h3>
+<p>你可以清空MySQL用户变量以记录结果，不必将它们保存到客户端的临时变量中。</p>
+<p>例如，要找出价格最高或最低的物品的，其方法是：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">SELECT</span> <span class="variable">@min</span>_price:<span class="operator">=</span><span class="built_in">MIN</span>(price),<span class="variable">@max</span>_price:<span class="operator">=</span><span class="built_in">MAX</span>(price) <span class="keyword">FROM</span> shop;</span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> shop <span class="keyword">WHERE</span> price<span class="operator">=</span><span class="variable">@min</span>_price <span class="keyword">OR</span> price<span class="operator">=</span><span class="variable">@max</span>_price;</span><br><span class="line"><span class="operator">+</span><span class="comment">---------|--------|-------+</span></span><br><span class="line"><span class="operator">|</span> article <span class="operator">|</span> dealer <span class="operator">|</span> price <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">---------|--------|-------+</span></span><br><span class="line"><span class="operator">|</span>    <span class="number">0003</span> <span class="operator">|</span> D      <span class="operator">|</span>  <span class="number">1.25</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span>    <span class="number">0004</span> <span class="operator">|</span> D      <span class="operator">|</span> <span class="number">19.95</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">---------|--------|-------+</span></span><br></pre></td></tr></table></figure>
+<h3 id="根据两个键搜索">根据两个键搜索</h3>
+<p>可以充分利用使用单关键字的 <code>OR</code> 子句，如同 <code>AND</code> 的处理。</p>
+<p>一个比较灵活的例子是寻找两个通过OR组合到一起的关键字：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> field1_index, field2_index <span class="keyword">FROM</span> test_table</span><br><span class="line"><span class="keyword">WHERE</span> field1_index <span class="operator">=</span> <span class="string">&#x27;1&#x27;</span> <span class="keyword">OR</span>  field2_index <span class="operator">=</span> <span class="string">&#x27;1&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>该情形是已经优化过的。参见7.2.6节，“索引合并优化”。</p>
+<p>还可以使用 <code>UNION</code> 将两个单独的 <code>SELECT</code> 语句的输出合成到一起来更有效地解决该问题。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> field1_index, field2_index</span><br><span class="line">    <span class="keyword">FROM</span> test_table <span class="keyword">WHERE</span> field1_index <span class="operator">=</span> <span class="string">&#x27;1&#x27;</span></span><br><span class="line"><span class="keyword">UNION</span></span><br><span class="line"><span class="keyword">SELECT</span> field1_index, field2_index</span><br><span class="line">    <span class="keyword">FROM</span> test_table <span class="keyword">WHERE</span> field2_index <span class="operator">=</span> <span class="string">&#x27;1&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>参见 <a href="../shell/%E9%80%9A%E9%85%8D%E7%AC%A6">通配符</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>1 <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/database-mysql-exams.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: 'MySQL'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

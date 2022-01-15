@@ -1,0 +1,1131 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2019 蒙太奇 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="以 montage 的形式，回顾我的 2019 年。本文所有内容仅代表个人观点，与雇主无关。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="2019 蒙太奇"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '2019 蒙太奇'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 2019 蒙太奇</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>以 montage 的形式，回顾我的 2019 年。本文所有内容仅代表个人观点，与雇主无关。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <p>时间过得真是非常的快。<a href="/life/2018-montage">去年的总结</a>好像才刚完成不久，现在又开始写 2019 年的总结了。也正因如此，年度总结才显得格为重要，无论如何都必须坚持下去，直到自己老到敲不动键盘为止。</p>
+<p>2019 年对我而言，最大的意义是实现了几个重要的小目标。在这一年，我搬进了自己住的房子，紧接着又幸运地摇到号订了车。在工作中，我渐渐地胜任了管理角色。另外，我还达成了一个公益小目标：利用开源项目筹集并捐出一万元善款。当然还有一些不尽如人意的部分，比如这一年过得更宅了。</p>
+<p>按照惯例，今年的总结依然会分几个主题来回顾：正经事（工作、开源、博客、授课），不正经事（居家、旅行、游戏、健康、看书、感情）。<span id="more"></span></p>
+<h2 id="正经事">正经事</h2>
+<h3 id="工作">工作</h3>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/work.jpg" alt="2019，乘风破浪" />
+        <figcaption>2019，乘风破浪</figcaption>
+      </figure>
+    </p>
+<p>如我在<a href="/life/2018-montage">去年的总结</a>中所述，从去年下半年开始，我开始挑战团队管理的工作。这里用了 “挑战” 这个词，是因为我一直对自己的管理能力并没有非常大的信心——我很怕自己没有尽到带好团队的责任，倘若真不幸如此，“一将无能，累死三军”，团队里每个成员的发展都将受我影响。这是我最不愿看到的事情，甚至比自己背个差的绩效还可怕。</p>
+<p>幸运的是，公司有非常完善的基干培养方案以及足够长时间的过渡期，在这段足够长的时间里我可以慢慢学会从一个普通员工转变成一个相对合格的基干。在今年年中我就参加了包括公司的潜龙计划在内的几个关于管理的培训；此外，今年开始我们用上了 OKR 目标管理，也使得整个团队的进度把控和目标跟踪清晰了很多；再加上 jolt 的密切关注和 star、jack 两位同我一样同为团队里的 “实习” leader 的相互支持，一年半载下来自己也切实感受到自己在这方面开始有了一些质的变化。</p>
+<p>先说说管理培训方面的收获。今年的培训给我印象最深刻的内容是 PDP 行为风格（Professional Dyna-Metric Programs）的概念。PDP 把人的性格分成了老虎型、孔雀型、无尾熊型、猫头鹰型、变色龙型等五种类型<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>。<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/2019-montage/leadership.jpg alt=' 陈振平老师的《登上成功管理的舞台》课后留念。'></img><b>附图 1</b>  陈振平老师的《登上成功管理的舞台》课后留念。</span></span></span></p>
+<img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/PDP.jpeg" class="" width="512" height="512" title="PDP行为风格">
+<ul>
+<li><strong>老虎型</strong>：具备高支配型特质，好胜心盛、积极自信，是个有决断力的组织者。他勇于冒险、分析敏锐、主动积极，只要认定目标就勇往直前。但至刚易折，也会因太注重速度和结果而忽视细节，容易情绪化。</li>
+<li><strong>孔雀型</strong>：具有较高的表达、社交能力，在团体或社群中容易广结善缘、建立知名度。这种类型的人乐观和善，感染力强，在团队合作中，会有最好的表现。但这类人思维跳跃性强，常因忽视细节无法完整地执行任务。</li>
+<li><strong>考拉型</strong>：具有高度的耐心。他敦厚随和，行事冷静自持；生活讲求规律但也随缘从容，面对困境都能泰然自若。这类人以耐力见长，但有时会勇气不足，惧怕压力。</li>
+<li><strong>猫头鹰型</strong>：具有高度精确的能力，其行事风格重规则轻情感，事事以规则为准绳。他善于以数字或规条为表达工具，不大擅长以语言来沟通情感，行事讲究条理分明、守纪律重承诺。但过于讲究原则会被认为是感情冷漠。</li>
+<li><strong>变色龙型</strong>（综合型，较为少见）：具有高度的应变能力，他性格善变，处事极具弹性。没有突出的个性，擅长整合内外信息，兼容并蓄，不会与人为敌，以中庸之道处世。这类人的优点是适应、沟通能力强，但他们较无个性及原则，易随波逐流，不善深思。<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/2019-montage/leadership2.jpg alt=' 在大梅沙参加的潜龙培训合影。'></img><b>附图 2</b>  在大梅沙参加的潜龙培训合影。</span></span></span></li>
+</ul>
+<div class="alert alert-info"><i class="fas fa-info"></i>  <a target="_blank" rel="noopener" href="https://types.yuzeli.com/survey/pdp30">这个页面提供了PDP行为风格的在线测评问卷</a>，感兴趣的朋友可以去试试，看看自己属于哪种风格。
+</div>
+<p>相比我在去年所介绍的<a href="/life/2018-montage/#%E5%B7%A5%E4%BD%9C">四象限领导模型</a>，PDP 行为风格的优点在于为与不同行为风格的人相处合作方式提供了简单有效的参考。</p>
+<table>
+<thead>
+<tr>
+<th>行为类型</th>
+<th>向上沟通要点</th>
+<th>向下沟通要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>老虎型</td>
+<td>1. 迅速反应<br/>2. 表现能力<br/>3. 独立作业<br/>4. 直截了当</td>
+<td>1. 表现自信<br/>2. 提供自主机会<br/>3. 奖励成果<br/>4. 指出确定范围<br/>5. 倾听，但有决断力<br/>6. 在平等基础上争论</td>
+</tr>
+<tr>
+<td>孔雀型</td>
+<td>1. 善于交际<br/>2. 圆熟事故<br/>3. 处事有机巧<br/>4. 有感染力</td>
+<td>1. 友善亲切<br/>2. 信息丰富，见闻广博<br/>3. 给予有助益的响应<br/>4. 表示了解<br/>5. 加以鼓励<br/>6. 具有弹性<br/>7. 展现幽默感</td>
+</tr>
+<tr>
+<td>考拉型</td>
+<td>1. 表达忠诚<br/>2. 态度真诚<br/>3. 以团队为重</td>
+<td>1. 给予肯定、信任与赞赏<br/>2. 互相设定目标<br/>3. 容易接近<br/>4. 试着分享<br/>5. 可以被依赖<br/>6. 行事公平<br/>7. 展现价值</td>
+</tr>
+<tr>
+<td>猫头鹰型</td>
+<td>1. 态度尊敬<br/>2. 遵循规律<br/>3. 讲求逻辑<br/>4. 专心一致</td>
+<td>1. 条理分明<br/>2. 目的清楚<br/>3. 重视细节<br/>4. 具有系统<br/>5. 客观合理<br/>6. 受前后一致</td>
+</tr>
+</tbody>
+</table>
+<p>作为一只 “老虎”，沟通方面一直不是我的强项。PDP 确实帮助我在处理日常沟通的时候至少变得有章可循，懂得了与不同风格的人日常交流要注意哪些要点。除了学习了沟通方面的技巧，我也借着这几次培训机会省视了一下自己在日常工作中的一些毛病。</p>
+<ol>
+<li>缺乏倾听。以前往往自己正在紧张地处理一件事情的时候，一旦有人想找我讨论问题，我的第一反应就是让他先等我处理下。或者让对方说着，但自己的手还是没有离开键盘。这就是一种很糟糕的缺乏倾听的肢体表现。今年开始，一旦有人找我，我的第一反应就是先离开键盘，转过身来听听对方的想法。不过，在很多沟通的场合，我还是改不了自己说得比听得多的毛病，这也是 shine 在有一次一起喝咖啡时建议我注意的问题。让我格外警醒到这一点的一件事发生在今年的团建中，虽然我不是导游，但我作为 “活跃分子” 提出了各种各样的建议。这些建议从我这个 leader 口中出来却变成了指令，直到后来有同事跟我反映了这个问题我才后知后觉。希望我在接下来的日常沟通中能更加注意倾听，以及尽量避免自己的想法显得过于武断。</li>
+<li>不懂得甩掉身上的 “猴子”（包袱）。这也是我在去年的总结中提到的问题。以往在进行工作安排时，如果我觉得这个任务交给我最适合，我就直接开干了。但一年下来，不仅我自己干得很累，有些同事得到的锻炼机会也少了。从今年开始，我更加关注起其他同事的产出和成长问题，在更多事情上面授权给其他同事去做。这样一来，我就有了更多时间去思考团队在当下阶段应该做什么的问题，并且承担起了更多预研性质的任务。</li>
+</ol>
+<p>当然管理对我而言始终是永远学不完的学问，有很多技巧我在实际工作中尚未能应用自如，只能在不断摸索和反省中要求自己改进。总的来说，在团队管理方面，希望明年自己能够在以下方面有更好的表现：</p>
+<ol>
+<li>决策方面，更能够明白当下阶段应该做什么。今年已经开始有了一些 good sense ，希望明年能够继续保持和加强。</li>
+<li>技术方面，能够更加严格而细致地把关技术方案，提前规避方案设计的不完善带来的风险。</li>
+<li>沟通方面，加强倾听，同时让沟通更加达到目的。</li>
+<li>成长方面，更加关注每一位成员的产出问题，及时发现成员在工作中的问题，并且能提出更高的要求。</li>
+</ol>
+<p>除了管理方面的挑战，这一年中，我还深刻感受到了其他方面的一些压力和挑战。其中最大的一项挑战来自于协调目标的困难。当一个任务，一方坚持要做，一方坚持不做的时候，这时候项目的执行者就会置身于冲突之中。在这一年中，我也有过一段痛苦的迷茫期，不知道自己该做些什么。我开始阅读起一本关于如何做决策的书，来自桥水基金公司创始人 Ray Dalio 的《原则》。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/principals.jpg" alt="Ray Dalio 的《原则》" />
+        <figcaption>Ray Dalio 的《原则》</figcaption>
+      </figure>
+    </p>
+<p>在这本书里，Ray Dalio 提出了一种称为创意择优的决策模型。这个模型包含三个部分：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/decision-model.png" alt="《原则》里的创意择优模型" />
+        <figcaption>《原则》里的创意择优模型</figcaption>
+      </figure>
+    </p>
+<ol>
+<li><strong>头脑极度开放</strong>。只有让自己的头脑极度开放，较低层次的你就无法控制你，才能做出好决策。</li>
+<li><strong>极度求真和极度透明</strong>。实事求是，开诚布公地讨论问题、寻找解决路径。同时，公开公正，让几乎每个人都能得以了解几乎所有的事物。</li>
+<li><strong>可信度加权</strong>。组织投票，并让可信的人在投票的时候多一些权重。</li>
+</ol>
+<p>其中，1 和 2 是进行可信度加权投票的前提。而 3 则要求对每个参与投票的人进行预先的可信度评估，但这个可信度评估制度需要自上而下推动落实，而且这种评估制度如果没有坚持效果跟进，很容易演变成形式化的流程。也正因为如此，要把它在团队中照搬落实几乎不可能。不过，极度开放、极度求真和透明在任何时刻都是应该鼓励的。后来我们就极度求真而透明地开展了一次关于如何处理分歧的讨论会，决定了后面执行需求预审制，有冲突再上周会讨论征求各方意见的方案。</p>
+<p>另外，从下半年开始，我们用上了一个目标管理利器：<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/OKR/2996251?fr=aladdin">OKR</a>。OKR（Objectives and Key Results）即目标与关键成果法，是一套明确和跟踪目标及其完成情况的管理工具和方法，由英特尔公司创始人安迪·葛洛夫（Andy Grove）发明。有了 OKR 后，产品、开发、设计、测试等各个组的整体目标就能保持一致，大家能够保证在同样的目标前提下进行任务的决策，一个任务如果对实现重点目标有利，顺理成章也就能得到更高的优先级。<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/2019-montage/okr.jpeg alt=' OKR = 目标+关键结果'></img><b>附图 3</b>  OKR = 目标+关键结果</span></span></span></p>
+<p>OKR 也使得我们日常的工作开展更为清晰。比如，我们会在每周定期维护一个 OKR 的脑图，详细说明每项 KR 相关的工作进展，这样就能非常全面地了解和预估每一个目标的达成情况。今年在 OKR 方面的尝试还只是停留在团队的粒度，明年我想再进一步尝试往下细化：具体跟踪到团队里每个人每周的 OKR 情况。</p>
+<h3 id="开源">开源</h3>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/contributions.png" alt="2019年的格子图" />
+        <figcaption>2019年的格子图</figcaption>
+      </figure>
+    </p>
+<p>今年主要开源了几个新项目：</p>
+<table>
+<thead>
+<tr>
+<th>项目名</th>
+<th>简介</th>
+<th>今年的工作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/wzpan/wukong-robot">wukong-robot</a></td>
+<td>一个简单、灵活、优雅的中文语音对话机器人/智能音箱项目</td>
+<td>新开源</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/wzpan/wukong-contrib">wukong-contrib</a></td>
+<td>wukong-robot 的插件集</td>
+<td>新开源</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/wzpan/wukong-itchat">wukong-itchat</a></td>
+<td>wukong-robot 的微信客户端</td>
+<td>新开源</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/wzpan/wukong-starter">wukong-starter</a></td>
+<td>wukong-robot 的<a target="_blank" rel="noopener" href="https://ke.qq.com/course/387931?tuin=1b8113f4">课程</a>版基本环境安装脚本</td>
+<td>新开源</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/wzpan/python-muse">python-muse</a></td>
+<td>Muse 头环的 Python 开发脚手架项目</td>
+<td>新开源</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/wzpan/MuseFlappyBird">MuseFlappyBird</a></td>
+<td>使用 Muse 头环玩 FlappyBird</td>
+<td>新开源</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-tag-bootstrap">hexo-tag-bootstrap</a></td>
+<td>hexo 的 twitter bootstrap tag 插件</td>
+<td>label 插件支持 markdown 渲染</td>
+</tr>
+</tbody>
+</table>
+<p>
+      <figure>
+        <img src="https://hahack-1253537070.file.myqcloud.com/images/wukong-docs/wukong-robot-mindmap.png?version=20191123" alt="wukong-robot" />
+        <figcaption>wukong-robot</figcaption>
+      </figure>
+    </p>
+<p>在今年春节期间，我开始对 <a target="_blank" rel="noopener" href="https://github.com/wzpan/dingdang-robot/">dingdang-robot</a> 项目进行重写，做出一个更加 <strong>优雅、灵活、鲁棒</strong> 的版本。为了区别于以前的版本，我决定起给这个新版本起一个新的名字 “孙悟空” 。于是，正月初五那天，wukong-robot 1.0 正式发布了。</p>
+<p>相比它的老大哥 dingdang-robot ，wukong-robot 有着更加迷人的特性：</p>
+<ol>
+<li>架构更加漂亮。完全重写了 dingdang-robot 的大部分代码，整个架构更加优雅，更易于修改和扩展。</li>
+<li>原来的版本只能在 Linux 平台运行，而且 PocketSphinx 安装很苛刻，失败率很高，PocketSphinx 对中文的识别率也很一般。新版本使用 snowboy 取代 PocketSphinx ，无论是安装成本、稳定性、唤醒成功率都是质的飞跃。</li>
+<li>提供了可视化的后台管理端，并且开放API。配套了配置页面、日志查看页面等管理页，大部分配置做到了免重启即改即生效。利用它可以轻松做出漂亮的交互界面，甚至开发出新的客户端，你可以类比为 Echo 一代到 Echo Show 的飞跃。</li>
+<li>基于腾讯云无服务函数（SCF）实现了版本更新检查，向专业的开源框架标准迈进。</li>
+<li>docker 镜像安装支持，另外<a target="_blank" rel="noopener" href="https://github.com/musistudio">金辉同学</a>也为它贡献了一个<a target="_blank" rel="noopener" href="https://github.com/musistudio/wukong-robot-install-script">一键式安装脚本</a>。</li>
+<li>对技能插件接口进行了重构，支持了沉浸式插件，开发者可以轻松实现多轮对话、音乐播放，我近期支持的极客模式特性也是使用了沉浸式插件。另外还加入了NLU支持，开发者可以写出更加智能的插件，处理更复杂的语义。</li>
+<li>提供了更加完善专业的<a target="_blank" rel="noopener" href="http://wukong.hahack.com/">文档站点</a>以及整套 <a target="_blank" rel="noopener" href="https://ke.qq.com/course/387931?tuin=1b8113f4">Python 开发视频教程</a>。</li>
+<li>在最新版本中，还加入了<a target="_blank" rel="noopener" href="https://wukong.hahack.com/#/bci">脑机唤醒</a>的支持。</li>
+</ol>
+<p>以下是一段 wukong-robot 的定制版本 ycy-robot 的演示视频： <span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/2019-montage/ycy-competetion.jpeg alt=' ycy-robot ，是我一时技痒参加的杨超越编程大赛的参赛作品。基于 wukong-robot 定制了一些月芽专属技能，以及配套了佩奇粉后台管理端皮肤和“超超越越”唤醒词。'></img><b>附图 4</b>  ycy-robot ，是我一时技痒参加的杨超越编程大赛的参赛作品。基于 wukong-robot 定制了一些月芽专属技能，以及配套了佩奇粉后台管理端皮肤和“超超越越”唤醒词。</span></span></span></p>
+<center>
+<iframe src="//player.bilibili.com/player.html?aid=50685517&cid=88726713&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="80%" height="460px"> </iframe>
+</center>
+<p>除了 wukong-robot 本体之外，我还给它开发了其他几个配套项目。包括第三方技能插件仓库 <a target="_blank" rel="noopener" href="https://github.com/wzpan/wukong-contrib">wukong-contrib</a>，微信客户端项目 <a target="_blank" rel="noopener" href="https://github.com/wzpan/wukong-itchat">wukong-itchat</a> ，wukong-robot 的树莓派 docker 安装工具 <a target="_blank" rel="noopener" href="https://github.com/wzpan/wukong-robot-pi-installer">wukong-robot-pi-installer</a>，配套 Python 开发教程基本环境安装脚本 <a target="_blank" rel="noopener" href="https://github.com/wzpan/wukong-starter">wukong-starter</a> 等。</p>
+<p>wukong-robot 发布至今，已经在超过 4,100 台设备上安装运行，总唤醒次数超过了 320,000 次。只用了不到一年的时间，wukong-robot 项目的 star 数就已经后来居上，反超了它的大哥 dingdang-robot 。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/rank.png" alt="wukong-robot 的后来居上" />
+        <figcaption>wukong-robot 的后来居上</figcaption>
+      </figure>
+    </p>
+<p>关于 wukong-robot ，还有一个值得分享的事情。在去年 6 月份的时候立过一个 Flag ：当我的机器人项目群的入群费用达到一万元时我将全部捐出给深圳壹基金等公益机构。到了今年的圣诞节期间，我的小目标终于达成了。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/donation-by-wukong-robot/milestone.png" alt="QQ群突破一万入群费" />
+        <figcaption>QQ群突破一万入群费</figcaption>
+      </figure>
+    </p>
+<p>通过 QQ 上的腾讯公益平台，我一共给 16 个公益项目提供了捐赠，其中包括了 11 个壹基金相关项目，两个重症儿童项目，一对一帮扶了两名藏区儿童，等等。</p>
+<p>
+      <figure>
+        <img src="https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/donate.png" alt="捐赠记录" />
+        <figcaption>捐赠记录</figcaption>
+      </figure>
+    </p>
+<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/2019-montage/homo-deus.jpg alt=' 《未来简史》里认为未来人来三大命题是“长生不死”、“幸福快乐”、“化身为神”。'></img><b>附图 5</b>  《未来简史》里认为未来人来三大命题是“长生不死”、“幸福快乐”、“化身为神”。</span></span></span>
+<p>业余时间除了开发维护 wukong-robot 之外，我对脑机技术也有了非常浓厚的兴趣——一方面我认为这项技术会是未来最重要的一种人机交互技术，甚至还可能和实现长生不死相关；另一方面是因为今年在工作中开始遇到了一些小我十岁的实习生，让我不禁感叹“逝者如斯夫，不舍昼夜”。唯一能和时间赛跑的只有技术了。于是我买了一个 Muse 头环，开始折腾起了脑机实验。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/bci-and-muse-headband-development/muse_meditation_headset.png" alt="Muse头环" />
+        <figcaption>Muse头环</figcaption>
+      </figure>
+    </p>
+<p>用了两天我就写出了几个 IoT 应用。分别使用眨眼、咬牙、关注度来打开家里的灯。</p>
+<center>
+<iframe src="//player.bilibili.com/player.html?aid=76551889&cid=130944190&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" height=600 width=100%> </iframe>
+</center>
+<p>之后我对我的智能音箱项目 wukong-robot 进行了改造，支持了 Muse 脑机唤醒：</p>
+<center>
+<iframe src="//player.bilibili.com/player.html?aid=76739580&cid=131259456&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" height=600 width=100%> </iframe>
+</center>
+<p>脑控游戏也是一个有趣的应用方向。例如我魔改的一个眨眼控制的 FlappyBird 游戏 <a target="_blank" rel="noopener" href="https://github.com/wzpan/MuseFlappyBird">MuseFlappyBird</a> 。</p>
+<p>如下是一个稍微粗糙一点的早期版本演示视频：</p>
+<center>
+<iframe src="//player.bilibili.com/player.html?aid=76336320&cid=130575552&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" height=600 width=100%> </iframe>
+</center>
+<p>在折腾 Muse 的过程中，我顺便开源了一个 Muse 的 Python 开发脚手架 <a target="_blank" rel="noopener" href="https://github.com/wzpan/python-muse">python-muse</a> 。详细开发流程及使用方法可以阅读我的上一篇博文 <a href="/life/2019-montage/">脑机接口概述及Muse头环Python开发基础</a>。</p>
+<p>玩了几天 Muse 后，我就已经把目前 Muse 所提供的现成能力都“榨干”了。后面就需要开始往更加困难的目标前进：真正识别意图。但如 Muse Direct 所述：</p>
+<blockquote>
+<p>It is important to note that this raw data can be difficult to interpret and you may want to consider getting in touch with an experienced EEG Researcher for your project as we are unable to provide further support with the analysis and processing of the EEG data you collect.</p>
+</blockquote>
+<p>仅靠 Muse 所提供的几个通道的 EEG 要准确识别出意图是非常困难的。不过，当我凝视深渊的时候，深渊不也正在凝视着我吗？</p>
+<p>我与脑机的故事，才刚刚开始。</p>
+<h3 id="博客">博客</h3>
+<p>说来惭愧，博客在今年依然处于荒废状态：只写了两篇博客。后面该不出现一年只剩一篇总结吧？</p>
+<p>其实今年之所以发这么少，有一个原因是我一直用的 Hexo 2.8.3 突然在某一天出现了兼容问题。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">(base) ➜  hexo-blog git:(master) ✗ npm start</span><br><span class="line"></span><br><span class="line">&gt; hexo@2.8.3 start /Users/panweizhou/Documents/projects/hexo-blog</span><br><span class="line">&gt; hexo s</span><br><span class="line"></span><br><span class="line">internal/util/inspect.js:31</span><br><span class="line">const types = internalBinding(<span class="string">&#x27;types&#x27;</span>);</span><br><span class="line">              ^</span><br><span class="line"></span><br><span class="line">ReferenceError: internalBinding is not defined</span><br><span class="line">    at internal/util/inspect.js:31:15</span><br><span class="line">    at req_ (/Users/panweizhou/Documents/projects/hexo-blog/node_modules/natives/index.js:137:5)</span><br><span class="line">    at require (/Users/panweizhou/Documents/projects/hexo-blog/node_modules/natives/index.js:110:12)</span><br><span class="line">    at util.js:25:21</span><br><span class="line">    at req_ (/Users/panweizhou/Documents/projects/hexo-blog/node_modules/natives/index.js:137:5)</span><br><span class="line">    at require (/Users/panweizhou/Documents/projects/hexo-blog/node_modules/natives/index.js:110:12)</span><br><span class="line">    at fs.js:42:21</span><br><span class="line">    at req_ (/Users/panweizhou/Documents/projects/hexo-blog/node_modules/natives/index.js:137:5)</span><br><span class="line">    at Object.req [as require] (/Users/panweizhou/Documents/projects/hexo-blog/node_modules/natives/index.js:54:10)</span><br><span class="line">    at Object.&lt;anonymous&gt; (/Users/panweizhou/Documents/projects/hexo-blog/node_modules/graceful-fs/fs.js:1:37)</span><br><span class="line">npm ERR! code ELIFECYCLE</span><br><span class="line">npm ERR! errno 1</span><br><span class="line">npm ERR! hexo@2.8.3 start: `hexo s`</span><br><span class="line">npm ERR! Exit status 1</span><br><span class="line">npm ERR!</span><br><span class="line">npm ERR! Failed at the hexo@2.8.3 start script.</span><br><span class="line">npm ERR! This is probably not a problem with npm. There is likely additional logging output above.</span><br><span class="line"></span><br><span class="line">npm ERR! A complete <span class="built_in">log</span> of this run can be found <span class="keyword">in</span>:</span><br><span class="line">npm ERR!     /Users/panweizhou/.npm/_logs/2020-01-19T04_49_41_873Z-debug.log</span><br><span class="line">(base) ➜  hexo-blog git:(master) ✗</span><br></pre></td></tr></table></figure>
+<p>网上搜了很多方法，包括<a target="_blank" rel="noopener" href="https://github.com/gulpjs/gulp/issues/2280">安装 natives</a>，<a target="_blank" rel="noopener" href="https://stackoverflow.com/a/57269141">降级 node 版本</a>，都不能解决问题。就这样放了好多时日，一直到了年底，我终于意识到再不折腾下自己的博客，连年度总结也没法写了，于是决定大动刀斧，升级 Hexo 到最新版本。</p>
+<p>其实早在 15 年，我就尝试过将博客升级到 Hexo 3.x 。但如我在 <a href="/tools/dockerize-your-hexo/">Dockerize Your Hexo</a> 文章中所述，我因为遇到了很多解决不了的问题而搁置了这个计划，遂将我的博客所使用的环境 “冻结” 在 2.8.3 。但 4 年过去，我的 hacking 能力又有了一些长进，再加上这次已经没有退路了，所以我终于耐着性子把原来遇到的问题都解决了（deadline 果然才是第一生产力啊）。另外还增加了 <a target="_blank" rel="noopener" href="https://github.com/defunkt/jquery-pjax">pjax</a> 优化，还给博客加了个切换主题的功能，整体效果甚至比原来的版本更好了。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/color-themes.png" alt="博客的主题" />
+        <figcaption>博客的主题</figcaption>
+      </figure>
+    </p>
+<p>另一个我所做的关于博客的事情，是在今年 5 月份搭建了<a target="_blank" rel="noopener" href="https://oedx.github.io/">团队博客</a> 。让其成为我们团队对外技术输出的标签。半年以来，我们一共在上面发了 12 篇文章，大多是跟 Cocos Creator 开发相关的技术。其中，xepher 的 《<a target="_blank" rel="noopener" href="https://oedx.github.io/2019/05/29/cocos-creator-js-binding-manual/">拒绝 evalString 进行回调，使用 JSB 进行手动绑定（流程篇）</a>》以及 kevin 的 《
+<a target="_blank" rel="noopener" href="https://oedx.github.io/2019/07/03/cocos-creator-js-binding-auto/">Cocos Creater 中如何实现 JSB 的自动绑定</a>》还被收录进了 Cocos Creator 官方文档中。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/oedx.png" alt="OEDx 技术博客" />
+        <figcaption>OEDx 技术博客</figcaption>
+      </figure>
+    </p>
+<p>虽然这个博客站点说不上高产，但从 5 月份以来，总 PV 已经超过了 1w 。到了下半年，我们决定开始起草一本关于 Cocos Creator 开发实践的书籍，将我们在 Cocos Creator 开发过程中的一些经验总结成文。目前我们已经完成了约 30% 的内容。希望明年上半年能够完成并与读者们见面。</p>
+<h3 id="授课">授课</h3>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/wukong-robot-intro/course.png" alt="Python 从入门到实战课程" />
+        <figcaption>Python 从入门到实战课程</figcaption>
+      </figure>
+    </p>
+<p>今年年初，jeep 找上我，希望我能在腾讯课堂开一门 Python 开发的课程。恰好那个时候我正有开发 wukong-robot 的打算，于是一拍即合，决定顺便开发一套《<a target="_blank" rel="noopener" href="https://ke.qq.com/course/387931?tuin=1b8113f4">Python从入门到实战</a>》的 Python 课程，并将 wukong-robot 的开发过程作为其中的一个项目案例。</p>
+<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/2019-montage/studio.jpeg alt=' 为了更好的录音质量，下血本买了套罗技G433降噪耳麦+海盗船声卡耳机架。'></img><b>附图 6</b>  为了更好的录音质量，下血本买了套罗技G433降噪耳麦+海盗船声卡耳机架。</span></span></span>
+<p>这门课的准备和录制几乎占据了我上半年全部的业余时间，我每天的常态就是一回到家就录制到深夜。整个过程是非常痛苦和煎熬的。比如，为了讲好 subprocess ，我把 subprocess 的老版本高级 API 、新的高级 API，再到底层的 Popen 以及涉及到的 Linux 的标准输入输出和管道的概念都讲了一遍。对于讲授的方式，我比较提倡授人以鱼不如授人以渔的主张，所以我并不是直接贴 API ，而是带着读者一起看 Python 的官方文档，着重培养阅读文档的能力。这种讲法非常的累，但却是我认为每个工程师应该掌握的学习方式。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/wukong-robot-intro/wukong-robot-tutorial.jpeg" alt="wukong-robot开发" />
+        <figcaption>wukong-robot开发</figcaption>
+      </figure>
+    </p>
+<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/2019-montage/prize.jpeg alt=' 年底的时候腾讯课堂送来的纪念礼物'></img><b>附图 7</b>  年底的时候腾讯课堂送来的纪念礼物</span></span></span>
+<p>参与这门课的制作也是为了完成我在<a href="/life/2018-montage/#%E6%8E%88%E8%AF%BE">去年的个人总结中立下的 flag</a> 。Python 一直是我业余时间最常用的玩具语言，它非常适合用于原型开发。我有不少开源项目，比如 wukong-robot、dingdang-robot、<a href="https://www.hahack.com/life/2018-montage/#%E5%BC%80%E6%BA%90">LiveCV</a> 都是用 Python 写的。而在我的工作中，它也帮助我完成了大量的工具和项目，这些工具和项目对个人或团队起到了非常大的作用（例如<a href="https://www.hahack.com/work/my-2-years-at-pingan/#%E6%94%AF%E7%BA%BF-v3">加班统计平台</a>、已经在上百家中小银行中使用的<a href="https://www.hahack.com/work/my-2-years-at-pingan/#%E4%B8%BB%E7%BA%BF">fmanager</a>），因此 Python 也无疑给我的职业发展起到了很大的推动作用。把我所掌握的 Python 知识分享给更多人，让更多人能够自如的使用这门语言来满足他们的需求，那也算是我对 Python 这门语言的回馈。</p>
+<p>除了腾讯课堂的课程外，今年10月份我还接受了大学同学东跃（现在该叫方老师了）的邀请在他的课程中客串了一把，为东莞中学的学生们科普了一下模式识别。</p>
+<center>
+<iframe src="//player.bilibili.com/player.html?aid=84142514&cid=143936608&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" height=600 width=100%> </iframe>
+</center>
+<h2 id="不正经事">不正经事</h2>
+<h3 id="居家">居家</h3>
+<p>说到今年最幸福的时刻之一，就是从租的房子搬进了自己的房子，生活质量一下子提高了不少。</p>
+<p>因为是自己的房子，就可以开始折腾起智能家居。在这之前，我经常在 robot 用户群里看到很多用户晒他们用 dingdang-robot / wukong-robot 联动智能家居的视频，心里着实非常羡慕。现在终于我也可以跟他们一样玩起装备了。</p>
+<p>于是我先买了一堆米家装置：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/mijia.png" alt="米家装备" />
+        <figcaption>米家装备</figcaption>
+      </figure>
+    </p>
+<p>米家智能家电的不足是无法灵活地获取设备的当前状态作为环境条件。举个例子，我希望浴室的排气扇在关浴室门超过两分钟后自动打开，而米家的智能选项里是没有米家门窗传感器关闭一段时间的条件的。于是我又趁着双十一组了套群晖 DS218+ ，在上面装了个 HomeAssistant ，把大部分能接入的设备都接了进去。<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/2019-montage/synology.png alt=' 群晖DS218+'></img><b>附图 8</b>  群晖DS218+</span></span></span></p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/hass.png" alt="HomeAssistant" />
+        <figcaption>HomeAssistant</figcaption>
+      </figure>
+    </p>
+<p>不得不赞一下群晖的可玩性真的很高，除了提供非常丰富的套件，还支持跑 docker ，在上面搭 HomeAssistant 、Gitlab 都非常方便。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/synology-system.png" alt="群晖系统可玩性非常高" />
+        <figcaption>群晖系统可玩性非常高</figcaption>
+      </figure>
+    </p>
+<p>接入了 HomeAssistant 后，好多原来米家满足不了的需求就可以实现了。例如上面提到的自动开关排气扇的需求就可以这么实现：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">id:</span> <span class="string">&#x27;extractor_fan_auto_on&#x27;</span></span><br><span class="line">  <span class="attr">alias:</span> <span class="string">关闭浴室门后2分钟自动打开排气扇</span></span><br><span class="line">  <span class="attr">description:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line">  <span class="attr">trigger:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">entity_id:</span> <span class="string">binary_sensor.door_window_sensor_xxx</span></span><br><span class="line">    <span class="attr">for:</span> <span class="number">00</span><span class="string">:02:00</span></span><br><span class="line">    <span class="attr">from:</span> <span class="string">&#x27;on&#x27;</span></span><br><span class="line">    <span class="attr">platform:</span> <span class="string">state</span></span><br><span class="line">    <span class="attr">to:</span> <span class="string">&#x27;off&#x27;</span></span><br><span class="line">  <span class="attr">condition:</span> []</span><br><span class="line">  <span class="attr">action:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">data:</span></span><br><span class="line">      <span class="attr">entity_id:</span> <span class="string">switch.wall_switch_right_xxx</span></span><br><span class="line">    <span class="attr">service:</span> <span class="string">switch.turn_on</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">id:</span> <span class="string">&#x27;extractor_fan_auto_off&#x27;</span></span><br><span class="line">  <span class="attr">alias:</span> <span class="string">打开浴室门后关闭排气扇</span></span><br><span class="line">  <span class="attr">description:</span> <span class="string">&#x27;&#x27;</span></span><br><span class="line">  <span class="attr">trigger:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">entity_id:</span> <span class="string">binary_sensor.door_window_sensor_xxx</span></span><br><span class="line">    <span class="attr">from:</span> <span class="string">&#x27;off&#x27;</span></span><br><span class="line">    <span class="attr">platform:</span> <span class="string">state</span></span><br><span class="line">    <span class="attr">to:</span> <span class="string">&#x27;on&#x27;</span></span><br><span class="line">  <span class="attr">condition:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">condition:</span> <span class="string">state</span></span><br><span class="line">    <span class="attr">entity_id:</span> <span class="string">switch.wall_switch_right_xxx</span></span><br><span class="line">    <span class="attr">state:</span> <span class="string">&#x27;on&#x27;</span></span><br><span class="line">  <span class="attr">action:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">data:</span></span><br><span class="line">      <span class="attr">entitiy_id:</span> <span class="string">switch.wall_switch_right_xxx</span></span><br><span class="line">    <span class="attr">service:</span> <span class="string">switch.turn_off</span></span><br></pre></td></tr></table></figure>
+<p>还有一个很好玩的家电：米家扫地机器人。<a target="_blank" rel="noopener" href="https://www.home-assistant.io/integrations/vacuum.xiaomi_miio/#using-flolevac-android">配合 Flovac</a> 可以将划区的位置信息导出出来：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/flovac.png" alt="使用 Flovac 导出划区数据" />
+        <figcaption>使用 Flovac 导出划区数据</figcaption>
+      </figure>
+    </p>
+<p>这样就可以很方便地将屋里的不同分区保存下来，写成 HomeAssistant 脚本。例如：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">vaccum_living_room:</span></span><br><span class="line">  <span class="attr">alias:</span> <span class="string">清扫客厅</span></span><br><span class="line">  <span class="attr">sequence:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">data:</span></span><br><span class="line">      <span class="attr">command:</span> <span class="string">app_zoned_clean</span></span><br><span class="line">      <span class="attr">entity_id:</span> <span class="string">vacuum.sao_di_ji_qi_ren</span></span><br><span class="line">      <span class="attr">params:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="bullet">-</span> <span class="number">25254</span></span><br><span class="line">        <span class="bullet">-</span> <span class="number">26008</span></span><br><span class="line">        <span class="bullet">-</span> <span class="number">28004</span></span><br><span class="line">        <span class="bullet">-</span> <span class="number">29058</span></span><br><span class="line">        <span class="bullet">-</span> <span class="number">1</span></span><br><span class="line">    <span class="attr">service:</span> <span class="string">vacuum.send_command</span></span><br></pre></td></tr></table></figure>
+<p>再搭配 wukong-robot 的 <a target="_blank" rel="noopener" href="https://wukong.hahack.com/#/contrib?id=hass">HASS 插件</a>，就可以实现让 wukong-robot 来指挥机器人打扫屋里的指定区域。如下是一个示例视频（使用的是 Raspberry Pi Zero 主板，所以响应速度比较慢）：</p>
+<center>
+    <iframe src="//player.bilibili.com/player.html?aid=81173082&cid=138922674&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="100%" height="600px"> </iframe>
+</center>
+<p>有一天我还突发奇想，把一块吃灰的 Kindle 给 hack 成了智能家居控制入口：</p>
+<center>
+    <iframe src="//player.bilibili.com/player.html?aid=84247359&cid=144108141&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="100%" height="600px"> </iframe>
+</center>
+<p>还有一个好笑的事情，圣诞节那天凌晨 6 点 Neal 从 LA 给我发来节日问候，没想到我的秒回把他吓到了。其实那个时候我正在拆家里的墙壁开关，看看里头有没有零线。大概我在朋友们眼中已经成为了下面这样的外星人😹：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/its-cover.png" alt="使用 Emacs 的外星人（图片出自《EMACS Manual for ITS Users》1981年版封面）" />
+        <figcaption>使用 Emacs 的外星人（图片出自《EMACS Manual for ITS Users》1981年版封面）</figcaption>
+      </figure>
+    </p>
+<h3 id="旅行">旅行</h3>
+<p>因为要买车，今年在旅游上的预算比较有限。一年下来全是省内游：</p>
+<ul>
+<li>云顶山（惠州）</li>
+<li>顺德</li>
+<li>外伶仃岛（珠海）</li>
+</ul>
+<h4 id="云顶山">云顶山</h4>
+<p>说走就走的云顶山温泉。实际证明不自驾的话又贵又 adventurous 。去的路线没有确定好，到了南昆山发现原来云顶山在另一个镇。而山里头没有滴滴，打车只能靠刷脸（这个黑历史已经成了 Neal 的话柄😂）虽然行程很曲折，不过却意外的吃到了一顿巨好吃的农家菜，以至于到了永汉反而找不到能比得过的餐馆。也许我会在将来不久自驾回南昆山，开展一次回味之旅。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/yunding.jpg" alt="云顶山" />
+        <figcaption>云顶山</figcaption>
+      </figure>
+    </p>
+<h4 id="顺德-外伶仃岛">顺德&amp;外伶仃岛</h4>
+<p>顺德和外伶仃岛是今年团队的团建地点。在顺德没什么好说的，就是一个字：吃。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/food1.jpeg" alt="顺德美食一" />
+        <figcaption>顺德美食一</figcaption>
+      </figure>
+    </p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/food2.jpeg" alt="顺德美食二" />
+        <figcaption>顺德美食二</figcaption>
+      </figure>
+    </p>
+<p>顺德菜的确非常符合我这个广东人的口味。特别推荐顺德特色的陈村粉，有点像肠粉，但更入味一些。</p>
+<p>为了怕在顺德行程太过无聊，我们还借了两台 switch 。玩聚会游戏就成了我们的室内活动。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/ns.jpeg" alt="NS成了我们的主要室内活动" />
+        <figcaption>NS成了我们的主要室内活动</figcaption>
+      </figure>
+    </p>
+<p>外伶仃岛则是我们行程的第二站。在岛上就是玩一些比较常规的海岛活动：看日落、骑自行车、吃海鲜。<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/2019-montage/software-freedom-day.jpg alt=' 恰逢软件自由日，在岛上穿件节日T恤做个纪念。'></img><b>附图 8</b>  恰逢软件自由日，在岛上穿件节日T恤做个纪念。</span></span></span></p>
+<p>看日落算是零成本活动，没什么可说的，挑对时机就好。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/sunset.jpeg" alt="外伶仃岛的日落" />
+        <figcaption>外伶仃岛的日落</figcaption>
+      </figure>
+    </p>
+<p>说说骑自行车，租自行车的时候店家可能会告诉你多交一点钱可以加到两小时。这个真的没必要多交。因为外伶仃岛的面积不大，不到半小时就没地方可骑了。</p>
+<p>再谈谈吃的部分。岛上有海鲜市场，可以挑选海鲜然后选一家餐厅加工。但实际上这里头也有不少猫腻：称海鲜用的秤盘往往非常的沉，如果你不注意就会被诓。餐厅的加工质量也参差不齐，吃得让我直皱眉头。相比之下，反而是使用自家食材的食德乐餐厅是我在岛上吃的唯一比较合口味的一家餐厅。</p>
+<h3 id="游戏">游戏</h3>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/games.jpg" alt="今年的游戏" />
+        <figcaption>今年的游戏</figcaption>
+      </figure>
+    </p>
+<p>今年终于入了索尼大法的坑，搬入新房子后我就立马买了套种草已久的 PlayStation 4 和 VR 头盔。这样我的 Macbook 就可以完全用于工作，不再用于游戏。</p>
+<h4 id="VR-游戏">VR 游戏</h4>
+<p>因为曾经在 VR 体验馆玩过一点 VR 游戏，所以 VR 游戏对我有很强的吸引力。于是到手后就立马买了《噢！我好神 VR（O! My Genesis VR）》和《上古卷轴 5 VR》（又称为老滚 5 VR）。</p>
+<p>先说说 《噢！我好神》，这是台湾同胞开发的一款 VR 游戏，玩家可以在虚拟的宇宙世界中，扮演拥有多种神力的宇宙创世神，用自己的双手，陪同星球上的小生物一同发展星球。虽说这个作品的内容丰富度比不上老滚这样的 3A 大作，但是 VR 效果非常出色。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/ohmygenis.jpeg" alt="噢！我好神" />
+        <figcaption>噢！我好神</figcaption>
+      </figure>
+    </p>
+<p>这个游戏的 VR 效果之所以出色，是因为游戏很好地解决了视角问题。当你戴上头盔后，整个星球是以立体的形式出现在你的眼前。你可以通过拖拽来旋转星球，而不需要考虑人物走动的情况，也就减轻了眩晕感（不过戴久了还是会晕）。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/ohmygenis.gif" alt="噢！我好神的第一人称视角是固定的" />
+        <figcaption>噢！我好神的第一人称视角是固定的</figcaption>
+      </figure>
+    </p>
+<p>相比之下，老滚 5 VR 版在处理人物移动和视角旋转的时候，是需要通过按左右两个 PS Move 手柄的 <code>X</code> 键和 <code>O</code> 键来控制的。这并不符合人的直觉，所以玩没多久就会很难受。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/skyrimvr.jpg" alt="老滚 5 VR" />
+        <figcaption>老滚 5 VR</figcaption>
+      </figure>
+    </p>
+<p>不过我买老滚 5 VR 更多是出于一种情怀，毕竟它是我去年玩过的最印象深刻的游戏。况且老滚 5 的 VR 版本也有过人之处：最好玩的地方莫过于躲在一个角落，然后偷偷探出头来给敌人放暗箭。这是普通版本所无法感受到的乐趣。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/archery-in-skyrim.png" alt="在老滚 5 VR 里放暗箭偷袭敌人非常好玩" />
+        <figcaption>在老滚 5 VR 里放暗箭偷袭敌人非常好玩</figcaption>
+      </figure>
+    </p>
+<p>除了这两款 VR 游戏之外，我还买了《PlayStation VR 世界》和《厨房》。《PlayStation VR 世界》是索尼出品的范例级别的 VR 游戏，里头包含了五个不同类型的 VR 游戏。既然是范例级别的游戏，VR 效果自然非常出色。例如在 《The London Heist（伦敦劫案）》这个游戏中，玩家需要扮演一个钻石大盗。其中一个抽雪茄的场景里，用户吐气的时候，在游戏场景中真的可以看到冒出来的烟雾。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/smoke.png" alt="The London Heist 里的抽雪茄场景" />
+        <figcaption>The London Heist 里的抽雪茄场景</figcaption>
+      </figure>
+    </p>
+<p>再比如《Into The Deep（深海惊魂）》中，当戴着头盔在海底看各种奇特的景观的时候，真的会有戴着潜水镜的错觉。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/into-the-deep.jpeg" alt="Into The Deep 沉浸感十足" />
+        <figcaption>Into The Deep 沉浸感十足</figcaption>
+      </figure>
+    </p>
+<p>至于《厨房》……一开始听说是一个恐怖游戏，而且才卖 8 块钱果断入了。后来我才发现这游戏只有五分钟的时长，而且只是作为生化危机 7 的一个预告性质的游戏。玩家在里头扮演一个被绑着的可怜人，除了坐以待毙，其他什么都做不了。游戏的恐怖指数也是令人发指，我一个人玩的时候不到一分钟就被吓出一身汗，卸甲投降。这游戏只能在人多的时候拿来给不怕死的朋友尝试。而最大的乐趣应该也是看着这位朋友被吓到尖叫吧？😝</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/kitchen.jpeg" alt="让人吓破胆的 Kitchen" />
+        <figcaption>让人吓破胆的 Kitchen</figcaption>
+      </figure>
+    </p>
+<h4 id="非-VR-游戏">非 VR 游戏</h4>
+<p>以上介绍的都是 VR 类的游戏。总的而言 PlayStation VR 游戏更适合用于体验，而不适合长久地玩，因为用不了多久就晕的不行了。所以这些游戏的篇幅基本都非常的短，一会儿就可以通关（当然沙盒游戏代表老滚 5 VR 是个例外，但我也只玩到拿回黄金龙爪就放弃了）。今年真正说得上 “细品” 的游戏，是 《底特律：成为人类》和《巫师3》。</p>
+<p>《底特律：成为人类》是一个多分支互动电影游戏，故事围绕着 3 个人形机器人，分别是为了探寻自己新产生的人工意识而逃离雇主的卡拉（Kara），追捕异常仿生人的康纳（Connor）和致力解救被奴役的仿生人的马库斯（Markus）。玩家所做的决择会决定 3 位角色的生死存亡。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/Detroit-Become-Human-Has-Passed-20-Million-Hours-of-Total-Playtime.jpg" alt="游戏里的三位主角" />
+        <figcaption>游戏里的三位主角</figcaption>
+      </figure>
+    </p>
+<p>游戏的剧情大致是人工智能觉醒后，机器人如何争取自己的权利和自由。随着剧情的发展，这三个不同的主角会最后走到一起，甚至还可能并肩作战，为机器人争取人权。这样的故事其实挺老套了，但作为一个技术nerd，这样的题材总是能够引起我的共鸣，更不用说是置身在这样的游戏世界中了。最出乎我意料的是突然有一天游戏首页的 Chole 妹子突然问我是否在关注脑机技术，着实让我惊艳了一把。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/chole.jpg" alt="游戏中的美女助理Chole" />
+        <figcaption>游戏中的美女助理Chole</figcaption>
+      </figure>
+    </p>
+<p>说回游戏玩法，《底特律：成为人类》是个多分支互动游戏，玩家会面临非常多的选择；而每个选择，包括主动探索获取的情报多少，都可能会影响到剧情的走向。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/branches.jpg" alt="《底特律：成为人类》的特色在于多分支互动" />
+        <figcaption>《底特律：成为人类》的特色在于多分支互动</figcaption>
+      </figure>
+    </p>
+<p>不过目前我只玩出了一个 happy ending ，就没有再去尝试其他的选择和结局。我向来不追求玩遍所有分支，即使是我最喜欢的游戏《武林群侠传》，我也没有试图刷遍全部线路和结局的欲望。一方面是因为一周目的剧情已经先入为主了，再去玩其他分支的时候总会有 “毁三观” 的感受；另一方面是时间太宝贵了。游戏对我而言，更多的作用只是利用很小一部分业余时间，去体验一下不一样的虚拟人生而已。</p>
+<p>最后再说一下《巫师 3》，其实在去年我就已经买了《巫师 3》的 steam 版，但一直存在 Library 里没有安装，因为 Macbook 并不是一个合适的游戏电脑。到了今年，趁着 PS4 游戏大促，又花了 99 块钱入了《巫师 3》的 PS4 版本。</p>
+<p>仔细品玩下来，《巫师 3》的确名不虚传是一个非常精彩的 3A 大作。相比去年花了我 60 个小时的老滚 5，《巫师 3》在剧情和打斗场景方面显得更加精致，人物形象也更加鲜明。巧舌如簧的丹德里恩、铁石心肠的拉多维德五世、铁汉柔情的血腥男爵、……即使是配角都给人留下非常深刻的印象。完全不像老滚 5 那样，清一色全是一群没有个性的脸谱化NPC。</p>
+<p>“两害相权取其轻” 这句话在游戏中频繁出现，作为同样具有多分支元素的游戏，玩家经常需要在游戏中面临选择。而每种选择都有如蝴蝶效应一般，总需要为自己的选择付出或轻或重的代价。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/bloody-baron.jpg" alt="“两害相权取其轻” ，我玩出了血腥男爵的 bad ending :( " />
+        <figcaption>“两害相权取其轻” ，我玩出了血腥男爵的 bad ending :( </figcaption>
+      </figure>
+    </p>
+<p>有些选择甚至让人过后细思极恐，例如在洋特拉村的村口会遇到一群村民求助，希望能帮忙抵御以小红帽为首的强盗的攻击。如果答应帮忙村民，就会发现小红帽变成了狼人（这是什么毁童年的暗黑剧情👿），将其击杀后，从她身上的信件中又会发现她其实拥有一个非常可怜的身世，而她过来报复村民也只是因为这些村民曾经背叛过她。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/dark-red-riding-hood.jpg" alt="暗黑版的“小红帽”" />
+        <figcaption>暗黑版的“小红帽”</figcaption>
+      </figure>
+    </p>
+<p>和老滚 5 类似的是，这同样是一个需要花费非常多时间的游戏。我同样已经在上面花了 62 个小时，但是才玩到了史凯利杰群岛，远远看不到边。感觉明年还可以玩一整年😄。</p>
+<p>要说游戏中让人跳戏的元素，莫过于昆特牌的元素了。 感受一下下面这段对话：<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/2019-montage/qianqiuxi.jpg alt=' 在《古剑奇谭三》也有类似的牌类游戏元素，应该就是借鉴了《巫师 3》中的设计。'></img><b>附图 9</b>  在《古剑奇谭三》也有类似的牌类游戏元素，应该就是借鉴了《巫师 3》中的设计。</span></span></span></p>
+<blockquote><p>血腥男爵：我的老婆和女儿一个被怪物抓走，一个加入邪教，你快点把她们找回来啊！</p>
+<p>杰洛特：来盘昆特牌吧！</p>
+<p>血腥男爵：好！</p>
+</blockquote>
+<p>这样的带有反差萌属性的对话在游戏中多次出现，以至于 “来盘昆特牌吧！” 变成了巫师 3 玩家群体中<a target="_blank" rel="noopener" href="https://zh.moegirl.org/zh-hant/%E6%9D%A5%E7%9B%98%E6%98%86%E7%89%B9%E7%89%8C%E5%90%A7">盛行的一个梗</a>。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/card-game.jpg" alt="巫师3里的昆特牌" />
+        <figcaption>巫师3里的昆特牌</figcaption>
+      </figure>
+    </p>
+<p>话说回来，这个棋牌游戏确实非常好玩，以至于很多人反而把收集牌当成了主线剧情😂。</p>
+<h3 id="健康">健康</h3>
+<p>去年我定了个目标，要把平均睡眠提高到日均 6 小时以上。为此我又做了一些努力：</p>
+<ol>
+<li>有意训练自己的呼吸。睡前让自己多做深呼吸，放松自己；</li>
+<li>配了一副蓝光眼镜，在睡前如果需要接触电子设备，一定要佩戴这幅眼镜。</li>
+<li>不要超过一点入睡，因为到了一点半我就会开始出现头痛，然后就会大概率出现失眠。</li>
+</ol>
+<p>有了三个调整后，我的年度平均睡眠时长果然从去年的 5.4 小时增加到了 6.4 小时。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/sleeping.jpeg" alt="睡眠情况" />
+        <figcaption>睡眠情况</figcaption>
+      </figure>
+    </p>
+<p>不过我的入睡时间还是太晚，这带来的问题是如果第二天中午没有午睡，下午就非常崩溃。希望明年能够提前到一点前入睡。</p>
+<p>除了睡眠问题之外，其他一些健康问题也需要引起重视。今年我在体检中还查出了窦性心动过缓和血压偏低的小毛病，这和我平时较少运动和不怎么吃早餐有关。希望明年能恢复每日基本的锻炼，并保持吃早餐。</p>
+<h3 id="看书">看书</h3>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/2019-montage/books.jpg" alt="今年的书单" />
+        <figcaption>今年的书单</figcaption>
+      </figure>
+    </p>
+<p>今年读了九本书。除了前面提到的《原则》之外，其他的都是网综《一本好书》第一季中所推荐的书单。</p>
+<p>同样按照喜欢程度从高到低的顺序往下评论：</p>
+<ul>
+<li>
+<p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/26418524/">万历十五年</a>：很喜欢看这种以历史人物为视角的书。这本书在明万历十五年这个时间点上进行着墨，万历十五年，即公元1587年，在中国历史上原本是极其普通的年份。作者以该年前后的历史事件及生活在那个时代的人物，包括万历皇帝、首辅申时行、张居正、海瑞、戚继光、李贽等人为视角，抽丝剥茧，梳理了中国传统社会管理层面存在的种种问题，并在此基础上探索现代中国应当涉取的经验和教训。</p>
+<ul>
+<li>万历皇帝：无奈的帝王。早早登基，然而一举一动却都受到满朝百官及诸多繁文缛节的限制，就连想册封自己最心爱的郑贵妃为皇后，将二人的皇子朱常洵封为太子都受到满朝文官极力劝阻。而自己最崇敬的老师张居正，平日里言传身教，始终占据道德制高点；背地里居然是一个大贪官，表里不一。一切种种让其新生厌倦，最终创造了长达 20 年不上早朝的怠政现象。数十年的怠政造成当时明政府政务废弛的现象，在女真族兴起并侵占明朝东北领土、扩张势力的同时，明神宗依然称疾不上朝，是导致明朝逐步步向灭亡的原因之一。</li>
+<li>申时行：张居正死后的继任者。关键词：道德至高无上。皇帝应该是天下人道德的表率。皇帝无德，举国都会受到影响。废长立少，是不合乎封建礼法的，从文官角度出发，大臣怕万历皇帝真的走这步棋，遂推内阁首辅申时行为首，联名上疏，请立万历皇帝与王氏的皇子朱常洛为皇储。</li>
+<li>海瑞与张居正：文官的两种极端的代表。海瑞一生清廉，他的信条和个性使他既被人尊重，也被人遗弃。他的一生体现了一个有教养的读书人服务于公众而牺牲自我的精神，但这种精神的实际作用却至为微薄；与之相比，张居正半生贪腐，却主导了万历中兴，有志于改革和创造，又同为时代所扼止。</li>
+<li>戚继光：孤独的武将。明朝从洪武开始，就具有重文轻武的趋向。而戚继光在武将之中，除了战功显赫，还有一个过人之处是文学水平同样出色。在当时的高级将领中，除了“少好读书”的俞大猷之外，戚继光的文章造诣已经无与伦比。等到他的官阶越来越高，就有更多的文官把他引为同类，在一起饮酒赋诗，往来酬对。也正因如此，他才得以得到首辅张居正的信任，担任蓟州总兵十四年，重修长城，建造塔楼加强防务，官拜左都督，加封少保兼太子太保，地位显赫。张居正过世后，因为和张居正走得过近，戚继光屡次被参劾，退休回乡，晚境凄凉。</li>
+<li>李贽：思想矛盾的民间哲学家。李贽的学说破坏性强而建设性弱。他没有能创造一种思想体系去代替正统的教条，原因不在于他缺乏决心和能力，而在于当时的社会不具备接受改造的条件。和别的思想家一样，当他发现自己的学说没有付诸实施的可能，他就只好把它美术化或神秘化。李贽的悲观不仅属于个人，也属于他所出于的时代。传统的政治已经凝固，类似宗教改革或者文艺复兴的新生命无法在这样的环境中孕育。社会环境把个人理智上的自由压缩在极小的限度之内，人的廉洁和诚信，也只能成长为灌木，不能形成丛林。</li>
+</ul>
+<p>书的末尾给了一句点睛之笔：</p>
+<blockquote><p>“1587年，是为万历十五年，丁亥次岁，表面是似乎是四海升平，无事可记，实际上我们的大明帝国却已经走到了它发展的尽头。在这个时候，皇帝的励精图治或者宴安耽乐，首辅的独裁或者调和，高级将领的富于创造或者习于苟安，文官的廉洁奉公或者贪污舞弊，思想家的极端进步或者绝对保守，最后的结果，都是无分善恶，统统不能在事业上取得有意义的发展，有的身败，有的名裂，还有的人则身败而兼名裂。</p>
+<p>因此我们的故事只好在这里作悲剧性的结束。万历丁亥年的年鉴，是为历史上一部失败的总记录。”</p>
+<footer><strong>《万历十五年》</strong></footer></blockquote>
+<p>PS：这本书是我年初在滨海大厦排队领开工利是的时候顺便刷完的。看书排队真的是消遣时间的利器，今年也会继续带本书过去😁。</p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/26768309/">查令十字街84号</a>：这其实是一本真实书信集，里头收录了纽约曼哈顿的穷作家海莲与远在英国伦敦查令十字街 84 号旧书店的长达二十年的通信邮件。故事的起因也非常简单：海莲在美国苦于找不到好书读，从一份报纸上看到了这个旧书店的广告，于是凭着一股莽撞劲，她开始给这个伦敦地址写信，希望能够买到自己想要的旧书。没想到书店老板弗兰克很快就回复了邮件，并且寄来了她要的书籍。于是，双方就开始了长达二十年的书信往来。在这二十年里，海莲与旧书店的人成了非常要好的 “笔友” 。当时英国战后物资短缺，海莲虽然生活也过得很穷困潦倒，却经常在重要节日给这些素未谋面的英国朋友们送去很多食物。整个书店也因此非常感激这位美国小姐姐，并真诚的邀请她一定要去英国找他们玩。而海莲也将之视为心愿，盼望着有一天自己的收入能够付得起这一趟伦敦之旅。然而本书的最大遗憾也在于此：当二十年后，海莲终于成为一个小有名气的剧作家时，弗兰克却早已不在人世。很多年后，她和这家书店的通信集，被称为“爱书人的圣经”，不断演绎。而那家书店的地址——查令十字街84号，已经成为全球爱书人之间的一个暗号。有无数人前往朝圣。</p>
+<p>其实这本书的故事非常简单，但正因为如此简单，这本书读完有一种至纯至美的隽永。这是一本爱书人的圣经，在阅读的时候，总是在字里行间让人感受到文字的力量。比如下面这句话：</p>
+<blockquote><p>我寄给你们的东西，你们顶多一个星期就吃光抹净，根本休想指望还能留着过年；而你们送给我的礼物，却能和我朝夕相处，至死方休；我甚至还能将它遗爱人间含笑以终。</p>
+<footer><strong>海莲</strong></footer></blockquote>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/10594787/">霍乱时期的爱情</a>：如果说《查令十字街84号》是爱书人的圣经，那么《霍乱时期的爱情》就是一本爱情的圣经。书中的主角弗洛伦蒂诺·阿里萨爱上了一个富商的女儿费尔明娜·达萨，两人私定终身，却遭到了她父亲的从中阻拦，最终费尔明娜嫁给了一个名声颇高的乌尔比诺医生。弗洛伦蒂诺为了费尔明娜终身不娶，但爱情的痛苦就像霍乱一样折磨着他，于是他只好不断通过和其他女性交往来缓解这种病痛。他一生一共交往了 662 个情人，而唯一一个真正在他心里挥之不去的却永远只有费尔明娜。而另一方面，费尔明娜嫁给了这位医生后，两人一直过着模范夫妻般的生活，甚至早已把弗洛伦蒂诺这个“影子”忘记。然而实际上费尔明娜和医生之间却谈不上爱情，更多的只是亲情关系。直到等了五十一年九个月零四天后，在医生去世，费尔明娜成为寡妇的第一个晚上，弗洛伦蒂诺才再一次向她重申了自己对她永恒的忠诚和不渝的爱情。一直到五十三年七个月零十一天后，已是古稀之年的两个人才真正走到了一起。</p>
+<p>有部分人看这本书的时候可能会骂弗洛伦蒂诺只是个渣男。诚然 662 个情人的确是渣的前无古人后无来者，但马尔克斯（本书作者）的用意其实是借这 622 个情人来将肉体之爱与灵魂之爱进行鲜明的对比。</p>
+<blockquote>
+<p>凡赤身裸体干的事都是爱，灵魂之爱在腰部以上，肉体之爱在腰部以下。</p>
+</blockquote>
+<p>弗洛伦蒂诺前脚刚和共享肉体之爱的 14 岁的小女友分手，后脚就跑去向自己灵魂深处爱了五十一年的费尔明娜表白。甚至还在两人重新再一起时，欺骗对方自己依然为她保留了童贞。其实，一个人愿意为另一个人保持五十一年的灵魂之爱，为其终身不娶，当终于等到爱情的希望时，愿意放弃一切重新来到对方身边。那么有没有为其拒绝肉体之爱，是否为其保持童贞又算得了什么呢？相比之下，医生和费尔明娜两人虽然拥有五十一年的肉体之爱，过着让人艳羡的模范夫妻生活，但两人却从未有过灵魂之爱，这样的爱情就真的幸福吗？</p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/26953606/">人类简史</a>：尤瓦尔·赫拉利的成名作。这是一部宏大的、突破性的人类简史，讲清了 “我是谁，我从哪里来，又要到哪里去” 三大基本问题，理清了影响人类发展的重大脉络。在看这本书之前，我还停留在人类是从类人猿进化得来的这种原始的认知上。而当看完这本书后，我被里头很多颠覆性质的思想深深地震撼住了。比如，我们的智人祖先是如何打败身高上比我们更有优势的尼安德特人呢？答案是靠信仰。因为虚构出了“神”，智人们就在“神”的名义下团结一致，发动起了战争，才将尼安德特人赶尽杀绝。除了宗教信仰，我们直到现在也还活在各种各样虚构的信仰当中。例如国家、货币、人权、婚姻、有限公司……这些都并不是客观存在的具体事物，但因为人类共同相信这些信仰，于是就出现了各种各样的相应的规则和教条，这些规则和教条反过来为人类社会带来了深刻的改变。人类的将来一定也会随着发展诞生出各种各样新的虚构的信仰，这些虚构的信仰是否会带来反面的效果，就需要我们保持警惕了。</p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/30161466/">暗算</a>：听风者和看风者的故事尤为精彩，结局也都让人无限唏嘘。看风者的解密过程扎实地提及了古典加密和现代密码学的置换和代换的基本门道，即使是学过安全学的人也挑不出毛病（看了书末花絮才知道麦家是真的为了写好这一部分专门查阅了大量资料。充实，有趣。）人物刻画形象鲜明，阿炳的不谙世事然则知恩图报爱憎分明，黄依依的亦正亦邪然则骨子里只是一个为爱不顾一切的人。关于陈二湖的解密信件更是把这个人物提拔到一个让人心生崇敬的高度：整一部分的标题名为“陈二湖的影子”，而他本人也成了整个701的缩影。将一生全奉献给了解密事业，以至于离开红墙后因为无密可解变得像江南一样疯癫，甚至让人想起了《肖申克里的救赎》里出狱后因适应不了外面的世界而轻生的Brooks。而最后回到红墙内解密，将最后一场战争最后的一颗子弹留给了自己，引人泪目。</p>
+</li>
+</ul>
+<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/2019-montage/none.webp alt=' 2015 版《无人生还》电视剧同样非常精彩'></img><b>附图 10</b>  2015 版《无人生还》电视剧同样非常精彩</span></span></span>
+<ul>
+<li>
+<p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/24859822/">无人生还</a>：阿加莎的经典之作。一个无法藏人的孤岛，总共只有十个人在里头，但十个人却都被杀死了。凶手会是谁？其实在看这本书之前早就被同名电影、电视剧以及其他衍生的剧集透光了，但是依然忍不住想看看书中的剧情如何发展，凶手又是如何设计这场惊天连环谋杀。书中对细节的刻画，即使对于看过电影的人相信也依然会拍案称绝。唯一的问题是书里的人名太多，看的时候需要做下笔记。</p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/27608239/">原则</a>：大概是我微信读书和Kindle上看得最久的一本书😂。Ray Dalio 在这本书洋洋洒洒得分享了他在生活和工作上的一些原则(或者说经验)。尤其是在个人生活中的决策、团队决策、招人用人、团队管理上需要避免踩的坑和加强的点。不过因为很多都是教条式的论述，在没有具体的案例的时候读起来就会很吃力，需要动脑思考在实际工作和生活中该如何运用。即便如此，有很多内容依然还没完全看明白。初次阅读建议可以直接先把第三部分开头的大纲看个几遍（我是直接打印了下来放在工位上，时常翻一翻看看有没有什么新的体会），赞同且有共鸣的，在生活中结合正文详细论述，多加运用。不赞同的，批判性接受即可。</p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/1200842/">尘埃落定</a>：讲述了末代土司从兴盛走向衰败的故事。一个声势显赫的康巴藏族土司，在酒后和汉族太太生了一个傻瓜儿子。这个人人都认定的傻子与现实生活格格不入，却有着超时代的予感和举止，成为土司制度兴衰的见证人。</p>
+<p>这本书有点像是魔幻版的《射雕英雄传》。主角很像《射雕英雄传》里的郭靖，虽然平日里很傻，但其实却往往在关键问题上显出大智慧。与之相比，他的哥哥是个聪明人，却经常在关键问题上聪明反被聪明误。恰恰是主角的傻，才让他得以在这个充满权斗的世界中安全生存；而恰恰又是主角的大智，他明白历史的巨轮无法改变，所以当他已经预见了土司王朝即将谢幕时，他唯一做的就是让这一切自然发生，包括自己的死亡。就像《守望者》里的曼哈顿博士一样，平静地看着一切向已预见的未来发展。最终尘归尘，土归土，一切尘埃落定。</p>
+<p>相比《无人生还》，我比较喜欢这本书交代人物的方式：并不强调每个重要角色叫什么名字，而是都安插了一个好记的外号（或者说身份），土司、大少爷、二太太、三太太、活佛、管家、书记官……这使得我们不用费心去记每个人的名字，反而更容易帮助我们融入这个神秘的世界。</p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/26945094/">未来简史</a>：进入21世纪后，曾经长期威胁人类生存、发展的瘟疫、饥荒和战争已经被攻克，智人面临着新的待办议题：长生不死、幸福快乐和化身为神。在解决这些新问题的过程中，科学技术的发展将颠覆我们很多当下认为无需佐证的“常识”，比如人文主义所推崇的自由意志将面临严峻挑战，机器将会代替人类做出更明智的选择。</p>
+<p>这本书要给一个评价有点叫我纠结。开头部分的人类新的三大命题真的是精华中的精华，而且极具启发性。末尾对人文派和算法派的阐述也非常有意思。算法（或者说科学）是不是一种宗教？我认为是的。未来究竟是不是拉普拉斯妖，能否完全预测？甚至人的思想是不是也是算法？也可以模拟？细思恐极。
+除去头和尾，其他的部分就有点让我失望了。“博古”方能“通今”，讲未来之前先讲历史没毛病。所以作者在摆出书末的讨论前试图引入很多“简史”作为佐证，但是太多“简史”就不“简”了，反而一度让我出戏，像看回了《人类简史》。于是一度怀疑是不是赫拉利写《人类简史》堆叠材料堆得太爽刹不住车又把很多内容拖进了《未来简史》。难怪经济学人评价这本书是“一部肤浅、华而不实的作品”。如果把头尾保留，中间简化下篇幅。我觉得会是一部更好的作品。</p>
+</li>
+</ul>
+<h3 id="感情">感情</h3>
+<p>最后是感情生活，这依然也是我今年最有挫败感的部分。</p>
+<p>坦白说，我在今年其实曾经遇到过一位非常合适的结婚对象。对方无论是职业、年龄、性格、相貌都与我非常适合，双方也都非常积极地往男女朋友关系发展。然而最大的问题也在于此：如果感情是在没有心动的情况下，单纯冲着结婚而发展的话，那很可能并不是爱情。如果这段关系发展下去，我和对方在这一两年内走向婚姻的可能性非常大，而且我们也会有非常美满的婚姻生活。但我们之间就很可能像费尔明娜和乌尔比诺医生，永无法共享灵魂之爱。而以对方的条件，完全应当找到一个能共同达到灵魂之爱的人。我又怎么忍心去践踏她的幸福？所以，我终于在某一天跟对方袒露了自己的心声，结束了这段还处于萌芽阶段的感情。</p>
+<p>今年还出现了一个让我无比心动的女孩，然而从客观条件上说，又存在着较大的差距，只好将这份欣赏存于灵魂深处了。弗洛伦蒂诺虽然痛苦地等了对方五十三年七个月零十一天，但这段漫长岁月里，他也因此一直拥有着灵魂之爱，这又何尝不是一种幸福呢？也许将来还会出现其他能取而代之的人，但在这之前我总得找点东西填补一下，以免内心的花园长出荒草。</p>
+<h2 id="总结和展望">总结和展望</h2>
+<p>幸好今年春节来得比较早，趁着节前的这几天休假抓紧完成了 2019 年拖到现在的最后一个任务。有趣的是，今年的总结和去年的总结发布时间相差刚好 365 天。Anyway，2019 基本就是按照计划按部就班的进行着。搬入新房之后的一个月我还幸运地摇到号，找了陪驾学开了几次车，总算是摆脱了驾驶恐惧感。</p>
+<p>review 下去年的目标吧：</p>
+<table>
+<thead>
+<tr>
+<th>目标</th>
+<th>进展</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>继续改善睡眠</td>
+<td>完成</td>
+</tr>
+<tr>
+<td>把《一本好书》里的推荐书单读完。</td>
+<td>完成</td>
+</tr>
+<tr>
+<td>买车，并成为一个合格的司机</td>
+<td>已订车，也算是会开车了吧（明年再练练）</td>
+</tr>
+<tr>
+<td>完成至少一次说走就走的旅行。</td>
+<td>完成</td>
+</tr>
+</tbody>
+</table>
+<p>20 年有几个目标：</p>
+<ol>
+<li>继续改善睡眠。</li>
+<li>恢复锻炼，坚持吃早餐。</li>
+<li>多开开车，成为老司机。</li>
+<li>完成一次自驾游。</li>
+</ol>
+<h2 id="脚注">脚注</h2>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>图片出自<a target="_blank" rel="noopener" href="https://wx.abbao.cn/a/8245-8123a9d35132f0ad.html">人力资源分享汇</a>。 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/codes/rhubarb-lip-sync/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/codes/bci-and-muse-headband-development/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '2019 蒙太奇'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/2019-montage.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2020-01-12 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/life/">life<span>9</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/summary/">summary<span>3</span></a></li> <li><a href="/tags/games/">games<span>2</span></a></li> <li><a href="/tags/reading/">reading<span>2</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%AD%A3%E7%BB%8F%E4%BA%8B"><span class="toc-article-text">正经事</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%B7%A5%E4%BD%9C"><span class="toc-article-text">工作</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%BC%80%E6%BA%90"><span class="toc-article-text">开源</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%8D%9A%E5%AE%A2"><span class="toc-article-text">博客</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%8E%88%E8%AF%BE"><span class="toc-article-text">授课</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%8D%E6%AD%A3%E7%BB%8F%E4%BA%8B"><span class="toc-article-text">不正经事</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%B1%85%E5%AE%B6"><span class="toc-article-text">居家</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%97%85%E8%A1%8C"><span class="toc-article-text">旅行</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E4%BA%91%E9%A1%B6%E5%B1%B1"><span class="toc-article-text">云顶山</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E9%A1%BA%E5%BE%B7-%E5%A4%96%E4%BC%B6%E4%BB%83%E5%B2%9B"><span class="toc-article-text">顺德&amp;外伶仃岛</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%B8%B8%E6%88%8F"><span class="toc-article-text">游戏</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#VR-%E6%B8%B8%E6%88%8F"><span class="toc-article-text">VR 游戏</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E9%9D%9E-VR-%E6%B8%B8%E6%88%8F"><span class="toc-article-text">非 VR 游戏</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%81%A5%E5%BA%B7"><span class="toc-article-text">健康</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%9C%8B%E4%B9%A6"><span class="toc-article-text">看书</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%84%9F%E6%83%85"><span class="toc-article-text">感情</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%80%BB%E7%BB%93%E5%92%8C%E5%B1%95%E6%9C%9B"><span class="toc-article-text">总结和展望</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E8%84%9A%E6%B3%A8"><span class="toc-article-text">脚注</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

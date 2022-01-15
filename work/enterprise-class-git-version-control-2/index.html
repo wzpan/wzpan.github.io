@@ -1,0 +1,641 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>化繁为简的企业级 Git 管理实战（二）：多分支子模块持续集成 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="在本篇文章中，我仔细讨论了对子模块进行持续集成的三种方案，并利用自动化手段实现逐层往上提交子模块 commit id 从而触发主工程构建。这些构建结果为我们快速定位工程的编译问题提供了重要的线索。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="化繁为简的企业级 Git 管理实战（二）：多分支子模块持续集成"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '化繁为简的企业级 Git 管理实战（二）：多分支子模块持续集成'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 化繁为简的企业级 Git 管理实战（二）：多分支子模块持续集成</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>在本篇文章中，我仔细讨论了对子模块进行持续集成的三种方案，并利用自动化手段实现逐层往上提交子模块 commit id 从而触发主工程构建。这些构建结果为我们快速定位工程的编译问题提供了重要的线索。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <h2 id="需求描述">需求描述</h2>
+<p>在 <a href="/work/enterprise-class-git-version-control-1/">上一篇文章</a> 中，我简单描述了我们一个项目的复杂程度：子模块、嵌套子模块、多分支。除了工程分支切换上的复杂，我们还遇到另一个问题：子模块持续集成。</p>
+<h2 id="主工程持续集成">主工程持续集成</h2>
+<p>先说说主工程如何做持续集成。我们使用 Gitlab 自带的 <a target="_blank" rel="noopener" href="https://about.gitlab.com/gitlab-ci/">Gitlab-Ci</a> 作为我们的持续集成系统。Android 端的主工程的持续集成脚本如下：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">build:</span></span><br><span class="line">  <span class="attr">tags:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">android</span></span><br><span class="line">  <span class="attr">script:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">./fmanager</span> <span class="string">checkout</span> <span class="string">-f</span> <span class="string">$CI_BUILD_REF_NAME</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">./fmanager</span> <span class="string">update</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">gradle</span> <span class="string">clean</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">gradle</span> <span class="string">aR</span></span><br></pre></td></tr></table></figure>
+<p>其中， <code>CI_BUILD_REF_NAME</code> 指定要编译哪个分支的主工程。当我们推送代码到某个分支时，该分支下的持续集成脚本就会被调用，<code>CI_BUILD_REF_NAME</code> 变量就会是那个分支的名字。在执行构建前，先用 fmanager 完成主工程和所有模块的分支切换 ，之后再用 fmanager 更新整个项目的代码。最后再执行编译指令。 <span id="more"></span></p>
+<p>主工程的持续集成就是这么简单。然而这远远不能满足我们的需求：我们的工程有多个子模块。一个子模块的某个分支可能被多个父模块的多个分支依赖。例如，common 模块的 master_dev 分支可能被 framework 模块的 master_dev、jilin_dev、taishan_dev 分支依赖。在这样的情况下，任何一个子模块如果不注意提交前自测，都有可能导致多个分支的整个工程编译失败，阻塞多个分支的开发进度。比这更困难的是，对某个模块的修改也许可以保证在当前主工程分支上编译通过，但却意外导致了另外一个依赖该子模块的主工程分支的编译失败。</p>
+<p>因此，我们除了要对主工程进行持续集成测试之外，也不得不对子模块做持续集成测试：任何一个子模块某个分支一旦推送了代码，就触发所有依赖它的主工程的分支的持续集成测试。为了实现这个目标，我们尝试了三种方案。</p>
+<h2 id="方案一：trigger">方案一：trigger</h2>
+<p>第一种方案是利用 Gitlab-Ci 的 <a target="_blank" rel="noopener" href="http://doc.gitlab.com/ce/ci/triggers/README.html">trigger</a> 机制。trigger 提供了直接在脚本中触发任何一个仓库的持续集成的方法。利用 trigger，我们可以为子模块也写一份持续集成脚本，而它仅仅用来触发依赖它的所有主工程的分支的持续集成。例如，假如主工程的 master_dev 分支和 jilin_dev 分支都依赖了 framework 子模块的 master_dev 分支，那么可以为 framework 的 master_dev 编写一个持续集成脚本：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">build:</span></span><br><span class="line">  <span class="attr">stage:</span> <span class="string">deploy</span></span><br><span class="line">  <span class="attr">script:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">&quot;curl -X POST -F token=3ef8939a8e50c5e98f459789b966a4 -F ref=refs/heads/master_dev http://yourcompany.com/api/v3/projects/10/trigger/builds&quot;</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">&quot;curl -X POST -F token=3ef8939a8e50c5e98f459789b966a4 -F ref=refs/heads/jilin_dev http://yourcompany.com/api/v3/projects/10/trigger/builds&quot;</span></span><br></pre></td></tr></table></figure>
+<p>其中，<code>ref</code> 参数指定了要触发持续集成测试的项目的分支。这样，当中央仓库上 framework 模块的 master_dev 分支有新的代码推送时，主工程的 master_dev 分支和 jilin_dev 分支就会触发构建：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-2/trigger.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>使用 trigger 虽然能有效触发所依赖的主工程的分支，但它有很多不足之处：</p>
+<p>1、维护成本高。每个子模块都需要编写持续集成脚本，且由于主工程经常需要新增新业务分支，需要频繁维护每个子模块的持续集成脚本，添加依赖它的分支。
+2、无法跟踪。子模块的持续集成脚本的作用仅仅只是触发了主工程的持续集成，而当次触发的结果并不会返回给子模块作为子模块持续集成的结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">gitlab-ci-multi-runner 1.0.4 (014aa8c)</span><br><span class="line">Using Shell executor...</span><br><span class="line">Running on appdevdeiMac.local...</span><br><span class="line">Fetching changes...</span><br><span class="line">HEAD is now at 826d126 Merge branch &#39;master_dev&#39; of http:&#x2F;&#x2F;yourcompany.com&#x2F;yourgroup&#x2F;framework_android into master_dev</span><br><span class="line">From http:&#x2F;&#x2F;yourcompany.com&#x2F;FFProject&#x2F;appframework_android</span><br><span class="line">   826d126..13ba8f3  master_dev -&gt; origin&#x2F;master_dev</span><br><span class="line">Checking out 13ba8f33 as master_dev...</span><br><span class="line">Previous HEAD position was 826d126... Merge branch &#39;master_dev&#39; of http:&#x2F;&#x2F;yourcompany.com&#x2F;yourgroup&#x2F;framework into master_dev</span><br><span class="line">HEAD is now at 13ba8f3... [master_dev][bank][c:panweizhou][r:chendingyi]update ci script.</span><br><span class="line">$ curl -X POST -F token&#x3D;2587402741a9ef3a09d0dd64f83b90 -F ref&#x3D;$CI_BUILD_REF_NAME http:&#x2F;&#x2F;yourcompany.com&#x2F;api&#x2F;v3&#x2F;projects&#x2F;11&#x2F;trigger&#x2F;builds</span><br><span class="line">  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span><br><span class="line">                                 Dload  Upload   Total   Spent    Left  Speed</span><br><span class="line">  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   298  100    26  100   272    220   2304 --:--:-- --:--:-- --:--:--  2324</span><br><span class="line">&#123;&quot;id&quot;:48,&quot;variables&quot;:null&#125;</span><br><span class="line">Build succeeded.</span><br></pre></td></tr></table></figure>
+<p>所以子模块的持续集成一直是成功的：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-2/all-success.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>而实际却可能早已导致主工程编译失败：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-2/all-fail.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>3、无法定位触发源。主工程的构建日志页仅记录触发本次构建的 trigger 的 Token 。但这个 trigger 是主工程自己的 <code>--bb</code> 。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-2/trigger-token.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>换句话说，除非为每一个子模块提供一个单独的 Token ，否则我们根本无法判断究竟是子模块触发了这个 trigger 。第一种方案歇菜。</p>
+<h2 id="方案二：子模块测试工程">方案二：子模块测试工程</h2>
+<p>第二种方案是为所有需要做集成测试的子模块都单独编写一个测试工程。当子模块有推送代码时，不再触发主工程的持续集成，而是触发测试工程的持续集成。</p>
+<p>由于每个子模块与其测试工程是一对一的关系，一旦测试工程编译失败，那其对应的子模块就很有可能存在问题。然而这个方案也有很大的局限性。</p>
+<ol>
+<li>需要为每个核心子模块都维护一个测试工程，且测试工程的开发进度需要一直与主工程同步。当测试工程的维护进度落后于主工程，就有可能出现子模块能保证主工程编译通过，却导致测试工程编译不过。</li>
+<li>当子模块有多个分支时，每个重要分支都需要相应建立测试工程的分支，这使得测试工程的维护成本同比增加。</li>
+<li>最致命的问题是：子模块的测试工程仅仅只能覆盖子模块，而整个主工程由多个子模块组合而成的，模块与模块之间也有相互依赖关系，模块级别的覆盖度并不足以保证整个工程的可编译。</li>
+</ol>
+<p>综上所述，用子模块测试工程来对子模块进行持续集成并不理想。方案二也失败了。看来 trigger 并不适合用来解决我们的问题，于是我对 trigger 的尝试也到此为止。</p>
+<h2 id="方案三：自动更新子模块-commit-id">方案三：自动更新子模块 commit id</h2>
+<p>前面两种方案走不通，我开始思考：Git 难道就没有关于子模块持续集成的 best practice 吗？直到我看到了 <a target="_blank" rel="noopener" href="https://blog.blahgeek.com/gitlab-ci-build-multi-repo/">blahgeek 的这篇文章</a> ，里头提出用 commit id 的改动来触发工程更新，顿时恍然大悟：Git 本身建议通过在主工程记录子模块的 commit id 来控制子模块的版本。除了控制版本，commit id 其实还有另一个好处，那就是持续集成！子模块发生修改后，为了让主工程同步该子模块的更新，你需要不断往上提交上层模块的 commit id ，这就会顺带触发主工程的持续集成。</p>
+<p>然而，<a href="/work/enterprise-class-git-version-control-1/">上一篇文章</a>中提到，为了避免只提 commit id 没提代码的情况发生，我们直接禁止了 commit id 的提交。矛盾来了。</p>
+<p>幸运的是我们有折中的办法。如果子模块代码已推送成功，那么此时该模块在父工程中的 commit id 一定可以更新。而这个更新为什么不能让计算机帮忙自动完成？我只需要在子模块的中央仓库中加入 post-receive 钩子，当子模块代码推送完成时，post-receive 钩子里的脚本就会自动被触发，帮助我们到上层提交该子模块的 commit id 。对于嵌套子模块，这个过程会一直递归地做，直到父工程就是主工程为止，而这最终就会触发主工程的持续集成！</p>
+<p>方法听起来可行，但实际做起来我依然遇到了不少困难。</p>
+<p>首先，服务器上的仓库都是 bare repository ，不能提交代码，也没有相互依赖关系，主工程和所有子模块的仓库都是平级的存放在同个目录下的。这意味着你无法利用 post-receive 钩子原地地修改自身仓库和依赖它的其他仓库。</p>
+<p>其次，依赖每个子模块的父工程及分支各不相同。当一个子模块的某个分支有更新时，你需要为父工程中为所有依赖该子模块那个分支的全部分支都提交一遍新的 commit id 。</p>
+<p>最后，每一个子模块也都需要安装一个这样的 post-receive 钩子，且子模块经常需要新增，依赖关系也经常变动，维护成本高。</p>
+<p>解决第一个问题的方法就是在服务器也像本地那样 clone 出一份整个工程的 working repository ，这个工程和我们本地开发的仓库没什么区别，交给服务器来自动维护。唯一的难点在于怎么将每个 bare repository 与该 working repository 里的每个子模块相关联。于是，只需要写个工具，遍历一遍所有主工程分支，并生成每个分支所依赖的每个子模块的仓库地址与本地路径信息。内容类似这样：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;master&quot;</span>: &#123;        </span><br><span class="line">        <span class="attr">&quot;app&quot;</span>: &#123;<span class="attr">&quot;branch&quot;</span>: <span class="string">&quot;master&quot;</span>&#125;,</span><br><span class="line">        <span class="attr">&quot;common&quot;</span>: &#123;<span class="attr">&quot;branch&quot;</span>: <span class="string">&quot;master&quot;</span>&#125;,</span><br><span class="line">        ...</span><br><span class="line">        &quot;react_native/node_modules&quot;: &#123;&quot;branch&quot;: &quot;master&quot;&#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;master_dev&quot;: &#123;        </span><br><span class="line">        &quot;app&quot;: &#123;&quot;branch&quot;: &quot;master_dev&quot;&#125;,</span><br><span class="line">        &quot;common&quot;: &#123;&quot;branch&quot;: &quot;master_dev&quot;&#125;,</span><br><span class="line">        ...</span><br><span class="line">        &quot;react_native/node_modules&quot;: &#123;&quot;branch&quot;: &quot;master&quot;&#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;jilin&quot;: &#123;        </span><br><span class="line">        &quot;app&quot;: &#123;&quot;branch&quot;: &quot;master&quot;&#125;,</span><br><span class="line">        &quot;common&quot;: &#123;&quot;branch&quot;: &quot;master&quot;&#125;,</span><br><span class="line">        ...</span><br><span class="line">        &quot;react_native/node_modules&quot;: &#123;&quot;branch&quot;: &quot;jilin&quot;&#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;jilin_dev&quot;: &#123;        </span><br><span class="line">        &quot;app&quot;: &#123;&quot;branch&quot;: &quot;master&quot;&#125;,</span><br><span class="line">        &quot;common&quot;: &#123;&quot;branch&quot;: &quot;master&quot;&#125;,</span><br><span class="line">        ...</span><br><span class="line">        &quot;react_native/node_modules&quot;: &#123;&quot;branch&quot;: &quot;jilin_dev&quot;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>解决第二个问题的方法就是利用每个主工程分支的 modules.json 。我们在主工程的每个分支上都编写了一份 modules.json ，这个文件记录了所有子模块的依赖关系。只要对所有分支的 modules.json 进行归并，就可以得到一份完整的记录所有模块所有分支的依赖关系。内容类似这样：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">app:</span><br><span class="line">    repo: http://yourcampany.com/yourgroup/app_android.git</span><br><span class="line">    path: /home/git/app_android</span><br><span class="line"></span><br><span class="line">common:</span><br><span class="line">    repo: http://yourcampany.com/yourgroup/core_lib_android.git</span><br><span class="line">    path: /home/git/app_android/common</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">node_modules:</span><br><span class="line">    repo: http://yourcampany.com/yourgroup/node_modules.git</span><br><span class="line">    path: /home/git/app_android/react_native/node_modules</span><br></pre></td></tr></table></figure>
+<p>有了这两个文件，post-receive 钩子也就可以写得通用化：先获取该子模块的仓库名，然后根据这个文件找到在 working repository 下对应的目录，然后用 fmanager 切到依赖该子模块该分支的主工程。更新该子模块的 working tree ，最后 cd 到上级目录提交该子模块的 commit id 。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment">#author:panweizhou</span></span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">After push, automatically update commit id of current submodule.</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.path.append(<span class="string">&#x27;/usr/lib/python2.6/site-packages&#x27;</span>)</span><br><span class="line">sys.path.append(<span class="string">&#x27;/usr/lib64/python2.6/site-packages&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> fileinput</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> yaml</span><br><span class="line"><span class="keyword">from</span> filelock <span class="keyword">import</span> FileLock</span><br><span class="line"></span><br><span class="line">module_file = <span class="string">&quot;/home/git/modules/modules_android.json&quot;</span></span><br><span class="line">module_path_file = <span class="string">&quot;/home/git/modules/modules_android.yml&quot;</span></span><br><span class="line">project_root = <span class="string">&quot;/home/git/app_android&quot;</span></span><br><span class="line">env_path = <span class="string">&quot;/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:/usr/local/libexec/git-core/:/home/git/bin&quot;</span></span><br><span class="line"></span><br><span class="line">lock_file_name = <span class="string">&quot;/tmp/&quot;</span> + os.path.basename(os.getcwd())</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> FileLock(lock_file_name):</span><br><span class="line">    <span class="built_in">print</span> (<span class="string">&quot;Updating commit id&quot;</span>)</span><br><span class="line">    <span class="comment"># read global module config</span></span><br><span class="line">    global_module_config = &#123;&#125;</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(module_file) <span class="keyword">as</span> f:</span><br><span class="line">            global_module_config = json.load(f)</span><br><span class="line">    <span class="keyword">except</span> ValueError:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Global modules.json parsed Error!&quot;</span>)</span><br><span class="line">        exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Read in each ref that the user is trying to update</span></span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> fileinput.<span class="built_in">input</span>():</span><br><span class="line">        line = line.strip()</span><br><span class="line">        (from_commit, to_commit, ref) = line.split(<span class="string">&#x27; &#x27;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Get branch name</span></span><br><span class="line">        pos = ref.rfind(<span class="string">&#x27;/&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> pos &gt;= <span class="number">0</span>:</span><br><span class="line">            branch = ref[pos+<span class="number">1</span>:]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            branch = ref</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> branch == <span class="string">&#x27;master&#x27;</span> <span class="keyword">or</span> branch.lower().endswith(<span class="string">&#x27;bank&#x27;</span>) <span class="keyword">or</span> branch.endswith(<span class="string">&#x27;_dev&#x27;</span>):</span><br><span class="line">        <span class="comment"># if branch == &#x27;WeiZhouBank_dev&#x27;:</span></span><br><span class="line">            <span class="comment"># Get repo name</span></span><br><span class="line">            output = subprocess.Popen([<span class="string">&#x27;git summary | egrep &quot;^ project&quot;&#x27;</span>], env=&#123;<span class="string">&quot;PATH&quot;</span>: env_path&#125;, stdout=subprocess.PIPE, shell=<span class="literal">True</span>)</span><br><span class="line">            oc = output.communicate()[<span class="number">0</span>]</span><br><span class="line">            repo = oc.split(<span class="string">&#x27;:&#x27;</span>)[<span class="number">1</span>].strip()</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Get the corresponding working path</span></span><br><span class="line">            module_path_info = &#123;&#125;</span><br><span class="line">            <span class="keyword">with</span> <span class="built_in">open</span> (module_path_file) <span class="keyword">as</span> f:</span><br><span class="line">                module_path_info = yaml.load(f)</span><br><span class="line">            module_path = <span class="string">&quot;&quot;</span></span><br><span class="line">            module_name = <span class="string">&quot;&quot;</span></span><br><span class="line">            <span class="keyword">for</span> module_name, module_info <span class="keyword">in</span> module_path_info.items():</span><br><span class="line">                <span class="keyword">if</span> module_info.has_key(<span class="string">&#x27;repo&#x27;</span>):</span><br><span class="line">                    module_repo = module_info[<span class="string">&quot;repo&quot;</span>]</span><br><span class="line">                    <span class="keyword">if</span> module_repo.endswith(repo):</span><br><span class="line">                        has_such_module = <span class="literal">True</span></span><br><span class="line">                        module_path = module_info[<span class="string">&quot;path&quot;</span>]                       </span><br><span class="line">                        <span class="keyword">break</span></span><br><span class="line">                        </span><br><span class="line">            <span class="comment"># Get all the main projects branch that use this module</span></span><br><span class="line">            main_branch_set = <span class="built_in">set</span>()</span><br><span class="line">            <span class="keyword">for</span> branch_name, config_list <span class="keyword">in</span> global_module_config.items():</span><br><span class="line">                <span class="keyword">if</span> config_list.has_key(module_name):</span><br><span class="line">                    mconfig = config_list[module_name]</span><br><span class="line">                    <span class="keyword">if</span> (mconfig.has_key(<span class="string">&#x27;branch&#x27;</span>)):</span><br><span class="line">                        mbranch = mconfig[<span class="string">&#x27;branch&#x27;</span>]</span><br><span class="line">                        <span class="keyword">if</span> branch == mbranch:</span><br><span class="line">                            main_branch_set.add(branch_name)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Do the following stuff for each branch of main project</span></span><br><span class="line">            <span class="comment"># that use this module of this branch</span></span><br><span class="line">            <span class="keyword">for</span> main_branch <span class="keyword">in</span> main_branch_set:</span><br><span class="line">                os.chdir(project_root)</span><br><span class="line">                output = subprocess.Popen([<span class="string">&quot;./fmanager checkout -f %s&quot;</span> % main_branch], env=&#123;<span class="string">&quot;PATH&quot;</span>: env_path&#125;, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=<span class="literal">True</span>)</span><br><span class="line">                res = output.wait()</span><br><span class="line">                <span class="keyword">if</span> res == <span class="number">0</span>:</span><br><span class="line">                    os.chdir(module_path)</span><br><span class="line">                    <span class="comment"># update current submodule </span></span><br><span class="line">                    output = subprocess.Popen([<span class="string">&#x27;/home/git/bin/update_root&#x27;</span>, branch], cwd=module_path, env=&#123;<span class="string">&quot;PATH&quot;</span>: env_path&#125;)</span><br><span class="line">                    res = output.wait()</span><br><span class="line">                    <span class="keyword">if</span> res == <span class="number">0</span>:</span><br><span class="line">                        <span class="comment"># Get commit log</span></span><br><span class="line">                        output = subprocess.Popen([<span class="string">&#x27;git log -n 1&#x27;</span>], env=&#123;<span class="string">&quot;PATH&quot;</span>: env_path&#125;, cwd=module_path, stdout=subprocess.PIPE, shell=<span class="literal">True</span>)</span><br><span class="line">                        commit_log = output.communicate()[<span class="number">0</span>]</span><br><span class="line">                        commit_log = <span class="string">&quot;Bump Version for submodule %s:\n\n%s&quot;</span> % (module_name, commit_log)</span><br><span class="line">                        <span class="comment"># Go to father module</span></span><br><span class="line">                        os.chdir(<span class="string">&#x27;..&#x27;</span>)</span><br><span class="line">                        father_path = os.getcwd()</span><br><span class="line">                        <span class="comment"># Get branch of father module</span></span><br><span class="line">                        output = subprocess.Popen([<span class="string">&#x27;git&#x27;</span>, <span class="string">&#x27;symbolic-ref&#x27;</span>, <span class="string">&#x27;--short&#x27;</span>, <span class="string">&#x27;HEAD&#x27;</span>], stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=&#123;<span class="string">&quot;PATH&quot;</span>: env_path&#125;)</span><br><span class="line">                        oc = output.communicate()</span><br><span class="line">                        father_branch = oc[<span class="number">0</span>].strip()</span><br><span class="line">                        <span class="keyword">if</span> (father_branch.strip() != <span class="string">&quot;&quot;</span>):</span><br><span class="line">                            <span class="built_in">print</span>(<span class="string">&quot;Bumping version of branch %s of father project...&quot;</span> % father_branch)</span><br><span class="line">                            output = subprocess.Popen([<span class="string">&#x27;/home/git/bin/update_root&#x27;</span>, father_branch], cwd=father_path, env=&#123;<span class="string">&quot;PATH&quot;</span>: env_path&#125;)</span><br><span class="line">                            res = output.wait()</span><br><span class="line">                            <span class="keyword">if</span> res == <span class="number">0</span>:</span><br><span class="line">                                output = subprocess.Popen([<span class="string">&#x27;git diff | wc -l&#x27;</span>], cwd=father_path, env=&#123;<span class="string">&quot;PATH&quot;</span>: env_path&#125;, stdout=subprocess.PIPE, shell=<span class="literal">True</span>)</span><br><span class="line">                                diff_num = output.communicate()[<span class="number">0</span>]</span><br><span class="line">                                <span class="keyword">if</span> diff_num &gt; <span class="number">1</span>:</span><br><span class="line">                                    subprocess.call([<span class="string">&#x27;git&#x27;</span>, <span class="string">&#x27;add&#x27;</span>, module_name], env=&#123;<span class="string">&quot;PATH&quot;</span>: env_path&#125;)</span><br><span class="line">                                    output.wait()</span><br><span class="line">                                    output = subprocess.Popen([<span class="string">&#x27;git&#x27;</span>, <span class="string">&#x27;commit&#x27;</span>, <span class="string">&#x27;-m&#x27;</span>, commit_log, <span class="string">&#x27;--no-verify&#x27;</span>], env=&#123;<span class="string">&quot;PATH&quot;</span>: env_path&#125;)</span><br><span class="line">                                    res = output.wait()</span><br><span class="line">                                    <span class="keyword">if</span> res == <span class="number">0</span>:</span><br><span class="line">                                        output = subprocess.Popen([<span class="string">&#x27;git&#x27;</span>, <span class="string">&#x27;push&#x27;</span>, <span class="string">&#x27;origin&#x27;</span>, <span class="string">&#x27;HEAD&#x27;</span>, <span class="string">&#x27;--no-verify&#x27;</span>], env=&#123;<span class="string">&quot;PATH&quot;</span>: env_path&#125;)</span><br><span class="line">                                        output.wait()</span><br><span class="line">                                        <span class="keyword">if</span> res == <span class="number">0</span>:</span><br><span class="line">                                            <span class="built_in">print</span> <span class="string">&quot;Successfully bumped version branch %s of father project&quot;</span> % father_branch</span><br><span class="line">                                        <span class="keyword">else</span>:</span><br><span class="line">                                            <span class="built_in">print</span> <span class="string">&quot;Error bumping version for branch %s of father project&quot;</span> % father_branch</span><br><span class="line">                                <span class="keyword">else</span>:</span><br><span class="line">                                    <span class="built_in">print</span> <span class="string">&quot;Error bumping version for branch %s of father project&quot;</span> % father_branch</span><br><span class="line">                            <span class="keyword">else</span>:</span><br><span class="line">                                <span class="built_in">print</span> <span class="string">&quot;Error bumping version for branch %s of father project&quot;</span> % father_branch</span><br><span class="line">                        <span class="keyword">else</span>:</span><br><span class="line">                            <span class="built_in">print</span>(<span class="string">&quot;Father project is a tag. Stop bumping verison.&quot;</span>)</span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        <span class="built_in">print</span> <span class="string">&quot;Error updating the remote working tree.&quot;</span></span><br></pre></td></tr></table></figure>
+<p>之后只需将钩子安装到每个子模块的 bare repository 里的 custom_hooks 目录下。同样可以利用脚本来一次性完成。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment">#author: panweizhou</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> module <span class="keyword">in</span> `ls -d *_android.git`</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">test</span> <span class="variable">$module</span> != <span class="string">&quot;App_Android.git&quot;</span>  <span class="comment"># Don&#x27;t install to root project</span></span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        module_dir=<span class="variable">$&#123;module&#125;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">test</span> ! -d <span class="variable">$&#123;module_dir&#125;</span>/custom_hooks</span><br><span class="line">        <span class="keyword">then</span></span><br><span class="line">            mkdir <span class="variable">$&#123;module_dir&#125;</span>/custom_hooks</span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line">        <span class="keyword">for</span> hook <span class="keyword">in</span> `ls submodule_hooks_android`</span><br><span class="line">        <span class="keyword">do</span></span><br><span class="line">            cp submodule_hooks_android/<span class="variable">$&#123;hook&#125;</span> <span class="variable">$&#123;module_dir&#125;</span>/custom_hooks/</span><br><span class="line">        	sudo chmod -R 755 <span class="variable">$&#123;module_dir&#125;</span>/custom_hooks</span><br><span class="line">            sudo chmod +x <span class="variable">$&#123;module_dir&#125;</span>/custom_hooks/<span class="variable">$&#123;hook&#125;</span></span><br><span class="line">        <span class="keyword">done</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<p>钩子装好后，试着为 framework 子模块推送一下代码，终端中会看到 <code>Bump Version for submodule framework</code> 的字眼，表示 framework 的 commit id 已被成功更新到主工程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">C02PGTP8FVH5:PAFFHouse hahack$ git push -u origin jilin_dev</span><br><span class="line">Counting objects: 3, done.</span><br><span class="line">Delta compression using up to 4 threads.</span><br><span class="line">Compressing objects: 100% (2&#x2F;2), done.</span><br><span class="line">Writing objects: 100% (3&#x2F;3), 308 bytes | 0 bytes&#x2F;s, done.</span><br><span class="line">Total 3 (delta 1), reused 0 (delta 0)</span><br><span class="line">remote:</span><br><span class="line">remote: &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;        </span><br><span class="line">remote: </span><br><span class="line">remote:         faq: http:&#x2F;&#x2F;yourcampany.com&#x2F;yourgroup&#x2F;FFWiki&#x2F;wikis&#x2F;git-faq        </span><br><span class="line">remote: </span><br><span class="line">remote: &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;        </span><br><span class="line">remote: [jilin_dev 941f8c5] Bump Version for submodule framework:        </span><br><span class="line">remote:  1 file changed, 1 insertion(+), 1 deletion(-)        </span><br><span class="line">remote: Updating commit id        </span><br><span class="line">remote: Bumping version of branch jilin_dev of main project...        </span><br><span class="line">remote: Bumping version of branch jilin_dev of father project...        </span><br><span class="line">remote: Successfully bumped version branch jilin_dev of father project        </span><br><span class="line">remote: remote:</span><br><span class="line">remote: remote: &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;                </span><br><span class="line">remote: remote:         </span><br><span class="line">remote: remote:         faq: http:&#x2F;&#x2F;yourcampany.com&#x2F;yourgroup&#x2F;FFWiki&#x2F;wikis&#x2F;git-faq                </span><br><span class="line">remote: remote:         </span><br><span class="line">remote: remote: &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;            </span><br><span class="line">remote: To http:&#x2F;&#x2F;yourcampany.com&#x2F;yourgroup&#x2F;App_Android.git        </span><br><span class="line">remote:    aa13394..69e6c467  HEAD -&gt; jilin_dev        </span><br><span class="line">To http:&#x2F;&#x2F;yourcampany.com&#x2F;yourgroup&#x2F;framework_android.git</span><br><span class="line">   e41b275..35141bf  jilin_dev -&gt; jilin_dev</span><br><span class="line">Branch jilin_dev set up to track remote branch jilin_dev from origin.</span><br></pre></td></tr></table></figure>
+<p>上面的步骤执行了两次 push 操作：</p>
+<ol>
+<li>push framework 子模块的代码；</li>
+<li>push 主工程的代码，更新 framework 的 commit id 。这个 push 操作是由 framework 的 post-receive 钩子自动完成的。</li>
+</ol>
+<p>等候一段时间后，打开主工程的持续集成页面，可以找到这次子模块更新触发的提交以及持续集成的结果：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-2/framework-bump.png" alt="非嵌套子模块的持续集成结果" />
+        <figcaption>非嵌套子模块的持续集成结果</figcaption>
+      </figure>
+    </p>
+<p>对于嵌套子模块，父模块提交完子模块的 commit id ，同样会触发父模块的 post-receive 钩子，于是会看到这样的推送结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">C02PGTP8FVH5:HFCommon hahack$ git push -u origin master_dev</span><br><span class="line">Counting objects: 3, done.</span><br><span class="line">Delta compression using up to 4 threads.</span><br><span class="line">Compressing objects: 100% (3&#x2F;3), done.</span><br><span class="line">Writing objects: 100% (3&#x2F;3), 305 bytes | 0 bytes&#x2F;s, done.</span><br><span class="line">Total 3 (delta 2), reused 0 (delta 0)</span><br><span class="line">remote: </span><br><span class="line">remote: &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;        </span><br><span class="line">remote: </span><br><span class="line">remote:         faq: http:&#x2F;&#x2F;yourcampany.com&#x2F;yourgroup&#x2F;FFWiki&#x2F;wikis&#x2F;git-faq        </span><br><span class="line">remote: </span><br><span class="line">remote: &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;        </span><br><span class="line">remote: warning: unable to rmdir FinancialProduct: Directory not empty        </span><br><span class="line">remote: [taishan 941b017] Bump Version for submodule HFCommon:        </span><br><span class="line">remote:  1 file changed, 1 insertion(+), 1 deletion(-)</span><br><span class="line">remote: Updating commit id        </span><br><span class="line">remote: Bumping version of branch taishan of main project...        </span><br><span class="line">remote: Bumping version of branch taishan of father project...        </span><br><span class="line">remote: Successfully bumped version branch taishan of father project        </span><br><span class="line">remote: Bumping version of branch taishan_dev of main project...  </span><br><span class="line">remote: remote:         </span><br><span class="line">remote: remote: &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;                </span><br><span class="line">remote: remote:         </span><br><span class="line">remote: remote:         faq: http:&#x2F;&#x2F;yourcampany.com&#x2F;yourgroup&#x2F;FFWiki&#x2F;wikis&#x2F;git-faq                </span><br><span class="line">remote: remote:         </span><br><span class="line">remote: remote: &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;                </span><br><span class="line">remote: remote: [taishan f43ab33] Bump Version for submodule react_native:                </span><br><span class="line">remote: remote:  1 file changed, 1 insertion(+), 1 deletion(-)                </span><br><span class="line">remote: remote: Updating commit id                </span><br><span class="line">remote: remote: Bumping version of branch taishan of main project...                </span><br><span class="line">remote: remote: Bumping version of branch taishan of father project...                </span><br><span class="line">remote: remote: Successfully bumped version branch taishan of father project                </span><br><span class="line">remote: remote: remote:                 </span><br><span class="line">remote: remote: remote: &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;                        </span><br><span class="line">remote: remote: remote:                 </span><br><span class="line">remote: remote: remote:         faq: http:&#x2F;&#x2F;yourcampany.com&#x2F;yourgroup&#x2F;FFWiki&#x2F;wikis&#x2F;git-faq                        </span><br><span class="line">remote: remote: remote:                 </span><br><span class="line">remote: remote: remote: &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;                        </span><br><span class="line">remote: remote: To http:&#x2F;&#x2F;yourcampany.com&#x2F;yourgroup&#x2F;App_Android.git                </span><br><span class="line">remote: remote:    50b73a2..f43ab33  HEAD -&gt; taishan                </span><br><span class="line">remote: To http:&#x2F;&#x2F;yourcampany.com&#x2F;yourgroup&#x2F;react_native.git        </span><br><span class="line">remote:    3552248..941b017  HEAD -&gt; taishan        </span><br><span class="line">To http:&#x2F;&#x2F;yourcampany.com&#x2F;yourgroup&#x2F;HFCommon.git</span><br><span class="line">   4940def..7a59ff0  master_dev -&gt; master_dev</span><br><span class="line">Branch master_dev set up to track remote branch master_dev from origin.</span><br></pre></td></tr></table></figure>
+<p>在主工程的持续集成页面中同样可以找出嵌套子模块触发的提交和持续集成结果：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-2/embeb-bump.png" alt="嵌套子模块的持续集成结果" />
+        <figcaption>嵌套子模块的持续集成结果</figcaption>
+      </figure>
+    </p>
+<p>只剩第三个问题未解决了。由于模块和分支不断在新增，上面的这两个文件肯定是需要经常更新，新增模块也需要安装这个钩子。这些既然已经可以用工具自动完成，只需要把工具都加进了 crontab 计划任务里，设定每天凌晨三点钟就自动执行一遍，问题完美解决！</p>
+<p>使用这个方案后，所有的子模块发生更新，都会触发依赖该子模块的主工程的持续集成测试。当发现主工程突然不能编译了，可以打开 Gitlab ，迅速定位到最早导致编译不过的子模块及提交：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/enterprise-class-git-version-control-2/problem-commit.png" alt="利用Gitlab定位编译问题" />
+        <figcaption>利用Gitlab定位编译问题</figcaption>
+      </figure>
+    </p>
+<p>这为我们定位编译问题提供了非常重要的线索！</p>
+<h2 id="后话">后话</h2>
+<p>在本篇文章中，我仔细讨论了对子模块进行持续集成的三种方案，并利用自动化手段实现逐层往上提交子模块 commit id 从而触发主工程构建。这些构建结果对我们快速定位工程编译不过的问题提供了重要的线索。</p>
+<p>说下其他一些值得注意的地方。有些时候某个模块的代码推送无法避免会导致暂时性的编译失败（比如涉及多个模块的代码提交），又不想被误认为是导致后面编译不过的罪魁祸首，那就可以通过在这些中间提交任务的 commit message 中加上 <code>[ci skip]</code> 字段，告诉 Gitlab 跳过对这些提交的构建测试，只在最后一次提交中去除该字段，检查最后一次的提交即可。</p>
+<p>另外一个问题是，自从启用了这种方案，我们服务器上的构建任务一下子爆增。一个子模块的代码推送可能会触发多个构建任务，而我们目前负责持续集成的机器还很少。这使得推送完代码后，往往需要等上半天才能看到结果，这可能会影响问题定位的及时性。我们在后面准备进行一个有趣的尝试：每个客户端开发者的机器其实已具备了构建至少一个平台的客户端的条件，所以可以利用开发机的剩余资源来帮忙构建。具体方法是：每个开发者将自己的机器注册为一个 Runner ，并自行打上 android 或者 ios 标签，标明机器能编译哪个平台的客户端：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gitlab-ci-multi-runner register -url http://yourcompany.com/ci -registration-token z_AvFaPcdF9aE3sseEvw --name <span class="string">&quot;android-panweizhou&quot;</span>  --<span class="built_in">limit</span> 1 --executor shell --shell bash --tag-list <span class="string">&quot;android&quot;</span></span><br></pre></td></tr></table></figure>
+<p>当机器暂时空余时，可以开启这个 Runner ，加入帮忙构建的队伍。Gitlab 将根据该 Runner 的标签为其安排相应平台的构建任务：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gitlab-ci-multi-runner start</span><br></pre></td></tr></table></figure>
+<p>年底我们将统计出 Gitlab 上这些 Runner 的构建次数，对次数多的 Runner 进行表彰。真是躺着就把钱挣了有木有！</p>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/work/enterprise-class-git-version-control-3/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/work/enterprise-class-git-version-control-1/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '化繁为简的企业级 Git 管理实战（二）：多分支子模块持续集成'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/enterprise-class-git-version-control-2.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2016-04-21 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/work/">work<span>7</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Git/">Git<span>5</span></a></li> <li><a href="/tags/CI/">CI<span>1</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%9C%80%E6%B1%82%E6%8F%8F%E8%BF%B0"><span class="toc-article-text">需求描述</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%BB%E5%B7%A5%E7%A8%8B%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90"><span class="toc-article-text">主工程持续集成</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%96%B9%E6%A1%88%E4%B8%80%EF%BC%9Atrigger"><span class="toc-article-text">方案一：trigger</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%96%B9%E6%A1%88%E4%BA%8C%EF%BC%9A%E5%AD%90%E6%A8%A1%E5%9D%97%E6%B5%8B%E8%AF%95%E5%B7%A5%E7%A8%8B"><span class="toc-article-text">方案二：子模块测试工程</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%96%B9%E6%A1%88%E4%B8%89%EF%BC%9A%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0%E5%AD%90%E6%A8%A1%E5%9D%97-commit-id"><span class="toc-article-text">方案三：自动更新子模块 commit id</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%90%8E%E8%AF%9D"><span class="toc-article-text">后话</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

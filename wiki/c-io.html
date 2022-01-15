@@ -1,0 +1,1149 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>输入输出 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="流的概念
+流是磁盘或其他外围设备中存储的数据的源点或终点。尽管在一些系统中(如在著名的UNIX系统中)，文本流和二进制流是没有差别的，但是标准库中还是提供了这两种流。
+文本流是由文本行组成的序列，每一行有 0个或多个字符并以 \n 结尾。在某些环境中也许需要把文本流转换成其他表示形式(例如把 \n ">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="输入输出"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '输入输出'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 输入输出</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="流的概念">流的概念</h2>
+<p>流是磁盘或其他外围设备中存储的数据的源点或终点。尽管在一些系统中(如在著名的UNIX系统中)，文本流和二进制流是没有差别的，但是标准库中还是提供了这两种流。</p>
+<p>文本流是由文本行组成的序列，每一行有 0个或多个字符并以 <code>\n</code> 结尾。在某些环境中也许需要把文本流转换成其他表示形式(例如把 <code>\n</code> 映射成回车符和换行符)或从其他表示形式转换过来。二进制流是未经处理的字节组成的序列，这些字节记录着内部数据，具有如下性质：如果在同一系统中把写出的二进制流再读入进来，读入的和写出的内容是完全相同的。</p>
+<p>通过打开一个流可以将该流与一个文件或设备关联起来，这一关联可以通过关闭流而终止。<strong>打开一个文件将返回一个指向 FILE 类型对象的指针，该指针中记录有用于控制该流的所有必要的信息</strong>。在不会引起歧义性的情况下，我们在下文中将不再区分“文件指针”和“流”。</p>
+<p>在程序开始执行时，stdin、stdout 和 stderr 这三个流已经被打开。</p>
+<h2 id="格式化输入输出">格式化输入输出</h2>
+<h3 id="格式化输出">格式化输出</h3>
+<p>printf 类函数用于提供格式化的输出转换。</p>
+<h4 id="格式化字符">格式化字符</h4>
+<p>格式化字符串由两种类型的对象组成：普通字符(它们被拷贝到输出流)与转换规格说明(它们决定参数的转换和输出格式)。每个转换规格说明均以字符 <code>%</code> 开头,以转换字符结束。</p>
+<h4 id="printf转换说明的可选项">printf转换说明的可选项</h4>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>描述</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>#</td>
+<td>八进制前面加0（转换字符为o），十六进制前面加0x（转换字符为x）或0X（转换字符为X）。</td>
+<td><code>printf(&quot;%#x&quot;, 0xff)</code>打印<code>0xff</code>，<code>printf(&quot;%x&quot;, 0xff)</code>打印<code>ff</code>。</td>
+</tr>
+<tr>
+<td>-</td>
+<td>格式化后的内容居左，右边可以留空格。</td>
+<td>见下面的例子</td>
+</tr>
+<tr>
+<td>宽度</td>
+<td>用一个整数指定格式化后的最小长度，如果格式化后的内容没有这么长，可以在左边留空格，如果前面指定了-号就在右边留空格。宽度有一种特别的形式，不指定整数值而是写成一个 * 号，表示取一个int型参数作为宽度。</td>
+<td><code>printf(&quot;-%10s-&quot;, &quot;hello&quot;)</code>打印<code>-␣␣␣␣␣hello-</code>，<code>printf(&quot;-%-*s-&quot;, 10, &quot;hello&quot;)</code>打印<code>-hello␣␣␣␣␣-</code>。</td>
+</tr>
+<tr>
+<td>.</td>
+<td>用于分隔上一条提到的最小长度和下一条要讲的精度。</td>
+<td>见下面的例子</td>
+</tr>
+<tr>
+<td>精度</td>
+<td>用一个整数表示精度。精度也可以不指定整数值而是写成一个 * 号，表示取下一个int型参数作为精度。</td>
+<td><code>printf(&quot;%.4s&quot;, &quot;hello&quot;)</code>打印<code>hell</code>，<code>printf(&quot;-%6.4d-&quot;, 100)</code>打印<code>-␣␣0100-</code>，<code>printf(&quot;-%*.*f-&quot;, 8, 4, 3.14)</code>打印<code>-␣␣3.1400-</code>。</td>
+</tr>
+<tr>
+<td>字长</td>
+<td>对于整型参数，hh、h、l、ll分别表示是char、short、long、long long型的字长，至于是有符号数还是无符号数则取决于转换字符；对于浮点型参数，L表示long double型的字长。</td>
+<td><code>printf(&quot;%hhd&quot;, 255)</code>打印<code>-1</code>。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="printf-常用的转换字符">printf 常用的转换字符</h4>
+<p>在 <code>%</code> 与转换字符这二者之间依次可以有以下转换字符：</p>
+<table>
+<thead>
+<tr>
+<th>格式码</th>
+<th>参数类型：转换效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>d</code>, <code>i</code></td>
+<td>int: 有符号十进制表示法</td>
+</tr>
+<tr>
+<td><code>o</code></td>
+<td>int；无符号八进制表示法(无前导 0)</td>
+</tr>
+<tr>
+<td><code>x</code>, <code>X</code></td>
+<td>int；无符号十六进制表示法(无前导 0 X和0x),对0x用abcdef,对0X用ABCDEF</td>
+</tr>
+<tr>
+<td><code>u</code></td>
+<td>int；无符号十进制表示法</td>
+</tr>
+<tr>
+<td><code>c</code></td>
+<td>int；单个字符,转换为 unsigned char类型后</td>
+</tr>
+<tr>
+<td><code>s</code></td>
+<td>char *；输出字符串直到遇到 <code>\0</code>或者已达到由精度指定的字符数</td>
+</tr>
+<tr>
+<td><code>f</code></td>
+<td>double；形如[-] mmm.ddd的十进制浮点数表示法，d的数目由精度确定。缺省精度为6位，精度为0时不输出小数点</td>
+</tr>
+<tr>
+<td><code>e</code>, <code>E</code></td>
+<td>double；形如[-]m.d ddddde±xx或[-] m .dddd ddE±xx的十进制表示法。d的数目由精度确定，缺省精度为6位。精度为0时不输出小数点</td>
+</tr>
+<tr>
+<td><code>g</code>, <code>G</code></td>
+<td>double；当指数值小于-4或大于等于精度时,采用 <code>%e</code> 或<code>%E</code>格式；否则采用 <code>%f</code> 的格式。尾部的0与小数点不打印</td>
+</tr>
+<tr>
+<td><code>p</code></td>
+<td>void *；输出指针值(具体表示与实现有关)</td>
+</tr>
+<tr>
+<td><code>n</code></td>
+<td>int *；到目前为止以此格式调用 printf 输出的字符的数目将被写入到相应参数中。</td>
+</tr>
+<tr>
+<td><code>%</code></td>
+<td>不进行参数转换；输出符号 <code>%</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="fprintf">fprintf</h4>
+<p>fprintf函数用于按照 format 说明的格式把参数列表中参数的内容进行转换，并写入stream指向的流。返回值是实际写入的字符数。若出错则返回一个负值。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fprintf</span><span class="params">(FILE *stream, <span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span></span><br></pre></td></tr></table></figure>
+<h4 id="printf">printf</h4>
+<p><code>printf(...)</code> 函数等价于 <code>fprintf(stdout, ...)</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">printf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span></span><br></pre></td></tr></table></figure>
+<h4 id="sprintf">sprintf</h4>
+<p>sprintf 函数与 printf 函数的功能基本相同，但输出到数组 s 中，并以 <code>\0</code> 结束。 s必须足够大，以便能装下输出结果。该函数返回实际输出的字符数，不包括 <code>\0</code>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sprintf</span><span class="params">(<span class="keyword">char</span> *str, <span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span>;</span><br></pre></td></tr></table></figure>
+<h4 id="snprintf">snprintf</h4>
+<p>sprintf并不打印到文件，而是打印到用户提供的缓冲区str中并在末尾加’\0’，由于格式化后的字符串长度很难预计，所以很可能造成缓冲区溢出，用snprintf更好一些，参数size指定了缓冲区长度，如果格式化后的字符串长度超过缓冲区长度，snprintf就把字符串截断到size-1字节，再加上一个’\0’写入缓冲区，也就是说snprintf保证字符串以’\0’结尾。snprintf的返回值是格式化后的字符串长度（不包括结尾的’\0’），如果字符串被截断，返回的是截断之前的长度，把它和实际缓冲区中的字符串长度相比较就可以知道是否发生了截断。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">snprintf</span><span class="params">(<span class="keyword">char</span> *str, <span class="keyword">size_t</span> size, <span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span>;</span><br></pre></td></tr></table></figure>
+<h4 id="vprintf-vfprintf-与-vsprintf">vprintf, vfprintf 与 vsprintf</h4>
+<p>vprintf、vfprintf 与 vsprintf 这几个函数与对应的 printf 函数等价，但参数列表由 <a href="/wiki/c/%E6%A0%87%E5%87%86%E5%BA%93#stdarg.h">arg</a> 代替。 arg由宏 <code>va_start</code> 初始化，由 <code>va_arg</code> 调用。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vprintf</span>(<span class="keyword">const</span> <span class="keyword">char</span> *format, va_list arg)</span><br><span class="line"><span class="built_in">vfprintf</span>(FILE *stream, <span class="keyword">const</span> <span class="keyword">char</span> *format, va_list arg)</span><br><span class="line"><span class="built_in">vsprintf</span>(<span class="keyword">char</span> *s, <span class="keyword">const</span> <span class="keyword">char</span> *format, va_list arg)</span><br></pre></td></tr></table></figure>
+<p>示例：实现格式化打印错误的err_sys函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;errno.h&gt;</span><br><span class="line">#include &lt;stdarg.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line"></span><br><span class="line">#define MAXLINE 80</span><br><span class="line"></span><br><span class="line">void err_sys(const char *fmt, ...)</span><br><span class="line">&#123;</span><br><span class="line">    int err &#x3D; errno;</span><br><span class="line">    char buf[MAXLINE+1];</span><br><span class="line">    va_list ap;</span><br><span class="line"></span><br><span class="line">    va_start(ap, fmt);</span><br><span class="line"></span><br><span class="line">    vsnprintf(buf, MAXLINE, fmt, ap);</span><br><span class="line">    snprintf(buf+strlen(buf), MAXLINE-strlen(buf), &quot;: %s&quot;, strerror(err));</span><br><span class="line">    strcat(buf, &quot;\n&quot;);</span><br><span class="line">    fputs(buf, stderr);</span><br><span class="line"></span><br><span class="line">    va_end(ap);</span><br><span class="line">    exit(1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main(int argc, char *argv[])</span><br><span class="line">&#123;</span><br><span class="line">    FILE *fp;</span><br><span class="line">    if (argc !&#x3D; 2) &#123;</span><br><span class="line">        fputs(&quot;Usage: .&#x2F;a.out pathname\n&quot;, stderr);</span><br><span class="line">        exit(1);</span><br><span class="line">    &#125;</span><br><span class="line">    fp &#x3D; fopen(argv[1], &quot;r&quot;);</span><br><span class="line"></span><br><span class="line">    if (fp &#x3D;&#x3D; NULL)</span><br><span class="line">        err_sys(&quot;Line %d - Open file %s&quot;, __LINE__, argv[1]);</span><br><span class="line">    printf(&quot;Open %s OK\n&quot;, argv[1]);</span><br><span class="line">    fclose(fp);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="格式化输入">格式化输入</h3>
+<p>scanf 类函数用于提供格式化输入转换。</p>
+<h4 id="格式化字符-v2">格式化字符</h4>
+<p>格式字符串 format 通常包含有用于指导输入转换的转换规格说明。格式字符串中可以包含：</p>
+<ul>
+<li>空格或制表符，它们将被忽略。</li>
+<li>普通字符(“%”除外)，与输入流中下一个非空白的字符相匹配。</li>
+<li>转换规格说明，由一个 %、一个赋值屏蔽字符 *(任选)、一个用于指定最大字段宽的数(任选)、一个用于指定目标字段的字符 (h、l或 L )(任选)以及一个转换字符组成。</li>
+</ul>
+<p>转换规格说明决定了输入字段的转换方式。通常把结果保存在由对应参数指向的变量中。然而，如果转换规格说明中包含有赋值屏蔽字符“*”，例如<code>% *s</code>，那么就跳过对应的输入字段，不进行赋值。输入字段是一个由非空白符组成的字符串，当遇到空白符或到达最大字段宽(如果有的话)时，对输入字段的读入结束。这意味着 scanf 函数可以跨越行的界限来读入其输入，因为换行符也是空白符(空白符包括空格、横向制表符、纵向制表符、换行符、回车符和换页符)。</p>
+<p>转换字符说明了输入字段的解释含义,对应的参数必须是指针。合法的转换符如下表所示。</p>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>输入数据；参数类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>d</code></td>
+<td>十进制整数； int *</td>
+</tr>
+<tr>
+<td><code>i</code></td>
+<td>整数；int * 。该整数可以是以 0开头的八进制数，也可以是以 0x 或 0X 开头的十六进制数</td>
+</tr>
+<tr>
+<td><code>o</code></td>
+<td>八进制整数(可以带或不带前导 0)；int *</td>
+</tr>
+<tr>
+<td><code>u</code></td>
+<td>无符号十进制整数； unsigned int *</td>
+</tr>
+<tr>
+<td><code>x</code></td>
+<td>十六进制整数(可以带或不带前导 0x 或 0X)；int *</td>
+</tr>
+<tr>
+<td><code>c</code></td>
+<td>字符；char * 。按照字段宽的大小把读入的字符保存在指定的数组中，不加入字符 <code>\0</code>。字段宽的缺省值为 1。在这种情况下，不跳过空白符 ；如果要读入下一个非空白符，使用 <code>%1s</code></td>
+</tr>
+<tr>
+<td><code>s</code></td>
+<td>由非空白符组成的字符串(不包含引号)； char*。该参数指针指向一个字符数组，该字符数组有足够空间来保存该字符串以及在末尾添加的 <code>\0</code></td>
+</tr>
+<tr>
+<td><code>e</code>、<code>f</code>、<code>g</code></td>
+<td>浮点数；float *。float 浮点数的输入格式为：一个任选的正负号，一串可能包含小数点的数字和一个任选的指数字段。指数字段由字母 e 或 E 以及后跟的一个可能带正负号的整数组成</td>
+</tr>
+<tr>
+<td><code>p</code></td>
+<td>用<code>printf(&quot;%p&quot;)</code>函数调用输出的指针值； void *</td>
+</tr>
+<tr>
+<td><code>n</code></td>
+<td>将到目前为止此调用所读的字符数写入参数； int * 。</td>
+</tr>
+<tr>
+<td><code>[...]</code></td>
+<td>不读入输入字符。不增加转换项目计数用方括号括起的字符集中的字符来匹配输入，以找到最长的非空字符串； char *。在末尾添加字符<code>\0</code>。格式 <code>[]...]</code> 表示字符集中包含字符 <code>]</code></td>
+</tr>
+<tr>
+<td><code>[^...]</code></td>
+<td>用不在方括号括起的字符集中的字符来匹配输入，以找到最长的非空字符串； char *。在末尾添加字符<code>\0</code>。格式 <code>[ ^ ]. ..]</code> 表示字符集中包含字符 <code>]</code></td>
+</tr>
+<tr>
+<td><code>%</code></td>
+<td>字面值%，不进行赋值</td>
+</tr>
+</tbody>
+</table>
+<h4 id="fscanf">fscanf</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fscanf</span><span class="params">(FILE *stream, <span class="keyword">const</span> <span class="keyword">char</span> *format, ...)</span></span></span><br></pre></td></tr></table></figure>
+<p>fscanf 函数用于在格式串 format 的控制下从流stream中读入字符，把转换后的值赋给后续各个参数，在此每一个参数都必须是一个指针。当格式串 format 结束时函数返回。如果到达文件的末尾或在参数被转换前出错，那么该函数返回 EOF；否则返回实际被转换并赋值的输入项的数目。</p>
+<h4 id="scanf">scanf</h4>
+<p><code>scanf(...)</code>函数等价于<code>fscanf(stdin, ...)</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">scanf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* format, ...)</span></span></span><br></pre></td></tr></table></figure>
+<h5 id="示例">示例</h5>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> str[] = <span class="string">&quot;hello world&quot;</span>;</span><br><span class="line">    <span class="keyword">int</span> num;</span><br><span class="line">    <span class="keyword">float</span> value;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%s&quot;</span>, str);</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;num);</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%f&quot;</span>, &amp;value);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, str);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, num);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%f\n&quot;</span>, value);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="sscanf">sscanf</h4>
+<p><code>sscanf(s, ...)</code>函数与<code>scanf (... )</code>等价,不同的是前者的输入字符来源于 s。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sscanf</span><span class="params">(<span class="keyword">char</span> *s,<span class="keyword">const</span> *format, ... )</span></span></span><br><span class="line"><span class="function"></span></span><br></pre></td></tr></table></figure>
+<h2 id="文件输入输出">文件输入输出</h2>
+<h3 id="fopen">fopen</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">FILE *<span class="title">fopen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">const</span> <span class="keyword">char</span> *mode)</span></span></span><br></pre></td></tr></table></figure>
+<p>fopen函数用于打开以filename所指内容为名字的文件,返回与之相关联的流。如果打开操作失败,那么返回 NULL。</p>
+<p>访问方式mode的合法值如下:</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>“r”</td>
+<td>打开文本文件用于读。</td>
+</tr>
+<tr>
+<td>“w”</td>
+<td>创建文本文件用于写,并删除已存在的内容(如果有的话)。</td>
+</tr>
+<tr>
+<td>“a”</td>
+<td>添加；打开或创建文本文件用于在文件末尾写。</td>
+</tr>
+<tr>
+<td>“r+”</td>
+<td>打开文本文件用于更新(即读和写)。</td>
+</tr>
+<tr>
+<td>“w+”</td>
+<td>创建文本文件用于更新,并删除已存在的内容(如果有的话)。</td>
+</tr>
+<tr>
+<td>“a+”</td>
+<td>添加、打开或创建文本文件用于更新和在文件末尾写。</td>
+</tr>
+</tbody>
+</table>
+<p>后三种方式允许对同一文件进行读和写。在读和写的交替过程中,必须调用 <a href="#fflush">fflush</a> 函数或文件定位函数。如果方式值在上述字符之后再加上 “b” ,如 “rb” 或 &quot;w+b &quot;等，那么表示文件是二进制文件。文件名 filename 长度的最大值为 <code>FILENAME_MAX</code> 个字符。一次最多可打开 <code>FOPEN_MAX</code> 个文件。</p>
+<p>在打开一个文件时如果出错，fopen将返回NULL并设置errno，errno稍后介绍。在程序中应该做出错处理，通常这样写：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ( (fp = fopen(<span class="string">&quot;/tmp/file1&quot;</span>, <span class="string">&quot;r&quot;</span>)) == <span class="literal">NULL</span>) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;error open file /tmp/file1!\n&quot;</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="freopen">freopen</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">FILE *<span class="title">freopen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">const</span> <span class="keyword">char</span> *mode, FILE *stream)</span></span></span><br></pre></td></tr></table></figure>
+<p>freopen 函数用于以参数 mode 指定的方式打开参数 filename 指定的文件，并使该文件与参数 stream 指定的流相关联。它返回指向 stream 的指针；若出错则返回 NULL。freopen 函数一般用于
+stdin、stdout 和 stderr 等标准流的重定向。</p>
+<h3 id="fflush">fflush</h3>
+<p>用户程序调用fputc通常只是写到I/O缓冲区中，这样fputc函数可以很快地返回，如果I/O缓冲区写满了，fputc就通过系统调用把I/O缓冲区中的数据传给内核，内核最终把数据写回磁盘。有时候用户程序希望把I/O缓冲区中的数据立刻传给内核，让内核写回设备，这称为Flush操作，对应的库函数是fflush，fclose函数在关闭文件之前也会做Flush操作。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fflush</span><span class="params">(FILE *stream)</span></span></span><br></pre></td></tr></table></figure>
+<p>对输出流, fflush 函数用于将已写到缓冲区但尚未写出的全部数据都写到文件中。对输入流，其结果是未定义的。如果写的过程中发生错误则返回 EOF ，否则返回 0。fflush(NULL)函数用于刷新所有的输出流。</p>
+<h4 id="C标准库的-I-O-缓冲区">C标准库的 I/O 缓冲区</h4>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/c-io/stdlib.buffer.png" alt="C标准库的I/O缓冲区" />
+        <figcaption>C标准库的I/O缓冲区</figcaption>
+      </figure>
+    </p>
+<p>C标准库的I/O缓冲区有三种类型：全缓冲、行缓冲和无缓冲。当用户程序调用库函数做写操作时，不同类型的缓冲区具有不同的特性。</p>
+<ul>
+<li>全缓冲：如果缓冲区写满了就写回内核。常规文件通常是全缓冲的。</li>
+<li>行缓冲：如果用户程序写的数据中有换行符就把这一行写回内核，或者如果缓冲区写满了就写回内核。标准输入和标准输出对应终端设备时通常是行缓冲的。</li>
+<li>无缓冲：用户程序每次调库函数做写操作都要通过系统调用写回内核。标准错误输出通常是无缓冲的，这样用户程序产生的错误信息可以尽快输出到设备。</li>
+</ul>
+<h3 id="fclose">fclose</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fclose</span><span class="params">(FILE *stream)</span></span></span><br></pre></td></tr></table></figure>
+<p>fclose函数用于刷新 stream 的全部未写出数据，丢弃任何未读的缓冲区内的输入数据并释放自动分配的缓冲区，最后关闭流。若出错则返回 EOF，否则返回 0。</p>
+<div class="alert alert-danger"><i class="fas fa-bug"></i>  fopen调用应该和fclose调用配对，打开文件操作完之后一定要记得关闭。如果不调用fclose，在进程退出时系统会自动关闭文件，但是不能因此就忽略fclose调用，如果写一个长年累月运行的程序（比如网络服务器程序），打开的文件都不关闭，堆积得越来越多，就会占用越来越多的系统资源。
+</div>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  关于fopen、fgetc、fputc、fclose几个函数的底层实现可以参考[Unbuffered I/O](/wiki/kernel/Unbuffered I/O)一节的内容
+</div>
+<h2 id="字符输入输出">字符输入输出</h2>
+<h3 id="fgetc">fgetc</h3>
+<p>fgetc 函数用于以 unsigned char 类型返回 stream 流中的下一个字符(转换为 int 类型)。如果到达文件的末尾或发生错误，则返回 EOF。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fgetc</span><span class="params">(FILE *stream)</span></span></span><br></pre></td></tr></table></figure>
+<p>对于fgetc函数的使用有以下几点说明：</p>
+<ul>
+<li>要用fgetc函数读一个文件，该文件的打开方式必须是可读的。</li>
+<li>系统对于每个打开的文件都记录着当前读写位置在文件中的地址（或者说距离文件开头的字节数），也叫偏移量（Offset）。当文件打开时，读写位置是0，每调用一次fgetc，读写位置向后移动一个字节，因此可以连续多次调用fgetc函数依次读取多个字节。</li>
+<li>fgetc成功时返回读到一个字节，本来应该是unsigned char型的，但由于函数原型中返回值是int型，所以这个字节要转换成int型再返回，那为什么要规定返回值是int型呢？因为出错或读到文件末尾时fgetc将返回EOF，即-1，保存在int型的返回值中是0xffffffff，如果读到字节0xff，由unsigned char型转换为int型是0x000000ff，只有规定返回值是int型才能把这两种情况区分开，如果规定返回值是unsigned char型，那么当返回值是0xff时无法区分到底是EOF还是字节0xff。<strong>如果需要保存fgetc的返回值，一定要保存在int型变量中</strong>，如果写成unsigned char c = fgetc(fp);，那么根据c的值又无法区分EOF和0xff字节了。注意，fgetc读到文件末尾时返回EOF，只是用这个返回值表示已读到文件末尾，并不是说每个文件末尾都有一个字节是EOF（根据上面的分析，EOF并不是一个字节）。</li>
+</ul>
+<h3 id="fputc">fputc</h3>
+<p>fputc函数用于把字符 c(转换为 unsigned char类型)输出到流 stream 中。它返回所写的字符，若出错则返回EOF。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fputc</span><span class="params">(<span class="keyword">int</span> c, FILE *stream)</span></span></span><br></pre></td></tr></table></figure>
+<p>对于fputc函数的使用也要说明几点：</p>
+<ul>
+<li>要用fputc函数写一个文件，该文件的打开方式必须是可写的（包括追加）。</li>
+<li>每调用一次fputc，读写位置向后移动一个字节，因此可以连续多次调用fputc函数依次写入多个字节。但如果文件是以追加方式打开的，每次调用fputc时总是将读写位置移到文件末尾然后把要写入的字节追加到后面。</li>
+</ul>
+<h3 id="getc">getc</h3>
+<p>getc函数等价于 fgetc，不同之处为：当 getc 函数被定义为宏时，它可能多次计算 stream 的值。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getc</span><span class="params">(FILE *stream)</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="getchar">getchar</h3>
+<p>getchar函数等价于 getc(stdin)。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getchar</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="putc">putc</h3>
+<p>putc 函数等价于 fputc，不同之处为：当 putc 函数被定义为宏时，它可能多次计算 stream 的值。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">putc</span><span class="params">(<span class="keyword">int</span> c, FILE *stream)</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="putchar">putchar</h3>
+<p>putchar© 函数等价于 putc(c, stdout)。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">putchar</span><span class="params">(<span class="keyword">int</span> c)</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="ungetc">ungetc</h3>
+<p>ungetc用于把字符 c(转换为 unsigned char类型)写回到流 stream 中，下次对该流进行读操作时，将返回该字符。对每个流只能写回一个字符，且此字符不能是 EOF。ungetc函数返回被写回的字符；如果发生错误，那么它返回 EOF。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">ungetc</span><span class="params">(<span class="keyword">int</span> c, FILE *stream)</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="字符串输入输出">字符串输入输出</h2>
+<h3 id="fgets">fgets</h3>
+<p>fgets函数用于读入最多 n-1 个字符到数组 s 中。当遇到换行符 <code>\n</code> 时，把换行符保留在数组s中，读入不再进行。数组 s以 <code>\0</code> 结尾。 fgets 函数返回数组 s，如果到达文件的末尾或发生错误，则返回 NULL。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">fgets</span><span class="params">(<span class="keyword">char</span> *s, <span class="keyword">int</span> n, FILE *stream)</span></span></span><br></pre></td></tr></table></figure>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  对于fgets来说，<code>\n</code> 是一个特别的字符，而 <code>\0</code> 并无任何特别之处，如果读到 <code>\0</code> 就当作普通字符读入。如果文件中存在 <code>\0</code> 字符（或者说0x00字节），调用fgets之后就无法判断缓冲区中的 <code>\0</code> 究竟是从文件读上来的字符还是由fgets自动添加的结束符，所以fgets只适合读文本文件而不适合读二进制文件，并且文本文件中的所有字符都应该是可见字符，不能有 <code>\0</code> 。
+</div>
+<h3 id="fputs">fputs</h3>
+<p>fputs函数用于把字符串 s(不包含字符 <code>\n</code>)输出到流 stream 中；它返回一个非负值，若出错则返回EOF。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fputs</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s, FILE *stream)</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="gets">gets</h3>
+<p>gets函数用于把下一个字符串读入到数组 s 中，并把读入的换行符替换为字符 <code>\0</code> 。它返回数组s，如果到达文件的末尾或发生错误则返回 NULL。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">gets</span><span class="params">(<span class="keyword">char</span> *s)</span></span></span><br></pre></td></tr></table></figure>
+<div class="alert alert-danger"><i class="fas fa-bug"></i>  <strong>Never use gets()</strong>。gets函数的存在只是为了兼容以前的程序，我们写的代码都不应该调用这个函数。gets函数的接口设计得很有问题，就像strcpy一样，用户提供一个缓冲区，却不能指定缓冲区的大小，很可能导致缓冲区溢出错误，这个函数比strcpy更加危险，strcpy的输入和输出都来自程序内部，只要程序员小心一点就可以避免出问题，而gets读取的输入直接来自程序外部，用户可能通过标准输入提供任意长的字符串，程序员无法避免gets函数导致的缓冲区溢出错误，所以唯一的办法就是不要用它。
+</div>
+<h3 id="puts">puts</h3>
+<p>puts函数用于把字符串 s 和一个换行符输出到 stdout。如果发生错误，那么它返回 EOF；否则返回一个非负值。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">puts</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="直接输入输出">直接输入输出</h2>
+<h3 id="fread">fread</h3>
+<p>fread函数用于从输入流 stream 中读入最多 nobj 个长度为 size 的对象到 ptr 指向的数组中，并返回所读入的对象数，此返回值可能小于 nobj。实际执行状态可用函数 feof 或 ferror 得到。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">fread</span><span class="params">(<span class="keyword">void</span> *ptr, <span class="keyword">size_t</span> size, <span class="keyword">size_t</span> nobj, FILE *stream)</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="fwrite">fwrite</h3>
+<p>fwrite 函数用于把 ptr 所指向的数组中 nobj 个长度为 size 的对象输出到流 stream 中，并返回被输出的对象数。如果发生错误，则返回一个小于 nobj 的值。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">fwrite</span><span class="params">(<span class="keyword">const</span> <span class="keyword">void</span> *ptr, <span class="keyword">size_t</span> size, <span class="keyword">size_t</span> nobj, FILE *stream)</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="示例-v2">示例</h3>
+<h4 id="writerec-c">writerec.c</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* writerec.c */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">record</span> &#123;</span></span><br><span class="line">    <span class="keyword">char</span> name[<span class="number">10</span>];</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">record</span> <span class="title">array</span>[2] =</span> &#123; &#123;<span class="string">&quot;Ken&quot;</span>, <span class="number">24</span>&#125;, &#123;<span class="string">&quot;Knuth&quot;</span>, <span class="number">28</span>&#125; &#125;;</span><br><span class="line">    FILE *fp = fopen(<span class="string">&quot;recfile&quot;</span>, <span class="string">&quot;w&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (fp == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        perror(<span class="string">&quot;Open file recfile&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    fwrite(<span class="built_in">array</span>, <span class="keyword">sizeof</span>(struct record), <span class="number">2</span>, fp);</span><br><span class="line">    fclose(fp);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="readrec-c">readrec.c</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* readrec.c */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">record</span> &#123;</span></span><br><span class="line">    <span class="keyword">char</span> name[<span class="number">10</span>];</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">record</span> <span class="title">array</span>[2];</span></span><br><span class="line">    FILE *fp = fopen(<span class="string">&quot;recfile&quot;</span>, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (fp == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        perror(<span class="string">&quot;Open file recfile&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    fread(<span class="built_in">array</span>, <span class="keyword">sizeof</span>(struct record), <span class="number">2</span>, fp);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Name1: %s\tAge1: %d\n&quot;</span>, <span class="built_in">array</span>[<span class="number">0</span>].name, <span class="built_in">array</span>[<span class="number">0</span>].age);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Name2: %s\tAge2: %d\n&quot;</span>, <span class="built_in">array</span>[<span class="number">1</span>].name, <span class="built_in">array</span>[<span class="number">1</span>].age);</span><br><span class="line">    fclose(fp);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="输出">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ gcc writerec.c -o writerec</span><br><span class="line">$ gcc readrec.c -o readrec</span><br><span class="line">$ ./writerec</span><br><span class="line">$ od -tx1 -tc -Ax recfile </span><br><span class="line">000000 4b 65 6e 00 00 00 00 00 00 00 00 00 18 00 00 00</span><br><span class="line">         K   e   n  \0  \0  \0  \0  \0  \0  \0  \0  \0 030  \0  \0  \0</span><br><span class="line">000010 4b 6e 75 74 68 00 00 00 00 00 00 00 1c 00 00 00</span><br><span class="line">         K   n   u   t   h  \0  \0  \0  \0  \0  \0  \0 034  \0  \0  \0</span><br><span class="line">000020</span><br><span class="line">$ ./readrec </span><br><span class="line">Name1: Ken	Age1: 24</span><br><span class="line">Name2: Knuth	Age2: 28</span><br></pre></td></tr></table></figure>
+<h2 id="文件定位函数">文件定位函数</h2>
+<h3 id="fseek">fseek</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fseek</span><span class="params">(FILE *stream, <span class="keyword">long</span> offset, <span class="keyword">int</span> whence)</span></span></span><br></pre></td></tr></table></figure>
+<p>fseek函数用于给与stream流相关的文件定位，随后的读写操作将从新位置开始。对于二进制文件，此位置被定位在由 whence 开始的 offset 个字符处。 whence的值可能为：</p>
+<ul>
+<li><code>SEEK_SET</code>：文件开始处</li>
+<li><code>SEEK_CUR</code>：当前位置</li>
+<li><code>SEEK_END</code>：文件结束处。</li>
+</ul>
+<p>offset可正可负，负值表示向前（向文件开头的方向）移动，正值表示向后（向文件末尾的方向）移动，如果向前移动的字节数超过了文件开头则出错返回，如果向后移动的字节数超过了文件末尾，再次写入时将增大文件尺寸，从原来的文件末尾到fseek移动之后的读写位置之间的字节都是0。</p>
+<h4 id="示例-v3">示例</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    FILE* fp;</span><br><span class="line">    <span class="keyword">if</span> ( (fp = fopen(<span class="string">&quot;textfile&quot;</span>,<span class="string">&quot;r+&quot;</span>)) == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        perror(<span class="string">&quot;Open file textfile&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (fseek(fp, <span class="number">10</span>, SEEK_SET) != <span class="number">0</span>) &#123;</span><br><span class="line">        perror(<span class="string">&quot;Seek file textfile&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    fputc(<span class="string">&#x27;K&#x27;</span>, fp);</span><br><span class="line">    fclose(fp);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="ftell">ftell</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">ftell</span><span class="params">(FILE *stream)</span></span></span><br></pre></td></tr></table></figure>
+<p>ftell 函数用于返回与 stream 流相关的文件的当前位置。在出错时返回 -1L。</p>
+<h3 id="rewind">rewind</h3>
+<p>rewind(fp)函数等价于 fseek(fp，0L，SEEK_SET) 与 clearerr(fp) 这两个函数顺序执行的效果。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">rewind</span><span class="params">(FILE *stream)</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="fgetpos">fgetpos</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fgetpos</span><span class="params">(FILE *stream， <span class="keyword">fpos_t</span> *ptr)</span></span></span><br></pre></td></tr></table></figure>
+<p>fgetpos函数用于把 stream流的当前位置记录在 *ptr中，供随后的 fsetpos 函数调用时使用。若出错则返回一个非 0 值。</p>
+<h3 id="fsetpos">fsetpos</h3>
+<p>fsetpos函数用于将流 stream 的位置定位在 ptr 所指向的位置。 * ptr的值是在函数 fgetpos 调用时记录下来的。若出错则返回一个非 0 值。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fsetpos</span><span class="params">(FILE *stream， <span class="keyword">const</span> <span class="keyword">fpos_t</span> *ptr)</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="错误处理">错误处理</h2>
+<p>当发生错误或到达文件末尾时，标准库中的许多函数将设置状态指示符。这些状态指示符可被显式地设置和测试。另外，很多系统函数在错误返回时将错误原因记录在libc定义的全局变量errno中，每种错误原因对应一个错误码。请查阅errno(3)的Man Page了解各种错误码，errno在头文件errno.h中声明，是一个整型变量，所有错误码都是正整数。</p>
+<h3 id="clearerr">clearerr</h3>
+<p>clearerr 函数用于清除与流 stream 相关的文件结束指示符和错误指示符。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">clearerr</span><span class="params">(FILE *stream)</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="feof">feof</h3>
+<p>feof函数用于在与stream流相关的文件结束指示符被设置时返回一个非0值。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">feof</span><span class="params">(FILE *stream)</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="ferror">ferror</h3>
+<p>ferror函数用于在与stream相关的文件出错指示符被设置时返回一个非0值。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">ferror</span><span class="params">(FILE *stream)</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="perror">perror</h3>
+<p>perror(s) 函数用于输出字符串 s 以及与全局变量 errno 中的整数值相对应的出错信息，具体出错信息的内容依赖于实现。该函数的功能类似于 <code>fprintf(stderr, &quot;%s: %s\n&quot;, s, &quot;出错信息&quot;)</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">perror</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span></span><br></pre></td></tr></table></figure>
+<p>如果在程序中打印错误信息时直接打印errno变量，打印出来的只是一个整数值，仍然看不出是什么错误。比较好的办法是用perror或strerror函数将errno解释成字符串再打印。</p>
+<h4 id="示例-v4">示例</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    FILE *fp = fopen(<span class="string">&quot;abcde&quot;</span>, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (fp == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        perror(<span class="string">&quot;Open file abcde&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="说明">说明</h4>
+<p>如果文件abcde不存在，fopen返回-1并设置errno为ENOENT，紧接着perror函数读取errno的值，将ENOENT解释成字符串No such file or directory并打印，最后打印的结果是Open file abcde: No such file or directory。虽然perror可以打印出错误原因，传给perror的字符串参数仍然应该提供一些额外的信息，以便在看到错误信息时能够很快定位是程序中哪里出了错，如果在程序中有很多个fopen调用，每个fopen打开不同的文件，那么在每个fopen的错误处理中打印文件名就很有帮助。</p>
+<div class="alert alert-danger"><i class="fas fa-bug"></i>  errno是一个全局变量，很多系统函数都会改变它，所以<strong>一个系统函数错误返回后应该马上检查errno，在检查errno之前不能再调用其它系统函数</strong>。
+</div>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+			
+			
+			
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/c-debug.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/c-linker.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '输入输出'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

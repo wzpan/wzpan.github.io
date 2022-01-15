@@ -1,0 +1,871 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>函数 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="本系列文章对应 Python 3 版本
+
+函数以关键字def定义，其后紧跟函数名，由一对小括号闭合的形参，最后以冒号结束定义行，定义行下面的是函数体，它是一个语句块。
+示例
+123456789#!/usr/bin/python# Filename: function1.pydef sayHello(">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="函数"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '函数'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 函数</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc', 2, 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<div class="alert alert-warning"><i class="far fa-bell"></i>  本系列文章对应 Python 3 版本
+</div>
+<p>函数以关键字<code>def</code>定义，其后紧跟函数名，由一对小括号闭合的形参，最后以冒号结束定义行，定义行下面的是函数体，它是一个语句块。</p>
+<h4 id="示例">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: function1.py</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sayHello</span>():</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Hello World!&#x27;</span>) <span class="comment"># 语句块也就是函数体</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 结束函数定义</span></span><br><span class="line">sayHello() <span class="comment"># 调用函数</span></span><br><span class="line">sayHello() <span class="comment"># 再次调用</span></span><br></pre></td></tr></table></figure>
+<h4 id="输出">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ python function1.py</span><br><span class="line">Hello World!</span><br><span class="line">Hello World!</span><br></pre></td></tr></table></figure>
+<h2 id="形参">形参</h2>
+<p>形参在函数定义中的小括号内指定，并以逗号分隔。当我们调用函数时以同样的方式提供形参值。</p>
+<h4 id="示例-v2">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: func_param.py</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">printMax</span>(<span class="params">a, b</span>):</span></span><br><span class="line">    <span class="keyword">if</span> a &gt; b:</span><br><span class="line">        <span class="built_in">print</span>(a, <span class="string">&#x27;is maximum&#x27;</span>)</span><br><span class="line">    <span class="keyword">elif</span> a == b:</span><br><span class="line">        <span class="built_in">print</span>(a, <span class="string">&#x27;is equal to&#x27;</span>, b)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(b, <span class="string">&#x27;is maximum&#x27;</span>)</span><br><span class="line"></span><br><span class="line">printMax(<span class="number">3</span>, <span class="number">4</span>) <span class="comment"># 直接提供字面值</span></span><br><span class="line"></span><br><span class="line">x = <span class="number">5</span></span><br><span class="line">y = <span class="number">7</span></span><br><span class="line"></span><br><span class="line">printMax(x, y) <span class="comment"># 以变量作为实参</span></span><br></pre></td></tr></table></figure>
+<h4 id="输出-v2">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ python func_param.py</span><br><span class="line">4 is maximum</span><br><span class="line">7 is maximum</span><br></pre></td></tr></table></figure>
+<h2 id="局部变量">局部变量</h2>
+<p>在函数内声明的变量与在函数外的同名变量没有任何关系，即变量名对于函数是局部的。</p>
+<p>这被称作变量的<strong>作用域</strong>，变量的作用域开始于它们所在块中定义它们的定义点处。</p>
+<h4 id="示例-v3">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: func_local.py</span></span><br><span class="line"></span><br><span class="line">x = <span class="number">50</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">x</span>):</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;x is&#x27;</span>, x)</span><br><span class="line">    x = <span class="number">2</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Changed local x to&#x27;</span>, x)</span><br><span class="line"></span><br><span class="line">func(x)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;x is still&#x27;</span>, x)</span><br></pre></td></tr></table></figure>
+<h4 id="输出-v3">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ python func_local.py</span><br><span class="line">x is 50</span><br><span class="line">Changed <span class="built_in">local</span> x to 2</span><br><span class="line">x is still 50</span><br></pre></td></tr></table></figure>
+<h2 id="全局变量">全局变量</h2>
+<p>如果你想要为一个定义在函数外的变量赋值，那么你就得告诉Python这个变量名不是局部的，而是 全局 的。我们使用global语句完成这一功能。没有global语句，是不可能为定义在函数外的变量赋值的。</p>
+<p>你可以使用定义在函数外的变量的值（假设在函数内没有同名的变量）。然而，我并不鼓励你这样做，并且你应该尽量避免这样做，因为这使得程序的读者会不清楚这个变量是在哪里定义的。使用global语句可以清楚地表明变量是在外面的块定义的。</p>
+<h4 id="示例-v4">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: func_global.py</span></span><br><span class="line"></span><br><span class="line">x = <span class="number">50</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>():</span></span><br><span class="line">    <span class="keyword">global</span> x <span class="comment"># 用global语句声明一个全局变量x</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;x is&#x27;</span>, x)</span><br><span class="line">    x = <span class="number">2</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Changed global x to&#x27;</span>, x)</span><br><span class="line"></span><br><span class="line">func()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Value of x is&#x27;</span>, x)</span><br></pre></td></tr></table></figure>
+<h4 id="输出-v4">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ python func_global.py</span><br><span class="line">x is 50</span><br><span class="line">Changed global x to 2</span><br><span class="line">Value of x is 2</span><br></pre></td></tr></table></figure>
+<h2 id="非局部变量">非局部变量</h2>
+<p>我们已经看到如何存取局部和全局变量。还有另一类叫做 <strong>非局部</strong> 的作用域，它介于局部和全局之间。</p>
+<p>当在函数内定义函数时你会注意到非局部作用域。</p>
+<p>因为python中的一切只是可执行代码，所以你可以在任何地方定义函数。让我们看一个例子：</p>
+<h4 id="示例-v5">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: func_nonlocal.py</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func_outer</span>():</span></span><br><span class="line">    x = <span class="number">2</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;x is&#x27;</span>, x)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">func_inner</span>():</span></span><br><span class="line">        <span class="keyword">nonlocal</span> x</span><br><span class="line">        x = <span class="number">5</span></span><br><span class="line">    func_inner()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Changed local x to&#x27;</span>, x)</span><br><span class="line"></span><br><span class="line">func_outer()</span><br></pre></td></tr></table></figure>
+<h4 id="输出-v5">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ python func_nonlocal.py</span><br><span class="line">x is 2</span><br><span class="line">Changed <span class="built_in">local</span> x to 5</span><br></pre></td></tr></table></figure>
+<h4 id="说明">说明</h4>
+<p>当我们处于<code>func_inner</code>函数中时，<code>func_outer</code>第一行定义的变量x既不是局部也不是全局变量。</p>
+<p>这时通过<code>nonlocal x</code>我们声明这个<code>x</code>是非局部的，所以我们才能够存取它。</p>
+<p>试着将<code>nonlocal x</code>改为<code>global x</code>观察这两种用法有什么不同。</p>
+<h2 id="默认实参值">默认实参值</h2>
+<p>对于一些函数，你可能希望它们的形参是可选的，并当用户没有为这些形参提供值的时候给它们一个默认值。</p>
+<p>这需要借助默认实参值。默认实参值在函数定义时通过为形参名赋一个默认值实现。</p>
+<div class="alert alert-warning"><i class="far fa-bell"></i>  默认实参值应该是一个常量，更确切的应该是一个不可变类型
+</div>
+<h4 id="示例-v6">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: func_default.py</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">say</span>(<span class="params">message, times = <span class="number">1</span></span>):</span></span><br><span class="line">    <span class="built_in">print</span>(message * times)</span><br><span class="line"></span><br><span class="line">say(<span class="string">&#x27;Hello&#x27;</span>)</span><br><span class="line">say(<span class="string">&#x27;World&#x27;</span>, <span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="输出-v6">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ python func_default.py</span><br><span class="line">hello</span><br><span class="line">worldworldworldworldworld</span><br></pre></td></tr></table></figure>
+<h4 id="重点">重点</h4>
+<p><strong>只有在实参列表靠后的参数才能拥有默认实参值</strong> ，即你不能先声明带有默认实参值的形参再声明不带有默认实参值的参数。</p>
+<p>这是因为实参值是根据形参的位置赋给形参的，例如：<code>def func(a, b = 5)</code>合法，但<code>def func(a = 5, b)</code>就非法了。</p>
+<h2 id="关键实参">关键实参</h2>
+<p>如果你有一些函数拥有许多参数，但你只想使用其中的几个，这时你可以通过形参名为其赋值。</p>
+<p>这被称做关键实参——使用形参名(关键字)为函数指定实参而不是我们一直使用的通过位置指定实参。</p>
+<p>这样做有两个优点，首先函数用起来更简单，因为我们不用操心实参的顺序了。</p>
+<p>其次，可以只为我们感兴趣的形参赋值，如果其它参数带有默认实参值的话。</p>
+<h4 id="示例-v7">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: func_key.py</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">a, b=<span class="number">5</span>, c=<span class="number">10</span></span>):</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;a is&#x27;</span>, a, <span class="string">&#x27;and b is&#x27;</span>, b, <span class="string">&#x27;and c is&#x27;</span>, c)</span><br><span class="line"></span><br><span class="line">func(<span class="number">3</span>, <span class="number">7</span>)</span><br><span class="line">func(<span class="number">25</span>, c=<span class="number">24</span>)</span><br><span class="line">func(c=<span class="number">50</span>, a=<span class="number">100</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="输出-v7">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ python func_key.py</span><br><span class="line">a is 3 and b is 7 and c is 10</span><br><span class="line">a is 25 and b is 5 and c is 24</span><br><span class="line">a is 100 and b is 5 and c is 50</span><br></pre></td></tr></table></figure>
+<h2 id="可变参数-VarArgs">可变参数(VarArgs)</h2>
+<p>有时你可能希望编写一个可以接受任意多个形参的函数，使用星号可以帮你做到。</p>
+<h4 id="示例-v8">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: total.py</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">total</span>(<span class="params">initial=<span class="number">5</span>, *numbers, **keywords</span>):</span></span><br><span class="line">    count = initial</span><br><span class="line">    <span class="keyword">for</span> number <span class="keyword">in</span> numbers:</span><br><span class="line">        count += number</span><br><span class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> keywords:</span><br><span class="line">        count += keywords[key]</span><br><span class="line">    <span class="keyword">return</span> count</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(total(<span class="number">10</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, vegetables=<span class="number">50</span>, fruits=<span class="number">100</span>))</span><br></pre></td></tr></table></figure>
+<h4 id="输出-v8">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ python total.py</span><br><span class="line">166</span><br></pre></td></tr></table></figure>
+<h4 id="说明-v2">说明</h4>
+<p>星号-列表：当我们以 <strong>星号</strong> 声明一个形参比如<code>*param</code>，那么这个参数点之后的所有实参会被收集成一个<strong>列表</strong>。</p>
+<p>双星号-关键字实参字典：与之类似如果我们以 <strong>双星号</strong> 声明一个形参，它会被收集成一个<strong>关键字实参字典</strong>。</p>
+<h2 id="只能以关键字赋值的形参">只能以关键字赋值的形参##</h2>
+<p>如果我们希望某些关键字形参只能通过关键字实参得到而不是按照实参的位置得到，可以将其声明在星号形参后面。称为Keyword-only实参：</p>
+<h4 id="示例-v9">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: keyword_only.py</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">total</span>(<span class="params">initial=<span class="number">5</span>, *numbers, vegetables</span>):</span></span><br><span class="line">    count = initial</span><br><span class="line">    <span class="keyword">for</span> number <span class="keyword">in</span> numbers:</span><br><span class="line">        count += number</span><br><span class="line">    count += vegetables</span><br><span class="line">    <span class="keyword">return</span> count</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(total(<span class="number">10</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, vegetables=<span class="number">50</span>))</span><br><span class="line"><span class="built_in">print</span>(total(<span class="number">10</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)) <span class="comment"># 引发错误，因为我们没有为vegetables提供默认实参值</span></span><br></pre></td></tr></table></figure>
+<h4 id="输出-v9">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ python keyword_only.py</span><br><span class="line">66</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;test.py&quot;</span>, line 12, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line"><span class="built_in">print</span>(total(10, 1, 2, 3))</span><br><span class="line">TypeError: total() needs keyword-only argument vegetables</span><br></pre></td></tr></table></figure>
+<h4 id="说明-v3">说明</h4>
+<p>在星号形参后面声明的形参导致它成为keyword-only实参。</p>
+<p>如果没有为这些实参提供一个默认值，那么必须在调用函数时以关键字实参为其赋值，否则将引发错误。</p>
+<p>如果你只需要keyword-only实参但不需要星号实参，那么可以简单的省略星号实参的实参名。</p>
+<p>例如<code>def total(initial=5, *, vegetables)</code>。</p>
+<h2 id="return语句">return语句</h2>
+<p><code>return</code>用于从函数返回，即跳出函数。也可以利用<code>return</code>语句从函数返回一个值。</p>
+<p>注意一个不带有返回值的<code>return</code>语句相当于返回<code>return None</code>。</p>
+<p><code>None</code>是python的一个特殊类型，代表空。例如如果一个变量的值为<code>None</code>则代表它不存在值。每个函数的末尾都隐含的包含一个<code>return None</code>语句除非你编写了自己的<code>return</code>语句。</p>
+<h4 id="示例-v10">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: func_return.py</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">maximum</span>(<span class="params">x, y</span>):</span></span><br><span class="line">    <span class="keyword">if</span> x &gt; y:</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> y</span><br><span class="line"><span class="built_in">print</span>(maximum(<span class="number">2</span>, <span class="number">3</span>))</span><br></pre></td></tr></table></figure>
+<h4 id="输出-v10">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ python func_return.py</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+<h2 id="文档字符串">文档字符串</h2>
+<p>文档字符串（doc string）是一个你应该利用的重要的工具，因为它帮助你更好的注释程序使得程序更易于理解。</p>
+<p>更神奇的是你甚至可以在程序运行时取得文档字符串！</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: func_doc.py</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">printMax</span>(<span class="params">x, y</span>):</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;Prints the maximum of two numbers.</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    The two values must be integers.&#x27;&#x27;&#x27;</span></span><br><span class="line">    x = <span class="built_in">int</span>(x) <span class="comment"># convert to integers, if possible</span></span><br><span class="line">    y = <span class="built_in">int</span>(y)</span><br><span class="line">    <span class="keyword">if</span> x &gt; y:</span><br><span class="line">        <span class="built_in">print</span>(x, <span class="string">&#x27;is maximum&#x27;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(y, <span class="string">&#x27;is maximum&#x27;</span>)</span><br><span class="line"></span><br><span class="line">printMax(<span class="number">3</span>, <span class="number">5</span>)</span><br><span class="line"><span class="built_in">print</span>(printMax.__doc__)</span><br></pre></td></tr></table></figure>
+<h4 id="输出-v11">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ python func_doc.py</span><br><span class="line">5 is maximum</span><br><span class="line">Prints the maximum of two numbers.</span><br><span class="line">        The two values must be integers.</span><br></pre></td></tr></table></figure>
+<h4 id="说明-v4">说明</h4>
+<p>一个函数的第一个逻辑行的字符串将成为这个函数的文档字符串。注意类和模块同样拥有文档字符串，在后面相应的章节我们会学到它们。</p>
+<p>根据惯例:</p>
+<ol>
+<li>文档字符串是一个多行字符串，其中第一行以大写字母开头，并以句号结尾。</li>
+<li>接下来的第二行为空行，从第三行开始为详细的描述。</li>
+</ol>
+<p>我强烈建议你在你的正规函数中遵循这个编写文档字符串的惯例。</p>
+<p>我们可以通过使用函数的<code>__doc__</code>属性(注意双下划线)存取printMax的文档字符串。如果你在python使用过<code>help()</code>，其实你已经看到过文档字符串的应用了！help()只是取出函数的<code>__doc__</code>属性，然后以一种整洁的方式显示给你。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  <a target="_blank" rel="noopener" href="http://www.python.org/peps/pep-0257.html">PEP257</a> 定义了文档字符串的规范。
+</div>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/python3-exception.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/python3-oop.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '函数'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

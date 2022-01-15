@@ -1,0 +1,749 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Hacking Logitech K350 Keyboard | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="介绍在Linux下通过一些hacking，让罗技K350键盘的部分功能键恢复工作的方法。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Hacking Logitech K350 Keyboard"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: 'Hacking Logitech K350 Keyboard'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> Hacking Logitech K350 Keyboard</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>介绍在Linux下通过一些hacking，让罗技K350键盘的部分功能键恢复工作的方法。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <h2 id="1-前言">1 前言</h2>
+<p>作为一个重度Emacs使用者，我使用电脑的大部分时间都在用键盘。“工欲善其事，必先利其器”，为了避免患上RSI，我用上了罗技K350键盘。</p>
+<p>罗技K350是一款不错的人体工学键盘，它具有下面几个优点：</p>
+<ol>
+<li>人体工学键盘。采用曲形键盘设计，因此手可以很自然的放在键盘上面。具有较大的掌托，有助于减少手腕的疲劳。提供两段式可调节键盘支架，可以按照喜好调整键盘高度；</li>
+<li>极尽奢华的功能键。K350具有16颗独立的功能键，可以实现vista3D浏览（在XP系统下为应用程序切换键）、vista照片库（在XP系统下为我的图片）、媒体播放器、计算器、计算机休眠等功能。另外，通过右手侧的“Fn”键与F1-F12键组合，还可以实现快速启动word文档程序、excel表格程序、日历、IE、浏览器、MSN、电源状态检测以及光盘弹出开关。并且，这些功能键都是可编程的，通过使用官方的SetPoint工具，可以定制这些按键对应的功能；</li>
+<li>Unifying无线优联技术，通过简单的设置，可以和其他支持Unifying的外设共用一个接收器，因此和我的M505鼠标可以天衣无缝的配合；</li>
+<li>Ctrl、Alt键都较大，适合Emacser使用。</li>
+</ol>
+<span id="more"></span>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/hacking-logitech-k350-keyboard/k350.png" alt="罗技K350键盘" />
+        <figcaption>罗技K350键盘</figcaption>
+      </figure>
+    </p>
+<p>尽管如此，它也具有以下几个不足：</p>
+<ol>
+<li>F1-F12功能区是三个一组，与标准键盘四个一组的设计不同，因此需要适应。但适应了这样的键盘安排后，又会对标准的键盘产生不适应；<code>=.=bb</code></li>
+<li>作为薄膜键盘，手感当然比不上机械键盘，有时候会出现按键卡槽的情况。但在薄膜键盘中，K350算是手感最好的键盘之一了；</li>
+<li>最大的问题在于，K350是针对Windows设计的，如果在Linux下使用，会发现很多功能键都没有反应。这是因为X11目前只能够处理不大于255的键码（Key
+Code），而这些功能键的键码都超出了X11的处理范围。这个问题一直让我感到很无趣。</li>
+</ol>
+<p>通过数次折腾，我终于在<a target="_blank" rel="noopener" href="http://www-user.tu-chemnitz.de/~klada/?site=projects&amp;id=logitechkbd">Daniel
+Klaffenbach</a>的主页上找到了对K350的hacking方法，能够让K350的一部分功能键在Linux里正常工作。这篇文章将对Daniel的方法进行补充说明，并结合<a href="/tools/awesome">Awesome</a>
+、Emacs等工具，让K350在Linux上最大程度的发挥自己的威力。</p>
+<p>先放一张hack前后键盘所有功能键的工作情况对比表格：</p>
+<table class="table table-striped">
+<thead>
+<tr>
+<th scope="col">按键</th>
+<th scope="col">hack前</th>
+<th scope="col">hack后</th>
+</thead>
+</tr>
+<tr>
+<td>多媒体键 (Play, Stop, Previous, Next, Volume Up, Volume Down, Mute)</td>
+<td>可以工作</td>
+<td>可以工作</td>
+</tr>
+<tr>
+<td>Music、Media Center</td>
+<td>可以工作（产生一样的键码）</td>
+<td>可以工作（产生一样的键码）</td>
+</tr>
+<tr>
+<td>HomePage</td>
+<td>可以工作</td>
+<td>可以工作</td>
+</tr>
+<tr>
+<td>Email</td>
+<td>可以工作</td>
+<td>可以工作</td>
+</tr>
+<tr>
+<td>Search</td>
+<td>可以工作</td>
+<td>可以工作</td>
+</tr>
+<tr>
+<td>Eject</td>
+<td>可以工作</td>
+<td>可以工作</td>
+</tr>
+<tr>
+<td>Calculator</td>
+<td>可以工作</td>
+<td>可以工作</td>
+</tr>
+<tr>
+<td>Sleep</td>
+<td>可以工作</td>
+<td>可以工作</td>
+</tr>
+<tr>
+<td>ZoomIn</td>
+<td>不能工作</td>
+<td>可以工作</td>
+</tr>
+<tr>
+<td>ZoomOut</td>
+<td>不能工作</td>
+<td>可以工作</td>
+</tr>
+<tr>
+<td>Camera</td>
+<td>不能工作</td>
+<td>可以工作</td>
+</tr>
+<tr>
+<td>Messenger</td>
+<td>不能工作</td>
+<td>可以工作</td>
+</tr>
+<tr>
+<td>Word</td>
+<td>不能工作</td>
+<td>可以工作</td>
+</tr>
+<tr>
+<td>Excel</td>
+<td>不能工作</td>
+<td>可以工作</td>
+</tr>
+<tr>
+<td>Calendar</td>
+<td>不能工作</td>
+<td>可以工作</td>
+</tr>
+<tr>
+<td>Flip</td>
+<td>不能工作</td>
+<td>不能工作</td>
+</tr>
+<tr>
+<td>Gadget</td>
+<td>不能工作</td>
+<td>不能工作</td>
+</tr>
+<tr>
+<td>A/B/C功能键</td>
+<td>不能工作</td>
+<td>不能工作</td>
+</tr>
+</table>
+<p>由表可见，除了Flip、Gadget、A、B、C几个功能键之外，其他的功能键经过hack之后都可以正常工作。</p>
+<h2 id="2-所需环境和工具">2 所需环境和工具</h2>
+<ul>
+<li>Linux内核要求支持evdev和HID，这在比较新的Linux内核版本都已经得到满足；</li>
+<li><a target="_blank" rel="noopener" href="http://www.bedroomlan.org/projects/evrouter">evrouter</a>
+，用于捕获鼠标和键盘产生的键码；</li>
+<li>xmodmap，用于按键映射。</li>
+</ul>
+<h2 id="3-配置xmodmap">3 配置xmodmap</h2>
+<p>首先先使用xmodmap为几个原本不能工作的按键分配一个keycode不大于255的值，并取一个名字。名字可以随意，但建议和功能键本身功能相同。将下面这段文本保存为
+<em>$HOME/.xmodmap</em>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">keycode 234 &#x3D; XF86Camera</span><br><span class="line">keycode 250 &#x3D; XF86ZoomIn</span><br><span class="line">keycode 251 &#x3D; XF86ZoomOut</span><br><span class="line">keycode 252 &#x3D; XF86Messenger</span><br><span class="line">keycode 253 &#x3D; XF86Word</span><br><span class="line">keycode 254 &#x3D; XF86Excel</span><br></pre></td></tr></table></figure>
+<h2 id="4-安装并配置evrouter">4 安装并配置evrouter</h2>
+<p>之后，可以使用evrouter将捕捉到的按键event映射到xmodmap分配的keycode上。</p>
+<p>首先到<a target="_blank" rel="noopener" href="http://www.bedroomlan.org/projects/evrouter">evrouter的官方主页</a>
+下载evrouter并安装evrouter。</p>
+<p>安装完成后，在终端中使用<code>evrouter --dump</code>选项捕获键码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">evrouter --dump &#x2F;dev&#x2F;input&#x2F;event*</span><br></pre></td></tr></table></figure>
+<p>之后可以试着按一下那些不工作的按键，例如ZoomIn键，你将会看到屏幕打印出类似下面这样的信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Window &quot;(null)&quot;: # Window title</span><br><span class="line"># Window &quot;(null)&quot;: # Resource name</span><br><span class="line"># Window &quot;(null)&quot;: # Class name</span><br><span class="line">&quot;Logitech Unifying Device. Wireless PID:200a&quot; &quot;&#x2F;dev&#x2F;input&#x2F;event8&quot; none key&#x2F;418 &quot;fill this in!&quot;</span><br></pre></td></tr></table></figure>
+<p>复制最下面这条信息，然后打开一个编辑器，把这条信息粘贴进去，并去掉<code>event</code>后面跟着的那个阿拉伯数字，例如上面这条语句中的<code>8</code>
+，然后将<code>fill this in</code>改为<code>XKey/XF86ZoomIn</code>，<code>XKey/</code>字段的作用是告诉evrouter这是个按键事件（event），而
+<code>XF86</code>后跟着的名字可以随意取，但建议和功能键的名字相同。</p>
+<p>按照这样的方法添加编辑器里内容。最后编辑器里的内容应该是类似这样的形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#Zoom In</span><br><span class="line">&quot;Logitech Unifying Device. Wireless PID:200a&quot; &quot;&#x2F;dev&#x2F;input&#x2F;event&quot; none key&#x2F;418 &quot;XKey&#x2F;XF86ZoomIn&quot;</span><br><span class="line">#Zoom Out</span><br><span class="line">&quot;Logitech Unifying Device. Wireless PID:200a&quot; &quot;&#x2F;dev&#x2F;input&#x2F;event&quot; none key&#x2F;419 &quot;XKey&#x2F;XF86ZoomOut&quot;</span><br><span class="line">#Word</span><br><span class="line">&quot;Logitech Unifying Device. Wireless PID:200a&quot; &quot;&#x2F;dev&#x2F;input&#x2F;event&quot; none key&#x2F;421 &quot;XKey&#x2F;XF86Word&quot;</span><br><span class="line">#Excel</span><br><span class="line">&quot;Logitech Unifying Device. Wireless PID:200a&quot; &quot;&#x2F;dev&#x2F;input&#x2F;event&quot; none key&#x2F;423 &quot;XKey&#x2F;XF86Excel&quot;</span><br><span class="line">#Calendar</span><br><span class="line">&quot;Logitech Unifying Device. Wireless PID:200a&quot; &quot;&#x2F;dev&#x2F;input&#x2F;event&quot; none key&#x2F;397 &quot;XKey&#x2F;XF86Calendar&quot;</span><br><span class="line">#Messenger</span><br><span class="line">&quot;Logitech Unifying Device. Wireless PID:200a&quot; &quot;&#x2F;dev&#x2F;input&#x2F;event&quot; none key&#x2F;430 &quot;XKey&#x2F;XF86Messenger&quot;</span><br><span class="line">#Pictures</span><br><span class="line">&quot;Logitech Unifying Device. Wireless PID:200a&quot; &quot;&#x2F;dev&#x2F;input&#x2F;event&quot; none key&#x2F;442 &quot;XKey&#x2F;XF86Camera&quot;</span><br></pre></td></tr></table></figure>
+<p>将这段文本保存为 <strong>$HOME/.evrouterrc</strong></p>
+<h2 id="5-测试结果">5 测试结果</h2>
+<p>完成后就可以进行一下测试，在终端中分别敲入下面三句代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ xmodmap $HOME&#x2F;.xmodmap</span><br><span class="line">$ sudo evrouter &#x2F;dev&#x2F;input&#x2F;event*</span><br><span class="line">$ xev</span><br></pre></td></tr></table></figure>
+<p>第三句代码会运行一个命令行的按键检测工具，此时你可以试试按ZoomIn、Zoomout、Camera按键。如果有输出结果，那么恭喜你，你已经hack成功了。但到这里还不完美，因为还没有进行按键绑定，所以这些功能键还没有什么真正的用途。此外，上面这几条命令只在本次开机有效，如果不想每次开机都输入前面两条命令，你还需要设置一下自启动。</p>
+<h2 id="6-按键绑定">6 按键绑定</h2>
+<p>可以使用以下几个工具来实现按键绑定：</p>
+<h3 id="6-1-KDE-GNome按键绑定">6.1 KDE/GNome按键绑定</h3>
+<p>KDE和Gnome都提供了按键绑定的工具，例如，Gnome的按键绑定位于<code>Gnome设置中心</code>-&gt;<code>键盘</code>-&gt;<code>快捷键</code>选项。</p>
+<h3 id="6-2-xbindkeys">6.2 xbindkeys</h3>
+<p>X11本身就自带了按键绑定工具xbindkeys，你可以编写<code>.xbindkeysrc</code>文件来实现按键绑定，如果有需要，可以参考Daniel给出的一份<a target="_blank" rel="noopener" href="http://www-user.tu-chemnitz.de/~klada/sites/projects/xbindkeysrc">.xbindkeysrc</a>
+文件。</p>
+<h3 id="6-3-Awesome">6.3 Awesome</h3>
+<p>如果使用Awesome，也可以通过配置<code>rc.lua</code>文件来进行按键绑定。这是我的绑定代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">-- Volume Control</span><br><span class="line">awful.key(&#123; &#125;, &quot;XF86AudioRaiseVolume&quot;, function ()</span><br><span class="line">             awful.util.spawn(&quot;amixer set Master 9%+&quot;) end),</span><br><span class="line">awful.key(&#123; &#125;, &quot;XF86AudioLowerVolume&quot;, function ()</span><br><span class="line">             awful.util.spawn(&quot;amixer set Master 9%-&quot;) end),</span><br><span class="line">awful.key(&#123; &#125;, &quot;XF86AudioMute&quot;, function ()</span><br><span class="line">             awful.util.spawn(&quot;amixer sset Master toggle&quot;) end),</span><br><span class="line"></span><br><span class="line">-- Tools</span><br><span class="line">awful.key(&#123; &#125;, &quot;XF86Calculator&quot;, function ()</span><br><span class="line">             awful.util.spawn(&quot;gnome-calculator&quot;) end),</span><br><span class="line">awful.key(&#123; &#125;, &quot;XF86Sleep&quot;, function ()</span><br><span class="line">             awful.util.spawn(&quot;&#x2F;usr&#x2F;local&#x2F;shutdown.sh&quot;) end),</span><br><span class="line">awful.key(&#123; &#125;, &quot;XF86Tools&quot;, function ()</span><br><span class="line">             awful.util.spawn(&quot;rhythmbox&quot;) end),</span><br><span class="line">awful.key(&#123; &#125;, &quot;XF86HomePage&quot;, function ()</span><br><span class="line">             awful.util.spawn(&quot;google-chrome&quot;) end),</span><br><span class="line">awful.key(&#123; &#125;, &quot;XF86Search&quot;, function ()</span><br><span class="line">             awful.util.spawn(&quot;firefox&quot;) end),</span><br><span class="line">awful.key(&#123; &#125;, &quot;XF86Camera&quot;, function ()</span><br><span class="line">             awful.util.spawn(&quot;cheese&quot;) end),</span><br><span class="line">awful.key(&#123; &#125;, &quot;XF86Word&quot;, function ()</span><br><span class="line">             awful.util.spawn(&quot;emacs&quot;) end),</span><br><span class="line">awful.key(&#123; &#125;, &quot;XF86Excel&quot;, function ()</span><br><span class="line">             awful.util.spawn(&quot;wps&quot;) end),</span><br><span class="line">awful.key(&#123; &#125;, &quot;XF86Calendar&quot;, function ()</span><br><span class="line">             awful.util.spawn(&quot;&#x2F;usr&#x2F;local&#x2F;xmind&#x2F;xmind&quot;) end),</span><br><span class="line">awful.key(&#123; &#125;, &quot;XF86Messenger&quot;, function ()</span><br><span class="line">             awful.util.spawn(&quot;pidgin&quot;) end),</span><br><span class="line"></span><br><span class="line">-- Flipping</span><br><span class="line">awful.key(&#123; &#125;, &quot;XF86ZoomIn&quot;,</span><br><span class="line">          function ()</span><br><span class="line">             awful.client.focus.byidx( 1)</span><br><span class="line">             if client.focus then client.focus:raise() end</span><br><span class="line">          end),</span><br><span class="line">awful.key(&#123; &#125;, &quot;XF86ZoomOut&quot;,</span><br><span class="line">          function ()</span><br><span class="line">             awful.client.focus.byidx(-1)</span><br><span class="line">             if client.focus then client.focus:raise() end</span><br><span class="line">          end),</span><br></pre></td></tr></table></figure>
+<p>其中：</p>
+<ul>
+<li>音量控制绑定到了一个叫做<a target="_blank" rel="noopener" href="http://awesome.naquadah.org/wiki/Volume_control_and_display">amixer</a>
+的widget；</li>
+<li>Sleep键绑定到了一个<a target="_blank" rel="noopener" href="http://awesome.naquadah.org/wiki/ShutdownDialog">可视化的关机脚本</a>
+；</li>
+<li>Music/Media Center键绑定到了媒体播放器Rhythmbox；</li>
+<li>Camera键绑定到了摄像工具茄子大头贴；</li>
+<li>HomePage键绑定到了Google Chrome上；</li>
+<li>Search键绑定到了Firefox上；</li>
+<li>我比较少用类Office排版工具，所以把Word键分给了Emacs，把Excel键分给了WPS；</li>
+<li>Calendar键绑定到了XMind；</li>
+<li>Messenger键绑定到了Pidgin，不过我比较少使用；</li>
+<li>ZoomIn和ZoomOut用来做窗口切换。</li>
+</ul>
+<h3 id="6-4-Emacs">6.4 Emacs</h3>
+<p>在Emacs中也可以专门做一些定制，让一些功能键为Emacs服务。由于我喜欢在Emacs中配合emms播放本地音乐，所以我的设置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">;; 配置多功能键</span><br><span class="line">(global-set-key (kbd &quot;M-&lt;XF86Tools&gt;&quot;) &#39;emms)</span><br><span class="line">(global-set-key (kbd &quot;&lt;XF86AudioNext&gt;&quot;) &#39;emms-next)</span><br><span class="line">(global-set-key (kbd &quot;&lt;XF86AudioPrev&gt;&quot;) &#39;emms-previous)</span><br><span class="line">(global-set-key (kbd &quot;&lt;XF86AudioStop&gt;&quot;) &#39;emms-stop)</span><br><span class="line">(global-set-key (kbd &quot;&lt;XF86AudioPlay&gt;&quot;) &#39;emms-pause)</span><br></pre></td></tr></table></figure>
+<h2 id="7-设置自启动">7 设置自启动</h2>
+<p>最后一步是设置自启动，在这之前需要先获取对 <strong>/dev/input/event*</strong>
+的访问权限，否则即使设置了自启动，每次启动仍然需要手动输入密码，对于像我这样的懒人而言是不可接受的。</p>
+<p>可以通过创建一条udev规则来获取访问权限，将这面这句话保存为
+<strong>/etc/udev/rules.d/80-evrouter.rules</strong> :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">KERNEL&#x3D;&#x3D;&quot;event*&quot;, NAME&#x3D;&quot;input&#x2F;%k&quot;, GROUP&#x3D;&quot;input&quot;</span><br></pre></td></tr></table></figure>
+<p>你需要确保当前用户属于input用户组中。可以直接在终端中敲入如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo groupadd input  增加一个名为input的组</span><br><span class="line">$ sudo gpasswd -a USER input  添加用户USER到input组中</span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong>把第二句代码中的<code>USER</code>改为你当前的用户名称。</p>
+<p>完成后可以选择以下几种方法设置自启动：</p>
+<h3 id="7-1-KDE">7.1 KDE</h3>
+<p>如果使用KDE，可以将下面这段代码保存到**~/.kde4/Autostart/autostart**：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;sh</span><br><span class="line">xmodmap ~&#x2F;.xmodmap</span><br><span class="line">evrouter &#x2F;dev&#x2F;input&#x2F;event*</span><br></pre></td></tr></table></figure>
+<p>之后为这个文件添加可执行权限：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ chmod a+x ~&#x2F;.kde4&#x2F;Autostart&#x2F;autostart</span><br></pre></td></tr></table></figure>
+<h3 id="7-2-Gnome">7.2 Gnome</h3>
+<p>Gnome使用<code>session</code>来管理自启动，因此，可以通过gnome-session-properties(System-&gt;Preferences-&gt;Sessions)来实现自启动。方法和KDE类似：</p>
+<ol>
+<li>
+<p>将上面的那段shell脚本保存为一个文件，例如~/keyboard.sh；</p>
+</li>
+<li>
+<p>使用chmod命令添加可执行权限</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ chmod a+x ~&#x2F;keyboard.sh</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>然后在gnome-session-properties里添加这个脚本即可。</p>
+</li>
+</ol>
+<h3 id="7-3-Awesome">7.3 Awesome</h3>
+<p>Awesome的自启动可以通过设置<code>rc.lua</code>来实现，在<code>rc.lua</code>里添加这段内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">-- Autorun programs</span><br><span class="line">function run_once(cmd)</span><br><span class="line">   findme &#x3D; cmd</span><br><span class="line">   firstspace &#x3D; cmd:find(&quot; &quot;)</span><br><span class="line">   if firstspace then</span><br><span class="line">      findme &#x3D; cmd:sub(0, firstspace-1)</span><br><span class="line">   end</span><br><span class="line">   awful.util.spawn_with_shell(&quot;pgrep -u $USER -x &quot; .. findme .. &quot; &gt; &#x2F;dev&#x2F;null || (&quot; .. cmd .. &quot;)&quot;)</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">run_once(&quot;sh $HOME&#x2F;keyboard.sh&quot;)</span><br></pre></td></tr></table></figure>
+<p>如果要添加其他自启动程序，同样也只需要添加一条<code>run_once</code>命令即可。</p>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/tools/latex-note/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/tools/awesome/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: 'Hacking Logitech K350 Keyboard'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/hacking-logitech-k350-keyboard.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2012-07-11 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/codes/">codes<span>38</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/emacs/">emacs<span>6</span></a></li> <li><a href="/tags/Awesome/">Awesome<span>3</span></a></li> <li><a href="/tags/K350/">K350<span>1</span></a></li> <li><a href="/tags/Linux/">Linux<span>3</span></a></li> <li><a href="/tags/Logitech/">Logitech<span>1</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#1-%E5%89%8D%E8%A8%80"><span class="toc-article-text">1 前言</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#2-%E6%89%80%E9%9C%80%E7%8E%AF%E5%A2%83%E5%92%8C%E5%B7%A5%E5%85%B7"><span class="toc-article-text">2 所需环境和工具</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#3-%E9%85%8D%E7%BD%AExmodmap"><span class="toc-article-text">3 配置xmodmap</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#4-%E5%AE%89%E8%A3%85%E5%B9%B6%E9%85%8D%E7%BD%AEevrouter"><span class="toc-article-text">4 安装并配置evrouter</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#5-%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C"><span class="toc-article-text">5 测试结果</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#6-%E6%8C%89%E9%94%AE%E7%BB%91%E5%AE%9A"><span class="toc-article-text">6 按键绑定</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#6-1-KDE-GNome%E6%8C%89%E9%94%AE%E7%BB%91%E5%AE%9A"><span class="toc-article-text">6.1 KDE&#x2F;GNome按键绑定</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#6-2-xbindkeys"><span class="toc-article-text">6.2 xbindkeys</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#6-3-Awesome"><span class="toc-article-text">6.3 Awesome</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#6-4-Emacs"><span class="toc-article-text">6.4 Emacs</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#7-%E8%AE%BE%E7%BD%AE%E8%87%AA%E5%90%AF%E5%8A%A8"><span class="toc-article-text">7 设置自启动</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#7-1-KDE"><span class="toc-article-text">7.1 KDE</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#7-2-Gnome"><span class="toc-article-text">7.2 Gnome</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#7-3-Awesome"><span class="toc-article-text">7.3 Awesome</span></a></li></ol></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

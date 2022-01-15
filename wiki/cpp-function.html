@@ -1,0 +1,921 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>函数 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="参数传递
+引用形参
+引用
+引用是别名——引用就是对象的另一个名字，通过在变量名前添加&amp;amp;符号来定义。
+1234int ival = 1024;int &amp;amp;refVal = ival;    //  ok: refVal refers to iValint &amp;amp;refVal2;   ">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="函数"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '函数'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 函数</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="参数传递">参数传递</h2>
+<h3 id="引用形参">引用形参</h3>
+<h4 id="引用">引用</h4>
+<p>引用是别名——引用就是对象的另一个名字，通过在变量名前添加<code>&amp;</code>符号来定义。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ival = <span class="number">1024</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;refVal = ival;    <span class="comment">//  ok: refVal refers to iVal</span></span><br><span class="line"><span class="keyword">int</span> &amp;refVal2;          <span class="comment">//  error: a reference must be initialized</span></span><br><span class="line"><span class="keyword">int</span> &amp;refVal3 = <span class="number">10</span>;     <span class="comment">//  error: initializer must be an object</span></span><br></pre></td></tr></table></figure>
+<p>因为引用只是它绑定的对象的另一个名字，因此作用在引用上的所有操作事实上都是作用在该引用绑定的对象上：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ival = <span class="number">1024</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;refVal = ival; </span><br><span class="line">refVal += <span class="number">2</span>;</span><br></pre></td></tr></table></figure>
+<p>将refVal指向的对象ival加2。类似地，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> ii = refVal;</span><br></pre></td></tr></table></figure>
+<p>把和ival相关联的值赋给ii。</p>
+<p><strong>注意</strong> ：当引用初始化后，只要该引用存在，它就保持绑定到初始化时指向的对象。不可能将引用绑定到另一个对象。</p>
+<h4 id="const-引用">const 引用</h4>
+<p>const 引用是指向const对象的引用。将普通的引用绑定到 const 对象是不合法的。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> ival = <span class="number">1024</span>; </span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> &amp;refVal = ival;      <span class="comment">// ok: both reference and object are const </span></span><br><span class="line"><span class="keyword">int</span> &amp;ref2 = ival;              <span class="comment">// error: non const reference to a const object </span></span><br></pre></td></tr></table></figure>
+<h4 id="引用形参-v2">引用形参</h4>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  从 C 语言背景转到 C++ 的程序员习惯通过传递指针来实现对实参的访问。在 C++ 中，使用引用形参则更安全和更自然。
+</div>
+<h5 id="引用形参-v3">引用形参</h5>
+<p>在 C 语言中，一个交换两个元素的函数可能用指针来实现：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> *p1, <span class="keyword">int</span> *p2)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">  <span class="keyword">int</span> tmp = *p2;</span><br><span class="line">  *p2 = *p1;</span><br><span class="line">  *p1 = tmp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但在 C++ 中，更好的做法是使用引用形参：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> &amp;v1, <span class="keyword">int</span> &amp;v2)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">  <span class="keyword">int</span> tmp = v2; </span><br><span class="line">  v2 = v1; </span><br><span class="line">  v1 = tmp; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>与所有引用一样，引用形参直接关联到其所绑定的对象，而并非这些对象的副本。定义引用时，必须用与该引用绑定的对象初始化该引用。引用形参完全以相同的方式工作。每次调用函数，引用形参被创建并与相应实参关联。此时，当调用 swap 时</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">swap</span>(i, j);    </span><br></pre></td></tr></table></figure>
+<p>形参 v1 只是对象 i 的另一个名字，而 v2 则是对象 j 的另一个名字。对 v1 的任何修改实际上也是对 i 的修改。同样地，v2 上的任何修改实际上也是对 j 的修改。重新编译使用 swap 的这个修订版本的 main
+函数后，可以看到输出结果是正确的：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Before <span class="title">swap</span><span class="params">()</span>: i: <span class="number">10</span> j: <span class="number">20</span> </span></span><br><span class="line"><span class="function">After  swap(): i: <span class="number">20</span> j: <span class="number">10</span>      </span></span><br></pre></td></tr></table></figure>
+<h5 id="利用-const-引用避免复制">利用 const 引用避免复制</h5>
+<p>在向函数传递大型对象时，需要使用引用形参，这是引用形参适用的另一种情况。虽然复制实参对于内置数据类型的对象或者规模较小的类类型对象来说没有什么问题，但是对于大部分的类类型或者大型数组，它的效率（通常）太低了；使用引用形参，函数可以直接访问实参对象，而无须复制它。</p>
+<p>编写一个比较两个 string 对象长度的函数作为例子。这个函数需要访问每个 string 对象的 size，但不必修改这些对象。由于 string 对象可能相当长，所以我们希望避免复制操作。使用 const 引用就可避免复制：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// compare the length of two strings </span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">isShorter</span><span class="params">(<span class="keyword">const</span> string &amp;s1, <span class="keyword">const</span> string &amp;s2)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">  <span class="keyword">return</span> s1.<span class="built_in">size</span>() &lt; s2.<span class="built_in">size</span>(); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其每一个形参都是 const string 类型的引用。因为形参是引用，所以不复制实参。又因为形参是 const 引用，所以 isShorter 函数不能使用该引用来修改实参。</p>
+<h4 id="指向指针的引用">指向指针的引用</h4>
+<p>假设我们想编写一个与前面交换两个整数的 swap 类似的函数，实现两个指针的交换。已知需用 * 定义指针，用 &amp; 定义引用。现在，问题在于如何将这两个操作符结合起来以获得指向指针的引用。这里给出一个例子：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// swap values of two pointers to int </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ptrswap</span><span class="params">(<span class="keyword">int</span> *&amp;v1, <span class="keyword">int</span> *&amp;v2)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">  <span class="keyword">int</span> *tmp = v2; </span><br><span class="line">  v2 = v1; </span><br><span class="line">  v1 = tmp; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>形参</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> *&amp;v1</span><br></pre></td></tr></table></figure>
+<p>的定义应 <em>从右至左理解</em> ：v1 是一个引用，与指向 int 型对象的指针相关联。也就是说，v1 只是传递进 ptrswap 函数的任意指针的别名。</p>
+<p>相应的 main 函数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">  <span class="keyword">int</span> i = <span class="number">10</span>; </span><br><span class="line">  <span class="keyword">int</span> j = <span class="number">20</span>; </span><br><span class="line">  <span class="keyword">int</span> *pi = &amp;i;  <span class="comment">// pi points to i </span></span><br><span class="line">  <span class="keyword">int</span> *pj = &amp;j; <span class="comment">// pj points to j </span></span><br><span class="line">  cout &lt;&lt; <span class="string">&quot;Before ptrswap():\t*pi: &quot;</span> </span><br><span class="line">       &lt;&lt; *pi &lt;&lt; <span class="string">&quot;\t*pj: &quot;</span> &lt;&lt; *pj &lt;&lt; endl; </span><br><span class="line">  <span class="built_in">ptrswap</span>(pi, pj); <span class="comment">// now pi points to j; pj points to i </span></span><br><span class="line">  cout &lt;&lt; <span class="string">&quot;After ptrswap():\t*pi: &quot;</span></span><br><span class="line">       &lt;&lt; *pi &lt;&lt; <span class="string">&quot;\t*pj: &quot;</span> &lt;&lt; *pj &lt;&lt; endl; </span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译并执行后，该程序产生如下结果：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Before <span class="title">ptrswap</span><span class="params">()</span>: *pi: <span class="number">10</span> *pj: <span class="number">20</span> </span></span><br><span class="line"><span class="function">After ptrswap():  *pi: <span class="number">20</span> *pj: <span class="number">10</span>      </span></span><br></pre></td></tr></table></figure>
+<p>即指针的值被交换了。在调用 ptrswap 时，pi 指向 i，而 pj 则指向 j。在 ptrswap 函数中，指针被交换，使得调用 ptrswap 结束后，pi 指向了原来 pj 所指向的对象。换句话说，现在 pi 指向 j，而 pj 则指向了 i。</p>
+<h3 id="容器的形参">容器的形参</h3>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  通常，函数不应该有 vector 或其他标准库容器类型的形参。调用含有普通的非引用 vector 形参的函数将会复制 vector 的每一个元素。
+</div>
+<p>从避免复制 vector 的角度出发，应考虑将形参声明为引用类型。然而事实上，C++ 程序员 <strong>倾向于通过传递指向容器中需要处理的元素的迭代器来传递容器</strong>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pass iterators to the first and one past the last element to print </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;::const_iterator beg, </span></span></span><br><span class="line"><span class="function"><span class="params">           vector&lt;<span class="keyword">int</span>&gt;::const_iterator end)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">  <span class="keyword">while</span> (beg != end) &#123; </span><br><span class="line">    cout &lt;&lt; *beg++; </span><br><span class="line">    <span class="keyword">if</span> (beg != end) cout &lt;&lt; <span class="string">&quot; &quot;</span>; <span class="comment">// no space after last element </span></span><br><span class="line">  &#125; </span><br><span class="line">  cout &lt;&lt; endl; </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<h3 id="数组形参">数组形参</h3>
+<p>因为数组会被自动转化为指针，所以处理数组的函数通常通过操纵指向数组指向数组中的元素的指针来处理数组。</p>
+<h4 id="数组形参的定义">数组形参的定义</h4>
+<p>如果要编写一个函数，输出 int 型数组的内容，可用下面三种方式指定数组形参：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// three equivalent definitions of printValues </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printValues</span><span class="params">(<span class="keyword">int</span>*)</span> </span>&#123; <span class="comment">/* ... */</span> &#125; </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printValues</span><span class="params">(<span class="keyword">int</span>[])</span> </span>&#123; <span class="comment">/* ... */</span> &#125; </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printValues</span><span class="params">(<span class="keyword">int</span>[<span class="number">10</span>])</span> </span>&#123; <span class="comment">/* ... */</span> &#125;     </span><br></pre></td></tr></table></figure>
+<p>虽然不能直接传递数组，但是函数的形参可以写成数组的形式。虽然形参表示方式不同，但可将使用数组语法定义的形参看作指向数组元素类型的指针。上面的三种定义是等价的，形参类型都是 <code>int *</code>。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  通常，<strong>将数组形参直接定义为指针要比使用数组语法定义更好</strong>。这样就明确地表示，函数操纵的是指向数组元素的指针，而不是数组本身。由于忽略了数组长度，形参定义中如果包含了数组长度则特别容易引起误解。
+</div>
+<p>不需要修改数组形参的元素时，函数应该将形参定义为指向 const 对象的指针：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// f won&#x27;t change the elements in the array </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span>*)</span> </span>&#123; <span class="comment">/* ... */</span> &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="通过引用传递数组">通过引用传递数组</h4>
+<p>和其他类型一样，数组形参可声明为数组的引用。如果形参是数组的引用，编译器不会将数组实参转化为指针，而是传递数组的引用本身。</p>
+<p>和使用指针的区别是，在这种情况下，数组大小成为形参和实参类型的一部分。编译器检查数组的实参的大小与形参的大小是否匹配：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ok: parameter is a reference to an array; size of array is fixed </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printValues</span><span class="params">(<span class="keyword">int</span> (&amp;arr)[<span class="number">10</span>])</span> </span>&#123; <span class="comment">/* ... */</span> &#125; </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">  <span class="keyword">int</span> i = <span class="number">0</span>, j[<span class="number">2</span>] = &#123;<span class="number">0</span>, <span class="number">1</span>&#125;; </span><br><span class="line">  <span class="keyword">int</span> k[<span class="number">10</span>] = &#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>&#125;; </span><br><span class="line">  <span class="built_in">printValues</span>(&amp;i); <span class="comment">// error: argument is not an array of 10 ints </span></span><br><span class="line">  <span class="built_in">printValues</span>(j);  <span class="comment">// error: argument is not an array of 10 ints </span></span><br><span class="line">  <span class="built_in">printValues</span>(k);  <span class="comment">// ok: argument is an array of 10 ints </span></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个版本的 printValues 函数只严格地接受含有 10 个 int 型数值的数组，这限制了哪些数组可以传递。然而，由于形参是引用，在函数体中依赖数组的大小是安全的：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ok: parameter is a reference to an array; size of array is fixed </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printValues</span><span class="params">(<span class="keyword">int</span> (&amp;arr)[<span class="number">10</span>])</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i != <span class="number">10</span>; ++i) &#123; </span><br><span class="line">    cout &lt;&lt; arr[i] &lt;&lt; endl; </span><br><span class="line">  &#125; </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>``&amp;arr` 两边的圆括号是必需的，因为下标操作符具有更高的优先级：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">f</span>(<span class="keyword">int</span> &amp;arr[<span class="number">10</span>])     <span class="comment">// error: arr is an array of references </span></span><br><span class="line"><span class="built_in">f</span>(<span class="built_in"><span class="keyword">int</span></span> (&amp;arr)[<span class="number">10</span>]) <span class="comment">// ok: arr is a reference to an array of 10 ints </span></span><br></pre></td></tr></table></figure>
+<h3 id="数组的边界处理">数组的边界处理</h3>
+<p>非引用数组形参的类型检查只是确保实参是和数组元素具有同样类型的指针，而不会检查实参实际上是否指向指定大小的数组。</p>
+<p>有三种常见的编程技巧确保函数的操作不超出数组实参的边界。</p>
+<h4 id="方法1：使用特殊标记">方法1：使用特殊标记</h4>
+<p>第一种方法是在数组本身放置一个标记来检测数组的结束。C 风格字符串就是采用这种方法的一个例子，它是一种字符数组，并且以空字符 null 作为结束的标记。处理 C 风格字符串的程序就是使用这个标记停止数组元素的处理。</p>
+<h4 id="方法2：标准库规范">方法2：标准库规范</h4>
+<p>第二种方法是传递指向数组第一个和最后一个元素的下一个位置的指针。这种编程风格由标准库所使用的技术启发而得。使用这种方法重写函数 printValues 并调用该函数，如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printValues</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> *beg, <span class="keyword">const</span> <span class="keyword">int</span> *end)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">  <span class="keyword">while</span> (beg != end) &#123; </span><br><span class="line">    cout &lt;&lt; *beg++ &lt;&lt; endl; </span><br><span class="line">  &#125; </span><br><span class="line">&#125; </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">  <span class="keyword">int</span> j[<span class="number">2</span>] = &#123;<span class="number">0</span>, <span class="number">1</span>&#125;; </span><br><span class="line">  <span class="comment">// ok: j is converted to pointer to 0th element in j </span></span><br><span class="line">  <span class="comment">//     j + 2 refers one past the end of j </span></span><br><span class="line">  <span class="built_in">printValues</span>(j, j + <span class="number">2</span>); </span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>; </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>printValues 中的循环很像用 vector 迭代器编写的程序。每次循环都使 beg 指针指向下一个元素，从而实现数组的遍历。当 beg 指针等于结束标记时，循环结束。结束标记就是传递给函数的第二个形参。</p>
+<p>调用这个版本的函数需要传递两个指针：一个指向要输出的第一个元素，另一个则指向最后一个元素的下一个位置。只要正确计算指针，使它们标记一段有效的元素范围，程序就会安全。</p>
+<h4 id="方法3：显式传递表示数组大小的形参">方法3：显式传递表示数组大小的形参</h4>
+<p>第三种方法是将第二个形参定义为表示数组的大小，这种用法在 C 程序和标准化之前的 C++ 程序中十分普遍。</p>
+<p>用这种方法再次重写函数 printValues，新版本及其调用如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// const int ia[] is equivalent to const int* ia </span></span><br><span class="line"><span class="comment">// size is passed explicitly and used to control access to elements </span></span><br><span class="line">of ia </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printValues</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> ia[], <span class="keyword">size_t</span> size)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i != size; ++i) &#123; </span><br><span class="line">    cout &lt;&lt; ia[i] &lt;&lt; endl; </span><br><span class="line">  &#125; </span><br><span class="line">&#125; </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">  <span class="keyword">int</span> j[] = &#123; <span class="number">0</span>, <span class="number">1</span> &#125;; <span class="comment">// int array of size 2 </span></span><br><span class="line">  <span class="built_in">printValues</span>(j, <span class="built_in"><span class="keyword">sizeof</span></span>(j)/<span class="built_in"><span class="keyword">sizeof</span></span>(*j)); </span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>; </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<p>这个版本使用了形参 size 来确定要输出的元素的个数。调用 printValues 时，要额外传递一个形参。只要传递给函数的 size 值不超过数组的实际大小，程序就能安全运行。</p>
+<h2 id="返回值">返回值</h2>
+<p>在含有 return 语句的循环后没有提供 return 语句是很危险的，因为大部分的编译器不能检测出这个漏洞，运行时会出现什么问题是不确定的。</p>
+<p>但此规则有一个例外情况：允许主函数 main 没有返回值就可结束。如果程序控制执行到主函数 main 的最后一个语句都还没有返回，那么编译器会隐式地插入返回 0 的语句。</p>
+<h3 id="返回非引用类型">返回非引用类型</h3>
+<p>函数的返回值用于初始化在调用函数处创建的临时对象。在求解表达式时，如果需要一个地方储存其运算结果，编译器会创建一个没有命名的对象，这就是临时对象。在英语中，C++
+程序员通常用 temporary 这个术语来代替 temporary object。</p>
+<p>用函数返回值初始化临时对象与用实参初始化形参的方法是一样的。如果返回类型不是引用，在调用函数的地方会将函数返回值复制给临时对象。当函数返回非引用类型时，其返回值既可以是局部对象，也可以是求解表达式的结果。</p>
+<p>例如，下面的程序提供了一个计数器、一个单词 word 和单词结束字符串
+ending，当计数器的值大于 1 时，返回该单词的复数版本：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// return plural version of word if ctr isn&#x27;t 1 </span></span><br><span class="line"><span class="function">string <span class="title">make_plural</span><span class="params">(<span class="keyword">size_t</span> ctr, <span class="keyword">const</span> string &amp;word, </span></span></span><br><span class="line"><span class="function"><span class="params">                   <span class="keyword">const</span> string &amp;ending)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">  <span class="keyword">return</span> (ctr == <span class="number">1</span>) ? word : word + ending; </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>我们可以使用这样的函数来输出单词的单数或复数形式。</p>
+<p>这个函数要么返回其形参 word 的副本，要么返回一个未命名的临时 string 对象，这个临时对象是由字符串 word 和 ending 的相加而产生的。这两种情况下，return 都在调用该函数的地方复制了返回的 string 对象。</p>
+<h3 id="返回引用类型">返回引用类型</h3>
+<p>当函数返回引用类型时，没有复制返回值。相反，返回的是对象本身。例如，考虑下面的函数，此函数返回两个 string 类型形参中较短的那个字符串的引用：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// find longer of two strings </span></span><br><span class="line"><span class="function"><span class="keyword">const</span> string &amp;<span class="title">shorterString</span><span class="params">(<span class="keyword">const</span> string &amp;s1, <span class="keyword">const</span> string &amp;s2)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">  <span class="keyword">return</span> s1.<span class="built_in">size</span>() &lt; s2.<span class="built_in">size</span>() ? s1 : s2; </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>形参和返回类型都是指向 const string 对象的引用，调用函数和返回结果时，都没有复制这些 string 对象。</p>
+<h3 id="不要返回局部对象的引用">不要返回局部对象的引用</h3>
+<div class="alert alert-danger"><i class="fas fa-bug"></i>  千万不能返回局部变量的引用！
+</div>
+<p>当函数执行完毕时，将释放分配给局部对象的存储空间。此时，对局部对象的引用就会指向不确定的内存。考虑下面的程序：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Disaster: Function returns a reference to a local object </span></span><br><span class="line"><span class="function"><span class="keyword">const</span> string &amp;<span class="title">manip</span><span class="params">(<span class="keyword">const</span> string&amp; s)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">     string ret = s; </span><br><span class="line">     <span class="comment">// transform ret in some way </span></span><br><span class="line">     <span class="keyword">return</span> ret; <span class="comment">// Wrong: Returning reference to a local object! </span></span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>这个函数会在运行时出错，因为它返回了局部对象的引用。当函数执行完毕，字符串 ret 占用的储存空间被释放，函数返回值指向了对于这个程序来说不再有效的内存空间。</p>
+<h3 id="引用返回左值">引用返回左值</h3>
+<p>返回引用的函数返回一个左值。因此，这样的函数可用于任何要求使用左值的地方：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> &amp;<span class="title">get_val</span><span class="params">(string &amp;str, string::size_type ix)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">  <span class="keyword">return</span> str[ix]; </span><br><span class="line">&#125; </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">  <span class="function">string <span class="title">s</span><span class="params">(<span class="string">&quot;a value&quot;</span>)</span></span>; </span><br><span class="line">  cout &lt;&lt; s &lt;&lt; endl;   <span class="comment">// prints a value </span></span><br><span class="line">  <span class="built_in">get_val</span>(s, <span class="number">0</span>) = <span class="string">&#x27;A&#x27;</span>; <span class="comment">// changes s[0] to A </span></span><br><span class="line"></span><br><span class="line">  cout &lt;&lt; s &lt;&lt; endl;   <span class="comment">// prints A value </span></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>给函数返回值赋值可能让人惊讶，由于函数返回的是一个引用，因此这是正确的，该引用是被返回元素的同义词。</p>
+<p>如果不希望引用返回值被修改，返回值应该声明为 const：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">const</span> <span class="keyword">char</span> &amp;<span class="title">get_val</span><span class="params">(... </span></span></span><br></pre></td></tr></table></figure>
+<h2 id="默认实参">默认实参</h2>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  设计带有默认实参的函数，其中部分工作就是排列形参，使最少使用默认实参的形参排在最前，最可能使用默认实参的形参排在最后。
+</div>
+<p>默认实参是一种虽然并不普遍、但在多数情况下仍然适用的实参值。调用函数时，可以省略有默认值的实参。编译器会为我们省略的实参提供默认值。</p>
+<p>默认实参是通过给形参表中的形参提供明确的初始值来指定的。程序员可为一个或多个形参定义默认值。但是，如果有一个形参具有默认实参，那么，它后面所有的形参都必须有默认实参。</p>
+<p>例如，下面的函数创建并初始化了一个 string
+对象，用于模拟窗口屏幕。此函数为窗口屏幕的高、宽和背景字符提供了默认实参：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">string <span class="title">screenInit</span><span class="params">(string::size_type height = <span class="number">24</span>, </span></span></span><br><span class="line"><span class="function"><span class="params">                  string::size_type width = <span class="number">80</span>, </span></span></span><br><span class="line"><span class="function"><span class="params">                  <span class="keyword">char</span> background = <span class="string">&#x27; &#x27;</span> )</span></span>;    </span><br></pre></td></tr></table></figure>
+<p>调用包含默认实参的函数时，可以为该形参提供实参，也可以不提供。如果提供了实参，则它将覆盖默认的实参值；否则，函数将使用默认实参值。下面的函数
+screenInit 的调用都是正确的：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">string screen; </span><br><span class="line">screen = <span class="built_in">screenInit</span>();       <span class="comment">// equivalent to screenInit (24,80,&#x27; &#x27;) </span></span><br><span class="line">screen = <span class="built_in">screenInit</span>(<span class="number">66</span>);     <span class="comment">// equivalent to screenInit (66,80,&#x27; &#x27;) </span></span><br><span class="line">screen = <span class="built_in">screenInit</span>(<span class="number">66</span>, <span class="number">256</span>);       <span class="comment">// screenInit(66,256,&#x27; &#x27;) </span></span><br><span class="line">screen = <span class="built_in">screenInit</span>(<span class="number">66</span>, <span class="number">256</span>, <span class="string">&#x27;#&#x27;</span>); </span><br></pre></td></tr></table></figure>
+<p>函数调用的实参按位置解析，默认实参只能用来替换函数调用缺少的<strong>尾部实参</strong>。例如，如果要给 background 提供实参，那么也必须给 height 和 width 提供实参：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">screen = <span class="built_in">screenInit</span>(, , <span class="string">&#x27;?&#x27;</span>); <span class="comment">// error, can omit only trailing arguments </span></span><br><span class="line">screen = <span class="built_in">screenInit</span>( <span class="string">&#x27;?&#x27;</span>);    <span class="comment">// calls screenInit(&#x27;?&#x27;,80,&#x27; &#x27;)   </span></span><br></pre></td></tr></table></figure>
+<h3 id="默认实参的初始化式">默认实参的初始化式</h3>
+<p>默认实参可以是任何适当类型的表达式：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">string::size_type <span class="title">screenHeight</span><span class="params">()</span></span>; </span><br><span class="line"><span class="function">string::size_type <span class="title">screenWidth</span><span class="params">(string::size_type)</span></span>; </span><br><span class="line"><span class="function"><span class="keyword">char</span> <span class="title">screenDefault</span><span class="params">(<span class="keyword">char</span> = <span class="string">&#x27; &#x27;</span>)</span></span>; </span><br><span class="line"><span class="function">string <span class="title">screenInit</span><span class="params">( </span></span></span><br><span class="line"><span class="function"><span class="params">                  string::size_type height = screenHeight(), </span></span></span><br><span class="line"><span class="function"><span class="params">                  string::size_type width = screenWidth(screenHeight()), </span></span></span><br><span class="line"><span class="function"><span class="params">                  <span class="keyword">char</span> background = screenDefault())</span></span>; </span><br></pre></td></tr></table></figure>
+<p>如果默认实参是一个表达式，而且默认值用作实参，则在调用函数时求解该表达式。例如，每次不带第三个实参调用函数 screenInit 时，编译器都会调用函数 screenDefault 为 background 获得一个值。</p>
+<h3 id="指定默认实参的约束">指定默认实参的约束</h3>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  通常，应在函数声明中指定默认实参，并将该声明放在合适的头文件中。
+</div>
+<p>既可以在函数声明也可以在函数定义中指定默认实参。但是，在一个文件中，只能为一个形参指定默认实参一次。下面的例子是错误的：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ff.h </span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">ff</span><span class="params">(<span class="keyword">int</span> = <span class="number">0</span>)</span></span>; </span><br><span class="line"></span><br><span class="line"><span class="comment">// ff.cc </span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;ff.h&quot;</span> </span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">ff</span><span class="params">(<span class="keyword">int</span> i = <span class="number">0</span>)</span> </span>&#123; <span class="comment">/* ... */</span> &#125; <span class="comment">// error</span></span><br></pre></td></tr></table></figure>
+<p>如果在函数定义的形参表中提供默认实参，那么只有在包含该函数定义的源文件中调用该函数时，默认实参才是有效的。</p>
+<h2 id="内联函数">内联函数</h2>
+<p>先看一个返回两个 string 形参中较短的字符串的函数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// find longer of two strings </span></span><br><span class="line"><span class="function"><span class="keyword">const</span> string &amp;<span class="title">shorterString</span><span class="params">(<span class="keyword">const</span> string &amp;s1, <span class="keyword">const</span> string &amp;s2)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">  <span class="keyword">return</span> s1.<span class="built_in">size</span>() &lt; s2.<span class="built_in">size</span>() ? s1 : s2; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="优点">优点</h3>
+<p>将函数指定为 inline 函数，（通常）就是将它在程序中每个调用点上“内联地”展开。假设我们将 shorterString 定义为内联函数，则调用：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cout &lt;&lt; <span class="built_in">shorterString</span>(s1, s2) &lt;&lt; endl;</span><br></pre></td></tr></table></figure>
+<p>在编译时将展开为：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cout &lt;&lt; (s1.<span class="built_in">size</span>() &lt; s2.<span class="built_in">size</span>() ? s1 : s2) &lt;&lt; endl;     </span><br></pre></td></tr></table></figure>
+<p>从而消除了把 shorterString 写成函数的额外执行开销。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// inline version: find longer of two strings </span></span><br><span class="line"><span class="keyword">inline</span> <span class="keyword">const</span> string &amp; </span><br><span class="line"><span class="built_in">shorterString</span>(<span class="keyword">const</span> string &amp;s1, <span class="keyword">const</span> string &amp;s2) </span><br><span class="line">&#123; </span><br><span class="line">  <span class="keyword">return</span> s1.<span class="built_in">size</span>() &lt; s2.<span class="built_in">size</span>() ? s1 : s2; </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  inline 说明对于编译器来说只是一个建议，编译器可以选择忽略这个。
+</div>
+<p>一般来说，内联机制适用于优化小的、只有几行的而且经常被调用的函数。大多数的编译器都不支持递归函数的内联。一个 1200 行的函数也不太可能在调用点内联展开。</p>
+<h3 id="注意事项">注意事项</h3>
+<div class="alert alert-warning"><i class="far fa-bell"></i>  内联函数应该在头文件中定义，这一点不同于其他函数。
+</div>
+<p>inline 函数的定义对编译器而言 <strong>必须是可见的</strong> ，以便编译器能够在调用点内联展开该函数的代码。此时，仅有函数原型是不够的。</p>
+<p>inline 函数可能要在程序中定义不止一次，只要 inline 函数的定义在某个源文件中只出现一次，而且在所有源文件中，其定义必须是完全相同的。把 inline 函数的定义放在头文件中，可以确保在调用函数时所使用的定义是相同的，并且保证在调用点该函数的定义对编译器可见。</p>
+<h2 id="重载函数">重载函数</h2>
+<p>通过省去为函数起名并记住函数名字的麻烦，函数重载简化了程序的实现，使程序更容易理解。函数名只是为了帮助编译器判断调用的是哪个函数而已。例如，一个数据库应用可能需要提供多个 lookup 函数，分别实现基于姓名、电话号码或账号之类的查询功能。函数重载使我们可以定义一系列的函数，它们的名字都是 lookup，不同之处在于用于查询的值不相同。如此可传递几种类型中的任一种值调用 lookup 函数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Record <span class="title">lookup</span><span class="params">(<span class="keyword">const</span> Account&amp;)</span></span>;  <span class="comment">// find by Account </span></span><br><span class="line"><span class="function">Record <span class="title">lookup</span><span class="params">(<span class="keyword">const</span> Phone&amp;)</span></span>;    <span class="comment">// find by Phone </span></span><br><span class="line"><span class="function">Record <span class="title">lookup</span><span class="params">(<span class="keyword">const</span> Name&amp;)</span></span>;     <span class="comment">// find by Name </span></span><br><span class="line">Record r1, r2; </span><br><span class="line">r1 = <span class="built_in">lookup</span>(acct);                  <span class="comment">// call version that takes an Account </span></span><br><span class="line">r2 = <span class="built_in">lookup</span>(phone);                 <span class="comment">// call version that takes a Phone </span></span><br></pre></td></tr></table></figure>
+<p>这里的三个函数共享同一个函数名，但却是三个不同的函数。编译器将根据所传递的实参类型来判断调用的是哪个函数。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  任何程序都仅有一个 main 函数的实例。main 函数不能重载。
+</div>
+<h3 id="重载与作用域">重载与作用域</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Program for illustration purposes only: </span></span><br><span class="line"><span class="comment"> * It is bad style for a function to define a local variable </span></span><br><span class="line"><span class="comment"> * with the same name as a global name it wants to use </span></span><br><span class="line"><span class="comment"> */</span> </span><br><span class="line"><span class="function">string <span class="title">init</span><span class="params">()</span></span>; <span class="comment">// the name init has global scope </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fcn</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">  <span class="keyword">int</span> init = <span class="number">0</span>;        <span class="comment">// init is local and hides global init </span></span><br><span class="line">  string s = <span class="built_in">init</span>();   <span class="comment">// error: global init is hidden </span></span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>一般的作用域规则同样适用于重载函数名。如果局部地声明一个函数，则该函数将屏蔽而不是重载在外层作用域中声明的同名函数。由此推论，每一个版本的重载函数都应在同一个作用域中声明。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  一般来说，局部地声明函数是一种不明智的选择。函数的声明应放在头文件中。
+</div>
+<h3 id="函数匹配与实参转换">函数匹配与实参转换</h3>
+<p>函数重载确定，即函数匹配是将函数调用与重载函数集合中的一个函数相关联的过程。通过自动提取函数调用中实际使用的实参与重载集合中各个函数提供的形参做比较，编译器实现该调用与函数的匹配。匹配结果有三种可能：</p>
+<ol>
+<li>编译器找到与实参最佳匹配的函数，并生成调用该函数的代码。</li>
+<li>找不到形参与函数调用的实参匹配的函数，在这种情况下，编译器将给出编译错误信息。</li>
+<li>存在多个与实参匹配的函数，但没有一个是明显的最佳选择。该调用具有二义性。</li>
+</ol>
+<p>大多数情况下，编译器都可以直接明确地判断一个实际的调用是否合法，如果合法，则应该调用哪一个函数。重载集合中的函数通常有不同个数的参数或无关联的参数类型。当多个函数的形参具有可通过隐式转换关联起来的类型，则函数匹配将相当灵活。在这种情况下，需要程序员充分地掌握函数匹配的过程。</p>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/cpp-dynamic-object.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/cpp-overload-operator.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '函数'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

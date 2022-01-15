@@ -1,0 +1,855 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>面向对象 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="@interface 部分
+使用 @interface 提供类的接口信息。
+示例
+1234567891011121314151617&amp;#x2F;&amp;#x2F; 声明新类（继承自 NSObject 类）@interface Circle : NSObject&amp;#123;  &amp;#x2F;&amp;#x2F; 告诉">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="面向对象"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '面向对象'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 面向对象</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="interface-部分">@interface 部分</h2>
+<p>使用 <code>@interface</code> 提供类的接口信息。</p>
+<h3 id="示例">示例</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 声明新类（继承自 NSObject 类）</span><br><span class="line">@interface Circle : NSObject</span><br><span class="line">&#123;</span><br><span class="line">  &#x2F;&#x2F; 告诉编译器 Circle 对象需要的各种数据成员</span><br><span class="line">  ShapeColor fillColor;</span><br><span class="line">  ShapeRect bounds;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 方法声明</span><br><span class="line">- (void) setFillColor: (ShapeColor) fillColor;</span><br><span class="line"></span><br><span class="line">- (void) setBounds: (ShapeRect) bounds;</span><br><span class="line"></span><br><span class="line">- (void) draw;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 告诉编译器我们已经完成了类的声明</span><br><span class="line">@end &#x2F;&#x2F; Circle</span><br></pre></td></tr></table></figure>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  熟悉中缀符：
+<p>Objective-C 有一种名为中缀符（infix notation）的语法技术，方法的名称及其参数都是合在一起的。例如，你可以这样调用一个带参数的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[circle setFillColor: kRedColor];</span><br></pre></td></tr></table></figure>
+<p>带两个参数的方法调用如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[textThing setStringValue: @&quot;hello there&quot;</span><br><span class="line">        color: kBlueColor];</span><br></pre></td></tr></table></figure>
+<p><code>setStringValue</code> 和 <code>color:</code> 实际上是参数的名称（实际上是方法名称的一部分，后面再详细介绍），<code>@&quot;hello there&quot;</code> 和 <code>kBlueColor</code> 是被传递的参数。</p>
+</div>
+<div class="alert alert-warning"><i class="far fa-bell"></i>  注意冒号：
+<p>注意：冒号是方法名称非常重要的组成部分。方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void) scratchTheCat;</span><br></pre></td></tr></table></figure>
+<p>不同于</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- (void) scratchTheCat: (CatType) critter;</span><br></pre></td></tr></table></figure>
+<p>规则：如果方法使用参数，则需要冒号；否则不需要冒号。</p>
+</div>
+<h2 id="implementation-部分">@implementation 部分</h2>
+<p><code>@implementation</code> 是一个编译器指令，表明你将为某个类提供代码。类名出现在 <code>@implementation</code> 之后。该行的结尾没有分号，因为在 Objective-C 编译器指令后不必使用分号。</p>
+<h3 id="示例-v2">示例</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@implementation Circle</span><br><span class="line"></span><br><span class="line">- (void) setFillColor: (ShapeColor) c</span><br><span class="line">&#123;</span><br><span class="line">  fillColor &#x3D; c;</span><br><span class="line">&#125; &#x2F;&#x2F; setFillColor</span><br><span class="line"></span><br><span class="line">- (void) setBounds: (ShapeRect) b</span><br><span class="line">&#123;</span><br><span class="line">  bounds &#x3D; b;</span><br><span class="line">&#125; &#x2F;&#x2F; setBounds</span><br><span class="line"></span><br><span class="line">- (void) draw</span><br><span class="line">&#123;</span><br><span class="line">  NSLog (@&quot;drawing a circle at (%d %d %d %d) in %@&quot;,</span><br><span class="line">      bounds.x, bounds.y,</span><br><span class="line">      bounds.width, bounds.height</span><br><span class="line">      colorName(fillColor));</span><br><span class="line">&#125; &#x2F;&#x2F; draw</span><br><span class="line"></span><br><span class="line">@end  &#x2F;&#x2F; Circle</span><br></pre></td></tr></table></figure>
+<h2 id="实例化对象">实例化对象</h2>
+<h3 id="示例-v3">示例</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">int main(int argc, const char * argv[])</span><br><span class="line">&#123;</span><br><span class="line">  id shapes[3];</span><br><span class="line"></span><br><span class="line">  shapeRect rect0 &#x3D; &#123; 0, 0, 10, 30 &#125;;</span><br><span class="line">  shapes[0] &#x3D; [Circle new];</span><br><span class="line">  [shapes[0] setBounds: rect0];</span><br><span class="line">  [shapes[0] setFillColor: kRedColor];</span><br><span class="line"></span><br><span class="line">  [ShapeRect rect1 &#x3D; &#123; 30, 40, 50, 60 &#125;;</span><br><span class="line">  shapes[1] &#x3D; [Rectangle new];</span><br><span class="line">  [shapes[1] setBounds: rect1];</span><br><span class="line">  [shapes[1] setFillColor: kGreenColor];</span><br><span class="line"></span><br><span class="line">  shapeRect rect2 &#x3D; &#123; 15, 19, 37, 29 &#125;;</span><br><span class="line">  shapes[2] &#x3D; [OblateSphereold new];</span><br><span class="line">  [shapes[2] setBounds: rect2];</span><br><span class="line">  [shapes[2] setFillColor: kBlueColor];</span><br><span class="line"></span><br><span class="line">  drawShapes (shapes, 3);</span><br><span class="line"></span><br><span class="line">  return (0);</span><br><span class="line">&#125; &#x2F;&#x2F; main</span><br></pre></td></tr></table></figure>
+<h2 id="继承">继承</h2>
+<h3 id="语法">语法</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@interface Son : Father</span><br><span class="line"></span><br><span class="line">@end &#x2F;&#x2F; Son</span><br></pre></td></tr></table></figure>
+<div class="alert alert-danger"><i class="fas fa-bug"></i>  注意：Objective-C 不支持多继承。下面的语句是不能被正常识别的：
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@interface Circle: NSObject, PrintableObject</span><br></pre></td></tr></table></figure>
+</div>
+<h3 id="示例-v4">示例</h3>
+<h4 id="父类">父类</h4>
+<ul>
+<li>声明：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@interface Shape : NSObject</span><br><span class="line">&#123;</span><br><span class="line">  ShapeColor fillColor;</span><br><span class="line">  ShapeRect  bounds;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">- (void) setFillColor: (ShapeColor) fillColor;</span><br><span class="line">- (void) setBounds: (ShapeRect) bounds;</span><br><span class="line">- (void) draw;</span><br><span class="line">@end &#x2F;&#x2F; Shape</span><br></pre></td></tr></table></figure>
+<ul>
+<li>实现：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">@implementation Shape</span><br><span class="line">- (void) setFillColor: (ShapeColor) c</span><br><span class="line">&#123;</span><br><span class="line">  fillColor &#x3D; c;</span><br><span class="line">&#125; &#x2F;&#x2F; setFillColor</span><br><span class="line"></span><br><span class="line">- (void) setBounds: (ShapeRect) b</span><br><span class="line">&#123;</span><br><span class="line">  bounds &#x3D; b;</span><br><span class="line">&#125; &#x2F;&#x2F; setBounds</span><br><span class="line"></span><br><span class="line">- (void) draw</span><br><span class="line">&#123;</span><br><span class="line">&#125; &#x2F;&#x2F; draw</span><br><span class="line"></span><br><span class="line">@end &#x2F;&#x2F; Shape</span><br></pre></td></tr></table></figure>
+<p>虽然 draw 方法没有实现任何功能，我们仍然需要定义它，以便 Shape 的所有子类都能被实现各自不同的方法。对于方法的定义，使用空正文或者返回一个虚（dummy）值都是可以的。</p>
+<h4 id="子类">子类</h4>
+<p>子类的声明和实现现在变得非常简单：</p>
+<ul>
+<li>声明：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@interface Circle : Shape</span><br><span class="line"></span><br><span class="line">@end &#x2F;&#x2F; Circle</span><br><span class="line"></span><br><span class="line">@interface Rectangle : Shape</span><br><span class="line"></span><br><span class="line">@end &#x2F;&#x2F; Rectangle</span><br></pre></td></tr></table></figure>
+<ul>
+<li>实现：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@implementation Circle</span><br><span class="line">- (void) draw</span><br><span class="line">&#123;</span><br><span class="line">NSLog (@&quot;drawing a circle at (%d %d %d %d) in %@&quot;,</span><br><span class="line">      bounds.x, bounds.y,</span><br><span class="line">      bounds.width, bounds.height,</span><br><span class="line">      colorName(fillColor));</span><br><span class="line">&#125; &#x2F;&#x2F; draw</span><br><span class="line">@end &#x2F;&#x2F; Circle</span><br><span class="line"></span><br><span class="line">@implementation Rectangle</span><br><span class="line">- (void) draw</span><br><span class="line">&#123;</span><br><span class="line">NSLog (@&quot;drawing a rect at (%d %d %d %d) in %@&quot;,</span><br><span class="line">      bounds.x, bounds.y,</span><br><span class="line">      bounds.width, bounds.height,</span><br><span class="line">      colorName(fillColor));</span><br><span class="line">&#125; &#x2F;&#x2F; draw</span><br><span class="line">@end &#x2F;&#x2F; Circle</span><br></pre></td></tr></table></figure>
+<h3 id="重载">重载</h3>
+<p>Objective-C 提供某种方式来重载方法，并且仍然调用超类的实现方式。当需要超类实现自身的功能，同时在前面或后面执行某些额外的工作时，这种机制非常有用。为了调用继承方法的实现，需要使用 super 作为方法调用的目标。</p>
+<h4 id="示例-v5">示例</h4>
+<p>例如，如果要改写绘图软件，将所有原本是红色的圆统一绘制成绿色。因为 <code>setFillColor:</code> 是在 Shape 类中定义的。因此，只要在 Circle 类中重载 <code>setFillColor:</code> 方法就可以解决该问题。我们考虑颜色参数，如果它是红色，就把它改成绿色。然后，使用 super 通知超类（shape）将更改的颜色存储到 fillColor 实例变量中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@impletement Circle</span><br><span class="line">- (void) setFillColor : (ShapeColor) c</span><br><span class="line">&#123;</span><br><span class="line">  if (c &#x3D;&#x3D; kRedColor) &#123;</span><br><span class="line">    c &#x3D; kGreenColor;</span><br><span class="line">  &#125;</span><br><span class="line">  [super setFillColor: c];</span><br><span class="line">&#125; &#x2F;&#x2F; setFillColor</span><br><span class="line">&#x2F;&#x2F; Circle 类其他实现部分保持不变</span><br><span class="line">@end &#x2F;&#x2F; Cicle</span><br></pre></td></tr></table></figure>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  Tips: 重载方法时，调用超类方法总是一个不错的选择，这样可以确保能够获得方法实现的所有特性。
+</div>
+<h2 id="复合">复合</h2>
+<p>在 Objective-C 中，复合是通过包含作为实例变量的对象指针实现的。</p>
+<p>例如，一辆轿车由一个发动机（Engine）和四个轮子（Tire）组成，下面我们用程序描述它。</p>
+<h3 id="示例-v6">示例</h3>
+<h4 id="Tire-类">Tire 类</h4>
+<p>Tire 类只有一个 description 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@interface Tire : NSObject</span><br><span class="line">@end &#x2F;&#x2F; Tire</span><br><span class="line"></span><br><span class="line">@implementation Tire</span><br><span class="line"></span><br><span class="line">- (NSString *) description</span><br><span class="line">&#123;</span><br><span class="line">  return (@&quot;I am a tire. I last a while&quot;);</span><br><span class="line">&#125;</span><br><span class="line">@end &#x2F;&#x2F; Tire</span><br></pre></td></tr></table></figure>
+<h4 id="Engine-类">Engine 类</h4>
+<p>与 Tire 类类似，Engine 类也只有一个 descrption 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@interface Engine : NSObject</span><br><span class="line">@end &#x2F;&#x2F; Engine</span><br><span class="line"></span><br><span class="line">@implementation Engine</span><br><span class="line"></span><br><span class="line">- (NSString *) description</span><br><span class="line">&#123;</span><br><span class="line">  return (@&quot;I am an Engine. Vroom!&quot;);</span><br><span class="line">&#125;</span><br><span class="line">@end &#x2F;&#x2F; Engine</span><br></pre></td></tr></table></figure>
+<h4 id="Car-类">Car 类</h4>
+<ul>
+<li>声明：</li>
+</ul>
+<p>Car 类本身拥有一个 engine 对象和一个由 4 个 tires 对象组成的 C 数组。它通过复合的方式来组装自己。 Car 同时还有一个 print 方法，该方法使用 NSLog 输出轮胎和发动机的描述：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@interface Car : NSObject</span><br><span class="line">&#123;</span><br><span class="line">  Engine *engine;</span><br><span class="line">  Tire *tires[4];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void) print;</span><br><span class="line"></span><br><span class="line">@end &#x2F;&#x2F; Car</span><br></pre></td></tr></table></figure>
+<p>每一个 Car 对象都会为指向 engine 和 tires 的指针分配内存。但是真正包含在 Car 中的并不是 engine 和 tires 变量，而只是内存中存在的其他对象的引用。为新建的 Car 分配内存时，这些指针将被初始化为 nil （零值），也就是说这辆汽车现在还没有发动机也没有轮胎。你可以将他想象成还在流水线上组装的汽车框架。</p>
+<ul>
+<li>实现：</li>
+</ul>
+<p>下面让我们看看 Car 类的实现。首先是一个初始化实例变量的 init 方法。init 方法创建一个 engine 变量和 4 个 tires 变量，用以装配汽车。使用 new 创建新对象时，实际上系统要完成两个步骤：</p>
+<ol>
+<li>为对象分配内存，即对象获得一个用来存放其实例变量的内存块；</li>
+<li>调用 init 方法，让该对象处于可用状态。</li>
+</ol>
+<figure class="highlight plain"><figcaption><span>Car</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- (id) init</span><br><span class="line">&#123;</span><br><span class="line">  if (self &#x3D; [super init]) &#123;</span><br><span class="line">    engine &#x3D; [Engine new];</span><br><span class="line"> </span><br><span class="line">    tires[0] &#x3D; [Tire new];</span><br><span class="line">    tires[1] &#x3D; [Tire new];</span><br><span class="line">    tires[2] &#x3D; [Tire new];</span><br><span class="line">    tires[3] &#x3D; [Tire new];</span><br><span class="line">  &#125;</span><br><span class="line">  return (self);</span><br><span class="line">&#125; &#x2F;&#x2F; init</span><br></pre></td></tr></table></figure>
+<div class="alert alert-grenn"><i class="fas fa-lightbulb"></i>  <ul>
+<li>关于 self ：</li>
+</ul>
+记住，每个方法调用都获得了一个名为 self 的隐藏参数，它是一个指向接收消息的对象的指针。方法使用 self 参数查找它们要使用的实例变量。
+<ul>
+<li>关于 if 语句：</li>
+</ul>
+<p>在 init 方法中，下面这行代码看起来有点奇怪：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">if (self &#x3D; [super init]) &#123;</span><br></pre></td></tr></table></figure>
+<p>下面我们来解释这行的意思。若要超类（这里是 NSObject）可以完成所需的一次性初始化，需要调用 [super init] 。init 方法返回的值（id 型数据，即泛型对象指针）描述了被初始化的对象。</p>
+<p>将 <code>[super init]</code> 的结果赋给 self 是 Objective-C 的标准惯例。这么做是为了防止超类在初始化过程中返回的对象不同于原先创建的对象。</p>
+</div>
+<p>Car 类的 init 方法创建了 4 个新轮胎并将其赋值给 tires 数组，接着又创建了一台发动机并将其赋值给 engine 实例变量。</p>
+<p>接下来就是 Car 的 print 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">- (void) print</span><br><span class="line">&#123;</span><br><span class="line">  NSLog (@&quot;%@&quot;, engine);</span><br><span class="line"></span><br><span class="line">  NSLog (@&quot;%@&quot;, tires[0]);</span><br><span class="line">  NSLog (@&quot;%@&quot;, tires[1]);</span><br><span class="line">  NSLog (@&quot;%@&quot;, tires[2]);</span><br><span class="line">  NSLog (@&quot;%@&quot;, tires[3]);</span><br><span class="line">&#125; &#x2F;&#x2F; print</span><br><span class="line"></span><br><span class="line">@end &#x2F;&#x2F; Car</span><br></pre></td></tr></table></figure>
+<h4 id="main-函数">main 函数</h4>
+<p>最后给出 <code>main()</code> 函数的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">int main (int argc, const char * argv[])</span><br><span class="line">&#123;</span><br><span class="line">  Car *car;</span><br><span class="line"></span><br><span class="line">  Car &#x3D; [Car new];</span><br><span class="line">  [car print];</span><br><span class="line"></span><br><span class="line">  return (0);</span><br><span class="line">&#125; &#x2F;&#x2F; main</span><br></pre></td></tr></table></figure>
+<h2 id="存取方法">存取方法</h2>
+<p>存取方法（accesosor method）是用来读取或修改对象特定属性的方法。存取方法包含两种，一种是 <strong>getter方法</strong> ，一种是 <strong>setter方法</strong> 。</p>
+<h3 id="命名习惯">命名习惯</h3>
+<p>在 Objective-C 中，setter 方法的命名习惯与其他语言类似：根据它所更改的属性的名称来命名，并加上前缀 <code>set</code> 。几个示例：<code>setEngine:</code>、<code>setStringValue:</code>、<code>setFont:</code>、<code>setTextLineHeight:</code>。</p>
+<p>而 getter 方法的命名习惯和其他语言则有较大区别：仅仅根据其返回的属性的名称来命名。几个示例：<code>engine</code>、<code>stringValue</code>、<code>font</code>、<code>fillColor</code>、<code>textLineHeight</code>。</p>
+<div class="alert alert-warning"><i class="far fa-bell"></i>  注意：不要将 <code>get</code> 用作 getter 方法的前缀。例如，方法 <code>getStringValue</code> 和 <code>getFont</code> 就破坏了命名惯例。<code>get</code> 这个词在 Cocoa 中有着特殊的含义。如果 <code>get</code> 出现在 Cocoa 的方法名称中，就意味着这个方法会通过你当做参数传入的指针来返回数值。如果你在存取方法的名称中使用 <code>get</code> ，那么有经验的 Cocoa 编程人员就会想到将指针作为参数传入这个方法。当他们发现这不过是一个简单的存取方法时就会感到困惑。最好不要让其他程序员被代码搅得一头雾水。
+</div>
+<h3 id="示例-v7">示例</h3>
+<h4 id="声明">声明</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">@interface Car : NSObject</span><br><span class="line">&#123;</span><br><span class="line">  Engine *engine;</span><br><span class="line">  Tire *tires[4];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (Engine *) engine;</span><br><span class="line">- (void) setEngine: (Engine *) new Engine;</span><br><span class="line"></span><br><span class="line">- (Tire *) tireAtIndex: (int) index;</span><br><span class="line">- (void) setTire: (Tire *) tire</span><br><span class="line">         atIndex: (int) index;</span><br><span class="line"></span><br><span class="line">- (void) print;</span><br><span class="line"></span><br><span class="line">@end &#x2F;&#x2F; Car</span><br></pre></td></tr></table></figure>
+<h4 id="实现">实现</h4>
+<ul>
+<li>发动机的存取方法：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- (Engine *) engine</span><br><span class="line">&#123;</span><br><span class="line">  return (engine);</span><br><span class="line">&#125; &#x2F;&#x2F; engine</span><br><span class="line"></span><br><span class="line">- (void) setEngine : (Engine *) newEngine</span><br><span class="line">&#123;</span><br><span class="line">  engine &#x3D; newEngine;</span><br><span class="line">&#125; &#x2F;&#x2F; setEngine</span><br></pre></td></tr></table></figure>
+<ul>
+<li>轮胎的存取方法：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">- (void) setTire: (Tire *) tire</span><br><span class="line">       atIndex: (int) index</span><br><span class="line">&#123;</span><br><span class="line">  if (index &lt; 0 || index &gt; 3) &#123;</span><br><span class="line">    NSLog(@&quot;bad index (%d) in setTire:atIndex:&quot;, index);</span><br><span class="line">    exit (1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    tires[index] &#x3D; tire;</span><br><span class="line">&#125; &#x2F;&#x2F; setTire:atIndex</span><br><span class="line"></span><br><span class="line">- (Tire *) tireAtIndex : (int) index</span><br><span class="line">&#123;</span><br><span class="line">  if (index &lt; 0 || index &gt; 3) &#123;</span><br><span class="line">    NSLog (@&quot;bad index (%d) in tireAtIndex:&quot;, index);</span><br><span class="line">    exit (1);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return (tires[index]);</span><br><span class="line">&#125; &#x2F;&#x2F; tireAtIndex:</span><br></pre></td></tr></table></figure>
+<h4 id="main-函数-v2">main 函数</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">int main (int argc, const char * argv[])</span><br><span class="line">&#123;</span><br><span class="line">  Car *car &#x3D; [Car new];</span><br><span class="line"></span><br><span class="line">  Engine *engine &#x3D; [Engine new];</span><br><span class="line">  [car setEngine: engine];</span><br><span class="line"></span><br><span class="line">  int i;</span><br><span class="line">  for (i &#x3D; 0; i &lt; 4; i++) &#123;</span><br><span class="line">    Tire *tire &#x3D; [Tire new];</span><br><span class="line"></span><br><span class="line">    [car setTire: tire</span><br><span class="line">        atIndex: i];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  [car print];</span><br><span class="line"></span><br><span class="line">  return (0);</span><br><span class="line">&#125; &#x2F;&#x2F; main</span><br></pre></td></tr></table></figure>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+			
+			
+			
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/oc-intro.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/oc-source-organize.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '面向对象'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

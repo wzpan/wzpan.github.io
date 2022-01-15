@@ -1,0 +1,867 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>风格 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="缩进和空白
+空白
+
+关键字if、while、for与其后的控制表达式的(括号之间插入一个空格分隔，但括号内的表达式应紧贴括号。例如：
+
+1while␣(1);
+
+双目运算符的两侧各插入一个空格分隔，单目运算符和操作数之间不加空格，例如i␣=␣i␣+␣1、++i、!(i␣&amp;lt;␣1)、-x、&amp;amp">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="风格"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '风格'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 风格</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="缩进和空白">缩进和空白</h2>
+<h3 id="空白">空白</h3>
+<ol>
+<li>关键字if、while、for与其后的控制表达式的(括号之间插入一个空格分隔，但括号内的表达式应紧贴括号。例如：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>␣(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>双目运算符的两侧各插入一个空格分隔，单目运算符和操作数之间不加空格，例如<code>i␣=␣i␣+␣1</code>、<code>++i</code>、<code>!(i␣&lt;␣1)</code>、<code>-x</code>、<code>&amp;a[1]</code>等。</li>
+<li>后缀运算符和操作数之间也不加空格，例如取结构体成员<code>s.a</code>、函数调用<code>foo(arg1)</code>、取数组成员<code>a[i]</code>。</li>
+<li><code>,</code>号和<code>;</code>号之后要加空格，这是英文的书写习惯，例如<code>for␣(i␣=␣1;␣i␣&lt;␣10;␣i++)</code>、<code>foo(arg1,␣arg2)</code>。</li>
+<li>以上关于双目运算符和后缀运算符的规则并没有严格要求，有时候为了突出优先级也可以写得更紧凑一些，例如<code>for␣(i=1;␣i&lt;10;␣i++)</code>、<code>distance␣=␣sqrt(x*x␣+␣y*y)</code>等。但是省略的空格一定不要误导了读代码的人，例如<code>a||b␣&amp;&amp;␣c</code>很容易让人理解成错误的优先级。</li>
+<li>由于UNIX系统标准的字符终端是24行80列的，接近或大于80个字符的较长语句要折行写，折行后用空格和上面的表达式或参数对齐，例如：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>␣(<span class="built_in">sqrt</span>(x*x␣+␣y*y)␣&gt;␣<span class="number">5.0</span></span><br><span class="line">    &amp;&amp;␣x␣&lt;␣<span class="number">0.0</span></span><br><span class="line">    &amp;&amp;␣y␣&gt;␣<span class="number">0.0</span>)</span><br></pre></td></tr></table></figure>
+<p>再比如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">foo(<span class="built_in">sqrt</span>(x*x␣+␣y*y),</span><br><span class="line">    a[i<span class="number">-1</span>]␣+␣b[i<span class="number">-1</span>]␣+␣c[i<span class="number">-1</span>])</span><br></pre></td></tr></table></figure>
+<ol start="7">
+<li>较长的字符串可以断成多个字符串然后分行书写，例如：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;This is such a long sentence that &quot;</span></span><br><span class="line">       <span class="string">&quot;it cannot be held within a line\n&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>C编译器会自动把相邻的多个字符串接在一起，以上两个字符串相当于一个字符串&quot;This is such a long sentence that it cannot be held within a line\n&quot;。</p>
+<ol start="8">
+<li>有的人喜欢在变量定义语句中用Tab字符，使变量名对齐，这样看起来很美观。</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">→<span class="keyword">int</span>    →a, b;</span><br><span class="line">→<span class="keyword">double</span> →c;</span><br></pre></td></tr></table></figure>
+<h3 id="缩进">缩进</h3>
+<p>内核代码风格关于缩进的规则有以下几条。</p>
+<ol>
+<li>要用缩进体现出语句块的层次关系，使用Tab字符缩进，不能用空格代替Tab。在标准的字符终端上一个Tab看起来是8个空格的宽度，如果你的文本编辑器可以设置Tab的显示宽度是几个空格，建议也设成8，这样大的缩进使代码看起来非常清晰。如果有的行用空格做缩进，有的行用Tab做缩进，甚至空格和Tab混用，那么一旦改变了文本编辑器的Tab显示宽度就会看起来非常混乱，所以内核代码风格规定只能用Tab做缩进，不能用空格代替Tab。</li>
+<li>if/else、while、do/while、for、switch这些可以带语句块的语句，语句块的{或}应该和关键字写在同一行，用空格隔开，而不是单独占一行。例如应该这样写：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>␣(...)␣&#123;</span><br><span class="line">       →语句列表</span><br><span class="line">&#125;␣<span class="keyword">else</span>␣<span class="keyword">if</span>␣(...)␣&#123;</span><br><span class="line">       →语句列表</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>函数定义的<code>&#123;</code>和<code>&#125;</code>单独占一行，这一点和语句块的规定不同，例如：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>␣foo(<span class="keyword">int</span>␣a,␣<span class="keyword">int</span>␣b)</span><br><span class="line">&#123;</span><br><span class="line">       →语句列表</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>switch和语句块里的case、default对齐写，也就是说语句块里的case、default标号相对于switch不往里缩进，但标号下的语句要往里缩进。例如：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span>␣(c)␣&#123;</span><br><span class="line"><span class="keyword">case</span> <span class="string">&#x27;A&#x27;</span>:</span><br><span class="line">       →语句列表</span><br><span class="line"><span class="keyword">case</span> <span class="string">&#x27;B&#x27;</span>:</span><br><span class="line">       →语句列表</span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">       →语句列表</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>用于goto语句的自定义标号应该顶头写不缩进，而不管标号下的语句缩进到第几层。</p>
+<ol start="5">
+<li>代码中每个逻辑段落之间应该用一个空行分隔开。例如每个函数定义之间应该插入一个空行，头文件、全局变量定义和函数定义之间也应该插入空行，例如：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> g;</span><br><span class="line"><span class="keyword">double</span> h;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">foo</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">       →语句列表</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bar</span><span class="params">(<span class="keyword">int</span> a)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">       →语句列表</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">       →语句列表</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>一个函数的语句列表如果很长，也可以根据相关性分成若干组，用空行分隔。这条规定不是严格要求，通常把变量定义组成一组，后面加空行，return语句之前加空行，例如：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">       →<span class="keyword">int</span>    →a, b;</span><br><span class="line">       →<span class="keyword">double</span> →c;</span><br><span class="line"></span><br><span class="line">       →语句组<span class="number">1</span></span><br><span class="line"></span><br><span class="line">       →语句组<span class="number">2</span></span><br><span class="line"></span><br><span class="line">       →<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="注释">注释</h2>
+<p>单行注释应采用<code>/*␣comment␣*/</code>的形式，用空格把界定符和文字分开。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  <strong>伟洲注</strong>： 关于注释应该使用 <code>/*...*/</code> 还是 <code>//</code> 具体要看项目的需求。Linux Kernel因为要考虑平台兼容性，不允许使用C99的<code>//</code>注释。但如果程序并不会兼容性有过多要求，使用<code>//</code>进行注释也是个很好的选择。
+</div>
+<p>多行注释最常见的是这种形式：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">␣*␣Multi-line</span></span><br><span class="line"><span class="comment">␣*␣comment</span></span><br><span class="line"><span class="comment">␣*/</span></span><br></pre></td></tr></table></figure>
+<p>也有更花哨的形式：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*************\</span></span><br><span class="line"><span class="comment">* Multi-line  *</span></span><br><span class="line"><span class="comment">* comment     *</span></span><br><span class="line"><span class="comment">\*************/</span></span><br></pre></td></tr></table></figure>
+<p>使用注释的场合主要有以下几种。</p>
+<p>整个源文件的顶部注释。说明此模块的相关信息，例如文件名、作者和版本历史等，顶头写不缩进。例如内核源代码目录下的kernel/sched.c文件的开头：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> *  kernel/sched.c</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  Kernel scheduler and related syscalls</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  Copyright (C) 1991-2002  Linus Torvalds</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  1996-12-23  Modified by Dave Grothe to fix bugs in semaphores and</span></span><br><span class="line"><span class="comment"> *              make semaphores SMP safe</span></span><br><span class="line"><span class="comment"> *  1998-11-19  Implemented schedule_timeout() and related stuff</span></span><br><span class="line"><span class="comment"> *              by Andrea Arcangeli</span></span><br><span class="line"><span class="comment"> *  2002-01-04  New ultra-scalable O(1) scheduler by Ingo Molnar:</span></span><br><span class="line"><span class="comment"> *              hybrid priority-list and round-robin design with</span></span><br><span class="line"><span class="comment"> *              an array-switch method of distributing timeslices</span></span><br><span class="line"><span class="comment"> *              and per-CPU runqueues.  Cleanups and useful suggestions</span></span><br><span class="line"><span class="comment"> *              by Davide Libenzi, preemptible kernel bits by Robert Love.</span></span><br><span class="line"><span class="comment"> *  2003-09-03  Interactivity tuning by Con Kolivas.</span></span><br><span class="line"><span class="comment"> *  2004-04-02  Scheduler domains code by Nick Piggin</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>函数注释。说明此函数的功能、参数、返回值、错误码等，写在函数定义上侧，和此函数定义之间不留空行，顶头写不缩进。</li>
+<li>相对独立的语句组注释。对这一组语句做特别说明，写在语句组上侧，和此语句组之间不留空行，与当前语句组的缩进一致。</li>
+<li>代码行右侧的简短注释。对当前代码行做特别说明，一般为单行注释，和代码之间至少用一个空格隔开，一个源文件中所有的右侧注释最好能上下对齐。内核源代码目录下的lib/radix-tree.c文件中的一个函数包含了上述三种注释：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *      radix_tree_insert    -    insert into a radix tree</span></span><br><span class="line"><span class="comment"> *      @root:          radix tree root</span></span><br><span class="line"><span class="comment"> *      @index:         index key</span></span><br><span class="line"><span class="comment"> *      @item:          item to insert</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *      Insert an item into the radix tree at position @index.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">radix_tree_insert</span><span class="params">(struct radix_tree_root *root,</span></span></span><br><span class="line"><span class="function"><span class="params">                        <span class="keyword">unsigned</span> <span class="keyword">long</span> index, <span class="keyword">void</span> *item)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">radix_tree_node</span> *<span class="title">node</span> =</span> <span class="literal">NULL</span>, *slot;</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> height, shift;</span><br><span class="line">        <span class="keyword">int</span> offset;</span><br><span class="line">        <span class="keyword">int</span> error;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Make sure the tree is high enough.  */</span></span><br><span class="line">        <span class="keyword">if</span> ((!index &amp;&amp; !root-&gt;rnode) ||</span><br><span class="line">                        index &gt; radix_tree_maxindex(root-&gt;height)) &#123;</span><br><span class="line">                error = radix_tree_extend(root, index);</span><br><span class="line">                <span class="keyword">if</span> (error)</span><br><span class="line">                        <span class="keyword">return</span> error;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        slot = root-&gt;rnode;</span><br><span class="line">        height = root-&gt;height;</span><br><span class="line">        shift = (height<span class="number">-1</span>) * RADIX_TREE_MAP_SHIFT;</span><br><span class="line"></span><br><span class="line">        offset = <span class="number">0</span>;                     <span class="comment">/* uninitialised var warning */</span></span><br><span class="line">        <span class="keyword">do</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (slot == <span class="literal">NULL</span>) &#123;</span><br><span class="line">                        <span class="comment">/* Have to add a child node.  */</span></span><br><span class="line">                        <span class="keyword">if</span> (!(slot = radix_tree_node_alloc(root)))</span><br><span class="line">                                <span class="keyword">return</span> -ENOMEM;</span><br><span class="line">                        <span class="keyword">if</span> (node) &#123;</span><br><span class="line">                                node-&gt;slots[offset] = slot;</span><br><span class="line">                                node-&gt;count++;</span><br><span class="line">                        &#125; <span class="keyword">else</span></span><br><span class="line">                                root-&gt;rnode = slot;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="comment">/* Go a level down */</span></span><br><span class="line">                offset = (index &gt;&gt; shift) &amp; RADIX_TREE_MAP_MASK;</span><br><span class="line">                node = slot;</span><br><span class="line">                slot = node-&gt;slots[offset];</span><br><span class="line">                shift -= RADIX_TREE_MAP_SHIFT;</span><br><span class="line">                height--;</span><br><span class="line">        &#125; <span class="keyword">while</span> (height &gt; <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (slot != <span class="literal">NULL</span>)</span><br><span class="line">                <span class="keyword">return</span> -EEXIST;</span><br><span class="line"></span><br><span class="line">        BUG_ON(!node);</span><br><span class="line">        node-&gt;count++;</span><br><span class="line">        node-&gt;slots[offset] = item;</span><br><span class="line">        BUG_ON(tag_get(node, <span class="number">0</span>, offset));</span><br><span class="line">        BUG_ON(tag_get(node, <span class="number">1</span>, offset));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>复杂的结构体定义比函数更需要注释。例如内核源代码目录下的kernel/sched.c文件中定义了这样一个结构体：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * This is the main, per-CPU runqueue data structure.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Locking rule: those places that want to lock multiple runqueues</span></span><br><span class="line"><span class="comment"> * (such as the load balancing or the thread migration code), lock</span></span><br><span class="line"><span class="comment"> * acquire operations must be ordered by ascending &amp;runqueue.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">runqueue</span> &#123;</span></span><br><span class="line">        <span class="keyword">spinlock_t</span> lock;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * nr_running and cpu_load should be in the same cacheline because</span></span><br><span class="line"><span class="comment">         * remote CPUs use both these fields when doing load calculation.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> nr_running;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> CONFIG_SMP</span></span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> cpu_load[<span class="number">3</span>];</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> nr_switches;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * This is part of a global counter where only the total sum</span></span><br><span class="line"><span class="comment">         * over all CPUs matters. A task can increase this counter on</span></span><br><span class="line"><span class="comment">         * one CPU and if it got migrated afterwards it may decrease</span></span><br><span class="line"><span class="comment">         * it on another CPU. Always updated under the runqueue lock:</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> nr_uninterruptible;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> expired_timestamp;</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> timestamp_last_tick;</span><br><span class="line">        <span class="keyword">task_t</span> *curr, *idle;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> *<span class="title">prev_mm</span>;</span></span><br><span class="line">        <span class="keyword">prio_array_t</span> *active, *expired, arrays[<span class="number">2</span>];</span><br><span class="line">        <span class="keyword">int</span> best_expired_prio;</span><br><span class="line">        <span class="keyword">atomic_t</span> nr_iowait;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> CONFIG_SMP</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">sched_domain</span> *<span class="title">sd</span>;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">/* For active balancing */</span></span><br><span class="line">        <span class="keyword">int</span> active_balance;</span><br><span class="line">        <span class="keyword">int</span> push_cpu;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">task_t</span> *migration_thread;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">migration_queue</span>;</span></span><br><span class="line">        <span class="keyword">int</span> cpu;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> CONFIG_SCHEDSTATS</span></span><br><span class="line">        <span class="comment">/* latency stats */</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">sched_info</span> <span class="title">rq_sched_info</span>;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">/* sys_sched_yield() stats */</span></span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> yld_exp_empty;</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> yld_act_empty;</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> yld_both_empty;</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> yld_cnt;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* schedule() stats */</span></span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> sched_switch;</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> sched_cnt;</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> sched_goidle;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* try_to_wake_up() stats */</span></span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> ttwu_cnt;</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">long</span> ttwu_local;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>复杂的宏定义和变量声明也需要注释。例如内核源代码目录下的include/linux/jiffies.h文件中的定义：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* TICK_USEC_TO_NSEC is the time between ticks in nsec assuming real ACTHZ and  */</span></span><br><span class="line"><span class="comment">/* a value TUSEC for TICK_USEC (can be set bij adjtimex)                */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TICK_USEC_TO_NSEC(TUSEC) (SH_DIV (TUSEC * USER_HZ * 1000, ACTHZ, 8))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* some arch&#x27;s have a small-data section that can be accessed register-relative</span></span><br><span class="line"><span class="comment"> * but that can only take up to, say, 4-byte variables. jiffies being part of</span></span><br><span class="line"><span class="comment"> * an 8-byte variable may not be correctly accessed unless we force the issue</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __jiffy_data  __attribute__((section(<span class="meta-string">&quot;.data&quot;</span>)))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * The 64-bit value is not volatile - you MUST NOT read it</span></span><br><span class="line"><span class="comment"> * without sampling the sequence number in xtime_lock.</span></span><br><span class="line"><span class="comment"> * get_jiffies_64() will do this for you as appropriate.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">extern</span> u64 __jiffy_data jiffies_64;</span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">volatile</span> __jiffy_data jiffies;</span><br></pre></td></tr></table></figure>
+<h2 id="命名">命名</h2>
+<h3 id="变量命名">变量命名</h3>
+<h4 id="普通变量命名">普通变量命名</h4>
+<p>内核编码风格规定变量、函数和类型采用全小写加下划线的方式命名。变量的名字应当使用“名词”或者“形容词+名词”。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">string</span> table_name;  <span class="comment">// OK - uses underscore.</span></span><br><span class="line"><span class="built_in">string</span> tableName;   <span class="comment">// Bad - mixed case.</span></span><br></pre></td></tr></table></figure>
+<h4 id="全局变量">全局变量</h4>
+<p>如果不得已需要全局变量,则使全局变量加前缀 <code>g_</code>(表示 global)。例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> g_how_many_people;    <span class="comment">// 全局变量</span></span><br><span class="line"><span class="keyword">int</span> g_how_much_money;     <span class="comment">// 全局变量</span></span><br></pre></td></tr></table></figure>
+<h4 id="静态变量">静态变量</h4>
+<p>静态变量加前缀 <code>s_</code>(表示 static)。例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Init</span><span class="params">(...)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> s_init_value; <span class="comment">// 静态变量</span></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="常量命名">常量命名</h3>
+<p>常量（比如宏定义和枚举常量）采用全大写加下划线的方式命名：</p>
+<h4 id="const-常量">const 常量</h4>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> DAYS_IN_A_WEEK = <span class="number">7</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="宏">宏</h4>
+<p>通常 <strong>不应该</strong> 使用宏. 如果不得不用, 其命名像常量一样全部大写, 使用下划线：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ROUND(x) ...</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PI_ROUNDED 3.0</span></span><br></pre></td></tr></table></figure>
+<h4 id="枚举常量">枚举常量</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">enum coordinate_type &#123; RECTANGULAR, POLAR &#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="函数、类型命名">函数、类型命名</h3>
+<h4 id="常规函数">常规函数</h4>
+<p>统一小写加下划线，和变量的命名方式相同。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">add_table_entry</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">delete_url</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">complex_struct</span>&#123;</span></span><br><span class="line">    <span class="keyword">double</span> x, y;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">coordinate_type</span> &#123;</span> RECTANGULAR, POLAR &#125;;</span><br></pre></td></tr></table></figure>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  Modern C++ 则建议函数名的每个单词首字母大写, 没有下划线。这种大小写混合的命名方式在c++代码中很普遍，称为 camelcase（驼峰命名法），大概是因为有高有低像驼峰一样。
+</div>
+<h2 id="深入阅读">深入阅读</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://learn.akae.cn/media/ch09.html">编码风格</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/torvalds/linux/blob/master/Documentation/CodingStyle">Linux Coding Style</a></li>
+</ol>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+			
+			
+			
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/c-standard-libs.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/c-tables.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '风格'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

@@ -1,0 +1,912 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>函数和命令 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="在 elisp 里类似函数的对象很多，比如：
+
+函数。这里的函数特指用 lisp 写的函数。
+原子函数（primitive）。用 C 写的函数，比如 car、append。
+lambda 表达式
+特殊表达式
+宏(macro)。宏是用 lisp 写的一种结构，它可以把一种 lisp 表达式转换成等价的">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="函数和命令"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '函数和命令'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 函数和命令</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<p>在 elisp 里类似函数的对象很多，比如：</p>
+<ul>
+<li>函数。这里的函数特指用 lisp 写的函数。</li>
+<li>原子函数（primitive）。用 C 写的函数，比如 car、append。</li>
+<li>lambda 表达式</li>
+<li>特殊表达式</li>
+<li>宏(macro)。宏是用 lisp 写的一种结构，它可以把一种 lisp 表达式转换成等价的另一个表达式。</li>
+<li>命令。命令能用 command-execute 调用。函数也可以是命令。</li>
+</ul>
+<p>以上这些用 functionp 来测试都会返回 t。</p>
+<h2 id="参数列表的语法">参数列表的语法</h2>
+<p>我们已经学过如何定义一个函数。但是这些函数的参数个数都是确定。但是你可以看到 emacs 里有很多函数是接受可选参数，比如 random 函数。还有一些函数可以接受不确定的参数，比如加减乘除。这样的函数在 elisp 中是如何定义的呢？</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">REQUIRED-VARS</span>...</span><br><span class="line"> [<span class="symbol">&amp;optional</span> OPTIONAL-VARS...]</span><br><span class="line"> [<span class="symbol">&amp;rest</span> REST-VAR])</span><br></pre></td></tr></table></figure>
+<p>它的意思是说，你必须把必须提供的参数写在前面，可选的参数写在后面，最后用一个符号表示剩余的所有参数。比如：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foo (<span class="name">var1</span> var2 <span class="symbol">&amp;optional</span> opt1 opt2 <span class="symbol">&amp;rest</span> rest)</span><br><span class="line">  (<span class="name">list</span> var1 var2 opt1 opt2 rest))</span><br><span class="line"></span><br><span class="line">(<span class="name">foo</span> <span class="number">1</span> <span class="number">2</span>)                               <span class="comment">; =&gt; (1 2 nil nil nil)</span></span><br><span class="line">(<span class="name">foo</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span>)                             <span class="comment">; =&gt; (1 2 3 nil nil)</span></span><br><span class="line">(<span class="name">foo</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span> <span class="number">6</span>)                       <span class="comment">; =&gt; (1 2 3 4 (5 6))</span></span><br></pre></td></tr></table></figure>
+<p>从这个例子可以看出，当可选参数没有提供时，在函数体里，对应的参数值都是 nil。同样调用函数时没有提供剩余参数时，其值也为 nil，但是一旦提供了剩余参数，则所有参数是以列表的形式放在对应变量里。</p>
+<h2 id="调用函数">调用函数</h2>
+<p>通常函数的调用都是用 eval 进行的，但是有时需要在运行时才决定使用什么函数，这时就需要用 funcall 和 apply 两个函数了。这两个函数都是把其余的参数作为函数的参数进行调用。那这两个函数有什么区别呢？唯一的区别就在于 funcall 是直接把参数传递给函数，而 apply 的最后一个参数是一个列表，传入函数的参数把列表进行一次平铺后再传给函数，看下面这个例子就明白了：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">funcall</span> &#x27;list &#x27;x &#x27;(y) &#x27;(z))               <span class="comment">; =&gt; (x (y) (z))</span></span><br><span class="line">(<span class="name">apply</span> &#x27;list &#x27;x &#x27;(y ) &#x27;(z))                <span class="comment">; =&gt; (x (y) z)</span></span><br></pre></td></tr></table></figure>
+<h2 id="宏">宏</h2>
+<p>前面在已经简单介绍过宏。宏的调用和函数是很类似的，它的求值和函数差不多，但是有一个重要的区别是，宏的参数是出现在最后扩展后的表达式中，而函数参数是求值后才传递给这个函数：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> foo (<span class="name">arg</span>)</span><br><span class="line">  (<span class="name">list</span> &#x27;message <span class="string">&quot;%d %d&quot;</span> arg arg))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> bar (<span class="name">arg</span>)</span><br><span class="line">  (<span class="name">message</span> <span class="string">&quot;%d %d&quot;</span> arg arg))</span><br><span class="line"></span><br><span class="line">(<span class="name">let</span> ((<span class="name">i</span> <span class="number">1</span>))</span><br><span class="line">  (<span class="name">bar</span> (<span class="name">incf</span> i)))                       <span class="comment">; =&gt; &quot;2 2&quot;</span></span><br><span class="line"></span><br><span class="line">(<span class="name">let</span> ((<span class="name">i</span> <span class="number">1</span>))</span><br><span class="line">  (<span class="name">foo</span> (<span class="name">incf</span> i)))                       <span class="comment">; =&gt; &quot;2 3&quot;</span></span><br></pre></td></tr></table></figure>
+<p>也许你对前面这个例子 foo 里为什么要用 list 函数很不解。其实宏可以这样看，如果把宏定义作一个表达式来运行，最后把参数用调用时的参数替换，这样就得到了宏调用最后用于求值的表达式。这个过程称为扩展。可以用 macroexpand 函数进行模拟：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">macroexpand</span> &#x27;(foo (incf i))) <span class="comment">; =&gt; (message &quot;%d %d&quot; (incf i) (incf i))</span></span><br></pre></td></tr></table></figure>
+<p>上面用 macroexpand 得到的结果就是用于求值的表达式。</p>
+<p>使用 macroexpand 可以使宏的编写变得容易一些。但是如果不能进行 debug 是很不方便的。在宏定义里可以引入 declare 表达式，它可以增加一些信息。目前只支持两类声明：debug 和 indent。debug 可选择的类型很多，具体参考 info elisp - Edebug 一章，一般情况下用 t 就足够了。indent 的类型比较简单，它可以使用这样几种类型：</p>
+<ul>
+<li>nil 也就是一般的方式缩进</li>
+<li>defun 类似 def 的结构，把第二行作为主体，对主体里的表达式使用同样的缩进</li>
+<li>整数表示从第 n 个表达式后作为主体。比如 if 设置为 2，而 when 设置为 1</li>
+<li>符号这个是最坏情况，你要写一个函数自己处理缩进。</li>
+</ul>
+<p>看 when 的定义就能知道 declare 如何使用了：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> when (<span class="name">cond</span> <span class="symbol">&amp;rest</span> body)</span><br><span class="line">  (<span class="name">declare</span> (<span class="name">indent</span> <span class="number">1</span>) (<span class="name">debug</span> <span class="literal">t</span>))</span><br><span class="line">  (<span class="name">list</span> &#x27;if cond (<span class="name">cons</span> &#x27;progn body)))</span><br></pre></td></tr></table></figure>
+<p>实际上，declare 声明只是设置这个符号的属性列表：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">symbol-plist</span> &#x27;when)    <span class="comment">; =&gt; (lisp-indent-function 1 edebug-form-spec t)</span></span><br></pre></td></tr></table></figure>
+<p>从前面宏 when 的定义可以看出直接使用 list，cons，append 构造宏是很麻烦的。为了使记号简洁，lisp 中有一个特殊的宏 <code>'</code> ，称为 backquote。在这个宏里，所有的表达式都是引起（quote）的，如果要让一个表达式不引起（也就是列表中使用的是表达式的值），需要在前面加 <code>,</code>，如果要让一个列表作为整个
+列表的一部分（slice），可以用 <code>,@</code>。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">`(a list of ,(+ <span class="number">2</span> <span class="number">3</span>) elements)          <span class="comment">; =&gt; (a list of 5 elements)</span></span><br><span class="line">(<span class="name">setq</span> some-list &#x27;(<span class="number">2</span> <span class="number">3</span>))                 <span class="comment">; =&gt; (2 3)</span></span><br><span class="line">`(<span class="number">1</span> ,some-list <span class="number">4</span> ,@some-list)           <span class="comment">; =&gt; (1 (2 3) 4 2 3)</span></span><br></pre></td></tr></table></figure>
+<p>有了这些标记，前面 when 这个宏可以写成：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> when (<span class="name">cond</span> <span class="symbol">&amp;rest</span> body)</span><br><span class="line">  `(if ,cond</span><br><span class="line">       (progn ,@body)))</span><br></pre></td></tr></table></figure>
+<p>值得注意的是这个 backquote 本身就是一个宏，从这里可以看出宏除了减少重复代码这个作用之外的另一个用途：定义新的控制结构，甚至增加新的语法特性。</p>
+<h2 id="命令">命令</h2>
+<p>emacs 运行时就是处于一个命令循环中，不断从用户那得到按键序列，然后调用对应命令来执行。lisp 编写的命令都含有一个 interactive 表达式。这个表达式指明了这个命令的参数。比如下面这个命令：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> hello-world (<span class="name">name</span>)</span><br><span class="line">  (<span class="name">interactive</span> <span class="string">&quot;sWhat you name? &quot;</span>)</span><br><span class="line">  (<span class="name">message</span> <span class="string">&quot;Hello, %s&quot;</span> name))</span><br></pre></td></tr></table></figure>
+<p>现在你可以用 M-x 来调用这个命令。让我们来看看 interactive 的参数是什么意思。这个字符串的第一个字符（也称为代码字符）代表参数的类型，比如这里 s 代表参数的类型是一个字符串，而其后的字符串是用来提示的字符串。如果这个命令有多个参数，可以在这个提示字符串后使用换行符分开，比如：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> hello-world (<span class="name">name</span> time)</span><br><span class="line">  (<span class="name">interactive</span> <span class="string">&quot;sWhat you name? \nnWhat the time? &quot;</span>)</span><br><span class="line">  (<span class="name">message</span> <span class="string">&quot;Good %s, %s&quot;</span></span><br><span class="line">           (<span class="name">cond</span> ((<span class="name">&lt;</span> time <span class="number">13</span>) <span class="string">&quot;morning&quot;</span>)</span><br><span class="line">                 ((<span class="name">&lt;</span> time <span class="number">19</span>) <span class="string">&quot;afternoon&quot;</span>)</span><br><span class="line">                 (<span class="name">t</span> <span class="string">&quot;evening&quot;</span>))</span><br><span class="line">           name))</span><br></pre></td></tr></table></figure>
+<p>interactive 可以使用的代码字符很多，虽然有一定的规则，比如字符串用 s，数字用 n，文件用 f，区域用 r，但是还是很容易忘记，<strong>用的时候看 interactive 函数的文档还是很有必要的</strong>。但是不是所有时候都参数类型都能使用代码字符，而且一个好的命令，应该尽可能的让提供默认参数以让用户少花时间在输入参数上，这时，就有可能要自己定制参数。</p>
+<p>首先学习和代码字符等价的几个函数。s 对应的函数是 read-string。比如：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">read-string</span> <span class="string">&quot;What your name? &quot;</span> user-full-name)</span><br></pre></td></tr></table></figure>
+<p>n 对应的函数是 read-number，文件对应 read-file-name。其实大部分代码字符都是有这样对应的函数或替换的方法：</p>
+<table>
+<thead>
+<tr>
+<th>代码字符</th>
+<th>代替的表达式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a</td>
+<td>(completing-read prompt obarray 'fboundp t)</td>
+</tr>
+<tr>
+<td>b</td>
+<td>(read-buffer prompt nil t)</td>
+</tr>
+<tr>
+<td>B</td>
+<td>(read-buffer prompt)</td>
+</tr>
+<tr>
+<td>c</td>
+<td>(read-char prompt)</td>
+</tr>
+<tr>
+<td>C</td>
+<td>(read-command prompt)</td>
+</tr>
+<tr>
+<td>d</td>
+<td>(point)</td>
+</tr>
+<tr>
+<td>D</td>
+<td>(read-directory-name prompt)</td>
+</tr>
+<tr>
+<td>e</td>
+<td>(read-event)</td>
+</tr>
+<tr>
+<td>f</td>
+<td>(read-file-name prompt nil nil t)</td>
+</tr>
+<tr>
+<td>F</td>
+<td>(read-file-name prompt)</td>
+</tr>
+<tr>
+<td>G</td>
+<td>暂时不知道和 f 的差别</td>
+</tr>
+<tr>
+<td>k</td>
+<td>(read-key-sequence prompt)</td>
+</tr>
+<tr>
+<td>K</td>
+<td>(read-key-sequence prompt nil t)</td>
+</tr>
+<tr>
+<td>m</td>
+<td>(mark)</td>
+</tr>
+<tr>
+<td>n</td>
+<td>(read-number prompt)</td>
+</tr>
+<tr>
+<td>N</td>
+<td>(if current-prefix-arg (prefix-numeric-value current-prefix-arg) (read-number prompt))</td>
+</tr>
+<tr>
+<td>p</td>
+<td>(prefix-numeric-value current-prefix-arg)</td>
+</tr>
+<tr>
+<td>P</td>
+<td>current-prefix-arg</td>
+</tr>
+<tr>
+<td>r</td>
+<td>(region-beginning) (region-end)</td>
+</tr>
+<tr>
+<td>s</td>
+<td>(read-string prompt)</td>
+</tr>
+<tr>
+<td>S</td>
+<td>(completing-read prompt obarray nil t)</td>
+</tr>
+<tr>
+<td>v</td>
+<td>(read-variable prompt)</td>
+</tr>
+<tr>
+<td>x</td>
+<td>(read-from-minibuffer prompt nil nil t)</td>
+</tr>
+<tr>
+<td>X</td>
+<td>(eval (read-from-minibuffer prompt nil nil t))</td>
+</tr>
+<tr>
+<td>z</td>
+<td>(read-coding-system prompt)</td>
+</tr>
+<tr>
+<td>Z</td>
+<td>(and current-prefix-arg (read-coding-system prompt))</td>
+</tr>
+</tbody>
+</table>
+<p>这些表达式如何用于 interactive 表达式里呢？简而言之，如果 interactive 的参数是一个表达式，则这个表达式求值后的列表元素对应于这个命令的参数。请看这个例子：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> read-hiden-file (<span class="name">file</span> arg)</span><br><span class="line">  (<span class="name">interactive</span></span><br><span class="line">   (<span class="name">list</span> (<span class="name">read-file-name</span> <span class="string">&quot;Choose a hiden file: &quot;</span> <span class="string">&quot;~/&quot;</span> <span class="literal">nil</span> <span class="literal">nil</span> <span class="literal">nil</span></span><br><span class="line">                         (<span class="name">lambda</span> (<span class="name">name</span>)</span><br><span class="line">                           (<span class="name">string-match</span> <span class="string">&quot;^\\.&quot;</span> (<span class="name">file-name-nondirectory</span> name))))</span><br><span class="line">         current-prefix-arg))</span><br><span class="line">  (<span class="name">message</span> <span class="string">&quot;%s, %S&quot;</span> file arg))</span><br></pre></td></tr></table></figure>
+<p>第一个参数是读入一个以 ``.’’ 开头的文件名，第二个参数为当前的前缀参数（prefix argument），它可以用 C-u 或 C-u 加数字提供。list 把这两个参数构成一个列表。这就是命令一般的自定义设定参数的方法。</p>
+<p>需要注意的是 current-prefix-arg 这个变量。这个变量当一个命令被调用，它就被赋与一个值，你可以用 C-u 就能改变它的值。在命令运行过程中，它的值始终都存在。即使你的命令不用参数，你也可以访问它：</p>
+<p>用 C-u foo 调用它，你可以发现它的值是 (4)。那为什么大多数命令还单独为它设置一个参数呢？这是因为命令不仅是用户可以调用，很可能其它函数也可以调用，单独设置一个参数可以方便的用参数传递的方法调用这个命令。事实上所有的命令都可以不带参数，而使用前面介绍的方法在命令定义的部分读入需要的参数，但是为了提高命令的可重用性和代码的可读性，还是把参数分离到 interactive 表达式里好。</p>
+<h2 id="函数列表">函数列表</h2>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">functionp</span> OBJECT)</span><br><span class="line">(<span class="name">apply</span> FUNCTION <span class="symbol">&amp;rest</span> ARGUMENTS)</span><br><span class="line">(<span class="name">funcall</span> FUNCTION <span class="symbol">&amp;rest</span> ARGUMENTS)</span><br><span class="line">(<span class="name">defmacro</span> NAME ARGLIST [DOCSTRING] [DECL] BODY...)</span><br><span class="line">(<span class="name">macroexpand</span> FORM <span class="symbol">&amp;optional</span> ENVIRONMENT)</span><br><span class="line">(<span class="name">declare</span> <span class="symbol">&amp;rest</span> SPECS)</span><br><span class="line">(` ARG)</span><br><span class="line">(<span class="name">interactive</span> ARGS)</span><br><span class="line">(<span class="name">read-string</span> PROMPT <span class="symbol">&amp;optional</span> INITIAL-INPUT HISTORY DEFAULT-VALUE</span><br><span class="line">             INHERIT-INPUT-METHOD)</span><br><span class="line">(<span class="name">read-file-name</span> PROMPT <span class="symbol">&amp;optional</span> DIR DEFAULT-FILENAME MUSTMATCH</span><br><span class="line">                INITIAL PREDICATE)</span><br><span class="line">(<span class="name">completing-read</span> PROMPT COLLECTION <span class="symbol">&amp;optional</span> PREDICATE</span><br><span class="line">                 REQUIRE-MATCH INITIAL-INPUT HIST DEF</span><br><span class="line">                 INHERIT-INPUT-METHOD)</span><br><span class="line">(<span class="name">read-buffer</span> PROMPT <span class="symbol">&amp;optional</span> DEF REQUIRE-MATCH)</span><br><span class="line">(<span class="name">read-char</span> <span class="symbol">&amp;optional</span> PROMPT INHERIT-INPUT-METHOD SECONDS)</span><br><span class="line">(<span class="name">read-command</span> PROMPT <span class="symbol">&amp;optional</span> DEFAULT-VALUE)</span><br><span class="line">(<span class="name">read-directory-name</span> PROMPT <span class="symbol">&amp;optional</span> DIR DEFAULT-DIRNAME</span><br><span class="line">                     MUSTMATCH INITIAL)</span><br><span class="line">(<span class="name">read-event</span> <span class="symbol">&amp;optional</span> PROMPT INHERIT-INPUT-METHOD SECONDS)</span><br><span class="line">(<span class="name">read-key-sequence</span> PROMPT <span class="symbol">&amp;optional</span> CONTINUE-ECHO</span><br><span class="line">                   DONT-DOWNCASE-LAST CAN-RETURN-SWITCH-FRAME</span><br><span class="line">                   COMMAND-LOOP)</span><br><span class="line">(<span class="name">read-number</span> PROMPT <span class="symbol">&amp;optional</span> DEFAULT)</span><br><span class="line">(<span class="name">prefix-numeric-value</span> RAW)</span><br><span class="line">(<span class="name">read-from-minibuffer</span> PROMPT <span class="symbol">&amp;optional</span> INITIAL-CONTENTS KEYMAP</span><br><span class="line">                      READ HIST DEFAULT-VALUE INHERIT-INPUT-METHOD)</span><br><span class="line">(<span class="name">read-coding-system</span> PROMPT <span class="symbol">&amp;optional</span> DEFAULT-CODING-SYSTEM)</span><br></pre></td></tr></table></figure>
+<h2 id="变量列表">变量列表</h2>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">current-prefix-arg</span><br></pre></td></tr></table></figure>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/elisp-variable.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next disabled"><a>Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '函数和命令'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

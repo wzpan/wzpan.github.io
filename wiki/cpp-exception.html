@@ -1,0 +1,830 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>异常处理 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="异常机制提供程序中错误检测与错误处理部分之间的通信。C++ 的异常处理中包括：
+
+throw 表达式，错误检测部分使用这种表达式来说明遇到了不可处理的错误。可以说，throw 引发了异常条件。
+try 块，错误处理部分使用它来处理异常。try 语句块以 try 关键字开始，并以一个或多个 catch">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="异常处理"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '异常处理'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 异常处理</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<p>异常机制提供程序中错误检测与错误处理部分之间的通信。C++ 的异常处理中包括：</p>
+<ol>
+<li>throw 表达式，错误检测部分使用这种表达式来说明遇到了不可处理的错误。可以说，throw 引发了异常条件。</li>
+<li>try 块，错误处理部分使用它来处理异常。try 语句块以 try 关键字开始，并以一个或多个 catch 子句结束。在 try 块中执行的代码所抛出（throw）的异常，通常会被其中一个 catch 子句处理。由于它们“处理”异常，catch 子句也称为处理代码。</li>
+<li>由标准库定义的一组异常类，用来在 throw 和相应的 catch 之间传递有关的错误信息。</li>
+</ol>
+<h2 id="throw-表达式">throw 表达式</h2>
+<p>系统通过 throw 表达式抛出异常。throw 表达式由关键字 throw 以及尾随的表达式组成，通常以分号结束，这样它就成为了表达式语句。throw 表达式的类型决定了所抛出异常的类型。</p>
+<p>一个简单的例子：该程序检查读入的记录是否来自同一本书。如果不是，就用 throw 抛出异常：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// first check that data is for the same item </span></span><br><span class="line"><span class="keyword">if</span> (!item1.<span class="built_in">same_isbn</span>(item2)) </span><br><span class="line">  <span class="keyword">throw</span> <span class="built_in">runtime_error</span>(<span class="string">&quot;Data must refer to same ISBN&quot;</span>); </span><br><span class="line"><span class="comment">// ok, if we&#x27;re still here the ISBNs are the same </span></span><br><span class="line">std::cout &lt;&lt; item1 + item2 &lt;&lt; std::endl;    </span><br></pre></td></tr></table></figure>
+<p>这段代码检查 ISBN 对象是否不相同。如果不同的话，停止程序的执行，并将控制转移给处理这种错误的处理代码。 throw 语句使用了一个表达式。在本例中，该表达式是 <code>runtime_error</code> 类型的对象。<code>runtime_error</code> 类型是标准库异常类中的一种，在 stdexcept 头文件中定义。我们通过传递string 对象来创建 <code>runtime_error</code> 对象，这样就可以提供更多关于所出现问题的相关信息。</p>
+<h2 id="try-块">try 块</h2>
+<p>try 块的通用语法形式是：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span></span><br><span class="line"> &#123; </span><br><span class="line">   program-statements </span><br><span class="line"> &#125; <span class="built_in"><span class="keyword">catch</span></span> (exception-specifier) &#123; </span><br><span class="line">  handler-statements </span><br><span class="line"> &#125; <span class="built_in"><span class="keyword">catch</span></span> (exception-specifier) &#123; </span><br><span class="line">  handler-statements </span><br><span class="line"> &#125; <span class="comment">//...    </span></span><br></pre></td></tr></table></figure>
+<p>try 块以关键字 try 开始，后面是用花括号起来的语句序列块。try 块后面是一个或多个 catch 子句。每个 catch 子句包括三部分：关键字 catch，圆括号内单个类型或者单个对象的声明——称为异常说明符，以及通常用花括号括起来的语句块。如果选择了一个 catch 子句来处理异常，则执行相关的块语句。一旦 catch 子句执行结束，程序流程立即继续执行紧随着最后一个 catch 子句的语句。</p>
+<p>try 语句内的 program-statements 形成程序的正常逻辑。这里面可以包含任意 C++ 语句，包括变量声明。与其他块语句一样，try 块引入局部作用域，在 try 块中声明的变量，包括 catch 子句声明的变量，不能在 try 外面引用。</p>
+<h4 id="示例">示例</h4>
+<p>在前面的例子中，使用了 throw 来避免将两个表示不同书的 <code>Sales_items</code> 对象相加。想象一下将 <code>Sales_items</code> 对象相加的那部分程序与负责与用户交流的那部分是分开的，则与用户交互的部分也许会包含下面的用于处理所捕获异常的代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (cin &gt;&gt; item1 &gt;&gt; item2) &#123; </span><br><span class="line">  <span class="keyword">try</span> &#123; </span><br><span class="line">    <span class="comment">// execute code that will add the two Sales_items </span></span><br><span class="line">    <span class="comment">// if the addition fails, the code throws a runtime_error exception </span></span><br><span class="line">   &#125; <span class="built_in"><span class="keyword">catch</span></span> (runtime_error err) &#123; </span><br><span class="line">    <span class="comment">// remind the user that ISBN must match and prompt for another pair </span></span><br><span class="line">    cout &lt;&lt; err.<span class="built_in">what</span>() </span><br><span class="line">         &lt;&lt; <span class="string">&quot;\nTry Again? Enter y or n&quot;</span> &lt;&lt; endl; </span><br><span class="line">    <span class="keyword">char</span> c; </span><br><span class="line">    cin &gt;&gt; c; </span><br><span class="line">    <span class="keyword">if</span> (cin &amp;&amp; c == <span class="string">&#x27;n&#x27;</span>) </span><br><span class="line">      <span class="keyword">break</span>;     <span class="comment">// break out of the while loop </span></span><br><span class="line">  &#125; </span><br><span class="line"> &#125; </span><br></pre></td></tr></table></figure>
+<p>关键字 try 后面是一个块语句。这个块语句调用处理 <code>Sales_item</code> 对象的程序部分。这部分也可能会抛出 <code>runtime_error</code> 类型的异常。</p>
+<p>上述 try 块提供单个 catch 子句，用来处理 <code>runtime_error</code> 类型的异常。在执行 try 块代码的过程中，如果在 try 块中的代码抛出 <code>runtime_error</code> 类型的异常，则处理这类异常的动作在 catch 后面的块语句中定义。</p>
+<p>通过输出 <code>err.what()</code> 的返回值提示用户。大家都知道 err 返回 <code>runtime_error</code> 类型的值，因此可以推断出 what 是 <code>runtime_error</code> 类的一个成员函数。 每一个标准库异常类都定义了名为 what 的成员函数。这个函数不需要参数，返回 C 风格字符串。在出现 <code>runtime_error</code> 的情况下，what 返回的 C 风格字符串，是用于初始化 <code>runtime_error</code> 的 string 对象的副本。如果在前面章节描述的代码抛出异常，那么执行这个 catch 将输出。</p>
+<h2 id="标准异常">标准异常</h2>
+<p>C++ 标准库定义了一组类，用于报告在标准库中的函数遇到的问题。程序员可在自己编写的程序中使用这些标准异常类。标准库异常类定义在四个头文件中：</p>
+<ul>
+<li>exception 头文件定义了最常见的异常类，它的类名是 exception。这个类只通知异常的产生，但不会提供更多的信息。</li>
+<li>stdexcept 头文件定义了几种常见的异常类，这些类型在下表中列出。</li>
+</ul>
+<hr>
+<p><code>exception</code>          最常见的问题。
+<code>runtime_error</code>      运行时错误：仅在运行时才能检测到问题
+<code>range_error</code>        运行时错误：生成的结果超出了有意义的值域范围
+<code>overflow_error</code>     运行时错误：计算上溢
+<code>underflow_error</code>    运行时错误：计算下溢
+<code>logic_error</code>        逻辑错误：可在运行前检测到问题
+<code>domain_error</code>       逻辑错误：参数的结果值不存在
+<code>invalid_argument</code>   逻辑错误：不合适的参数
+<code>length_error</code>       逻辑错误：试图生成一个超出该类型最大长度的对象
+<code>out_of_range</code>       逻辑错误：使用一个超出有效范围的值</p>
+<hr>
+<ul>
+<li>new 头文件定义了 <code>bad_alloc</code> 异常类型，提供因无法分配内存而由 new 抛出的异常。</li>
+<li>type_info 头文件定义了 <code>bad_cast</code> 异常类型。</li>
+</ul>
+<h3 id="标准库异常类">标准库异常类</h3>
+<p>标准库异常类只提供很少的操作，包括创建、复制异常类型对象以及异常类型对象的赋值。
+exception、bad_alloc 以及 bad_cast 类型只定义了默认构造函数，无法在创建这些类型的对象时为它们提供初值。其他的异常类型则只定义了一个使用
+string 初始化式的构造函数。当需要定义这些异常类型的对象时，必须提供一想
+string 参数。string 初始化式用于为所发生的错误提供更多的信息。</p>
+<p>异常类型只定义了一个名为 <code>what</code> 的操作。这个函数不需要任何参数，并且返回
+const char* 类型值。它返回的指针指向一个 C 风格字符串（第 4.3
+节）。使用 C 风格字符串的目的是为所抛出的异常提出更详细的文字描述。</p>
+<p>what 函数所返回的指针指向 C
+风格字符数组的内容，这个数组的内容依赖于异常对象的类型。对于接受 string
+初始化式的异常类型，what 函数将返回该 string 作为 C
+风格字符数组。对于其他异常类型，返回的值则根据编译器的变化而不同。</p>
+<h3 id="使用预处理器进行调试">使用预处理器进行调试</h3>
+<h4 id="NDEBUG-预处理变量">NDEBUG 预处理变量</h4>
+<p>可使用 NDEBUG 预处理变量实现有条件的调试代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> NDEBUG </span></span><br><span class="line">  cerr &lt;&lt; <span class="string">&quot;starting main&quot;</span> &lt;&lt; endl; </span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> </span></span><br><span class="line">  <span class="comment">// ... </span></span><br></pre></td></tr></table></figure>
+<p>如果 NDEBUG 未定义，那么程序就会将信息写到 cerr 中。如果 NDEBUG 已经定义了，那么程序执行时将会跳过 <code>#ifndef</code> 和 <code>#endif</code> 之间的代码。
+默认情况下，NDEBUG 未定义（表示正在Debug！），这也就意味着必须执行 <code>#ifndef</code> 和 <code>#endif</code> 之间的代码。在开发程序的过程中，只要保持 NDEBUG
+未定义就会执行其中的调试语句。开发完成后，要将程序交付给客户时，可通过定义 NDEBUG 预处理变量，（有效地）删除这些调试语句。</p>
+<p><strong>大多数的编译器都提供定义 NDEBUG 命令行选项</strong> ：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ CC -DNDEBUG main.c</span><br></pre></td></tr></table></figure>
+<p>这样的命令行等效于在 main.c 的开头提供 <code>#define NDEBUG</code> 预处理命令。</p>
+<h4 id="调试常量">调试常量</h4>
+<p>预处理器还定义了其余四种在调试时非常有用的常量：</p>
+<hr>
+<p><code>__FILE__</code>      文件名
+<code>__LINE__</code>       当前行号
+<code>__TIME__</code>       文件被编译的时间
+<code>__DATE__</code>       文件被编译的日期</p>
+<hr>
+<p>可使用这些常量在错误消息中提供更多的信息：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (word.<span class="built_in">size</span>() &lt; threshold) </span><br><span class="line">  cerr &lt;&lt; <span class="string">&quot;Error: &quot;</span> &lt;&lt; __FILE__ </span><br><span class="line">       &lt;&lt; <span class="string">&quot; : line &quot;</span> &lt;&lt; __LINE__ &lt;&lt; endl </span><br><span class="line">       &lt;&lt; <span class="string">&quot;       Compiled on &quot;</span> &lt;&lt; __DATE__ </span><br><span class="line">       &lt;&lt; <span class="string">&quot; at &quot;</span> &lt;&lt; __TIME__ &lt;&lt; endl </span><br><span class="line">       &lt;&lt; <span class="string">&quot;      Word read was &quot;</span> &lt;&lt; word </span><br><span class="line">       &lt;&lt; <span class="string">&quot;: Length too short&quot;</span> &lt;&lt; endl; </span><br></pre></td></tr></table></figure>
+<p>如果给这个程序提供一个比 threshold 短的 string 对象，则会产生下面的错误信息：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Error: wdebug.cc : line <span class="number">21</span> </span><br><span class="line">Compiled on Jan <span class="number">12</span> <span class="number">2005</span> at <span class="number">19</span>:<span class="number">44</span>:<span class="number">40</span> </span><br><span class="line">Word read was <span class="string">&quot;foo&quot;</span>: Length too <span class="keyword">short</span>    </span><br></pre></td></tr></table></figure>
+<h4 id="assert-宏">assert 宏</h4>
+<p>另一个常见的调试技术是使用 NDEBUG 预处理变量以及 <code>assert</code> 预处理宏。assert 宏是在 <code>cassert</code> 头文件中定义的，所有使用 assert 的文件都必须包含这个头文件。</p>
+<p>预处理宏有点像函数调用。assert 宏需要一个表达式作为它的条件：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">assert</span>(expr)</span><br></pre></td></tr></table></figure>
+<p>与异常不同（异常用于处理程序执行时预期要发生的错误），程序员使用 assert 来 <strong>测试“不可能发生”的条件</strong> 。例如，对于处理输入文本的程序，可以预测全部给出的单词都比指定的阈值长。那么程序可以包含这样一个语句：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">assert</span>(word.<span class="built_in">size</span>() &gt; threshold); </span><br></pre></td></tr></table></figure>
+<p>在测试过程中，assert 等效于检验数据是否总是具有预期的大小。一旦开发和测试工作完成，程序就已经建立好，并且定义了 NDEBUG。 <strong>在成品代码中，assert 语句不做任何工作，因此也没有任何运行时代价</strong> 。当然，也不会引起任何运行时检查。assert 仅用于检查确实不可能的条件，这只对程序的调试有帮助，但不能用来代替运行时的逻辑检查，也不能代替对程序可能产生的错误的检测。</p>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+			
+			
+			
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/cpp-container.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/cpp-snippets.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '异常处理'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

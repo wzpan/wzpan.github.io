@@ -1,0 +1,903 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>工具栈 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="JavaScript 拥有非常丰富的工具栈。
+版本管理
+nvm
+nvm 是 node.js 的版本管理工具。安装 nvm 需要打开命令行窗口，运行下面的命令。
+1$ curl -o- https://raw.githubusercontent.com/creationix/nvm/&amp;lt;versi">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="工具栈"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '工具栈'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 工具栈</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<p>JavaScript 拥有非常丰富的工具栈。</p>
+<h2 id="版本管理">版本管理</h2>
+<h3 id="nvm">nvm</h3>
+<p>nvm 是 node.js 的版本管理工具。安装 nvm 需要打开命令行窗口，运行下面的命令。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> curl -o- https://raw.githubusercontent.com/creationix/nvm/&lt;version number&gt;/install.sh | bash</span></span><br></pre></td></tr></table></figure>
+<p>上面命令的 version number 处，需要用版本号替换。本节写作时的版本号是v0.29.0。该命令运行后，nvm会默认安装在用户主目录的 .nvm 子目录。</p>
+<p>然后，激活 nvm 。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">source</span> ~/.nvm/nvm.sh</span> </span><br></pre></td></tr></table></figure>
+<p>激活以后，安装Node的最新版。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> nvm install node</span></span><br></pre></td></tr></table></figure>
+<p>安装完成后，切换到该版本。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> nvm use node</span></span><br></pre></td></tr></table></figure>
+<h2 id="ES6-兼容性">ES6 兼容性</h2>
+<h3 id="Babel-转码器">Babel 转码器</h3>
+<p>Babel是一个广泛使用的ES6转码器，可以将ES6代码转为ES5代码，从而在现有环境执行。这意味着，你可以用ES6的方式编写程序，又不用担心现有环境是否支持。下面是一个例子。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 转码前</span><br><span class="line">input.map(item =&gt; item + 1);</span><br><span class="line"></span><br><span class="line">// 转码后</span><br><span class="line">input.map(function (item) &#123;</span><br><span class="line">  return item + 1;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>上面的原始代码用了箭头函数，这个特性还没有得到广泛支持，Babel将其转为普通函数，就能在现有的JavaScript环境执行了。</p>
+<h4 id="配置文件-babelrc">配置文件.babelrc</h4>
+<p>Babel的配置文件是.babelrc，存放在项目的根目录下。使用Babel的第一步，就是配置这个文件。</p>
+<p>该文件用来设置转码规则和插件，基本格式如下。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;presets&quot;</span>: [],</span><br><span class="line">  <span class="attr">&quot;plugins&quot;</span>: []</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>presets 字段设定转码规则，官方提供以下的规则集，你可以根据需要安装。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> ES2015转码规则</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> npm install --save-dev babel-preset-es2015</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> react转码规则</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> npm install --save-dev babel-preset-react</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> ES7不同阶段语法提案的转码规则（共有4个阶段），选装一个</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> npm install --save-dev babel-preset-stage-0</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> npm install --save-dev babel-preset-stage-1</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> npm install --save-dev babel-preset-stage-2</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> npm install --save-dev babel-preset-stage-3</span></span><br></pre></td></tr></table></figure>
+<p>然后，将这些规则加入.babelrc。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;presets&quot;</span>: [</span><br><span class="line">    <span class="string">&quot;es2015&quot;</span>,</span><br><span class="line">    <span class="string">&quot;react&quot;</span>,</span><br><span class="line">    <span class="string">&quot;stage-2&quot;</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">&quot;plugins&quot;</span>: []</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>注意，以下所有Babel工具和模块的使用，都必须先写好.babelrc。</p>
+<h4 id="命令行转码babel-cli">命令行转码babel-cli</h4>
+<p>Babel提供babel-cli工具，用于命令行转码。</p>
+<p>它的安装命令如下。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install --global babel-cli</span></span><br></pre></td></tr></table></figure>
+<p>基本用法如下。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 转码结果输出到标准输出</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> babel example.js</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 转码结果写入一个文件</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> --out-file 或 -o 参数指定输出文件</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> babel example.js --out-file compiled.js</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 或者</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> babel example.js -o compiled.js</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 整个目录转码</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> --out-dir 或 -d 参数指定输出目录</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> babel src --out-dir lib</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 或者</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> babel src -d lib</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> -s 参数生成<span class="built_in">source</span> map文件</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> babel src -d lib -s</span></span><br></pre></td></tr></table></figure>
+<p>上面代码是在全局环境下，进行Babel转码。这意味着，如果项目要运行，全局环境必须有Babel，也就是说项目产生了对环境的依赖。另一方面，这样做也无法支持不同项目使用不同版本的Babel。</p>
+<p>一个解决办法是将babel-cli安装在项目之中。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 安装</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> npm install --save-dev babel-cli</span></span><br></pre></td></tr></table></figure>
+<p>然后，改写package.json。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">&quot;devDependencies&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;babel-cli&quot;</span>: <span class="string">&quot;^6.0.0&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;build&quot;</span>: <span class="string">&quot;babel src -d lib&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>转码的时候，就执行下面的命令。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm run build</span></span><br></pre></td></tr></table></figure>
+<h4 id="babel-node">babel-node</h4>
+<p>babel-cli工具自带一个babel-node命令，提供一个支持ES6的REPL环境。它支持Node的REPL环境的所有功能，而且可以直接运行ES6代码。</p>
+<p>它不用单独安装，而是随babel-cli一起安装。然后，执行babel-node就进入REPL环境。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> babel-node</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> (x =&gt; x * 2)(1)</span></span><br><span class="line">2</span><br></pre></td></tr></table></figure>
+<p>babel-node命令可以直接运行ES6脚本。将上面的代码放入脚本文件es6.js，然后直接运行。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> babel-node es6.js</span></span><br><span class="line">2</span><br></pre></td></tr></table></figure>
+<p>babel-node也可以安装在项目中。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install --save-dev babel-cli</span></span><br></pre></td></tr></table></figure>
+<p>然后，改写package.json。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;script-name&quot;</span>: <span class="string">&quot;babel-node script.js&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>上面代码中，使用babel-node替代node，这样script.js本身就不用做任何转码处理。</p>
+<h4 id="babel-register">babel-register</h4>
+<p>babel-register模块改写require命令，为它加上一个钩子。此后，每当使用require加载.js、.jsx、.es和.es6后缀名的文件，就会先用Babel进行转码。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install --save-dev babel-register</span></span><br></pre></td></tr></table></figure>
+<p>使用时，必须首先加载babel-register。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>(<span class="string">&quot;babel-register&quot;</span>);</span><br><span class="line"><span class="built_in">require</span>(<span class="string">&quot;./index.js&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>然后，就不需要手动对index.js转码了。</p>
+<p>需要注意的是，babel-register只会对require命令加载的文件转码，而不会对当前文件转码。另外，由于它是实时转码，所以<strong>只适合在开发环境使用</strong>。</p>
+<h4 id="babel-core">babel-core</h4>
+<p>如果某些代码需要调用Babel的API进行转码，就要使用babel-core模块。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install babel-core --save</span></span><br></pre></td></tr></table></figure>
+<p>然后，在项目中就可以调用babel-core。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> babel = <span class="built_in">require</span>(<span class="string">&#x27;babel-core&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 字符串转码</span></span><br><span class="line">babel.transform(<span class="string">&#x27;code();&#x27;</span>, options);</span><br><span class="line"><span class="comment">// =&gt; &#123; code, map, ast &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 文件转码（异步）</span></span><br><span class="line">babel.transformFile(<span class="string">&#x27;filename.js&#x27;</span>, options, <span class="function"><span class="keyword">function</span>(<span class="params">err, result</span>) </span>&#123;</span><br><span class="line">  result; <span class="comment">// =&gt; &#123; code, map, ast &#125;</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 文件转码（同步）</span></span><br><span class="line">babel.transformFileSync(<span class="string">&#x27;filename.js&#x27;</span>, options);</span><br><span class="line"><span class="comment">// =&gt; &#123; code, map, ast &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Babel AST转码</span></span><br><span class="line">babel.transformFromAst(ast, code, options);</span><br><span class="line"><span class="comment">// =&gt; &#123; code, map, ast &#125;</span></span><br></pre></td></tr></table></figure>
+<p>配置对象<code>options</code>，可以参看官方文档http://babeljs.io/docs/usage/options/。</p>
+<p>下面是一个例子。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> es6Code = <span class="string">&#x27;let x = n =&gt; n + 1&#x27;</span>;</span><br><span class="line"><span class="keyword">var</span> es5Code = <span class="built_in">require</span>(<span class="string">&#x27;babel-core&#x27;</span>)</span><br><span class="line">  .transform(es6Code, &#123;</span><br><span class="line">    presets: [<span class="string">&#x27;es2015&#x27;</span>]</span><br><span class="line">  &#125;)</span><br><span class="line">  .code;</span><br><span class="line"><span class="comment">// &#x27;&quot;use strict&quot;;\n\nvar x = function x(n) &#123;\n  return n + 1;\n&#125;;&#x27;</span></span><br></pre></td></tr></table></figure>
+<h4 id="babel-polyfill">babel-polyfill</h4>
+<p>Babel默认只转换新的JavaScript句法（syntax），而不转换新的API，比如Iterator、Generator、Set、Maps、Proxy、Reflect、Symbol、Promise等全局对象，以及一些定义在全局对象上的方法（比如Object.assign）都不会转码。</p>
+<p>举例来说，ES6在Array对象上新增了Array.from方法。Babel就不会转码这个方法。如果想让这个方法运行，必须使用babel-polyfill，为当前环境提供一个垫片。</p>
+<p>安装命令如下。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install --save babel-polyfill</span></span><br></pre></td></tr></table></figure>
+<p>然后，在脚本头部，加入如下一行代码。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;babel-polyfill&#x27;</span>;</span><br><span class="line"><span class="comment">// 或者</span></span><br><span class="line"><span class="built_in">require</span>(<span class="string">&#x27;babel-polyfill&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p>Babel默认不转码的API非常多，详细清单可以查看<code>babel-plugin-transform-runtime</code>模块的<a target="_blank" rel="noopener" href="https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-runtime/src/definitions.js">definitions.js</a>文件。</p>
+<h4 id="浏览器环境">浏览器环境</h4>
+<p>Babel也可以用于浏览器环境。但是，从Babel 6.0开始，不再直接提供浏览器版本，而是要用构建工具构建出来。如果你没有或不想使用构建工具，可以通过安装5.x版本的babel-core模块获取。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install babel-core@5</span></span><br></pre></td></tr></table></figure>
+<p>运行上面的命令以后，就可以在当前目录的node_modules/babel-core/子目录里面，找到babel的浏览器版本browser.js（未精简）和browser.min.js（已精简）。</p>
+<p>然后，将下面的代码插入网页。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;node_modules/babel-core/browser.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/babel&quot;</span>&gt;</span></span><br><span class="line"><span class="javascript"><span class="comment">// Your ES6 code</span></span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上面代码中，browser.js是Babel提供的转换器脚本，可以在浏览器运行。用户的ES6脚本放在script标签之中，但是要注明 <code>type=&quot;text/babel&quot;</code> 。</p>
+<p>另一种方法是使用babel-standalone模块提供的浏览器版本，将其插入网页。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.4.4/babel.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;text/babel&quot;</span>&gt;</span></span><br><span class="line"><span class="javascript"><span class="comment">// Your ES6 code</span></span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>注意，网页中实时将ES6代码转为ES5，对性能会有影响。生产环境需要加载已经转码完成的脚本。</p>
+<p>下面是如何将代码打包成浏览器可以使用的脚本，以Babel配合Browserify为例。首先，安装babelify模块。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install --save-dev babelify babel-preset-es2015</span></span><br></pre></td></tr></table></figure>
+<p>然后，再用命令行转换ES6脚本。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">  browserify script.js -o bundle.js \</span></span><br><span class="line"><span class="bash">  -t [ babelify --presets [ es2015 ] ]</span></span><br></pre></td></tr></table></figure>
+<p>上面代码将ES6脚本script.js，转为bundle.js，浏览器直接加载后者就可以了。</p>
+<p>在package.json设置下面的代码，就不用每次命令行都输入参数了。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;browserify&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;transform&quot;</span>: [[<span class="string">&quot;babelify&quot;</span>, &#123; <span class="attr">&quot;presets&quot;</span>: [<span class="string">&quot;es2015&quot;</span>] &#125;]]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="在线转换">在线转换</h4>
+<p>Babel提供一个<a target="_blank" rel="noopener" href="https://babeljs.io/repl/">REPL在线编译器</a>，可以在线将ES6代码转为ES5代码。转换后的代码，可以直接作为ES5代码插入网页运行。</p>
+<h3 id="Traceur转码器">Traceur转码器</h3>
+<p>Google公司的<a target="_blank" rel="noopener" href="https://github.com/google/traceur-compiler">Traceur</a>转码器，也可以将ES6代码转为ES5代码。</p>
+<h4 id="直接插入网页">直接插入网页</h4>
+<p>Traceur允许将ES6代码直接插入网页。首先，必须在网页头部加载Traceur库文件。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://google.github.io/traceur-compiler/bin/traceur.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://google.github.io/traceur-compiler/bin/BrowserSystem.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://google.github.io/traceur-compiler/src/bootstrap.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span>&gt;</span></span><br><span class="line"><span class="javascript">  <span class="keyword">import</span> <span class="string">&#x27;./Greeter.js&#x27;</span>;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上面代码中，一共有4个script标签。第一个是加载Traceur的库文件，第二个和第三个是将这个库文件用于浏览器环境，第四个则是加载用户脚本，这个脚本里面可以使用ES6代码。</p>
+<p>注意，第四个script标签的type属性的值是module，而不是text/javascript。这是Traceur编译器识别ES6代码的标志，编译器会自动将所有<code>type=module</code>的代码编译为ES5，然后再交给浏览器执行。</p>
+<p>除了引用外部ES6脚本，也可以直接在网页中放置ES6代码。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span>&gt;</span></span><br><span class="line"><span class="javascript">  <span class="class"><span class="keyword">class</span> <span class="title">Calc</span> </span>&#123;</span></span><br><span class="line"><span class="javascript">    <span class="function"><span class="title">constructor</span>(<span class="params"></span>)</span>&#123;</span></span><br><span class="line"><span class="javascript">      <span class="built_in">console</span>.log(<span class="string">&#x27;Calc constructor&#x27;</span>);</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="javascript">    <span class="function"><span class="title">add</span>(<span class="params">a, b</span>)</span>&#123;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">return</span> a + b;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="javascript">  <span class="keyword">var</span> c = <span class="keyword">new</span> Calc();</span></span><br><span class="line"><span class="javascript">  <span class="built_in">console</span>.log(c.add(<span class="number">4</span>,<span class="number">5</span>));</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>正常情况下，上面代码会在控制台打印出9。</p>
+<p>如果想对Traceur的行为有精确控制，可以采用下面参数配置的写法。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">  <span class="comment">// Create the System object</span></span></span><br><span class="line"><span class="javascript">  <span class="built_in">window</span>.System = <span class="keyword">new</span> traceur.runtime.BrowserTraceurLoader();</span></span><br><span class="line"><span class="javascript">  <span class="comment">// Set some experimental options</span></span></span><br><span class="line"><span class="javascript">  <span class="keyword">var</span> metadata = &#123;</span></span><br><span class="line">    traceurOptions: &#123;</span><br><span class="line"><span class="javascript">      experimental: <span class="literal">true</span>,</span></span><br><span class="line"><span class="javascript">      properTailCalls: <span class="literal">true</span>,</span></span><br><span class="line"><span class="javascript">      symbols: <span class="literal">true</span>,</span></span><br><span class="line"><span class="javascript">      arrayComprehension: <span class="literal">true</span>,</span></span><br><span class="line"><span class="javascript">      asyncFunctions: <span class="literal">true</span>,</span></span><br><span class="line">      asyncGenerators: exponentiation,</span><br><span class="line"><span class="javascript">      forOn: <span class="literal">true</span>,</span></span><br><span class="line"><span class="javascript">      generatorComprehension: <span class="literal">true</span></span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line"><span class="javascript">  <span class="comment">// Load your module</span></span></span><br><span class="line"><span class="javascript">  System.import(<span class="string">&#x27;./myModule.js&#x27;</span>, &#123;<span class="attr">metadata</span>: metadata&#125;).catch(<span class="function"><span class="keyword">function</span>(<span class="params">ex</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">    <span class="built_in">console</span>.error(<span class="string">&#x27;Import failed&#x27;</span>, ex.stack || ex);</span></span><br><span class="line">  &#125;);</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上面代码中，首先生成Traceur的全局对象<code>window.System</code>，然后<code>System.import</code>方法可以用来加载ES6模块。加载的时候，需要传入一个配置对象metadata，该对象的traceurOptions属性可以配置支持ES6功能。如果设为<code>experimental: true</code>，就表示除了ES6以外，还支持一些实验性的新功能。</p>
+<h4 id="在线转换-v2">在线转换</h4>
+<p>Traceur也提供一个<a target="_blank" rel="noopener" href="http://google.github.io/traceur-compiler/demo/repl.html">在线编译器</a>，可以在线将ES6代码转为ES5代码。转换后的代码，可以直接作为ES5代码插入网页运行。</p>
+<h4 id="命令行转换">命令行转换</h4>
+<p>作为命令行工具使用时，Traceur是一个Node的模块，首先需要用Npm安装。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install -g traceur</span></span><br></pre></td></tr></table></figure>
+<p>安装成功后，就可以在命令行下使用Traceur了。</p>
+<p>Traceur直接运行es6脚本文件，会在标准输出显示运行结果，以前面的calc.js为例。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> traceur calc.js</span></span><br><span class="line">Calc constructor</span><br><span class="line">9</span><br></pre></td></tr></table></figure>
+<p>如果要将ES6脚本转为ES5保存，要采用下面的写法。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> traceur --script calc.es6.js --out calc.es5.js</span></span><br></pre></td></tr></table></figure>
+<p>上面代码的<code>--script</code>选项表示指定输入文件，<code>--out</code>选项表示指定输出文件。</p>
+<p>为了防止有些特性编译不成功，最好加上–experimental选项。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> traceur --script calc.es6.js --out calc.es5.js --experimental</span></span><br></pre></td></tr></table></figure>
+<p>命令行下转换生成的文件，就可以直接放到浏览器中运行。</p>
+<h4 id="Node-js环境的用法">Node.js环境的用法</h4>
+<p>Traceur的 Node.js 用法如下（假定已安装traceur模块）。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> traceur = <span class="built_in">require</span>(<span class="string">&#x27;traceur&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将ES6脚本转为字符串</span></span><br><span class="line"><span class="keyword">var</span> contents = fs.readFileSync(<span class="string">&#x27;es6-file.js&#x27;</span>).toString();</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> result = traceur.compile(contents, &#123;</span><br><span class="line">  filename: <span class="string">&#x27;es6-file.js&#x27;</span>,</span><br><span class="line">  sourceMap: <span class="literal">true</span>,</span><br><span class="line">  <span class="comment">// 其他设置</span></span><br><span class="line">  modules: <span class="string">&#x27;commonjs&#x27;</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (result.error)</span><br><span class="line">  <span class="keyword">throw</span> result.error;</span><br><span class="line"></span><br><span class="line"><span class="comment">// result对象的js属性就是转换后的ES5代码</span></span><br><span class="line">fs.writeFileSync(<span class="string">&#x27;out.js&#x27;</span>, result.js);</span><br><span class="line"><span class="comment">// sourceMap属性对应map文件</span></span><br><span class="line">fs.writeFileSync(<span class="string">&#x27;out.js.map&#x27;</span>, result.sourceMap);</span><br></pre></td></tr></table></figure>
+<h2 id="强类型">强类型</h2>
+<p>JavaScript 是一种弱类型（或称动态类型）语言，即变量的类型是不确定的。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="number">5</span>; <span class="comment">// 5</span></span><br><span class="line">x = x + <span class="string">&#x27;A&#x27;</span>; <span class="comment">// &#x27;5A&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>弱类型的好处是十分灵活，可以写出非常简洁的代码。但是，对于大型项目来说，强类型更有利，可以降低系统的复杂度，在编译时就发现类型错误，减轻程序员的负担。</p>
+<h3 id="TypeScript">TypeScript</h3>
+<p><a target="_blank" rel="noopener" href="http://www.typescriptlang.org/">TypeScript</a> 是微软2012年推出的一种编程语言，属于 JavaScript 的超集，可以编译为 JavaScript 执行。 它的最大特点就是支持强类型和 <a href="/wiki/javascript-es6.html">ES6 Class</a>。</p>
+<p>首先，安装TypeScript。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install -g typescript</span></span><br></pre></td></tr></table></figure>
+<p>然后，为变量指定类型。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// greet.ts</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">greet</span>(<span class="params">person: <span class="built_in">string</span></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;Hello, &quot;</span> + person);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">greet([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]);</span><br></pre></td></tr></table></figure>
+<p>上面是文件 greet.ts 的代码，后缀名 ts 表明这是 TypeScript 的代码。函数 greet 的参数，声明类型为字符串，但在调用时，传入了一个数组。</p>
+<p>使用 tsc 命令将 ts 文件编译为 js 文件，就会抛出类型不匹配的错误。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ tsc greeter.ts</span><br><span class="line"></span><br><span class="line">greet.ts(<span class="number">5</span>,<span class="number">9</span>): error TS2345: Argument <span class="keyword">of</span> <span class="keyword">type</span> <span class="string">&#x27;number[]&#x27;</span>   </span><br><span class="line">is not assignable to parameter <span class="keyword">of</span> <span class="keyword">type</span> <span class="string">&#x27;string&#x27;</span>.</span><br></pre></td></tr></table></figure>
+<h3 id="Flowcheck">Flowcheck</h3>
+<p><a target="_blank" rel="noopener" href="http://gcanti.github.io/flowcheck/">Flowcheck</a> 是一个轻量级的类型断言库，可以在运行时（runtime）检查变量类型是否正确。</p>
+<p>首先，安装Flowcheck。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install -g flowcheck</span></span><br></pre></td></tr></table></figure>
+<p>然后，编写一个声明了变量类型的脚本。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sum</span>(<span class="params">a: number, b: number</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sum(<span class="string">&#x27;hello&#x27;</span>,<span class="string">&#x27;world&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>接着，使用下面的命令，将脚本转换为正常的 JavaScript 文件。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> browserify -t flowcheck -t [reactify --strip-types] \</span></span><br><span class="line"><span class="bash">input.js -o output.js</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>转换后的文件如下。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _f = <span class="built_in">require</span>(<span class="string">&quot;flowcheck/assert&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sum</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">    _f.check(<span class="built_in">arguments</span>, _f.arguments([_f.number, _f.number]));</span><br><span class="line">  <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>可以看到，代码中插入一个断言库。每次运行函数之前，会先执行断言，如果类型不符就报错。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> node output.js</span></span><br><span class="line">// throw new TypeError(message);</span><br><span class="line">            ^</span><br><span class="line">TypeError: </span><br><span class="line"></span><br><span class="line">Expected an instance of number got &quot;hello&quot;,   </span><br><span class="line">context: arguments / [number, number] / 0</span><br><span class="line"></span><br><span class="line">Expected an instance of number got &quot;world&quot;,  </span><br><span class="line">context: arguments / [number, number] / 1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="Flow">Flow</h3>
+<p><a target="_blank" rel="noopener" href="http://flowtype.org/">Flow</a> 是 Facebook 在2014年发布的一个类型检查工具，用来检查 React 的源码。
+安装命令如下。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> npm install --global flow-bin</span></span><br></pre></td></tr></table></figure>
+<p>Flow 的用法很多，我只举几个例子。前文介绍的两种工具，只能检查声明了类型的变量，而 Flow 可以推断变量类型。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// hello.js</span></span><br><span class="line"><span class="comment">/* @flow */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x*<span class="number">10</span>;</span><br><span class="line">&#125;</span><br><span class="line">foo(<span class="string">&quot;Hello, world!&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>上面是文件 hello.js ，该文件的第一行是注释，表明需要使用 Flow 检查变量类型。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> flow check</span></span><br><span class="line">hello.js:7:5,19: string</span><br><span class="line">This type is incompatible with</span><br><span class="line">/hello.js:4:10,13: number</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+<p>运行 <code>flow check</code> 命令，得到报错信息：预期函数 foo 的参数是一个数值，但是实际为一个字符串。</p>
+<p>Flow 也支持变量的类型声明。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* @flow */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">x: string, y: number</span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x.length * y;</span><br><span class="line">&#125;</span><br><span class="line">foo(<span class="string">&quot;Hello&quot;</span>, <span class="number">42</span>);</span><br></pre></td></tr></table></figure>
+<p>另一个有趣的功能是，Flow 可以将类型注释（annotation），转为类型声明。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// annotation.js</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  <span class="doctag">@param <span class="type">&#123;number&#125;</span> <span class="variable">x</span></span></span></span><br><span class="line"><span class="comment">  <span class="doctag">@return <span class="type">&#123;number&#125;</span></span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">square</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x * x;</span><br><span class="line">&#125;</span><br><span class="line">square(<span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+<p>运行 <code>flow port</code> 命令，会得到下面的结果。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ flow port annotation.js</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">square</span>(<span class="params">x: number</span>) : <span class="title">number</span> </span>&#123;</span><br><span class="line">   <span class="keyword">return</span> x * x;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>Flow 的更多介绍，可以阅读<a target="_blank" rel="noopener" href="http://www.crmarsh.com/flow/">《Exploring Flow, Facebook’s Type Checker for JavaScript》</a>。
+本文的原始幻灯片点击<a target="_blank" rel="noopener" href="http://slides.ruanyifeng.com/type/">这里</a>（里面有更多内容）。</p>
+<h2 id="本文参考材料">本文参考材料</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://es6.ruanyifeng.com/#docs/intro">阮一峰 - ECMAScript 6 入门</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2015/02/strong-typing-javascript.html">阮一峰 - 强类型 JavaScript 的解决方案</a></li>
+</ul>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/javascript-es6.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/javascript-tables.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '工具栈'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

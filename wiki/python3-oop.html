@@ -1,0 +1,917 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>类和对象 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="对象可以使用属于这个对象的变量存储数据。属于对象或类的变量称作字段(fields)。
+对象同样可以利用属于类的函数实现所需的功能。这些函数被称作类的方法(method)。
+字段与方法统称为类属性。
+字段分为两种类型 – 它们既可以属于类的实例/对象也可以属于类本身，两者分别称为实例变量与类变量。
+一">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="类和对象"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '类和对象'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 类和对象</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc', 2, 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<p>对象可以使用属于这个对象的变量存储数据。属于对象或类的变量称作<strong>字段(fields)</strong>。</p>
+<p>对象同样可以利用属于类的函数实现所需的功能。这些函数被称作类的<strong>方法(method)</strong>。</p>
+<p>字段与方法统称为<strong>类属性</strong>。</p>
+<p>字段分为两种类型 – 它们既可以属于类的实例/对象也可以属于类本身，两者分别称为<strong>实例变量</strong>与<strong>类变量</strong>。</p>
+<p>一个类通过关键字<code>class</code>创建。字段与方法被列在类的缩进块里。</p>
+<h2 id="self">self</h2>
+<p>类方法与普通函数只有一个特殊区别 – 类方法<strong>必须增加一个额外的形参</strong>，而且它必须处于第一个形参的位置，但是在调用类方法时<strong>不要为这个额外的形参传值</strong>，python会自动代劳。这个特别的变量引用对象本身，按照惯例它被命名为<code>self</code>。</p>
+<p>尽管你可以随便为这个形参取名字，但我强烈建议你使用self – 其它名字会让人皱眉头的。使用标准名字是有很多好处的 – 任何你的代码的读者都会立即明白它代表什么，甚至当你使用标准名字时专业的IDE都会更好的帮助你。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  <strong>写给C++/Java/C#程序员</strong>：
+<p>Python中的<code>self</code>相当于C++中的this指针和java/C#中的this引用。</p>
+</div>
+<h3 id="Python如何为self赋值">Python如何为self赋值</h3>
+<p>你一定感到疑惑Python是如何为self赋值的，为什么你无需亲力亲为呢？举个例子可以让事情变的明朗。</p>
+<p>假设你有一个叫做MyClass的类与一个它的实例myobject。 当你调用这个对象的方法时myobject.method(arg1, arg2)，</p>
+<p>python会自动将其转换为myobject.method(myobject, arg1, arg2) – 这就是关于self的内幕。</p>
+<p>这也意味着如果你有一个无需参数的方法，你也仍然需要一个self实参。</p>
+<h2 id="类">类</h2>
+<h4 id="示例">示例</h4>
+<p>下面的例子是一个最简单的类了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: simplestclass.py</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span>:</span></span><br><span class="line">    <span class="keyword">pass</span> <span class="comment"># 空语句块</span></span><br><span class="line"></span><br><span class="line">p = Person()</span><br><span class="line"><span class="built_in">print</span>(p)</span><br></pre></td></tr></table></figure>
+<h4 id="输出">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ python simplestclass.py</span><br><span class="line">&lt;__main__.Person object at 0x019F85F0&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="对象方法">对象方法</h2>
+<p>我们已经讨论过对象/类可以拥有类似函数一样的方法，只不过这些函数必须加上额外的<code>self</code>变量。现在我们就来看个例子。</p>
+<h4 id="示例-v2">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: method.py</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sayHi</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;Hello, how are you?&#x27;</span>)</span><br><span class="line"></span><br><span class="line">p = Person()</span><br><span class="line">p.sayHi()</span><br><span class="line"><span class="comment"># 在这个简短的例子中同样可以写成Person().sayHi()</span></span><br></pre></td></tr></table></figure>
+<h4 id="输出-v2">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ python method.py</span><br><span class="line">Hello, how are you?</span><br></pre></td></tr></table></figure>
+<h4 id="说明">说明</h4>
+<p>本例中我们使用了self，注意方法sayHi虽无需参数但<strong>在函数中仍然要写上self</strong>。</p>
+<h2 id="init-方法"><code>__init__</code>方法</h2>
+<p><code>__init__</code>方法在类对象被实例化时立即执行。此方法专用于初始化对象。另外注意方法名中的双下划线前后缀。</p>
+<h4 id="示例-v3">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: class_init.py</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, name</span>):</span></span><br><span class="line">        self.name = name</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sayHi</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;Hello, my name is&#x27;</span>, self.name)</span><br><span class="line"></span><br><span class="line">p = Person(<span class="string">&#x27;Swaroop&#x27;</span>)</span><br><span class="line">p.sayHi()</span><br><span class="line"><span class="comment"># 在这个简短的例子中同样可以写成Person().sayHi()</span></span><br></pre></td></tr></table></figure>
+<h4 id="输出-v3">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ python class_init.py</span><br><span class="line">Hello, my name is Swaroop</span><br></pre></td></tr></table></figure>
+<h4 id="说明-v2">说明</h4>
+<p>这里我们定义一个带有名为name形参的__init__方法(除了寻常的self)。初始化之后，我们就可以在方法中使用self.name字段了，方法sayHi演示了这点。</p>
+<h2 id="类和对象变量">类和对象变量</h2>
+<p><strong>数据即字段</strong>，只不过是绑定在类和对象的名字空间中的普通变量。这意味着这些名字只在其所属类和对象的上下文中合法有效。这就是它们被称作名字空间的原因。</p>
+<p>有两种字段类型 —— 类变量和对象变量，它们根据所有者是类还是对象而区分开来。</p>
+<p>类对象是共享的 —— 它们可以被一个类的所有实例存取。即一个类对象在类中只存在一个拷贝，任何对象对其的修改都会反映到所有对象上。</p>
+<p>而每个独立的类对象/实例都拥有自己的对象变量。这样每个对象都有属于自己的字段拷贝即这些字段非共享，不同对象中的同名对象变量彼此没有任何关联。</p>
+<h4 id="示例-v4">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: objvar.py</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Robot</span>:</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;Represents a robot, with a name.&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># A class variable, counting the number of robots</span></span><br><span class="line">    population = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, name</span>):</span></span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;Initializes the data.&#x27;&#x27;&#x27;</span></span><br><span class="line">        self.name = name</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;(Initializing &#123;0&#125;)&#x27;</span>.<span class="built_in">format</span>(self.name))</span><br><span class="line">        <span class="comment"># When this person is created, the robot</span></span><br><span class="line">        <span class="comment"># adds to the population</span></span><br><span class="line">        Robot.population += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__del__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;I am dying.&#x27;&#x27;&#x27;</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;&#123;0&#125; is being destroyed!&#x27;</span>.<span class="built_in">format</span>(self.name))</span><br><span class="line">        Robot.population -= <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> Robot.population == <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;&#123;0&#125; was the last one.&#x27;</span>.<span class="built_in">format</span>(self.name))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;There are still &#123;0:d&#125; robots working.&#x27;</span>.<span class="built_in">format</span>(Robot.population))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">sayHi</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;Greeting by the robot.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Yeah, they can do that.&#x27;&#x27;&#x27;</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;Greetings, my masters call me &#123;0&#125;.&#x27;</span>.<span class="built_in">format</span>(self.name))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">howMany</span>():</span></span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;Prints the current population.&#x27;&#x27;&#x27;</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;We have &#123;0:d&#125; robots.&#x27;</span>.<span class="built_in">format</span>(Robot.population))</span><br><span class="line">    howMany = <span class="built_in">staticmethod</span>(howMany)</span><br><span class="line"></span><br><span class="line">droid1 = Robot(<span class="string">&#x27;R2-D2&#x27;</span>)</span><br><span class="line">droid1.sayHi()</span><br><span class="line">Robot.howMany()</span><br><span class="line"></span><br><span class="line">droid2 = Robot(<span class="string">&#x27;C-3PO&#x27;</span>)</span><br><span class="line">droid2.sayHi()</span><br><span class="line">Robot.howMany()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\nRobots can do some work here.\n&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Robots have finished their work. So let&#x27;s destroy them.&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">del</span> droid1</span><br><span class="line"><span class="keyword">del</span> droid2</span><br><span class="line">Robot.howMany()</span><br></pre></td></tr></table></figure>
+<h4 id="输出-v4">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(Initializing R2-D2)</span><br><span class="line">Greetings, my masters call me R2-D2.</span><br><span class="line">We have 1 robots.</span><br><span class="line">(Initializing C-3PO)</span><br><span class="line">Greetings, my masters call me C-3PO.</span><br><span class="line">We have 2 robots.</span><br><span class="line"></span><br><span class="line">Robots can <span class="keyword">do</span> some work here.</span><br><span class="line"></span><br><span class="line">Robots have finished their work. So <span class="built_in">let</span><span class="string">&#x27;s destroy them.</span></span><br><span class="line"><span class="string">R2-D2 is being destroyed!</span></span><br><span class="line"><span class="string">There are still 1 robots working.</span></span><br><span class="line"><span class="string">C-3PO is being destroyed!</span></span><br><span class="line"><span class="string">C-3PO was the last one.</span></span><br><span class="line"><span class="string">We have 0 robots.</span></span><br></pre></td></tr></table></figure>
+<h4 id="说明-v3">说明</h4>
+<p>howMany实际上是一个属于类的方法而不是对象。这意味着我们可以将及其定义为classmethod也可以定义为staticmethod，这取决于我们是否需要知道我们是哪个类的一部分。因为我们无需类似信息，所以我们使用staticmethod。</p>
+<p>另外我们还可以通过装饰符(decorators)达到同样的效果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@staticmethod</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">howMany</span>():</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;Prints the current population.&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;We have &#123;0:d&#125; robots.&#x27;</span>.<span class="built_in">format</span>(Robot.population))</span><br></pre></td></tr></table></figure>
+<p>装饰符可以被想象成调用一条显式语句的捷径，就像在这个例中看到的一样。</p>
+<p>本例中，我们还在类与方法中使用了文档字符串。我们可以在运行时使用<code>Robot.__doc__</code>和<code>Robot.sayhi.__doc__</code>分别访问类和方法的文档字符串。</p>
+<p>就像<code>__init__</code>方法，这里还有另一个特殊方法<code>__del__</code>，当对象被删除的时候将被调用。对象被删除是指对象不再被使用了，它占用的空间将返回给系统以便重复使用。在<code>__del__</code>中我们只是简单的将Robot.population减1。</p>
+<p>当对象不再被使用时<code>__del__</code>方法将可以被执行，但<strong>无法保证到底啥时执行它</strong>。如果你想显式执行它则必须使用<code>del</code>语句，就象本例中做的那样。（注：本例中<code>del</code>后对象的引用计数降为0）。</p>
+<div class="alert alert-warning"><i class="far fa-bell"></i>  <strong>C++/Java/C#程序员请注意</strong>：
+<p>python中所有类成员（包括数据成员）全部为public，并且所有方法都为virtual。</p>
+<p>只有一个例外：如果你使用的数据成员，其名字<strong>带有双下划线前缀</strong>例如__privatevar，则python将使用名字混淆机制有效的将其作为private变量。</p>
+<p>另外存在一个惯例，<strong>任何只在类或对象内部使用的变量应该以单下划线为前缀</strong>，其他的变量则为public可以被其它类/变量使用。</p>
+<p>记住这只是一个惯例而不是强迫(不过双下划线前缀例外).</p>
+</div>
+<h2 id="特殊方法">特殊方法</h2>
+<p>有一些诸如<code>__init__</code>和<code>__del__</code>的方法在类中拥有特殊的含义。特殊方法用于模拟某些内建类型的行为。</p>
+<p>例如，你希望为你的类使用<code>x[key]</code>索引操作(就像在列表和元组中那样)，那么你仅仅需要实现<code>__getitem__</code>方法就可以了。</p>
+<p>顺便思考一下，python正是这样实现list类的！</p>
+<p>一些有用的特殊方法列在下表中。如果你想了解所有的特殊方法，详见 <a target="_blank" rel="noopener" href="http://docs.python.org/py3k/reference/datamodel.html#special-method-names">Special method names</a> 。</p>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>__init__(self, ...)</code></td>
+<td>在对象被返回以变的可用前调用</td>
+</tr>
+<tr>
+<td><code>__del__(self)</code></td>
+<td>在对象被销毁前调用</td>
+</tr>
+<tr>
+<td><code>__str__(self)</code></td>
+<td>在使用print函数或str()时调用</td>
+</tr>
+<tr>
+<td><code>__lt__(self, other)</code></td>
+<td>在使用小于运算符时(&lt;)调用。类似的其它运算符也存在对象的特殊方法(+, &gt;等)</td>
+</tr>
+<tr>
+<td><code>__getitem__(self, key)</code></td>
+<td>当使用x[key]索引操作时调用</td>
+</tr>
+<tr>
+<td><code>__len__(self)</code></td>
+<td>当使用内建len()函数时调用。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="继承">继承</h2>
+<p>继承可以细化为 <strong>继承（泛化）</strong> 和 <strong>组合（聚合）</strong> 两种，如下面这张图所示。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/python3-oop/oobase.gif" alt="面向对象的三个基本特征" />
+        <figcaption>面向对象的三个基本特征</figcaption>
+      </figure>
+    </p>
+<h3 id="继承（泛化）">继承（泛化）</h3>
+<h4 id="示例-v5">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: inherit.py</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Parent</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">override</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;PARENT override()&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">implicit</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;PARENT implicit()&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">altered</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;PARENT altered()&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Child</span>(<span class="params">Parent</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">override</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;CHILD override()&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">altered</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;CHILD, BEFORE PARENT altered()&quot;</span>)</span><br><span class="line">        Parent.altered()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;CHILD, AFTER PARENT altered()&quot;</span>)</span><br><span class="line"></span><br><span class="line">dad = Parent()</span><br><span class="line">son = Child()</span><br><span class="line"></span><br><span class="line">dad.implicit()</span><br><span class="line">son.implicit()</span><br><span class="line"></span><br><span class="line">dad.override()</span><br><span class="line">son.override()</span><br><span class="line"></span><br><span class="line">dad.altered()</span><br><span class="line">son.altered()</span><br></pre></td></tr></table></figure>
+<h4 id="输出-v5">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ python inherit.py</span><br><span class="line">OTHER implicit()</span><br><span class="line">CHILD override()</span><br><span class="line">CHILD, BEFORE OTHER altered()</span><br><span class="line">OTHER altered()</span><br><span class="line">CHILD, AFTER OTHER altered()</span><br></pre></td></tr></table></figure>
+<h4 id="说明-v4">说明</h4>
+<p>为了使用继承，我们在类定义的类名后的一个<strong>元组中指定基类名</strong>。然后我们注意到使用super函数显式调用了基类的__init__方法，这样我们就能初始化对象的基类部分了。牢记这点非常重要 – <strong>Python不会自动调用基类的构造函数，你必须自己显式的调用它</strong>。</p>
+<p>同时应该注意到<strong>程序调用的是子类型的方法而不是基类的方法</strong>。理解这个机制的一个思路是python永远先在实际类型中查找被调用的方法，这个例子中就是如此。如果Python没有找到被调用方法，则会在基类中逐个查找，查找顺序由类定义时在元组中指定的基类顺序决定。</p>
+<h4 id="super-关键字">super 关键字</h4>
+<p>在上面的例子中，显示调用基类的函数是直接通过使用基类名字来完成的。例如：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">parent.altered()</span><br></pre></td></tr></table></figure>
+<p>但这种做法有一个潜在性的隐患：如果以后更换了基类，则这里的名字就要更换。如果重载的函数很多，修改起来就很麻烦。使用super函数可以解决这个问题：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">super</span>(Child, self).altered()</span><br></pre></td></tr></table></figure>
+<p>super函数传入的参数是当前子类的类名， python会为其找到相应的基类，然后调用相应方法。</p>
+<p>从 Python3 开始，super函数被进一步简化了，可以不再给super传参数：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">super</span>().altered()</span><br></pre></td></tr></table></figure>
+<h3 id="组合（聚合）">组合（聚合）</h3>
+<p>还有另外一种非常有用的方法可以达到和上面完全一样的目的，它可以允许一个类直接使用和封装来自其他类和模块中定义的接口，而不需要依靠继承。</p>
+<h4 id="示例-v6">示例</h4>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># composition.py</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Other</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">override</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;OTHER override()&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">implicit</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;OTHER implicit()&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">altered</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;OTHER altered()&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Child</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.other = Other()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">implicit</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.other.implicit()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">override</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;CHILD override()&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">altered</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;CHILD, BEFORE OTHER altered()&quot;</span>)</span><br><span class="line">        self.other.altered()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;CHILD, AFTER OTHER altered()&quot;</span>)</span><br><span class="line"></span><br><span class="line">son = Child()</span><br><span class="line"></span><br><span class="line">son.implicit()</span><br><span class="line">son.override()</span><br><span class="line">son.altered()</span><br></pre></td></tr></table></figure>
+<h4 id="输出-v6">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ python composition.py</span><br><span class="line">OTHER implicit()</span><br><span class="line">CHILD override()</span><br><span class="line">CHILD, BEFORE OTHER altered()</span><br><span class="line">OTHER altered()</span><br><span class="line">CHILD, AFTER OTHER altered()</span><br></pre></td></tr></table></figure>
+<h3 id="应该选择哪个？">应该选择哪个？</h3>
+<p>三条指导准则：</p>
+<ol>
+<li>避免多继承，因为它会使得类之间的关系太复杂，影响可靠性。</li>
+<li>使用组合来将代码打包，以方便在多个不同且没有关联的地方使用。</li>
+<li>仅当在同一个概念下存在清晰、可复用的代码才使用继承，或者由于某个原因不得不使用继承的情况下才使用继承。</li>
+</ol>
+<h2 id="迭代器">迭代器</h2>
+<p>迭代器就是一个定义了 <code>__iter()__</code> 方法的类。例如这是一个生成Fibonacci序列的迭代器：</p>
+<h4 id="示例-v7">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Fib</span>:</span>                                        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, <span class="built_in">max</span></span>):</span>                      </span><br><span class="line">        self.<span class="built_in">max</span> = <span class="built_in">max</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span>(<span class="params">self</span>):</span>                           </span><br><span class="line">        self.a = <span class="number">0</span></span><br><span class="line">        self.b = <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__next__</span>(<span class="params">self</span>):</span>                           </span><br><span class="line">        fib = self.a</span><br><span class="line">        <span class="keyword">if</span> fib &gt; self.<span class="built_in">max</span>:</span><br><span class="line">            <span class="keyword">raise</span> StopIteration                   </span><br><span class="line">        self.a, self.b = self.b, self.a + self.b</span><br><span class="line">        <span class="keyword">return</span> fib                                </span><br></pre></td></tr></table></figure>
+<h4 id="说明-v5">说明</h4>
+<ol>
+<li><code>__iter__()</code>方法用于初始化迭代器，每个<code>__iter__()</code>方法都需要做的就是必须返回一个迭代器。</li>
+<li>当有人调用<code>iter(fib)</code>的时候，<code>__iter__()</code>就会被调用。（正如你等下会看到的， <strong>for 循环会自动调用它</strong> ， 你也可以自己手动调用。） 在完成迭代器初始化后，（在本例中， 重置我们两个计数器 <code>self.a</code> 和 <code>self.b</code>）， <code>__iter__()</code> 方法能返回任何实现了 <code>__next__()</code> 方法的对象。 在本例（甚至大多数例子）中， <code>__iter__()</code> 仅简单返回 self， 因为该类实现了自己的 <code>__next__()</code> 方法。</li>
+<li>当有人在迭代器的实例中调用<code>next()</code>方法时，<code>__next__()</code>会自动调用。 随后会有更多理解。</li>
+<li>当<code>__next__()</code>方法抛出 <code>StopIteration</code> 异常， 这是给调用者表示迭代用完了的信号。 和大多数异常不同， 这不是错误；它是正常情况，仅表示迭代器没有值可产生了。 如果调用者是 for 循环， 它会注意到该 <code>StopIteration</code> 异常并优雅的退出。 （换句话说，它会吞掉该异常。） 这点神奇之处就是使用 for 的关键。</li>
+</ol>
+<h4 id="输出-v7">输出</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> fibonacci2 <span class="keyword">import</span> Fib</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> n <span class="keyword">in</span> Fib(<span class="number">1000</span>):</span><br><span class="line"><span class="meta">... </span>    <span class="built_in">print</span>(n, end=<span class="string">&#x27; &#x27;</span>)</span><br><span class="line"><span class="number">0</span> <span class="number">1</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">5</span> <span class="number">8</span> <span class="number">13</span> <span class="number">21</span> <span class="number">34</span> <span class="number">55</span> <span class="number">89</span> <span class="number">144</span> <span class="number">233</span> <span class="number">377</span> <span class="number">610</span> <span class="number">987</span></span><br></pre></td></tr></table></figure>
+<p>for 循环内有魔力。下面是究竟发生了什么：</p>
+<ol>
+<li>如你所见，for 循环调用 <code>Fib(1000)</code>。 这返回 Fib 类的实例。 叫它 <code>fib_inst</code>。</li>
+<li>背地里，且十分聪明的， for 循环调用 <code>iter(fib_inst)</code>， 它返回迭代器。叫它 <code>fib_iter</code>。 本例中， <code>fib_iter == fib_inst</code> ， 因为 <code>__iter__()</code> 方法返回 self，但 for 循环不知道（也不关心）那些。</li>
+<li>为“循环通过”迭代器， for 循环调用 <code>next(fib_iter)</code>， 它又调用 <code>fib_iter</code> 对象的 <code>__next__()</code> 方法，产生下一个菲波拉稀计算并返回值。 for 拿到该值并赋给 n， 然后执行n值的 for 循环体。</li>
+<li>当 <code>next(fib_iter)</code> 抛出 <code>StopIteration</code> 异常时， for循环将吞下该异常并优雅退出。 （其他异常将传过并如常抛出。）</li>
+</ol>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/python3-exception.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/python3-closure.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '类和对象'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

@@ -1,0 +1,900 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>autotools | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="简介
+GNU autotools是一系列编程工具，可以辅助产生 Makefile，方便编译整个工程项目。它是自由软件基金会发起的GNU计划的其中一项，作为GNU建构系统的一部分。autotools 所产生的 Makefile 符合GNU编程标准。
+工具
+autotools包含以下工具：
+
+acloc">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="autotools"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: 'autotools'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> autotools</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc', 2, 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="简介">简介</h2>
+<p><a target="_blank" rel="noopener" href="http://www.gnu.org/software/automake/manual/automake.html">GNU autotools</a>是一系列编程工具，可以辅助产生 <a href="/wiki/tools-makefile.html">Makefile</a>，方便编译整个工程项目。它是自由软件基金会发起的GNU计划的其中一项，作为GNU建构系统的一部分。autotools 所产生的 Makefile 符合GNU编程标准。</p>
+<h2 id="工具">工具</h2>
+<p>autotools包含以下工具：</p>
+<ul>
+<li>aclocal</li>
+<li>autoscan</li>
+<li>autoheader</li>
+<li>autoconf：用以生成 configure，需依赖 m4；</li>
+<li>automake：<a target="_blank" rel="noopener" href="http://xn--Makefile-yj1mmho401b.xn--amMakefile-2m4py86a6o4czek640dd12b.in">用以从Makefile.am文件自动生成Makefile.in</a>，需依赖perl。</li>
+</ul>
+<h2 id="流程图">流程图</h2>
+<p>使用autotools的一个简单的流程图如下（点击可以跳转到该步骤）。</p>
+<p><img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/gnu-automake/flow.png" usemap="#G"></img>
+<map id="G" name="G">
+<area shape="rect" id="node1" href="#编写-helloworld-程序" title="源代码" alt="" coords="30,5,108,53"/>
+<area shape="rect" id="node2" href="#生成-configure.scan" title="configure.scan" alt="" coords="5,123,133,171"/>
+<area shape="rect" id="edge1-label" href="#生成-configure.scan" title="生成configure.scan文件，作为configure.ac的模板" alt="" coords="69,78,171,98"/>
+<area shape="rect" id="node3" href="#修改-configure.ac" title="configure.ac" alt="" coords="13,240,124,288"/>
+<area shape="rect" id="edge2-label" href="#修改-configure.ac" title="重命名+修改" alt="" coords="69,195,176,215"/>
+<area shape="rect" id="node6" href="#生成-configure" title="aclocal.m4" alt="" coords="74,357,176,405"/>
+<area shape="poly" id="edge5" href="#aclocal" title="执行aclocal" alt="" coords="83,287,111,344,106,346,78,290"/>
+<area shape="rect" id="edge5-label" href="#aclocal" title="收集configure.ac中用到的各种非Autoconf的宏，包括自定义宏" alt="" coords="103,313,192,333"/>
+<area shape="rect" id="node4" href="#实战-makefile.am" title="Makefile.am" alt="" coords="201,357,316,405"/>
+<area shape="poly" id="edge7" href="#运行-automake" title="执行autoheader和automake" alt="" coords="260,406,258,461,252,461,255,406"/>
+<area shape="rect" id="edge7-label" href="#运行-automake" title="将每个Makefile.am转化成Makefile.in" alt="" coords="256,430,449,450"/>
+<area shape="rect" id="edge4-label" href="#autoconf" title="利用M4解析configure.ac，生成shell脚本configure" alt="" coords="125,430,227,450"/>
+</map></p>
+<h2 id="从-helloworld-入手">从 helloworld 入手</h2>
+<p>从最简单的例子程序helloworld开始。</p>
+<h3 id="建目录">建目录</h3>
+<p>在你的工作目录下建一个<code>helloworld</code>目录，我们用它来存放helloworld程序及相关文件，如在<code>/home/my/build</code>下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir helloworld</span><br><span class="line">$ <span class="built_in">cd</span> helloworld</span><br></pre></td></tr></table></figure>
+<h3 id="编写-helloworld-程序">编写 helloworld 程序</h3>
+<p>编写一个 helloworld 程序：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Hello World!\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="生成-configure-scan">生成 configure.scan</h3>
+<p>我们使用 <code>autoscan</code> 命令来帮助我们根据目录下的源代码生成一个configure.scan文件，它可以作为进一步生成 configure 的 <a target="_blank" rel="noopener" href="http://configure.ac">configure.ac</a> 的模板。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ autoscan</span><br><span class="line">$ ls</span><br><span class="line">autoscan.log  configure.scan  helloworld.c</span><br></pre></td></tr></table></figure>
+<p>执行后在hellowrold目录下会生成一个文件：configure.scan，我们可以拿它作为configure.in的蓝本。</p>
+<h3 id="修改-configure-ac">修改 <a target="_blank" rel="noopener" href="http://configure.ac">configure.ac</a></h3>
+<p>当我们利用<code>autoscan</code>工具生成confiugre.scan文件时，我们需要将confiugre.scan重命名为confiugre.ac文件。confiugre.ac调用一系列<code>autoconf</code>宏来测试程序需要的或用到的特性是否存在，以及这些特性的功能。</p>
+<p>下面我们就来目睹一下confiugre.scan的庐山真面目：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">$ cat configure.scan</span><br><span class="line"></span><br><span class="line"><span class="comment">#                                               -*- Autoconf -*-</span></span><br><span class="line"><span class="comment"># Process this file with autoconf to produce a configure script.</span></span><br><span class="line"></span><br><span class="line">AC_PREREQ([2.69])</span><br><span class="line">AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])</span><br><span class="line">AC_CONFIG_SRCDIR([helloworld.c])</span><br><span class="line">AC_CONFIG_HEADERS([config.h])</span><br><span class="line"></span><br><span class="line"><span class="comment"># Checks for programs.</span></span><br><span class="line">AC_PROG_CC</span><br><span class="line"></span><br><span class="line"><span class="comment"># Checks for libraries.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Checks for header files.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Checks for typedefs, structures, and compiler characteristics.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Checks for library functions.</span></span><br><span class="line"></span><br><span class="line">AC_OUTPUT</span><br></pre></td></tr></table></figure>
+<p>每个configure.scan文件都是以<code>AC_INIT</code>开头，以<code>AC_OUTPUT</code>结束。我们不难从文件中看出<code>confiugre.in</code>文件的一般布局：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">AC_INIT</span><br><span class="line"> 测试程序</span><br><span class="line"> 测试函数库</span><br><span class="line"> 测试头文件</span><br><span class="line"> 测试类型定义</span><br><span class="line"> 测试结构</span><br><span class="line"> 测试编译器特性</span><br><span class="line"> 测试库函数</span><br><span class="line"> 测试系统调用</span><br><span class="line">AC_OUTPUT</span><br></pre></td></tr></table></figure>
+<p>上面的调用次序只是建议性质的，但我们还是强烈建议不要随意改变对宏调用的次序。</p>
+<p>现在就开始修改该文件：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mv configure.scan configure.ac</span><br><span class="line">$ vim configure.in</span><br></pre></td></tr></table></figure>
+<p>修改后的结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#                                               -*- Autoconf -*-</span><br><span class="line"># Process this file with autoconf to produce a configure script.</span><br><span class="line"></span><br><span class="line">AC_PREREQ([2.69])</span><br><span class="line">AC_INIT(helloworld, 1.0, wzpan@hahack.com)</span><br><span class="line">AC_CONFIG_SRCDIR([helloworld.c])</span><br><span class="line">AC_CONFIG_HEADERS([config.h])</span><br><span class="line">AM_INIT_AUTOMAKE(test,1.0)</span><br><span class="line"></span><br><span class="line"># Checks for programs.</span><br><span class="line">AC_PROG_CC</span><br><span class="line"></span><br><span class="line"># Checks for libraries.</span><br><span class="line"></span><br><span class="line"># Checks for header files.</span><br><span class="line"></span><br><span class="line"># Checks for typedefs, structures, and compiler characteristics.</span><br><span class="line"></span><br><span class="line"># Checks for library functions.</span><br><span class="line"></span><br><span class="line">AC_OUTPUT(Makefile)</span><br></pre></td></tr></table></figure>
+<h3 id="生成-configure">生成 configure</h3>
+<p>然后执行命令<code>aclocal</code>和<code>autoconf</code>，分别会产生aclocal.m4及configure两个文件：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ aclocal</span><br><span class="line">$ autoconf</span><br><span class="line">$ ls</span><br><span class="line">aclocal.m4  autom4te.cache  autoscan.log  configure  configure.in  helloworld.c</span><br></pre></td></tr></table></figure>
+<h3 id="实战-Makefile-am">实战 <a target="_blank" rel="noopener" href="http://Makefile.am">Makefile.am</a></h3>
+<p>Makefile.am是一种比Makefile更高层次的规则。只需指定要生成什么目标，它由什么源文件生成，要安装到什么目录等构成。</p>
+<p>表一列出了可执行文件、静态库、头文件和数据文件，四种书写Makefile.am文件的一般格式。</p>
+<table>
+<thead>
+<tr>
+<th>文件类型</th>
+<th>书写格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>可执行文件</td>
+<td><code>bin_PROGRAMS = foo</code></td>
+</tr>
+<tr>
+<td></td>
+<td><code>foo-SOURCES = xxxx.c</code></td>
+</tr>
+<tr>
+<td></td>
+<td><code>foo-LDADD=      </code></td>
+</tr>
+<tr>
+<td></td>
+<td><code>foo_LDFLAGS=      </code></td>
+</tr>
+<tr>
+<td>静态库</td>
+<td><code>lib_LIBRARIES = libfoo.a</code></td>
+</tr>
+<tr>
+<td></td>
+<td><code>foo_a_SOURCES=      </code></td>
+</tr>
+<tr>
+<td></td>
+<td><code>foo_a_LDADD=       </code></td>
+</tr>
+<tr>
+<td></td>
+<td><code>foo_a_LIBADD=      </code></td>
+</tr>
+<tr>
+<td></td>
+<td><code>foo_a_LDFLAGS=     </code></td>
+</tr>
+<tr>
+<td>头文件</td>
+<td><code>include_HEADERS = foo.h</code></td>
+</tr>
+<tr>
+<td>数据文件</td>
+<td><code>data_DATA = data1 data2</code></td>
+</tr>
+</tbody>
+</table>
+<p>新建Makefile.am文件，命令：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vi Makefile.am</span><br></pre></td></tr></table></figure>
+<p>内容如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">AUTOMAKE_OPTIONS&#x3D;foreign</span><br><span class="line">bin_PROGRAMS&#x3D;helloworld</span><br><span class="line">helloworld_SOURCES&#x3D;helloworld.c</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="http://xn--automakeMakefile-1i3z99a56xs13ggbvab25e.xn--amMakefile-e42q629l7qowk9bsd2b.in">automake会根据你写的Makefile.am来自动生成Makefile.in</a>。</p>
+<p>Makefile.am中定义的宏和目标,会指导automake生成指定的代码。例如，宏<code>bin_PROGRAMS</code>将导致编译和连接的目标被生成。</p>
+<h3 id="运行-autoheader-和-automake">运行 autoheader 和 automake</h3>
+<p>先执行 <code>autoheader</code>，<a target="_blank" rel="noopener" href="http://xn--configure-9v8rm6j.ac">扫描configure.ac</a>(<a target="_blank" rel="noopener" href="http://configure.in">configure.in</a>)、acconfig.h（如果存在），生成config.h.in宏定义文件，里面主要是根据configure.ac中某些特定宏(如<code>AC_DEFINE</code>)生成的#define和#undefine宏，configure在将根据实际的探测结果决定这些宏是否定义。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ autoheader</span><br></pre></td></tr></table></figure>
+<p>之后执行 <code>automake</code>，<a target="_blank" rel="noopener" href="http://xn--Makefile-sc0mp85ibk0b.xn--amMakefile-y33qy15l8h1i.in">将每个Makefile.am转化成Makefile.in</a>，同时生成满足GNU编码规范的一系列文件</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ automake --add-missing</span><br><span class="line">configure.in: installing `./install-sh<span class="string">&#x27;</span></span><br><span class="line"><span class="string">configure.in: installing `./mkinstalldirs&#x27;</span></span><br><span class="line">configure.in: installing `./missing<span class="string">&#x27;</span></span><br><span class="line"><span class="string">Makefile.am: installing `./depcomp&#x27;</span></span><br></pre></td></tr></table></figure>
+<h3 id="使用Makefile编译代码">使用Makefile编译代码</h3>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ make</span><br><span class="line"><span class="keyword">if</span> gcc -DPACKAGE_NAME=<span class="string">&quot;&quot;</span> -DPACKAGE_TARNAME=<span class="string">&quot;&quot;</span> -DPACKAGE_VERSION=<span class="string">&quot;&quot;</span> -</span><br><span class="line"></span><br><span class="line">DPACKAGE_STRING=<span class="string">&quot;&quot;</span> -DPACKAGE_BUGREPORT=<span class="string">&quot;&quot;</span> -DPACKAGE=<span class="string">&quot;helloworld&quot;</span> -DVERSION=<span class="string">&quot;1.0&quot;</span> </span><br><span class="line"></span><br><span class="line">-I. -I. -g -O2 -MT helloworld.o -MD -MP -MF <span class="string">&quot;.deps/helloworld.Tpo&quot;</span> \</span><br><span class="line">-c -o helloworld.o `<span class="built_in">test</span> -f <span class="string">&#x27;helloworld.c&#x27;</span> || <span class="built_in">echo</span> <span class="string">&#x27;./&#x27;</span>`helloworld.c; \</span><br><span class="line"><span class="keyword">then</span> mv -f <span class="string">&quot;.deps/helloworld.Tpo&quot;</span> <span class="string">&quot;.deps/helloworld.Po&quot;</span>; \</span><br><span class="line"><span class="keyword">else</span> rm -f <span class="string">&quot;.deps/helloworld.Tpo&quot;</span>; <span class="built_in">exit</span> 1; \</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line">gcc -g -O2 -o helloworld helloworld.o</span><br></pre></td></tr></table></figure>
+<h3 id="运行hello-world">运行hello world</h3>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ./helloworld</span><br><span class="line">Hello World!</span><br></pre></td></tr></table></figure>
+<h2 id="相关命令解析">相关命令解析</h2>
+<h3 id="autoscan">autoscan</h3>
+<p>autoscan是用来扫描源代码目录生成configure.scan文件的。autoscan可以用目录名做为参数，但如果你不使用参数的话，那么autoscan将认为使用的是当前目录。autoscan将扫描你所指定目录中的源文件，并创建configure.scan文件。</p>
+<h3 id="configure-scan">configure.scan</h3>
+<p>configure.scan包含了系统配置的基本选项，里面都是一些宏定义。<a target="_blank" rel="noopener" href="http://xn--configure-fp6nf5dg42ao1wnub766bqrlil4m301b.ac">我们需要将它改名为configure.ac</a>。</p>
+<h3 id="aclocal">aclocal</h3>
+<p>aclocal是一个 perl 脚本程序。aclocal根据configure.in文件的内容，自动生成aclocal.m4文件。aclocal的定义是：“aclocal - create aclocal.m4 by scanning <a target="_blank" rel="noopener" href="http://configure.ac">configure.ac</a>”。</p>
+<h3 id="autoconf">autoconf</h3>
+<p>autoconf是用来产生configure文件的。configure是一个脚本，它能设置源程序来适应各种不同的操作系统平台，并且根据不同的系统来产生合适的Makefile，从而可以使你的源代码能在不同的操作系统平台上被编译出来。</p>
+<p>configure.ac文件的内容是一些宏，这些宏经过 autoconf 处理后会变成检查系统特性、环境变量、软件必须的参数的shell脚本。configure.ac文件中的宏的顺序并没有规定，但是你<strong>必须在所有宏的最前面和最后面分别加上<code>AC_INIT</code>宏和<code>AC_OUTPUT</code>宏</strong>。</p>
+<h4 id="AC-INIT-FILE">AC_INIT(FILE)</h4>
+<p>这个宏用来检查源代码所在的路径。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AM_INIT_AUTOMAKE(PACKAGE, VERSION)</span><br></pre></td></tr></table></figure>
+<p>这个宏是必须的，它描述了我们将要生成的软件包的名字及其版本号：PACKAGE是软件包的名字，VERSION是版本号。当你使用<code>make dist</code>命令时，它会给你生成一个类似helloworld-1.0.tar.gz的软件发行包，其中就有对应的软件包的名字和版本号。</p>
+<h4 id="AC-PROG-CC">AC_PROG_CC</h4>
+<p>这个宏将检查系统所用的C编译器。</p>
+<h4 id="AC-OUTPUT-FILE">AC_OUTPUT(FILE)</h4>
+<p>这个宏是我们要输出的Makefile的名字。</p>
+<p>我们在使用automake时，实际上还需要用到其他的一些宏，但我们可以用<code>aclocal</code>来帮我们自动产生。执行<code>aclocal</code>后我们会得到aclocal.m4文件。</p>
+<p>产生了configure.in和aclocal.m4 两个宏文件后，我们就可以使用<code>autoconf</code>来产生configure文件了。</p>
+<h3 id="Makefile-am"><a target="_blank" rel="noopener" href="http://Makefile.am">Makefile.am</a></h3>
+<p>Makefile.am是用来生成Makefile.in的，需要你手工书写。Makefile.am中定义了一些内容：</p>
+<h4 id="AUTOMAKE-OPTIONS">AUTOMAKE_OPTIONS</h4>
+<p>这个是<code>automake</code>的选项。在执行<code>automake</code>时，它会检查目录下是否存在标准GNU软件包中应具备的各种文件，例如AUTHORS、ChangeLog、NEWS等文件。我们将其设置成<code>foreign</code>时，automake会改用一般软件包的标准来检查。</p>
+<h4 id="bin-PROGRAMS">bin_PROGRAMS</h4>
+<p>这个是指定我们所要产生的可执行文件的文件名。如果你要产生多个可执行文件，那么在各个名字间用空格隔开。</p>
+<h4 id="helloworld-SOURCES">helloworld_SOURCES</h4>
+<p>这个是指定产生“helloworld”时所需要的源代码。如果它用到了多个源文件，那么请使用空格符号将它们隔开。比如需要helloworld.h，helloworld.c那么请写成helloworld_SOURCES= helloworld.h helloworld.c。</p>
+<p>如果你在<code>bin_PROGRAMS</code>定义了多个可执行文件，则对应每个可执行文件都要定义相对的<code>filename_SOURCES</code>。</p>
+<h3 id="automake">automake</h3>
+<p>我们使用<code>automake --add-missing</code>来产生<code>Makefile.in</code>。</p>
+<p>选项<code>--add-missing</code>的定义是“add missing standard files to package”，它会让automake加入一个标准的软件包所必须的一些文件。</p>
+<p>我们用<code>automake</code>产生出来的Makefile.in文件是符合GNU Makefile惯例的，接下来我们只要执行<code>configure</code>这个 shell 脚本就可以产生合适的 Makefile 文件了。</p>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/tools-makefile.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/tools-manpage.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: 'autotools'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

@@ -1,0 +1,791 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Extempore: A Real-time Programming Language for Real-time Systems | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="介绍 Extempore 实时编程语言和环境，并详细探讨了使用 Extempore 演奏音乐的方法和技巧。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Extempore: A Real-time Programming Language for Real-time Systems"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: 'Extempore: A Real-time Programming Language for Real-time Systems'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> Extempore: A Real-time Programming Language for Real-time Systems</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>介绍 Extempore 实时编程语言和环境，并详细探讨了使用 Extempore 演奏音乐的方法和技巧。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <p>Extempore 是一套实时编程语言和运行环境，它提供了一个机体编程 (<a target="_blank" rel="noopener" href="http://dl.acm.org/citation.cfm?id=1869526">Cyberphysical Programming</a>)<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup> 环境，以支持对多媒体和实时系统的实时编程（Live Coding）。所谓机体编程，就是允许编程者可以在任意时刻自由地修改程序并即时影响系统的运作，达到“即写即执行”。官方的介绍如下：</p>
+<blockquote>
+
+<p>Extempore is a programming language and runtime environment designed to support ‘cyberphysical programming’. Cyberphysical programming supports the notion of a human programmer operating as an active agent in a real-time distributed network of environmentally aware systems. The programmer interacts with the distributed real-time system procedurally by modifying code on-the-fly.</p>
+
+
+</blockquote>
+
+<p>Extempore 的前身是 <a target="_blank" rel="noopener" href="http://impromptu.moso.com.au/index.html">Impromptu</a> ，由 <a target="_blank" rel="noopener" href="http://www.moso.com.au/index.html">MOSO</a> 公司的创始人 Andrew Sorensen 所设计和开发，并托管在 <a target="_blank" rel="noopener" href="https://github.com/digego/extempore">Github</a> 上。<span id="more"></span>在进一步介绍它之前，先看看 Andrew Sorensen 在 OSCON 2014 上的演示吧：</p>
+<iframe src="http://www.tudou.com/programs/view/html5embed.action?type=0&code=2o_ChSqo984&lcode=&resourceId=0_06_05_99" allowtransparency="true" allowfullscreen="true" scrolling="no" border="0" frameborder="0" style="width:100%;height:400px;"></iframe>
+<p>是不是很酷 <code>^_^</code> ？Andrew Sorensen 以计算机仿真音乐作为例子演示了机体编程的用途：通过任意时刻的人机交互，来实现对目标实时系统的控制。这个实时系统和实际的环境配置有关（Environment-aware）——既可以是一个实时虚拟交响乐系统，也可以是一个<a target="_blank" rel="noopener" href="http://vimeo.com/37293927">实时图形系统</a>、<a target="_blank" rel="noopener" href="https://vimeo.com/52964510">实时物理模拟系统</a>等等。从构造上看，这类系统有个共同点，就是通常是由分布式的网络环境构成。Extempore 还具有非常强烈的时序和并发概念，可以很好地应用在时序非常重要的场合（比如音频和视频）。</p>
+<h2 id="安装配置-Extempore">安装配置 Extempore</h2>
+<p>本节介绍 Extempore 的安装配置。我使用的环境是 OSX + Emacs，可以使用 <a target="_blank" rel="noopener" href="http://brew.sh/">Homebrew</a> 安装 extempore：</p>
+<h3 id="安装-Extempore">安装 Extempore</h3>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ brew tap benswift/extempore</span><br><span class="line">$ brew install extempore</span><br></pre></td></tr></table></figure>
+<p>安装完成后，可以试着执行以下 Extempore 进程（服务器）：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/Cellar/extempore/X.XX/  <span class="comment"># X.XX 需要替换成实际安装的版本号</span></span><br><span class="line">$ ./extempore</span><br></pre></td></tr></table></figure>
+<p>如果你看到下面的界面，说明安装成功：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/extempore-intro/run.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>可以通过执行 <code>./extempore --help</code> 来了解更多的启动选项。</p>
+<p>到这里读者应该就可以大致明白 Extempore 的运行方式了：首先启动一个或多个服务器，这些服务器将侦听各自的端口。之后，我们可以通过编辑器或者其他界面与这些服务器实时互动，比如将代码发送给某一个服务器让其立即执行。这也是大部分支持 REPL （read-eval-print-loop）的编程语言的特点，比如 Common Lisp/Scheme/Python/Ruby/Matlab 。</p>
+<p>后面会介绍如何在 Emacs 下启用 Extempore 服务器，所以我们可以先 <code>C-c C-c</code> 结束掉这个进程。</p>
+<h3 id="安装-Emacs-插件">安装 Emacs 插件</h3>
+<p>extempore 的安装路径里头已经包含了相应的 Emacs 插件，只需要将以下几行添加到你的 Emacs 配置文件中：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">autoload</span> &#x27;extempore-mode <span class="string">&quot;/path/to/extempore/extras/extempore.el&quot;</span> <span class="string">&quot;&quot;</span> <span class="literal">t</span>)</span><br><span class="line">(<span class="name">add-to-list</span> &#x27;auto-mode-alist &#x27;(<span class="string">&quot;\\.xtm$&quot;</span> . extempore-mode))</span><br><span class="line">(<span class="name">setq</span> user-extempore-directory <span class="string">&quot;/path/to/extempore/&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>注意将第一行的路径改为插件实际所在位置。</p>
+<p>完成后使用 <code>eval-region</code> 执行这几行指令，或者重启 Emacs ，使配置生效。自此插件就安装完成。当我们打开 .xtm 文件时，major mode就会变成 Extempore-mode 。但此时 Extempore 的进程服务器还没有启动，编辑器也还没有和服务器建立连接。因此我们可以执行以下几步：</p>
+<ol>
+<li><code>M-x Extempore-run</code> 或者 <code>M-x switch-to-Extempore</code> 启动一个 Extempore 服务器，记住服务器的端口号（如果已经有 Extempore 服务器在运行，并且我们希望连接它，则可以跳过这一步）。</li>
+<li><code>M-x Extempore-connect</code> 让 Emacs 连接一个 Extempore 服务器。记住，每个 .xtm 文件的 buffer 都需要完成至少一次连接。</li>
+</ol>
+<h2 id="Extempore-设计哲学">Extempore 设计哲学</h2>
+<p>在介绍 Extempore 的语法前，先了解下它的设计哲学是很有必要的。Extempore 的设计是为了同时实现两个目标：动态灵活性，及尽可能接近 C 语言的速度。为了同时达到这两个目标，Extempore 首先保证了对 Scheme 语言的支持，然后在保留 Scheme 的语法风格的基础上，加入了类 C 语言的强类型的支持，设计出了 xtlang 语言 。一个 Extempore 进程既可以解释弱类型的 Scheme ，也可以编译强类型定义的 xtlang 。Scheme 的对象（列表、闭包、continuation 等）可以和 xtlang 的<a target="_blank" rel="noopener" href="http://benswift.me/2012-08-09-xtlang-type-reference.html">类型</a>和<a href="%E6%8C%87%E9%92%88">http://benswift.me/2012-08-13-understanding-pointers-in-xtlang.html</a>共存，且借助于一些“辅助函数”，数据可以在两种语言间自由传输。在实现上，Extempore 使用 LLVM 作为编译器后端。在处理 xtlang 时，先将代码编译成 LLVM 指令，再进一步交由 LLVM 编译和链接。</p>
+<p>可以被 Extempore 处理的 Scheme 和 xtlang 语言的示例如下：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">define</span> scheme-closure</span><br><span class="line">  (<span class="name">lambda</span> (<span class="name">a</span> b)</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">result</span> (<span class="name">*</span> a b)))</span><br><span class="line">      (<span class="name">print</span> <span class="string">&quot;result = &quot;</span> result)</span><br><span class="line">      result)))</span><br><span class="line"></span><br><span class="line">(<span class="name">scheme-closure</span> <span class="number">4</span> <span class="number">5</span>) <span class="comment">;; prints &quot;result = 20&quot;, returns 20</span></span><br><span class="line">(<span class="name">scheme-closure</span> <span class="number">2.4</span> <span class="number">2</span>) <span class="comment">;; prints &quot;result = 4.8&quot;, returns 4.8</span></span><br><span class="line"></span><br><span class="line">(<span class="name">bind-func</span> xtlang_closure</span><br><span class="line">  (<span class="name">lambda</span> (<span class="name">c</span><span class="symbol">:double</span> d<span class="symbol">:i64</span>)</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">result</span> (<span class="name">*</span> c (<span class="name">i64tod</span> d))))</span><br><span class="line">      (<span class="name">printf</span> <span class="string">&quot;result = %f\n&quot;</span> result)</span><br><span class="line">      result)))</span><br><span class="line"></span><br><span class="line">(<span class="name">xtlang_closure</span> <span class="number">4.5</span> <span class="number">2</span>) <span class="comment">;; prints &quot;result = 9.000000&quot;, returns 9.0</span></span><br></pre></td></tr></table></figure>
+<p>本文并不打算介绍过多 Scheme 的语法，建议读者自己阅读 Lisp 相关的语法教程入门。例如 [TSPL](<a target="_blank" rel="noopener" href="http://www.scheme.com/tspl3/">Scheme 教程</a>)。</p>
+<h2 id="xtlang-的基本类型">xtlang 的基本类型</h2>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/extempore-intro/type-key.png" alt="xtlang基本类型一览" />
+        <figcaption>xtlang基本类型一览</figcaption>
+      </figure>
+    </p>
+<h3 id="整型">整型</h3>
+<ul>
+<li>i1 (boolean)</li>
+<li>i8 (char)</li>
+<li>i32</li>
+<li>i64 (default)</li>
+</ul>
+<h3 id="浮点型">浮点型</h3>
+<ul>
+<li>float (32 bit)</li>
+<li>double (64 bit, default)</li>
+</ul>
+<h3 id="指针">指针</h3>
+<p>例如：</p>
+<ul>
+<li>double* ：a pointer to a double</li>
+<li>i64**: a pointer to a pointer to a 64-bit integer</li>
+</ul>
+<p>xtlang 的指针与 C 语言的指针非常类似（你可以通过 <code>%p</code> 来 <code>printf</code> 它们）。对 Extempore 的指针更深入的介绍可以参考<a target="_blank" rel="noopener" href="http://benswift.me/2012-08-13-understanding-pointers-in-xtlang.html">这篇文章</a>。</p>
+<h4 id="空间分配">空间分配</h4>
+<p>要分配一块空间并让一个指针指向它，Extempore 提供了三种 alloc 函数：salloc、halloc 和 zalloc 。它们用用来分配一块内存空间，并返回一个指针类型，但它们的区别在于空间的分配方式，这将决定不同的占用时间。salloc 是在栈分配空间的（短期），zalloc 则在当前的区域分配空间，而 halloc 则在堆分配空间（长期）。alloc 是 zalloc 的别名。更多关于三种函数的探讨可以参考<a target="_blank" rel="noopener" href="http://benswift.me/2012-08-17-memory-management-in-extempore.html">这篇文章</a>。zalloc 的一个示例：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">bind-func</span> ptr_test</span><br><span class="line">  (<span class="name">lambda</span> ()</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">a</span><span class="symbol">:double*</span> (<span class="name">zalloc</span>)))</span><br><span class="line">      (<span class="name">printf</span> <span class="string">&quot;address = %p\n&quot;</span> a))))</span><br><span class="line"></span><br><span class="line">(<span class="name">ptr_test</span>) <span class="comment">;; prints &quot;address = 0x1163bc030&quot;</span></span><br></pre></td></tr></table></figure>
+<p>在这个例子中，<code>eptr_test</code> 实现将一个指针绑定到一个 double 型变量 a ，并将该指针指向的地址打印出来。</p>
+<h4 id="解引用">解引用</h4>
+<p>与在 C 语言不同，<code>*</code> 并非解引用操作符。xtlang 使用一个函数 <code>pref</code> 来实现指针的解引用。<code>pref</code> 需要两个参数：指针名和一个（整型）偏移量。如果 a 是一个指向内存中的一块 10 个 double 值的指针，那么 <code>(pref a 2)</code> 就是第三个 double 值（相当于 C 语言中的 a[2]）。</p>
+<h4 id="指针赋值">指针赋值</h4>
+<p>要为指针指向的空间赋值，可以使用 <code>pset!</code> ，它接受三个参数：指针名、偏移量、要赋的值。示例：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">bind-func</span> ptr_test2</span><br><span class="line">  (<span class="name">lambda</span> ()</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">a</span><span class="symbol">:double*</span> (<span class="name">zalloc</span>))) <span class="comment">; allocate some memory for a double, bind</span></span><br><span class="line">                                        <span class="comment">; the pointer to the symbol a</span></span><br><span class="line">      (<span class="name">pset!</span> a <span class="number">0</span> <span class="number">2.4</span>)          <span class="comment">; set the value at index 0 (of a) to 2.4</span></span><br><span class="line">      (<span class="name">pref</span> a <span class="number">0</span>))))            <span class="comment">; read the value at index 0 of a</span></span><br><span class="line"></span><br><span class="line">(<span class="name">ptr_test2</span>) <span class="comment">;; returns 2.400000</span></span><br></pre></td></tr></table></figure>
+<p>如果要一次性为一个指针指向的一组空间赋值，可以使用 <code>pfill!</code> 。示例：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">bind-func</span> ptr_test3</span><br><span class="line">  (<span class="name">lambda</span> ()</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">a</span><span class="symbol">:double*</span> (<span class="name">zalloc</span> <span class="number">4</span>)))</span><br><span class="line">      (<span class="name">pfill!</span> a <span class="number">1.2</span> <span class="number">3.4</span> <span class="number">4.2</span> <span class="number">1.1</span>) <span class="comment">; fill the pointer a with values</span></span><br><span class="line">      (<span class="name">pref</span> a <span class="number">2</span>))))              <span class="comment">; read the value at index 2 of a</span></span><br><span class="line"></span><br><span class="line">(<span class="name">ptr_test3</span>) <span class="comment">;; returns 4.200000</span></span><br></pre></td></tr></table></figure>
+<p>上例的 <code>pfill!</code> 相当于连续使用 <code>pset!</code> 四次，要要求值和空间精确对应。一个更有用的方法是使用循环：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">bind-func</span> ptr_test4</span><br><span class="line">  (<span class="name">lambda</span> ()</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">a</span><span class="symbol">:double*</span> (<span class="name">zalloc</span> <span class="number">10</span>))</span><br><span class="line">          (<span class="name">i</span><span class="symbol">:i64</span> <span class="number">0</span>))</span><br><span class="line">      (<span class="name">dotimes</span> (<span class="name">i</span> <span class="number">0</span>)</span><br><span class="line">        (<span class="name">pset!</span> a i (<span class="name">i64tod</span> i)))</span><br><span class="line">     (<span class="name">pref</span> a <span class="number">6</span>))))</span><br><span class="line"></span><br><span class="line">(<span class="name">ptr_test4</span>) <span class="comment">;; returns 5.000000</span></span><br></pre></td></tr></table></figure>
+<p>还有一个有用的使用指针的函数：<code>pref-ptr</code>。例如， <code>(pref a 3)</code> 返回的是 a 指针指向的空间的第 4 个元素的值，而 <code>(pref-ptr a 3)</code> 返回指向该值的指针。这也意味着 <code>(pref (pref-ptr a n))</code> 与 <code>(pref (pref-ptr a 0) n)</code> 等效（n 可以为任意整数）。</p>
+<h3 id="复合类型">复合类型</h3>
+<ul>
+<li>元组 Tuples 。使用 <code>&lt;...&gt;</code> 声明。例如 <code>&lt;double,i32&gt;*</code> 是一个指向包含 2 个元素的元组的指针。第一个元素是一个 double 而第二个元素是一个 i32 值。</li>
+<li>数组 Arrays 。使用 <code>|...|</code> 声明。例如 <code>|4,double|*</code> 是一个指向包含 4 个 double 的数组的指针。</li>
+<li>向量 Vector。使用 <code>/.../</code> 声明。例如 <code>/4,float/*</code> 是一个指向 4 个 float 的向量的指针。</li>
+</ul>
+<p>这些类型的解引用等操作与指针的对应操作非常类似，名字也大同小异。例如，元组的解引用、赋值等操作以 <code>t</code> 开头，分别为 <code>tref</code> 、<code>tset!</code> 、<code>tfill!</code> 、<code>tref-ptr</code> 。Array 以 <code>a</code> 开头， Vector 以 <code>v</code> 开头。</p>
+<h3 id="闭包类型">闭包类型</h3>
+<p>闭包类型使用 <code>[...]</code> 声明，括号里头的第一个元素表示返回值类型，其他元素则是函数参数类型。例如 <code>[i64,double,double]*</code> 是一个指向一个有两个 double 参数，返回值类型为 i64 的闭包的指针。</p>
+<p>在 xtlang 中，创建一个闭包可以使用 <code>lambda</code>（匿名函数） 或 <code>bind-func</code>（有名函数）。例如：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">bind-func</span> xt_add</span><br><span class="line">  (<span class="name">lambda</span> (<span class="name">a</span><span class="symbol">:i64</span> b<span class="symbol">:i64</span>)</span><br><span class="line">    (<span class="name">+</span> a b)))</span><br><span class="line"></span><br><span class="line">(<span class="name">xt_add</span> <span class="number">3</span> <span class="number">6</span>) <span class="comment">;; returns 9</span></span><br></pre></td></tr></table></figure>
+<h2 id="Extempore-实时音乐编程">Extempore 实时音乐编程</h2>
+<p>Extempore 最为人所知的应用莫过于用来编写音乐。Extempore 既可以编写较为底层的 DSP，也可以编写较为高级的（基于音名的）音频。</p>
+<h3 id="简单-dsp-函数">简单 dsp 函数</h3>
+<p>Extempore 提供了一个特殊的函数 <code>dsp</code> ，该函数返回的值将直接输出给音频驱动器，从而实现声音的输出。例如：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">bind-val</span> STWOPI SAMPLE <span class="number">6.2831853071795864769252867665590057683943387987502116419498</span>)</span><br><span class="line"></span><br><span class="line">(<span class="name">bind-func</span> dsp</span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> (in:SAMPLE time:i64 chan:i64 data:SAMPLE*)</span><br><span class="line">    (<span class="name"><span class="builtin-name">sin</span></span> (<span class="name"><span class="builtin-name">/</span></span> (<span class="name"><span class="builtin-name">*</span></span> STWOPI <span class="number">440.0</span> (<span class="name">convert</span> time SAMPLE))</span><br><span class="line">          <span class="number">44100.0</span>))))</span><br><span class="line"></span><br><span class="line"><span class="comment">; to let Extempore know that this function is the one </span></span><br><span class="line"><span class="comment">; it should call to get the output audio samples</span></span><br><span class="line">(<span class="name">dsp:set!</span> dsp)</span><br></pre></td></tr></table></figure>
+<p><code>dsp</code> 函数接受以下几个参数：</p>
+<ul>
+<li>in：输入音频采样，例如麦克风。</li>
+<li>time：一个 i64 值，表示时间。</li>
+<li>chan：另一个 i64 值，表示声道序号（0 表示左，1 表示右，以此类推）。Extempore 支持处理任意声道。</li>
+<li>data：一个指向 SAMPLE 类型（默认为 float）的数据的指针，也可以用来传递其他数据给 <code>dsp</code> 函数。</li>
+</ul>
+<p>默认情况下，SAMPLE 的类型是 <code>float</code> ，定义如下：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">bind-alias</span> SAMPLE float)</span><br></pre></td></tr></table></figure>
+<p>它也可以设为 double ，具体见<a target="_blank" rel="noopener" href="http://benswift.me/2013-11-15-changing-from-doubles-to-floats-in-audio_dsp.html">这篇文章</a>。</p>
+<h3 id="编写振荡器">编写振荡器</h3>
+<blockquote>
+<p>振荡器（英文：oscillator）是用来产生重复电子讯号（通常是正弦波或方波）的电子元件。</p>
+</blockquote>
+<p>一个简单的振荡器：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">bind-func</span> osc_c <span class="comment">; osc_c is the same as last time</span></span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> (phase)</span><br><span class="line">    (<span class="name"><span class="builtin-name">lambda</span></span> (amp freq)</span><br><span class="line">      (<span class="name"><span class="builtin-name">let</span></span> ((<span class="name">inc:SAMPLE</span> (<span class="name"><span class="builtin-name">*</span></span> <span class="number">3.141592</span> (<span class="name"><span class="builtin-name">*</span></span> <span class="number">2.0</span> (<span class="name"><span class="builtin-name">/</span></span> freq <span class="number">44100.0</span>)))))</span><br><span class="line">        (<span class="name"><span class="builtin-name">set!</span></span> phase (<span class="name"><span class="builtin-name">+</span></span> phase inc))</span><br><span class="line">        (<span class="name"><span class="builtin-name">*</span></span> amp (<span class="name"><span class="builtin-name">sin</span></span> phase))))))</span><br></pre></td></tr></table></figure>
+<p><code>osc_c</code> 函数接受一个参数相位 <code>phase</code>，该函数并不返回一个基本类型的值，而是返回一个指向另一个闭包的指针，该闭包就是一个“振荡器”，参数为幅度值 <code>amp</code> 和频率 <code>freq</code> 。这种写法在 xtlang 中非常常见，为了方便标识，我们习惯性将一个返回另一个闭包的闭包的名字加上 <code>_c</code> 后缀<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>。</p>
+<p>我们可以使用 <code>osc_c</code> 函数创建任意数量的振荡器：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">; remember that the dsp closure is called for every sample</span></span><br><span class="line"><span class="comment">; also, for convenience, let&#x27;s make a type signature for the</span></span><br><span class="line"><span class="comment">; DSP closure</span></span><br><span class="line"></span><br><span class="line">(<span class="name">bind-alias</span> DSP [<span class="name">SAMPLE</span>,SAMPLE,i64,i64,SAMPLE*]*)</span><br><span class="line"></span><br><span class="line">(<span class="name">bind-func</span> dsp:DSP <span class="comment">; note the use of the type signature &#x27;DSP&#x27;</span></span><br><span class="line">  (<span class="name"><span class="builtin-name">let</span></span> ((<span class="name">osc1</span> (<span class="name">osc_c</span> <span class="number">0.0</span>))</span><br><span class="line">        (<span class="name">osc2</span> (<span class="name">osc_c</span> <span class="number">0.0</span>))</span><br><span class="line">        (<span class="name">osc3</span> (<span class="name">osc_c</span> <span class="number">0.0</span>)))</span><br><span class="line">    (<span class="name"><span class="builtin-name">lambda</span></span> (in time channel data)</span><br><span class="line">      (<span class="name"><span class="builtin-name">cond</span></span> ((<span class="name"><span class="builtin-name">=</span></span> channel <span class="number">1</span>) </span><br><span class="line">             (<span class="name"><span class="builtin-name">+</span></span> (<span class="name">osc1</span> <span class="number">0.5</span> <span class="number">220.0</span>)</span><br><span class="line">                (<span class="name">osc2</span> <span class="number">0.5</span> <span class="number">350.0</span>)))</span><br><span class="line">            ((<span class="name"><span class="builtin-name">=</span></span> channel <span class="number">0</span>)</span><br><span class="line">             (<span class="name">osc3</span> <span class="number">0.5</span> <span class="number">210.0</span>))</span><br><span class="line">            (<span class="name"><span class="builtin-name">else</span></span> <span class="number">0.0</span>)))))</span><br></pre></td></tr></table></figure>
+<p>振荡器闭包中的 phase 变量用来维护 osc1 或 osc2 的调用状态。每当闭包被调用，phase 就会递增（见上面 osc_c 的定义）。每个 osc 的 phase 变量是彼此独立的，从而每个 osc_c 创建的振荡器是彼此独立的。</p>
+<p>借助元组，上面的代码可以写成更简洁的形式：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">bind-alias</span> osc_t [<span class="name">SAMPLE</span>,SAMPLE,SAMPLE]*)</span><br><span class="line"></span><br><span class="line">(<span class="name">bind-func</span> dsp:DSP</span><br><span class="line">  (<span class="name"><span class="builtin-name">let</span></span> ((<span class="name">osc_tuple:&lt;osc_t</span>,osc_t,osc_t&gt;* (<span class="name">alloc</span>)))</span><br><span class="line">    (<span class="name">tfill!</span> osc_tuple (<span class="name">osc_c</span> <span class="number">0.0</span>) (<span class="name">osc_c</span> <span class="number">0.0</span>) (<span class="name">osc_c</span> <span class="number">0.0</span>))</span><br><span class="line">    (<span class="name"><span class="builtin-name">lambda</span></span> (in time channel data)</span><br><span class="line">      (<span class="name"><span class="builtin-name">cond</span></span> ((<span class="name"><span class="builtin-name">=</span></span> channel <span class="number">1</span>) </span><br><span class="line">             (<span class="name"><span class="builtin-name">+</span></span> ((<span class="name">tref</span> osc_tuple <span class="number">0</span>) <span class="number">0.5</span> <span class="number">220.0</span>)</span><br><span class="line">                ((<span class="name">tref</span> osc_tuple <span class="number">1</span>) <span class="number">0.5</span> <span class="number">350.0</span>)))</span><br><span class="line">            ((<span class="name"><span class="builtin-name">=</span></span> channel <span class="number">0</span>)</span><br><span class="line">             ((<span class="name">tref</span> osc_tuple <span class="number">2</span>) <span class="number">0.5</span> <span class="number">210.0</span>))</span><br><span class="line">            (<span class="name"><span class="builtin-name">else</span></span> <span class="number">0.0</span>)))))</span><br></pre></td></tr></table></figure>
+<p>下面是一个更复杂的例子，使用数组存放每个振荡器的参数信息，生成 30 个白噪声振荡器。前 15 个振荡器放在左声道输出，后 15 个振荡器放在右声道输出：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">bind-func</span> dsp:DSP</span><br><span class="line">  (<span class="name"><span class="builtin-name">let</span></span> ((<span class="name">osc_array:</span>|<span class="number">30</span>,[<span class="name">SAMPLE</span>,SAMPLE,SAMPLE]*|* (<span class="name">alloc</span>))</span><br><span class="line">        (<span class="name">amp_array:</span>|<span class="number">30</span>,SAMPLE|* (<span class="name">alloc</span>))</span><br><span class="line">        (<span class="name">freq_array:</span>|<span class="number">30</span>,SAMPLE|* (<span class="name">alloc</span>))</span><br><span class="line">        (<span class="name">i</span> <span class="number">0</span>))</span><br><span class="line">    <span class="comment">; initialise the arrays</span></span><br><span class="line">    (<span class="name">dotimes</span> (<span class="name">i</span> <span class="number">30</span>)</span><br><span class="line">      (<span class="name">aset!</span> osc_array i (<span class="name">osc_c</span> <span class="number">0.0</span>))</span><br><span class="line">      (<span class="name">aset!</span> amp_array i (<span class="name"><span class="builtin-name">+</span></span> <span class="number">0.2</span> (<span class="name"><span class="builtin-name">*</span></span> <span class="number">0.2</span> (<span class="name">random</span>))))</span><br><span class="line">      (<span class="name">aset!</span> freq_array i (<span class="name"><span class="builtin-name">+</span></span> <span class="number">110.0</span> (<span class="name"><span class="builtin-name">*</span></span> <span class="number">1000.0</span> (<span class="name">random</span>)))))</span><br><span class="line">    <span class="comment">; this is the dsp closure</span></span><br><span class="line">    (<span class="name"><span class="builtin-name">lambda</span></span> (in time chan data)</span><br><span class="line">      (<span class="name"><span class="builtin-name">cond</span></span> ((<span class="name"><span class="builtin-name">=</span></span> chan <span class="number">0</span>) <span class="comment">; left channel</span></span><br><span class="line">             (<span class="name"><span class="builtin-name">let</span></span> ((<span class="name">suml</span> <span class="number">0.0</span>))</span><br><span class="line">               (<span class="name">dotimes</span> (<span class="name">i</span> <span class="number">15</span>) <span class="comment">; sum over the first 15 oscs</span></span><br><span class="line">                 (<span class="name"><span class="builtin-name">set!</span></span> suml (<span class="name"><span class="builtin-name">+</span></span> suml ((<span class="name">aref</span> osc_array i)</span><br><span class="line">                                     (<span class="name">aref</span> amp_array i)</span><br><span class="line">                                     (<span class="name">aref</span> freq_array i)))))</span><br><span class="line">               (<span class="name"><span class="builtin-name">/</span></span> suml <span class="number">15.0</span>))) <span class="comment">; normalise over all oscs</span></span><br><span class="line">            ((<span class="name"><span class="builtin-name">=</span></span> chan <span class="number">1</span>) <span class="comment">; left channel</span></span><br><span class="line">             (<span class="name"><span class="builtin-name">let</span></span> ((<span class="name">sumr</span> <span class="number">0.0</span>))</span><br><span class="line">               (<span class="name">dotimes</span> (<span class="name">i</span> <span class="number">15</span> <span class="number">30</span>) <span class="comment">; sum over the last 15 oscs</span></span><br><span class="line">                 (<span class="name"><span class="builtin-name">set!</span></span> sumr (<span class="name"><span class="builtin-name">+</span></span> sumr ((<span class="name">aref</span> osc_array i)</span><br><span class="line">                                     (<span class="name">aref</span> amp_array i)</span><br><span class="line">                                     (<span class="name">aref</span> freq_array i)))))</span><br><span class="line">               (<span class="name"><span class="builtin-name">/</span></span> sumr <span class="number">15.0</span>)))</span><br><span class="line">            (<span class="name"><span class="builtin-name">else</span></span> <span class="number">0.0</span>))))) <span class="comment">; any remaining channels</span></span><br></pre></td></tr></table></figure>
+<h3 id="读取音频文件">读取音频文件</h3>
+<p>Extempore 的 <code>libsndfile</code> 库绑定提供了文件读写的支持。</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">sys:load</span> <span class="string">&quot;libs/external/sndfile.xtm&quot;</span>)</span><br><span class="line"></span><br><span class="line">(<span class="name">bind-func</span> dsp:DSP <span class="number">1000000000</span>  <span class="comment">;; allocate memory to store the audio file</span></span><br><span class="line">  (<span class="name"><span class="builtin-name">let</span></span> ((<span class="name">audiofile</span> (<span class="name">audiofile_c</span> <span class="string">&quot;/Users/ben/Desktop/xtm-assets/peg.wav&quot;</span> <span class="number">0</span> <span class="number">0</span>)))</span><br><span class="line">    (<span class="name"><span class="builtin-name">lambda</span></span> (in time chan dat)</span><br><span class="line">      <span class="comment">;; get the output sample</span></span><br><span class="line">      (<span class="name">audiofile</span>))))</span><br><span class="line">(<span class="name">dsp:set!</span> dsp)</span><br></pre></td></tr></table></figure>
+<p><code>audiofile_c</code> 接收三个参数：</p>
+<ul>
+<li>音频文件的名字</li>
+<li>起始的文件读取偏移位置（0 表示文件开头）</li>
+<li>要读取的采样数（0 表示整个文件）</li>
+</ul>
+<h3 id="使用采样器">使用采样器</h3>
+<p>在 Extempore 中，采样器是一个存放了音频并可供触发和回放的乐器，它可以用来模拟乐器或其他事物的声音（例如，一个钢琴采样器存放了真实录制的钢琴声，利用这个采样器，MIDI 键盘可以触发这些声音来模拟真实钢琴的演奏）。因为采样器非常有用，所以 Extempore 专门提供了一个内置的采样器 libs/external/instruments_ext.xtm 。</p>
+<p>我们可以将采样器想象成一堆“槽”，每个槽装着一个音频文件。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/extempore-intro/slots.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>每个槽用一个独一无二的序号区分。播放采样器通常就是指定某个序号的槽的音频以某个响度/频率和长度来播放。上图左侧的数字是每个音名对应的<a target="_blank" rel="noopener" href="http://www.phys.unsw.edu.au/jw/notes.html">MIDI音名数字</a>（middle C=60）。例如，如果你需要触发 middle C 的采样，只需使用 <code>play-note</code> 消息并带上音高参数 <code>60</code> 。</p>
+<p>Extempore 的采样器并不要求装满——允许出现空槽。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/extempore-intro/empty-slots.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>在这种情况下，当采样器发现要采样的槽里为空时，会找到最近的非空槽，取出该音频，并线性调整它的音高，以播放出期望音高的声音。</p>
+<h4 id="创建一个采样器">创建一个采样器</h4>
+<p>使用 <code>define-sampler</code> 创建一个 Extempore 采样器。</p>
+<p>下面将演示创建一个鼓的采样器。音频文件可以在<a target="_blank" rel="noopener" href="https://archive.org/download/SalamanderDrumkit/salamanderDrumkit.tar.bz2">这里</a>下载到。</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">sys:load</span> <span class="string">&quot;libs/external/instruments_ext.xtm&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">;; define a sampler (called drums) using the default sampler note kernel and effects</span></span><br><span class="line">(<span class="name">define-sampler</span> drums sampler_note_hermite_c sampler_fx)</span><br><span class="line"></span><br><span class="line"><span class="comment">;; add the sampler to the dsp output callback</span></span><br><span class="line">(<span class="name">bind-func</span> dsp:DSP</span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> (in time chan dat)</span><br><span class="line">    (<span class="name"><span class="builtin-name">cond</span></span> ((<span class="name"><span class="builtin-name">&lt;</span></span> chan <span class="number">2</span>)</span><br><span class="line">           (<span class="name">drums</span> in time chan dat))</span><br><span class="line">          (<span class="name"><span class="builtin-name">else</span></span> <span class="number">0.0</span>))))</span><br><span class="line"></span><br><span class="line">(<span class="name">dsp:set!</span> dsp)</span><br></pre></td></tr></table></figure>
+<p>接下来把每个音频放进每个槽里：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">define</span></span> drum-path <span class="string">&quot;/Users/ben/Music/sample-libs/drums/salamander/OH/&quot;</span>)</span><br><span class="line">(<span class="name">set-sampler-index</span> drums (<span class="name"><span class="builtin-name">string-append</span></span> drum-path <span class="string">&quot;kick_OH_F_9.wav&quot;</span>) *gm-kick* <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span>)</span><br><span class="line">(<span class="name">set-sampler-index</span> drums (<span class="name"><span class="builtin-name">string-append</span></span> drum-path <span class="string">&quot;snareStick_OH_F_9.wav&quot;</span>) *gm-side-stick* <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span>)</span><br><span class="line">(<span class="name">set-sampler-index</span> drums (<span class="name"><span class="builtin-name">string-append</span></span> drum-path <span class="string">&quot;snare_OH_FF_9.wav&quot;</span>) *gm-snare* <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span>)</span><br><span class="line">(<span class="name">set-sampler-index</span> drums (<span class="name"><span class="builtin-name">string-append</span></span> drum-path <span class="string">&quot;hihatClosed_OH_F_20.wav&quot;</span>) *gm-closed-hi-hat* <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span>)</span><br><span class="line">(<span class="name">set-sampler-index</span> drums (<span class="name"><span class="builtin-name">string-append</span></span> drum-path <span class="string">&quot;hihatFoot_OH_MP_12.wav&quot;</span>) *gm-pedal-hi-hat* <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span>)</span><br><span class="line">(<span class="name">set-sampler-index</span> drums (<span class="name"><span class="builtin-name">string-append</span></span> drum-path <span class="string">&quot;hihatOpen_OH_FF_6.wav&quot;</span>) *gm-open-hi-hat* <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span>)</span><br><span class="line">(<span class="name">set-sampler-index</span> drums (<span class="name"><span class="builtin-name">string-append</span></span> drum-path <span class="string">&quot;loTom_OH_FF_8.wav&quot;</span>) *gm-low-floor-tom* <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span>)</span><br><span class="line">(<span class="name">set-sampler-index</span> drums (<span class="name"><span class="builtin-name">string-append</span></span> drum-path <span class="string">&quot;hiTom_OH_FF_9.wav&quot;</span>) *gm-hi-floor-tom* <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span>)</span><br><span class="line">(<span class="name">set-sampler-index</span> drums (<span class="name"><span class="builtin-name">string-append</span></span> drum-path <span class="string">&quot;crash1_OH_FF_6.wav&quot;</span>) *gm-crash* <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span>)</span><br><span class="line">(<span class="name">set-sampler-index</span> drums (<span class="name"><span class="builtin-name">string-append</span></span> drum-path <span class="string">&quot;ride1_OH_FF_4.wav&quot;</span>) *gm-ride* <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span>)</span><br><span class="line">(<span class="name">set-sampler-index</span> drums (<span class="name"><span class="builtin-name">string-append</span></span> drum-path <span class="string">&quot;china1_OH_FF_8.wav&quot;</span>) *gm-chinese* <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span>)</span><br><span class="line">(<span class="name">set-sampler-index</span> drums (<span class="name"><span class="builtin-name">string-append</span></span> drum-path <span class="string">&quot;cowbell_FF_9.wav&quot;</span>) *gm-cowbell* <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span>)</span><br><span class="line">(<span class="name">set-sampler-index</span> drums (<span class="name"><span class="builtin-name">string-append</span></span> drum-path <span class="string">&quot;bellchime_F_3.wav&quot;</span>) *gm-open-triangle* <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span>)</span><br><span class="line">(<span class="name">set-sampler-index</span> drums (<span class="name"><span class="builtin-name">string-append</span></span> drum-path <span class="string">&quot;ride1Bell_OH_F_6.wav&quot;</span>) *gm-ride-bell* <span class="number">0</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>完成后可以使用如下的方式演奏我们的鼓：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; evaluate these as you see fit!</span></span><br><span class="line">(<span class="name">play-note</span> (<span class="name">now</span>) drums *gm-kick* <span class="number">80</span> <span class="number">44100</span>)</span><br><span class="line">(<span class="name">play-note</span> (<span class="name">now</span>) drums *gm-snare* <span class="number">80</span> <span class="number">44100</span>)</span><br><span class="line">(<span class="name">play-note</span> (<span class="name">now</span>) drums *gm-closed-hi-hat* <span class="number">80</span> <span class="number">44100</span>)</span><br></pre></td></tr></table></figure>
+<p>如果采样的音频文件命名有一定的规律，可以使用 external/instruments.xtm 中提供的辅助宏 load-sampler 以更简洁的方式加载采样。具体见 <a target="_blank" rel="noopener" href="http://benswift.me/2012/10/17/loading-and-using-a-sampler/">这篇文章</a> 。</p>
+<h3 id="演奏乐器">演奏乐器</h3>
+<p>Extempore 自带了一些乐器，这些乐器在 libs/core/instruments.xtm 文件中定义。</p>
+<h4 id="演奏单音">演奏单音</h4>
+<p>下面的例子将载入自带乐器，命名为 synth ，并用它奏出随机音高的声音。</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; load the instruments file </span></span><br><span class="line">(<span class="name">sys:load</span> <span class="string">&quot;libs/core/instruments.xtm&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">;; define a synth using the provided components</span></span><br><span class="line"><span class="comment">;; synth_note_c and synth_fx</span></span><br><span class="line">(<span class="name">define-instrument</span> synth synth_note_c synth_fx)</span><br><span class="line"></span><br><span class="line"><span class="comment">;; add the instrument to the DSP output sink closure</span></span><br><span class="line">(<span class="name">bind-func</span> dsp:DSP</span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> (in time chan dat)</span><br><span class="line">    (<span class="name">synth</span> in time chan dat)))</span><br><span class="line">(<span class="name">dsp:set!</span> dsp)</span><br><span class="line"></span><br><span class="line"><span class="comment">;; play a note on our synth</span></span><br><span class="line">(<span class="name">play-note</span> (<span class="name">now</span>) synth (<span class="name">random</span> <span class="number">60</span> <span class="number">80</span>) <span class="number">80</span> (<span class="name"><span class="builtin-name">*</span></span> <span class="number">1.0</span> *second*))</span><br></pre></td></tr></table></figure>
+<h4 id="演奏和弦">演奏和弦</h4>
+<p>除了弹奏一个单音，也可以通过编写相应函数弹奏一个和弦。例如一个 C 和弦：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">define</span></span> chord</span><br><span class="line">   (<span class="name"><span class="builtin-name">lambda</span></span> ()</span><br><span class="line">      (<span class="name">play-note</span> (<span class="name">now</span>) synth <span class="number">60</span> <span class="number">80</span> *second*)</span><br><span class="line">      (<span class="name">play-note</span> (<span class="name">now</span>) synth <span class="number">64</span> <span class="number">80</span> *second*)</span><br><span class="line">      (<span class="name">play-note</span> (<span class="name">now</span>) synth <span class="number">67</span> <span class="number">80</span> *second*)))</span><br><span class="line"></span><br><span class="line"><span class="comment">;; play chord</span></span><br><span class="line">(<span class="name">chord</span>)</span><br></pre></td></tr></table></figure>
+<p>后面将介绍<a href="#%E9%80%92%E5%BD%92%E6%BC%94%E5%A5%8F%E9%9F%B3%E9%98%B6%E5%8F%8A%E5%92%8C%E5%BC%A6">使用递归形式演奏和弦</a>。</p>
+<h4 id="演奏一组声音">演奏一组声音</h4>
+<p>要让 Extempore 演奏一组声音从而形成完整的曲子，可以使用循环。下例演示了演奏 “Hello World” 的 ASCII 序号对应的音高：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">; hello world as a list of note pitches</span></span><br><span class="line"><span class="comment">; transposed down two octaves (24 semitones)</span></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> melody (<span class="name"><span class="builtin-name">map</span></span> (<span class="name"><span class="builtin-name">lambda</span></span> (c)</span><br><span class="line">                       (<span class="name"><span class="builtin-name">-</span></span> (<span class="name"><span class="builtin-name">char-&gt;integer</span></span> c) <span class="number">24</span>))</span><br><span class="line">                    (<span class="name"><span class="builtin-name">string-&gt;list</span></span> <span class="string">&quot;Hello World!&quot;</span>)))</span><br><span class="line"></span><br><span class="line"><span class="comment">; Define a recursive function to cycle through the pitches in melody</span></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> loop</span><br><span class="line">   (<span class="name"><span class="builtin-name">lambda</span></span> (time pitch-list)</span><br><span class="line">      (<span class="name"><span class="builtin-name">cond</span></span> ((<span class="name"><span class="builtin-name">null?</span></span> pitch-list) (<span class="name">println</span> <span class="symbol">&#x27;done</span>))</span><br><span class="line">            (<span class="name"><span class="builtin-name">else</span></span> (<span class="name">play-note</span> time synth (<span class="name"><span class="builtin-name">car</span></span> pitch-list) <span class="number">80</span> <span class="number">10000</span>)</span><br><span class="line">                  (<span class="name">loop</span> (<span class="name"><span class="builtin-name">+</span></span> time (<span class="name"><span class="builtin-name">*</span></span> *second* <span class="number">0.5</span>))</span><br><span class="line">                        (<span class="name"><span class="builtin-name">cdr</span></span> pitch-list))))))</span><br><span class="line"></span><br><span class="line"><span class="comment">; start playing melody</span></span><br><span class="line">(<span class="name">loop</span> (<span class="name">now</span>) melody)</span><br></pre></td></tr></table></figure>
+<h4 id="递归演奏音阶及和弦">递归演奏音阶及和弦</h4>
+<p>在 Scheme 中，使用递归形式可以更好地控制演奏流程。</p>
+<p>演奏一组全音阶：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; recursive whole-tone scale</span></span><br><span class="line">(<span class="name"><span class="builtin-name">let</span></span> loop ((<span class="name">i</span> <span class="number">0</span>))</span><br><span class="line">  (<span class="name">play-note</span> (<span class="name"><span class="builtin-name">+</span></span> (<span class="name">now</span>) (<span class="name"><span class="builtin-name">*</span></span> i <span class="number">2500</span>)) synth (<span class="name"><span class="builtin-name">+</span></span> <span class="number">60</span> i) <span class="number">80</span> <span class="number">4000</span>)</span><br><span class="line">  (<span class="name"><span class="builtin-name">if</span></span> (<span class="name"><span class="builtin-name">&lt;</span></span> i <span class="number">9</span>) (<span class="name">loop</span> (<span class="name"><span class="builtin-name">+</span></span> i <span class="number">2</span>))))</span><br></pre></td></tr></table></figure>
+<p>演奏一组主音阶：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; recursive major scale</span></span><br><span class="line">(<span class="name"><span class="builtin-name">let</span></span> loop ((<span class="name">scale</span> &#x27;(<span class="number">0</span> <span class="number">2</span> <span class="number">4</span> <span class="number">5</span> <span class="number">7</span> <span class="number">9</span> <span class="number">11</span> <span class="number">12</span>))</span><br><span class="line">           (<span class="name">time</span> <span class="number">0</span>))</span><br><span class="line">  (<span class="name">play-note</span> (<span class="name"><span class="builtin-name">+</span></span> (<span class="name">now</span>) time) synth (<span class="name"><span class="builtin-name">+</span></span> <span class="number">60</span> (<span class="name"><span class="builtin-name">car</span></span> scale)) <span class="number">80</span> <span class="number">4000</span>)</span><br><span class="line">  (<span class="name"><span class="builtin-name">if</span></span> (<span class="name"><span class="builtin-name">not</span></span> (<span class="name"><span class="builtin-name">null?</span></span> (<span class="name"><span class="builtin-name">cdr</span></span> scale)))</span><br><span class="line">      (<span class="name">loop</span> (<span class="name"><span class="builtin-name">cdr</span></span> scale) (<span class="name"><span class="builtin-name">+</span></span> time <span class="number">5000</span>))))</span><br></pre></td></tr></table></figure>
+<p>上例还带了一个时间参数 time， 因此可以进一步控制每个音高播放的时间长度：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; recursive major scale with rhythm</span></span><br><span class="line">(<span class="name"><span class="builtin-name">let</span></span> loop ((<span class="name">scale</span> &#x27;(<span class="number">0</span> <span class="number">2</span> <span class="number">4</span> <span class="number">5</span> <span class="number">7</span> <span class="number">9</span> <span class="number">11</span> <span class="number">12</span>))</span><br><span class="line">           (<span class="name">dur</span> &#x27;(<span class="number">22050</span> <span class="number">11025</span> <span class="number">11025</span> <span class="number">22050</span> <span class="number">11025</span> <span class="number">11025</span> <span class="number">44100</span> <span class="number">44100</span>))</span><br><span class="line">           (<span class="name">time</span> <span class="number">0</span>))</span><br><span class="line">  (<span class="name">play-note</span> (<span class="name"><span class="builtin-name">+</span></span> (<span class="name">now</span>) time) synth (<span class="name"><span class="builtin-name">+</span></span> <span class="number">60</span> (<span class="name"><span class="builtin-name">car</span></span> scale)) <span class="number">80</span> (<span class="name"><span class="builtin-name">car</span></span> dur))</span><br><span class="line">  (<span class="name"><span class="builtin-name">if</span></span> (<span class="name"><span class="builtin-name">not</span></span> (<span class="name"><span class="builtin-name">null?</span></span> (<span class="name"><span class="builtin-name">cdr</span></span> scale)))</span><br><span class="line">      (<span class="name">loop</span> (<span class="name"><span class="builtin-name">cdr</span></span> scale) (<span class="name"><span class="builtin-name">cdr</span></span> dur) (<span class="name"><span class="builtin-name">+</span></span> time (<span class="name"><span class="builtin-name">car</span></span> dur)))))</span><br></pre></td></tr></table></figure>
+<p>演奏一个 C 和弦：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; recursive chord</span></span><br><span class="line">(<span class="name"><span class="builtin-name">let</span></span> loop ((<span class="name">chord</span> &#x27;(<span class="number">0</span> <span class="number">4</span> <span class="number">7</span>)))</span><br><span class="line">  (<span class="name">play-note</span> (<span class="name">now</span>) synth (<span class="name"><span class="builtin-name">+</span></span> <span class="number">60</span> (<span class="name"><span class="builtin-name">car</span></span> chord)) <span class="number">80</span> <span class="number">44100</span>)</span><br><span class="line">  (<span class="name"><span class="builtin-name">if</span></span> (<span class="name"><span class="builtin-name">not</span></span> (<span class="name"><span class="builtin-name">null?</span></span> (<span class="name"><span class="builtin-name">cdr</span></span> chord)))</span><br><span class="line">      (<span class="name">loop</span> (<span class="name"><span class="builtin-name">cdr</span></span> chord))))</span><br><span class="line"></span><br><span class="line"><span class="comment">;; we could also write this</span></span><br><span class="line">(<span class="name"><span class="builtin-name">let</span></span> loop ((<span class="name">scale</span> &#x27;(<span class="number">0</span> <span class="number">4</span> <span class="number">7</span>)))</span><br><span class="line">  (<span class="name"><span class="builtin-name">cond</span></span> ((<span class="name"><span class="builtin-name">null?</span></span> scale) <span class="symbol">&#x27;finished</span>)</span><br><span class="line">        (<span class="name"><span class="builtin-name">else</span></span> (<span class="name">play-note</span> (<span class="name">now</span>) synth (<span class="name"><span class="builtin-name">+</span></span> <span class="number">60</span> (<span class="name"><span class="builtin-name">car</span></span> scale)) <span class="number">80</span> <span class="number">44100</span>)</span><br><span class="line">              (<span class="name">loop</span> (<span class="name"><span class="builtin-name">cdr</span></span> scale)))))</span><br></pre></td></tr></table></figure>
+<p>分解和弦：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; for-each broken chord with volumes</span></span><br><span class="line">(<span class="name"><span class="builtin-name">for-each</span></span> (<span class="name"><span class="builtin-name">lambda</span></span> (p d v)</span><br><span class="line">            (<span class="name">play-note</span> (<span class="name"><span class="builtin-name">+</span></span> (<span class="name">now</span>) d) synth p v (<span class="name"><span class="builtin-name">-</span></span> <span class="number">88200</span> d)))</span><br><span class="line">          (<span class="name"><span class="builtin-name">list</span></span> <span class="number">60</span> <span class="number">64</span> <span class="number">67</span>)</span><br><span class="line">          (<span class="name"><span class="builtin-name">list</span></span> <span class="number">0</span> <span class="number">22050</span> <span class="number">44100</span>)</span><br><span class="line">          (<span class="name"><span class="builtin-name">list</span></span> <span class="number">90</span> <span class="number">50</span> <span class="number">20</span>))</span><br></pre></td></tr></table></figure>
+<p>这里用 <a target="_blank" rel="noopener" href="http://www.scheme.com/tspl3/control.html#./control:h2">for-each</a> 而不用 <a target="_blank" rel="noopener" href="http://www.scheme.com/tspl3/start.html#./start:h2">map</a> 遍历列表的原因是 map 每次会返回一个新的列表，而 for-each 不会返回新的列表，而只会触发副作用（例如发出声音）<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup>。</p>
+<h4 id="使用-callback-递归演奏">使用 callback 递归演奏</h4>
+<p>前面已经介绍了多种播放一组音高的方法。下面介绍使用 <code>callback</code> 函数来递归演奏一组音高。</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; plays a sequence of pitches</span></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> play-seq</span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> (time plst)</span><br><span class="line">    (<span class="name">play-note</span> time synth (<span class="name"><span class="builtin-name">car</span></span> plst) <span class="number">80</span> <span class="number">11025</span>)</span><br><span class="line">    (<span class="name"><span class="builtin-name">if</span></span> (<span class="name"><span class="builtin-name">not</span></span> (<span class="name"><span class="builtin-name">null?</span></span> (<span class="name"><span class="builtin-name">cdr</span></span> plst)))</span><br><span class="line">        (<span class="name">callback</span> (<span class="name"><span class="builtin-name">+</span></span> time <span class="number">10000</span>) <span class="symbol">&#x27;play-seq</span> (<span class="name"><span class="builtin-name">+</span></span> time <span class="number">11025</span>) (<span class="name"><span class="builtin-name">cdr</span></span> plst)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">play-seq</span> (<span class="name">now</span>) &#x27;(<span class="number">60</span> <span class="number">62</span> <span class="number">63</span> <span class="number">65</span> <span class="number">67</span> <span class="number">68</span> <span class="number">71</span> <span class="number">72</span>))</span><br></pre></td></tr></table></figure>
+<p>这个看起来和前面讲述的方法没什么不同，但它们确实存在一些细微的区别。为了进一步说明不同之处，我们修改一下 play-seq 函数，让它一直循环播放：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; loop over a sequence of pitches indefinitely</span></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> play-seq</span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> (time plst)</span><br><span class="line">    (<span class="name">play-note</span> time synth (<span class="name"><span class="builtin-name">car</span></span> plst) <span class="number">80</span> <span class="number">11025</span>)</span><br><span class="line">    (<span class="name"><span class="builtin-name">if</span></span> (<span class="name"><span class="builtin-name">null?</span></span> (<span class="name"><span class="builtin-name">cdr</span></span> plst))</span><br><span class="line">        (<span class="name">callback</span> (<span class="name"><span class="builtin-name">+</span></span> time <span class="number">10000</span>) <span class="symbol">&#x27;play-seq</span> (<span class="name"><span class="builtin-name">+</span></span> time <span class="number">11025</span>) &#x27;(<span class="number">60</span> <span class="number">62</span> <span class="number">65</span>))</span><br><span class="line">        (<span class="name">callback</span> (<span class="name"><span class="builtin-name">+</span></span> time <span class="number">10000</span>) <span class="symbol">&#x27;play-seq</span> (<span class="name"><span class="builtin-name">+</span></span> time <span class="number">11025</span>) (<span class="name"><span class="builtin-name">cdr</span></span> plst)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">play-seq</span> (<span class="name">now</span>) &#x27;(<span class="number">60</span> <span class="number">62</span> <span class="number">65</span>))</span><br></pre></td></tr></table></figure>
+<p>现在试着在播放的时候将 play-seq 函数里的 <code>(60 20 65)</code> 改为 <code>(60 20 67)</code> 并重新对 <code>play-seq</code> 求值，再改成 <code>(60 20 67 69)</code> 再求值。你会发现当一组音高播完后，将播放你最新修改的音高值列表。这是因为 play-seq 在 plst 会空时，会在 callback 中重新初始化该列表。</p>
+<p>要停止播放这段音乐，可以将 play-seq 重新定义为一个空函数：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">define</span></span> play-seq (<span class="name"><span class="builtin-name">lambda</span></span> <span class="name">args</span>))</span><br></pre></td></tr></table></figure>
+<p>我们再扩展一下 play-seq，为它添加一个长度列表 rlst ：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; plays a sequence of pitches</span></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> play-seq</span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> (time plst rlst)</span><br><span class="line">    (<span class="name">play-note</span> time synth (<span class="name"><span class="builtin-name">car</span></span> plst) <span class="number">80</span> (<span class="name"><span class="builtin-name">car</span></span> rlst))</span><br><span class="line">    (<span class="name">callback</span> (<span class="name"><span class="builtin-name">+</span></span> time (<span class="name"><span class="builtin-name">*</span></span> .5 (<span class="name"><span class="builtin-name">car</span></span> rlst))) <span class="symbol">&#x27;play-seq</span> (<span class="name"><span class="builtin-name">+</span></span> time (<span class="name"><span class="builtin-name">car</span></span> rlst))</span><br><span class="line">              (<span class="name"><span class="builtin-name">if</span></span> (<span class="name"><span class="builtin-name">null?</span></span> (<span class="name"><span class="builtin-name">cdr</span></span> plst))</span><br><span class="line">                  &#x27;(<span class="number">60</span> <span class="number">62</span> <span class="number">65</span> <span class="number">69</span> <span class="number">67</span>)</span><br><span class="line">                  (<span class="name"><span class="builtin-name">cdr</span></span> plst))</span><br><span class="line">              (<span class="name"><span class="builtin-name">if</span></span> (<span class="name"><span class="builtin-name">null?</span></span> (<span class="name"><span class="builtin-name">cdr</span></span> rlst))</span><br><span class="line">                  &#x27;(<span class="number">11025</span> <span class="number">11025</span> <span class="number">22050</span> <span class="number">11025</span>)</span><br><span class="line">                  (<span class="name"><span class="builtin-name">cdr</span></span> rlst)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">play-seq</span> (<span class="name">now</span>) &#x27;(<span class="number">60</span> <span class="number">62</span> <span class="number">65</span> <span class="number">69</span> <span class="number">67</span>) &#x27;(<span class="number">11025</span> <span class="number">11025</span> <span class="number">22050</span> <span class="number">11025</span>))</span><br></pre></td></tr></table></figure>
+<p>注意到 rlst 和 plst 长度允许不同，两个列表是彼此独立的遍历和重新初始化的。</p>
+<p>目前为止，演奏音乐的音量都是 80 ，我们可以修改一下程序，通过使用 <code>random</code> 加入随机因子，实现一个音高和音量不断变化的演奏：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; plays a random pentatonic sequence of notes with a metric pulse</span></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> play-seq</span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> (time plst rlst)</span><br><span class="line">    (<span class="name">play-note</span> time synth (<span class="name"><span class="builtin-name">car</span></span> plst)</span><br><span class="line">               (<span class="name"><span class="builtin-name">+</span></span> <span class="number">60</span> (<span class="name"><span class="builtin-name">*</span></span> <span class="number">50</span> (<span class="name"><span class="builtin-name">cos</span></span> (<span class="name"><span class="builtin-name">*</span></span> <span class="number">0.03125</span> <span class="number">3.141592</span> time))))</span><br><span class="line">               (<span class="name"><span class="builtin-name">*</span></span> .65 (<span class="name"><span class="builtin-name">car</span></span> rlst)))</span><br><span class="line">    (<span class="name">callback</span> (<span class="name"><span class="builtin-name">+</span></span> time (<span class="name"><span class="builtin-name">*</span></span> .5 (<span class="name"><span class="builtin-name">car</span></span> rlst))) <span class="symbol">&#x27;play-seq</span> (<span class="name"><span class="builtin-name">+</span></span> time (<span class="name"><span class="builtin-name">car</span></span> rlst))</span><br><span class="line">              (<span class="name"><span class="builtin-name">if</span></span> (<span class="name"><span class="builtin-name">null?</span></span> (<span class="name"><span class="builtin-name">cdr</span></span> plst))</span><br><span class="line">                  (<span class="name">make-list-with-proc</span> <span class="number">4</span> (<span class="name"><span class="builtin-name">lambda</span></span> (i) (<span class="name">random</span> &#x27;(<span class="number">60</span> <span class="number">62</span> <span class="number">64</span> <span class="number">67</span> <span class="number">69</span>))))</span><br><span class="line">                  (<span class="name"><span class="builtin-name">cdr</span></span> plst))</span><br><span class="line">              (<span class="name"><span class="builtin-name">if</span></span> (<span class="name"><span class="builtin-name">null?</span></span> (<span class="name"><span class="builtin-name">cdr</span></span> rlst))</span><br><span class="line">                  (<span class="name">make-list</span> <span class="number">4</span> <span class="number">11025</span>)</span><br><span class="line">                  (<span class="name"><span class="builtin-name">cdr</span></span> rlst)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">play-seq</span> (<span class="name">now</span>) &#x27;(<span class="number">60</span> <span class="number">62</span> <span class="number">64</span> <span class="number">67</span>) &#x27;(<span class="number">11025</span>))</span><br></pre></td></tr></table></figure>
+<h3 id="节拍和长度">节拍和长度</h3>
+<p>到目前为止，我们使用的是 Extempore 的标准计时方式 —— 采样/秒，来控制节拍和长度。更有用的方式是使用节拍和长度。</p>
+<p>下面这个例子用到了<a href="#%E4%BD%BF%E7%94%A8%E9%87%87%E6%A0%B7%E5%99%A8">前面建立好的鼓乐器</a>。</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; assuming you&#x27;ve set up and loaded the drums sampler as in</span></span><br><span class="line"><span class="comment">;; http://benswift.me/2012-10-17-loading-and-using-a-sampler.html</span></span><br><span class="line">(<span class="name">bind-func</span> dsp:DSP</span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> (in time chan dat)</span><br><span class="line">    (<span class="name"><span class="builtin-name">+</span></span> (<span class="name">synth</span> in time chan dat)</span><br><span class="line">       (<span class="name">organ</span> in time chan dat)</span><br><span class="line">       (<span class="name">drums</span> in time chan dat))))</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> drum-loop</span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> (time dur)</span><br><span class="line">    (<span class="name">play-note</span> time drums *gm-cowbell* <span class="number">80</span> dur)</span><br><span class="line">    (<span class="name">callback</span> (<span class="name"><span class="builtin-name">+</span></span> time (<span class="name"><span class="builtin-name">*</span></span> .5 dur)) <span class="symbol">&#x27;drum-loop</span> (<span class="name"><span class="builtin-name">+</span></span> time dur) (<span class="name">random</span> &#x27;(<span class="number">22050</span> <span class="number">11025</span>)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">drum-loop</span> (<span class="name">now</span>) <span class="number">11025</span>)</span><br></pre></td></tr></table></figure>
+<p>我们可以将上面这段程序用更抽象化描述的时间来描述：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; beat loop</span></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> drum-loop</span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> (time dur)</span><br><span class="line">    (<span class="name"><span class="builtin-name">let</span></span> ((<span class="name">d</span> (<span class="name"><span class="builtin-name">*</span></span> dur *samplerate*)))</span><br><span class="line">      (<span class="name">play-note</span> time drums *gm-cowbell* <span class="number">80</span> d)</span><br><span class="line">      (<span class="name">callback</span> (<span class="name"><span class="builtin-name">+</span></span> time (<span class="name"><span class="builtin-name">*</span></span> .5 d)) <span class="symbol">&#x27;drum-loop</span> (<span class="name"><span class="builtin-name">+</span></span> time d) (<span class="name">random</span> &#x27;(<span class="number">0.5</span> <span class="number">0.25</span>))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">drum-loop</span> (<span class="name">now</span>) <span class="number">0.25</span>)</span><br></pre></td></tr></table></figure>
+<p>Extempore 默认的速率是 60 拍/秒（bpm） ，我们可以将上面的程序改成 120 bpm，并加上 1/3 拍。</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; beat loop at 120bpm</span></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> drum-loop</span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> (time dur)</span><br><span class="line">    (<span class="name"><span class="builtin-name">let</span></span> ((<span class="name">d</span> (<span class="name"><span class="builtin-name">*</span></span> dur .5 *samplerate*)))</span><br><span class="line">      (<span class="name">play-note</span> time drums *gm-cowbell* <span class="number">80</span> d)</span><br><span class="line">      (<span class="name">callback</span> (<span class="name"><span class="builtin-name">+</span></span> time (<span class="name"><span class="builtin-name">*</span></span> .5 d)) <span class="symbol">&#x27;drum-loop</span> (<span class="name"><span class="builtin-name">+</span></span> time d)</span><br><span class="line">                (<span class="name">random</span> (<span class="name"><span class="builtin-name">list</span></span> (<span class="name"><span class="builtin-name">/</span></span> <span class="number">1</span> <span class="number">3</span>) <span class="number">0.5</span> <span class="number">0.25</span>))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">drum-loop</span> (<span class="name">now</span>) <span class="number">0.25</span>)</span><br></pre></td></tr></table></figure>
+<p>为了得到更明确的律动，runtime/scheme.xtm 提供了一个 <code>make-metro</code> 函数，该函数接受一个 tempo 参数，返回一个可以生成节拍样本的闭包。</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; create a metronome starting at 120 bpm</span></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> *metro* (<span class="name">make-metro</span> <span class="number">120</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">;; beat loop</span></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> drum-loop</span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> (time duration)</span><br><span class="line">    (<span class="name">println</span> time duration)</span><br><span class="line">    (<span class="name">play-note</span> (<span class="name">*metro*</span> time) drums *gm-cowbell* <span class="number">80</span> (<span class="name">*metro*</span> <span class="symbol">&#x27;dur</span> duration))</span><br><span class="line">    (<span class="name">callback</span> (<span class="name">*metro*</span> (<span class="name"><span class="builtin-name">+</span></span> time (<span class="name"><span class="builtin-name">*</span></span> .5 duration))) <span class="symbol">&#x27;drum-loop</span> (<span class="name"><span class="builtin-name">+</span></span> time duration)</span><br><span class="line">              (<span class="name">random</span> (<span class="name"><span class="builtin-name">list</span></span> <span class="number">0.5</span>)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">drum-loop</span> (<span class="name">*metro*</span> <span class="symbol">&#x27;get-beat</span>) <span class="number">0.5</span>)</span><br></pre></td></tr></table></figure>
+<p>从上面的例子我们可以发现：</p>
+<ol>
+<li>我们通过调用 <code>(*metro* 'get-beat)</code> 开始我们的循环。这个语句向 <em>metro</em> 闭包请求返回下一个可用的节拍数值（fmod beat 1.0）。<em>metro</em> 一经初始化，就开始算拍子了。</li>
+<li>时间以拍子数为单位（而不再是采样数），并且是个累加值。你可以在 <em>extempore</em> 的输出窗口中看到任意时刻  time 的值。</li>
+<li><code>(*metro* 'dur duration)</code> 返回一个采样与当前节拍的相对长度信息。</li>
+</ol>
+<p>我们可以加入一个振荡器，并使用 <code>set-tempo</code> 使得节奏发生变化：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; create a metronome starting at 120 bpm</span></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> *metro* (<span class="name">make-metro</span> <span class="number">120</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">;; beat loop with tempo shift</span></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> drum-loop</span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> (time duration)</span><br><span class="line">    (<span class="name">*metro*</span> <span class="symbol">&#x27;set-tempo</span> (<span class="name"><span class="builtin-name">+</span></span> <span class="number">120</span> (<span class="name"><span class="builtin-name">*</span></span> <span class="number">40</span> (<span class="name"><span class="builtin-name">cos</span></span> (<span class="name"><span class="builtin-name">*</span></span> .25 <span class="number">3.141592</span> time)))))</span><br><span class="line">    (<span class="name">play-note</span> (<span class="name">*metro*</span> time) drums *gm-cowbell* <span class="number">80</span> (<span class="name">*metro*</span> <span class="symbol">&#x27;dur</span> duration))</span><br><span class="line">    (<span class="name">callback</span> (<span class="name">*metro*</span> (<span class="name"><span class="builtin-name">+</span></span> time (<span class="name"><span class="builtin-name">*</span></span> .5 duration))) <span class="symbol">&#x27;drum-loop</span> (<span class="name"><span class="builtin-name">+</span></span> time duration)</span><br><span class="line">              (<span class="name">random</span> (<span class="name"><span class="builtin-name">list</span></span> <span class="number">0.5</span>)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">drum-loop</span> (<span class="name">*metro*</span> <span class="symbol">&#x27;get-beat</span>) <span class="number">0.5</span>)</span><br></pre></td></tr></table></figure>
+<p>Extempore 还提供了另一个有用的律动函数 <code>make-metre</code> 。<code>make-metre</code> 同样返回一个闭包，该闭包根据一个简单的查询返回 <code>#t</code> 或 <code>#f</code>：给定一个累加的节拍数，是否当前处在某个律动上？</p>
+<p><code>make-metre</code> 包含两个参数：第一个参数是一个数值列表，第二个参数是一个分母值。例如：</p>
+<ul>
+<li><code>(make-metre '(4) 1.0)</code> 提供以 4 分音符为一拍，每小节 4 拍（即 4/4 拍）；</li>
+<li><code>(make-metre '(3) 0.5)</code> 提供以 8 分音符为一拍，每小节 3 拍（即 3/8 拍）；</li>
+<li><code>(make-metre '(2 3) 0.5)</code> 提供以 8 分音符为一拍，每小节先 2 拍再 3 拍（即 2/8 拍，3/8 拍，2/8 拍，3/8 拍……）。</li>
+</ul>
+<p>先看看最简单的例子。以 2/8、3/8、2/8 拍的节奏演奏鼓的侧敲。</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">define</span></span> *metro* (<span class="name">make-metro</span> <span class="number">90</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">;; a 2/8 3/8 2/8 cycle</span></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> *metre* (<span class="name">make-metre</span> &#x27;(<span class="number">2</span> <span class="number">3</span> <span class="number">2</span>) <span class="number">0.5</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">;; play first beat of each &#x27;bar&#x27;</span></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> metre-test</span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> (time)</span><br><span class="line">    (<span class="name"><span class="builtin-name">if</span></span> (<span class="name">*metre*</span> time <span class="number">1.0</span>)</span><br><span class="line">        (<span class="name">play-note</span> (<span class="name">*metro*</span> time) drums *gm-side-stick* <span class="number">80</span> <span class="number">10000</span>))</span><br><span class="line">    (<span class="name">callback</span> (<span class="name">*metro*</span> (<span class="name"><span class="builtin-name">+</span></span> time <span class="number">0.4</span>)) <span class="symbol">&#x27;metre-test</span> (<span class="name"><span class="builtin-name">+</span></span> time <span class="number">0.5</span>))))</span><br><span class="line"></span><br><span class="line">(<span class="name">metre-test</span> (<span class="name">*metro*</span> <span class="symbol">&#x27;get-beat</span> <span class="number">1.0</span>))</span><br></pre></td></tr></table></figure>
+<p>我们接下来使用两个律动器，两个律动分别演奏鼓的不同部分。</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; classic 2 against 3</span></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> *metro* (<span class="name">make-metro</span> <span class="number">180</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">;; 3/8</span></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> *metre1* (<span class="name">make-metre</span> &#x27;(<span class="number">3</span>) .5))</span><br><span class="line"><span class="comment">;; 2/8</span></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> *metre2* (<span class="name">make-metre</span> &#x27;(<span class="number">2</span>) .5))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">;; play first beat of each &#x27;bar&#x27;</span></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> metre-test</span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> (time)</span><br><span class="line">    (<span class="name"><span class="builtin-name">if</span></span> (<span class="name">*metre1*</span> time <span class="number">1.0</span>)</span><br><span class="line">        (<span class="name">play-note</span> (<span class="name">*metro*</span> time) drums *gm-side-stick* <span class="number">80</span> <span class="number">10000</span>))</span><br><span class="line">    (<span class="name"><span class="builtin-name">if</span></span> (<span class="name">*metre2*</span> time <span class="number">1.0</span>)</span><br><span class="line">        (<span class="name">play-note</span> (<span class="name">*metro*</span> time) drums *gm-snare* <span class="number">60</span> <span class="number">10000</span>))</span><br><span class="line">    (<span class="name">callback</span> (<span class="name">*metro*</span> (<span class="name"><span class="builtin-name">+</span></span> time <span class="number">0.4</span>)) <span class="symbol">&#x27;metre-test</span> (<span class="name"><span class="builtin-name">+</span></span> time <span class="number">0.5</span>))))</span><br><span class="line"></span><br><span class="line">(<span class="name">metre-test</span> (<span class="name">*metro*</span> <span class="symbol">&#x27;get-beat</span> <span class="number">1.0</span>))</span><br></pre></td></tr></table></figure>
+<p>下面是一个更复杂（也更动听）的例子：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; messiaen drum kit</span></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> *metro* (<span class="name">make-metro</span> <span class="number">140</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> *metre1* (<span class="name">make-metre</span> &#x27;(<span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">3</span> <span class="number">2</span>) .5))</span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> *metre2* (<span class="name">make-metre</span> &#x27;(<span class="number">3</span> <span class="number">5</span> <span class="number">7</span> <span class="number">5</span> <span class="number">3</span>) .5))</span><br><span class="line"></span><br><span class="line"><span class="comment">;; play first beat of each &#x27;bar&#x27;</span></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> metre-test</span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> (time)</span><br><span class="line">    (<span class="name">play-note</span> (<span class="name">*metro*</span> time) drums</span><br><span class="line">               (<span class="name">random</span> (<span class="name"><span class="builtin-name">cons</span></span> .8 *gm-closed-hi-hat*) (<span class="name"><span class="builtin-name">cons</span></span> .2 *gm-open-hi-hat*))</span><br><span class="line">               (<span class="name"><span class="builtin-name">+</span></span> <span class="number">40</span> (<span class="name"><span class="builtin-name">*</span></span> <span class="number">20</span> (<span class="name"><span class="builtin-name">cos</span></span> (<span class="name"><span class="builtin-name">*</span></span> <span class="number">2</span> <span class="number">3.441592</span> time))))</span><br><span class="line">               (<span class="name">random</span> (<span class="name"><span class="builtin-name">cons</span></span> .8 <span class="number">500</span>)  (<span class="name"><span class="builtin-name">cons</span></span> .2 <span class="number">2000</span>)))</span><br><span class="line">    (<span class="name"><span class="builtin-name">if</span></span> (<span class="name">*metre1*</span> time <span class="number">1.0</span>)</span><br><span class="line">        (<span class="name"><span class="builtin-name">begin</span></span> (<span class="name">play-note</span> (<span class="name">*metro*</span> time) drums *gm-snare* <span class="number">80</span> <span class="number">10000</span>)</span><br><span class="line">               (<span class="name">play-note</span> (<span class="name">*metro*</span> time) drums *gm-pedal-hi-hat* <span class="number">80</span> <span class="number">100000</span>)))</span><br><span class="line">    (<span class="name"><span class="builtin-name">if</span></span> (<span class="name">*metre2*</span> time <span class="number">1.0</span>)</span><br><span class="line">        (<span class="name"><span class="builtin-name">begin</span></span> (<span class="name">play-note</span> (<span class="name">*metro*</span> time) drums *gm-kick* <span class="number">80</span> <span class="number">100000</span>)</span><br><span class="line">               (<span class="name">play-note</span> (<span class="name">*metro*</span> time) drums *gm-ride-bell* <span class="number">100</span> <span class="number">100000</span>)))</span><br><span class="line">    (<span class="name">callback</span> (<span class="name">*metro*</span> (<span class="name"><span class="builtin-name">+</span></span> time <span class="number">0.2</span>)) <span class="symbol">&#x27;metre-test</span> (<span class="name"><span class="builtin-name">+</span></span> time <span class="number">0.25</span>))))</span><br><span class="line"></span><br><span class="line">(<span class="name">metre-test</span> (<span class="name">*metro*</span> <span class="symbol">&#x27;get-beat</span> <span class="number">1.0</span>))</span><br></pre></td></tr></table></figure>
+<h3 id="用-Extempore-写的小苹果">用 Extempore 写的小苹果</h3>
+<p>最后是我写的一段《小苹果》：</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">sys:load</span> <span class="string">&quot;libs/core/instruments.xtm&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">;; define a synth using the provided components</span></span><br><span class="line"><span class="comment">;; synth_note_c and synth_fx</span></span><br><span class="line">(<span class="name">define-instrument</span> synth synth_note_c synth_fx)</span><br><span class="line"></span><br><span class="line"><span class="comment">;; add the instrument to the DSP output sink closure</span></span><br><span class="line">(<span class="name">bind-func</span> dsp:DSP</span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> (in time chan dat)</span><br><span class="line">    (<span class="name">synth</span> in time chan dat)))</span><br><span class="line">(<span class="name">dsp:set!</span> dsp)</span><br><span class="line"></span><br><span class="line"><span class="comment">;; Define a recursive function to cycle through the pitches in melody</span></span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> play-seq</span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> (time plst rlst)</span><br><span class="line">    (<span class="name"><span class="builtin-name">let</span></span> ((<span class="name">d</span> (<span class="name"><span class="builtin-name">*</span></span> (<span class="name"><span class="builtin-name">car</span></span> rlst) .5 *samplerate*)))</span><br><span class="line">      (<span class="name">play-note</span> time synth (<span class="name"><span class="builtin-name">+</span></span> <span class="number">60</span> (<span class="name"><span class="builtin-name">car</span></span> plst)) <span class="number">80</span> d)</span><br><span class="line">      (<span class="name"><span class="builtin-name">if</span></span> (<span class="name"><span class="builtin-name">and</span></span> (<span class="name"><span class="builtin-name">not</span></span> (<span class="name"><span class="builtin-name">null?</span></span> (<span class="name"><span class="builtin-name">cdr</span></span> plst))) (<span class="name"><span class="builtin-name">not</span></span> (<span class="name"><span class="builtin-name">null?</span></span> (<span class="name"><span class="builtin-name">cdr</span></span> rlst))))</span><br><span class="line">          (<span class="name">callback</span> (<span class="name"><span class="builtin-name">+</span></span> time (<span class="name"><span class="builtin-name">*</span></span> .5 d)) <span class="symbol">&#x27;play-seq</span> (<span class="name"><span class="builtin-name">+</span></span> time d) (<span class="name"><span class="builtin-name">cdr</span></span> plst) (<span class="name"><span class="builtin-name">cdr</span></span> rlst))))))</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> sing1</span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> () (<span class="name">play-seq</span> (<span class="name">now</span>) &#x27;(<span class="number">16</span> <span class="number">12</span> <span class="number">14</span> <span class="number">9</span> <span class="number">16</span> <span class="number">14</span> <span class="number">12</span> <span class="number">14</span> <span class="number">9</span>)</span><br><span class="line">                       &#x27;(<span class="number">0.5</span> <span class="number">0.5</span> <span class="number">0.5</span> <span class="number">0.5</span> <span class="number">0.3</span> <span class="number">0.3</span> <span class="number">0.3</span> <span class="number">0.3</span> <span class="number">0.5</span>))))</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> sing2</span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> () (<span class="name">play-seq</span> (<span class="name">now</span>) &#x27;(<span class="number">16</span> <span class="number">12</span> <span class="number">14</span> <span class="number">14</span> <span class="number">19</span> <span class="number">16</span> <span class="number">11</span> <span class="number">12</span>)</span><br><span class="line">                       &#x27;(<span class="number">0.5</span> <span class="number">0.5</span> <span class="number">0.5</span> <span class="number">0.5</span> <span class="number">0.3</span> <span class="number">0.3</span> <span class="number">0.5</span> <span class="number">0.5</span>))))</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> sing3</span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> () (<span class="name">play-seq</span> (<span class="name">now</span>) &#x27;(<span class="number">12</span> <span class="number">11</span> <span class="number">9</span> <span class="number">11</span> <span class="number">12</span> <span class="number">14</span> <span class="number">7</span> <span class="number">21</span> <span class="number">19</span> <span class="number">16</span> <span class="number">16</span>)</span><br><span class="line">                       &#x27;(<span class="number">0.3</span> <span class="number">0.3</span> <span class="number">0.5</span> <span class="number">0.3</span> <span class="number">0.3</span> <span class="number">0.4</span> <span class="number">0.5</span> <span class="number">0.3</span> <span class="number">0.3</span> <span class="number">0.5</span> <span class="number">0.5</span>))))</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> sing4</span><br><span class="line">  (<span class="name"><span class="builtin-name">lambda</span></span> () (<span class="name">play-seq</span> (<span class="name">now</span>) &#x27;(<span class="number">14</span> <span class="number">12</span> <span class="number">16</span> <span class="number">14</span> <span class="number">7</span> <span class="number">9</span> <span class="number">12</span> <span class="number">9</span>)</span><br><span class="line">                       &#x27;(<span class="number">0.3</span> <span class="number">0.5</span> <span class="number">0.4</span> <span class="number">0.5</span> <span class="number">0.5</span> <span class="number">0.5</span> <span class="number">0.5</span> <span class="number">0.5</span>))))</span><br><span class="line"></span><br><span class="line">(<span class="name">sing1</span>)</span><br><span class="line">(<span class="name">sing2</span>)</span><br><span class="line">(<span class="name">sing3</span>)</span><br><span class="line">(<span class="name">sing4</span>)</span><br></pre></td></tr></table></figure>
+<p>如果有兴趣，可以观看演奏过程的视频：</p>
+<iframe src="http://www.tudou.com/programs/view/html5embed.action?type=0&code=YYmUmVgovp8&lcode=&resourceId=14402399_06_05_99" allowtransparency="true" allowfullscreen="true" scrolling="no" border="0" frameborder="0" style="width:100%;height:400px;"></iframe>
+<h2 id="深入阅读">深入阅读</h2>
+<p>由于篇幅关系，本文并没有详细介绍 Scheme 和 xtlang 的语法细节，也略过了乐器的编写和音级（pitch classes）的使用。读完这篇文章后，感兴趣的读者可以继续阅读以下几篇文章：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://benswift.me/extempore-docs/index.html">Extempore 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.scheme.com/tspl3/">Scheme 教程</a></li>
+<li><a target="_blank" rel="noopener" href="http://benswift.me/2012-09-28-making-an-instrument.html">如何编写乐器</a></li>
+<li><a target="_blank" rel="noopener" href="http://benswift.me/2012/10/15/playing-an-instrument-part-ii/">音级</a></li>
+</ol>
+<p>Extempore 自带的相关范例也是不错的学习资源：</p>
+<ul>
+<li>examples/core/audio_101.xtm</li>
+<li>examples/core/polysynth.xtm</li>
+<li>examples/core/fmsynth.xtm</li>
+<li>examples/external/electrofunk.xtm</li>
+<li>examples/external/audio_player.xtm</li>
+<li>examples/external/convolution_reverb.xtm</li>
+</ul>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>对于 cyber-physical 这个词，我一直想不出更好的翻译。cyber 意为 “计算机的”，而 physical 则意为 “物理的，人体的”。从作者的设计意图上来看， physical 应该更接近“人体”的意思。而直接翻译成“人机编程”又显得很 low ：编程不就是人和计算机之间的交互吗？（我想这也是为什么作者不直接命名为 “man-machine”）最后我决定翻译为<q>机体编程</q>，有计算机和人体混合的含义。 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>更多命名约定可参考 <a target="_blank" rel="noopener" href="http://benswift.me/2012/10/15/xtlang-naming-conventions/">xtlang naming conventions</a> 。 <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p>副作用在 Lisp 中不是一个贬义词，而是求值的附加效果。例如 Emacs Lisp 的副作用常常是对文本缓冲区的控制。 <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/codes/hexo-3-speed-up/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/life/an-appeal-from-scnuthesis-author/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: 'Extempore: A Real-time Programming Language for Real-time Systems'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/extempore-intro.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2015-02-16 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/codes/">codes<span>38</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Extempore/">Extempore<span>1</span></a></li> <li><a href="/tags/xtlang/">xtlang<span>1</span></a></li> <li><a href="/tags/Live-Coding/">Live Coding<span>1</span></a></li> <li><a href="/tags/Scheme/">Scheme<span>1</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE-Extempore"><span class="toc-article-text">安装配置 Extempore</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85-Extempore"><span class="toc-article-text">安装 Extempore</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85-Emacs-%E6%8F%92%E4%BB%B6"><span class="toc-article-text">安装 Emacs 插件</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#Extempore-%E8%AE%BE%E8%AE%A1%E5%93%B2%E5%AD%A6"><span class="toc-article-text">Extempore 设计哲学</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#xtlang-%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B"><span class="toc-article-text">xtlang 的基本类型</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%95%B4%E5%9E%8B"><span class="toc-article-text">整型</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%B5%AE%E7%82%B9%E5%9E%8B"><span class="toc-article-text">浮点型</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%8C%87%E9%92%88"><span class="toc-article-text">指针</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E7%A9%BA%E9%97%B4%E5%88%86%E9%85%8D"><span class="toc-article-text">空间分配</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E8%A7%A3%E5%BC%95%E7%94%A8"><span class="toc-article-text">解引用</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%8C%87%E9%92%88%E8%B5%8B%E5%80%BC"><span class="toc-article-text">指针赋值</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%A4%8D%E5%90%88%E7%B1%BB%E5%9E%8B"><span class="toc-article-text">复合类型</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E9%97%AD%E5%8C%85%E7%B1%BB%E5%9E%8B"><span class="toc-article-text">闭包类型</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#Extempore-%E5%AE%9E%E6%97%B6%E9%9F%B3%E4%B9%90%E7%BC%96%E7%A8%8B"><span class="toc-article-text">Extempore 实时音乐编程</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%AE%80%E5%8D%95-dsp-%E5%87%BD%E6%95%B0"><span class="toc-article-text">简单 dsp 函数</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%BC%96%E5%86%99%E6%8C%AF%E8%8D%A1%E5%99%A8"><span class="toc-article-text">编写振荡器</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E8%AF%BB%E5%8F%96%E9%9F%B3%E9%A2%91%E6%96%87%E4%BB%B6"><span class="toc-article-text">读取音频文件</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%BD%BF%E7%94%A8%E9%87%87%E6%A0%B7%E5%99%A8"><span class="toc-article-text">使用采样器</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E9%87%87%E6%A0%B7%E5%99%A8"><span class="toc-article-text">创建一个采样器</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%BC%94%E5%A5%8F%E4%B9%90%E5%99%A8"><span class="toc-article-text">演奏乐器</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%BC%94%E5%A5%8F%E5%8D%95%E9%9F%B3"><span class="toc-article-text">演奏单音</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%BC%94%E5%A5%8F%E5%92%8C%E5%BC%A6"><span class="toc-article-text">演奏和弦</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E6%BC%94%E5%A5%8F%E4%B8%80%E7%BB%84%E5%A3%B0%E9%9F%B3"><span class="toc-article-text">演奏一组声音</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E9%80%92%E5%BD%92%E6%BC%94%E5%A5%8F%E9%9F%B3%E9%98%B6%E5%8F%8A%E5%92%8C%E5%BC%A6"><span class="toc-article-text">递归演奏音阶及和弦</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#%E4%BD%BF%E7%94%A8-callback-%E9%80%92%E5%BD%92%E6%BC%94%E5%A5%8F"><span class="toc-article-text">使用 callback 递归演奏</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E8%8A%82%E6%8B%8D%E5%92%8C%E9%95%BF%E5%BA%A6"><span class="toc-article-text">节拍和长度</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%94%A8-Extempore-%E5%86%99%E7%9A%84%E5%B0%8F%E8%8B%B9%E6%9E%9C"><span class="toc-article-text">用 Extempore 写的小苹果</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%B7%B1%E5%85%A5%E9%98%85%E8%AF%BB"><span class="toc-article-text">深入阅读</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

@@ -1,0 +1,1218 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Makefile | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="变量
+自动化变量
+
+
+
+变量
+说明
+
+
+
+
+$@
+表示规则中的目标。
+
+
+$&amp;lt;
+表示规则中的第一个条件。
+
+
+$?
+表示规则中所有比目标新的条件，组成一个列表，以空格分隔。
+
+
+$^
+表示规则中的所有条件，组成一个列表，以空格分隔。
+
+
+
+示例1
+12main: main.o stack.o ">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Makefile"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: 'Makefile'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> Makefile</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="变量">变量</h2>
+<h3 id="自动化变量">自动化变量</h3>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$@</code></td>
+<td>表示规则中的目标。</td>
+</tr>
+<tr>
+<td><code>$&lt;</code></td>
+<td>表示规则中的第一个条件。</td>
+</tr>
+<tr>
+<td><code>$?</code></td>
+<td>表示规则中所有比目标新的条件，组成一个列表，以空格分隔。</td>
+</tr>
+<tr>
+<td><code>$^</code></td>
+<td>表示规则中的所有条件，组成一个列表，以空格分隔。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="示例1">示例1</h4>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">main: main.o stack.o maze.o</span></span><br><span class="line">    gcc main.o stack.o maze.o -o main</span><br></pre></td></tr></table></figure>
+<p>可以改写成：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">main: main.o stack.o maze.o</span></span><br><span class="line">    gcc <span class="variable">$^</span> -o <span class="variable">$@</span></span><br></pre></td></tr></table></figure>
+<h4 id="示例2">示例2</h4>
+<p>有时候希望只对更新过的条件进行操作，例如有一个库文件libsome.a依赖于几个目标文件：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">libsome.a: foo.o bar.o lose.o win.o </span></span><br><span class="line">    ar r libsome.a <span class="variable">$?</span></span><br><span class="line">    ranlib libsome.a</span><br></pre></td></tr></table></figure>
+<h3 id="常用变量">常用变量</h3>
+<table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AR</code></td>
+<td>静态库打包命令的名字，缺省值是<code>ar</code>。</td>
+</tr>
+<tr>
+<td><code>ARFLAGS</code></td>
+<td>静态库打包命令的选项，缺省值是<code>rv</code>。</td>
+</tr>
+<tr>
+<td><code>AS</code></td>
+<td>汇编器的名字，缺省值是<code>as</code>。</td>
+</tr>
+<tr>
+<td><code>ASFLAGS</code></td>
+<td>汇编器的选项，没有定义。</td>
+</tr>
+<tr>
+<td><code>CC</code></td>
+<td>C编译器的名字，缺省值是<code>cc</code>。</td>
+</tr>
+<tr>
+<td><code>CFLAGS</code></td>
+<td>C编译器的选项，没有定义。</td>
+</tr>
+<tr>
+<td><code>CXX</code></td>
+<td>C++编译器的名字，缺省值是<code>g++</code>。</td>
+</tr>
+<tr>
+<td><code>CXXFLAGS</code></td>
+<td>C++编译器的选项，没有定义。</td>
+</tr>
+<tr>
+<td><code>CPP</code></td>
+<td>C预处理器的名字，缺省值是<code>$(CC) -E</code>。</td>
+</tr>
+<tr>
+<td><code>CPPFLAGS</code></td>
+<td>C预处理器的选项，没有定义。</td>
+</tr>
+<tr>
+<td><code>LD</code></td>
+<td>链接器的名字，缺省值是<code>ld</code>。</td>
+</tr>
+<tr>
+<td><code>LDFLAGS</code></td>
+<td>链接器的选项，没有定义。</td>
+</tr>
+<tr>
+<td><code>TARGET</code></td>
+<td><code>_ARCH</code> 和目标平台相关的命令行选项，没有定义。</td>
+</tr>
+<tr>
+<td><code>OUTPUT</code></td>
+<td><code>_OPTION</code> 输出的命令行选项，缺省值是<code>-o $@</code>。</td>
+</tr>
+<tr>
+<td><code>LINK.o</code></td>
+<td>把.o文件链接在一起的命令行，缺省值是<code>$(CC) $(LDFLAGS) $(TARGET_ARCH)</code>。</td>
+</tr>
+<tr>
+<td><code>LINK.c</code></td>
+<td>把.c文件链接在一起的命令行，缺省值是<code>$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)</code>。</td>
+</tr>
+<tr>
+<td><code>LINK.cc</code></td>
+<td>把.cc文件（C++源文件）链接在一起的命令行，缺省值是<code>$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)</code>。</td>
+</tr>
+<tr>
+<td><code>COMPILE.c</code></td>
+<td>编译.c文件的命令行，缺省值是<code>$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c</code>。</td>
+</tr>
+<tr>
+<td><code>COMPILE.cc</code></td>
+<td>编译.cc文件的命令行，缺省值是<code>$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c</code>。</td>
+</tr>
+<tr>
+<td><code>RM</code></td>
+<td>删除命令的名字，缺省值是<code>rm -f</code>。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="函数">函数</h2>
+<h3 id="函数的调用语法">函数的调用语法</h3>
+<p>函数调用，很像变量的使用，也是以“$”来标识的，其语法如下:</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(&lt;function&gt; &lt;arguments&gt;)</span><br></pre></td></tr></table></figure>
+<p>或是</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$&#123;&lt;function&gt; &lt;arguments&gt;&#125;</span><br></pre></td></tr></table></figure>
+<p>这里，&lt;function&gt;就是函数名，make 支持的函数不多。&lt;arguments&gt;是函数的参数，参数间以逗号“，”分隔，而函数名和参数之间以“空格”分隔。函数调用以 <strong>“$”</strong> 开头，以 <strong>圆括号或花括号</strong> 把函数名和参数括起。感觉很像一个变量，是不是?函数中的参数可以使用变量，为了风格的统一，函数和变量的括号最好一样，如使用 <code>$(subst a,b,$(x))</code> 这样的形式，而不是 <code>$(subst a,b,$&#123;x&#125;)</code> 的形式。因为统一会更清楚，也会减少一些不必要的麻烦。</p>
+<p>还是来看一个示例:</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">comma:= ,</span><br><span class="line">empty:=</span><br><span class="line">space:= <span class="variable">$(empty)</span> <span class="variable">$(empty)</span></span><br><span class="line">foo:= a b c</span><br><span class="line">bar:= <span class="variable">$(<span class="built_in">subst</span> <span class="variable">$(space)</span>,<span class="variable">$(comma)</span>,<span class="variable">$(foo)</span>)</span></span><br></pre></td></tr></table></figure>
+<p>在这个示例中，$(comma)的值是一个逗号。$(space)使用了$(empty)定义了一个空格，$(foo)的值是“a b c”，$(bar)的定义用，调用了函数“subst”，这是一个替换函数，这个函数有三个参数，第一个参数是被替换字串，第二个参数是替换字串，第三个参数是替换操作作用的字串。这个函数也就是把$(foo)中的空格替换成逗号，所以$(bar)的值是“a,b,c”。</p>
+<h3 id="字符串处理函数">字符串处理函数</h3>
+<h4 id="subst">subst</h4>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">subst</span> &lt;from&gt;,&lt;to&gt;,&lt;text&gt;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>名称:字符串替换函数——subst。</li>
+<li>功能:把字串&lt;text&gt;中的&lt;from&gt;字符串替换成&lt;to&gt;。</li>
+<li>返回:函数返回被替换过后的字符串。</li>
+<li>示例: <code>$(subst ee,EE,feet on the street)</code> 把“feet on the street”中的“ee”替换成“EE”，返回结果是“fEEt on the strEEt”。</li>
+</ul>
+<h4 id="patsubst">patsubst</h4>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">patsubst</span> &lt;pattern&gt;,&lt;replacement&gt;,&lt;text&gt;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>名称:模式字符串替换函数——patsubst。</p>
+</li>
+<li>
+<p>功能:查找&lt;text&gt;中的单词(单词以“空格”、“Tab”或“回车”“换行”分隔)是否符合模式&lt;pattern&gt;，如果匹配的话，则以&lt;replacement&gt;替换。这里，&lt;pattern&gt;可以包括通配符<code>%</code>，表示任意长度的字串。如果&lt;replacement&gt;中也包含<code>%</code>，那么，&lt;replacement&gt;中的这个<code>%</code>将是&lt;pattern&gt;中的那个<code>%</code>所代表的字串。(可以用“\”来转义，以<code>\%</code>来表示真实含义的<code>%</code>字符)</p>
+</li>
+<li>
+<p>返回:函数返回被替换过后的字符串。</p>
+</li>
+<li>
+<p>示例: <code>$(patsubst %.c,%.o,x.c.c bar.c)</code> 把字串“x.c.c bar.c”符合模式[%.c]的单词替换成[%.o]，返回结果是“x.c.o bar.o”</p>
+</li>
+<li>
+<p>备注: 这和我们前面“变量章节”说过的相关知识有点相似。</p>
+<p>如:</p>
+<p><code>$(var:&lt;pattern&gt;=&lt;replacement&gt;)</code> 相当于 <code>$(patsubst &lt;pattern&gt;,&lt;replacement&gt;,$(var))</code></p>
+<p>而 <code>$(var: &lt;suffix&gt;=&lt;replacement&gt;)</code> 则相当于 <code>$(patsubst %&lt;suffix&gt;,%&lt;replacement&gt;,$(var))</code> 。</p>
+<p>例如有: <code>objects = foo.o bar.o baz.o</code></p>
+<p>那么， <code>$(objects:.o</code>.c)= 和 <code>$(patsubst %.o,%.c,$(objects))</code> 是一样的。</p>
+</li>
+</ul>
+<h4 id="strip">strip</h4>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">strip</span> &lt;string&gt;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>名称:去空格函数——strip。</li>
+<li>功能:去掉&lt;string&gt;字串中开头和结尾的空字符。</li>
+<li>返回:返回被去掉空格的字符串值。</li>
+<li>示例： <code>$(strip a b c )</code> 把字串“a b c ”去到开头和结尾的空格，结果是“a b c”。</li>
+</ul>
+<h4 id="findstring">findstring</h4>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">findstring</span> &lt;find&gt;,&lt;in&gt;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>名称:查找字符串函数——findstring。</p>
+</li>
+<li>
+<p>功能:在字串&lt;in&gt;中查找&lt;find&gt;字串。</p>
+</li>
+<li>
+<p>返回:如果找到，那么返回&lt;find&gt;，否则返回空字符串。</p>
+</li>
+<li>
+<p>示例:</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">findstring</span> a,a b c)</span></span><br><span class="line"><span class="variable">$(<span class="built_in">findstring</span> a,b c)</span></span><br></pre></td></tr></table></figure>
+<p>第一个函数返回“a”字符串，第二个返回“”字符串(空字符串)</p>
+</li>
+</ul>
+<h4 id="filter">filter</h4>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">filter</span> &lt;pattern...&gt;,&lt;text&gt;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>名称:过滤函数——filter。</p>
+</li>
+<li>
+<p>功能:以&lt;pattern&gt;模式过滤&lt;text&gt;字符串中的单词， <strong>保留</strong> 符合模式&lt;pattern&gt;的单词。可以有多个模式。</p>
+</li>
+<li>
+<p>返回:返回符合模式&lt;pattern&gt;的字串。</p>
+</li>
+<li>
+<p>示例:</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sources := foo.c bar.c baz.s ugh.h</span><br><span class="line"><span class="section">foo: <span class="variable">$(sources)</span></span></span><br><span class="line">        cc <span class="variable">$(<span class="built_in">filter</span> %.c %.s,<span class="variable">$(sources)</span>)</span> -o foo</span><br></pre></td></tr></table></figure>
+<p><code>$(filter %.c %.s,$(sources))</code> 返回的值是“foo.c bar.c baz.s”。</p>
+</li>
+</ul>
+<h4 id="filter-out">filter-out</h4>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">filter</span>-out &lt;pattern...&gt;,&lt;text&gt;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>名称:反过滤函数——filter-out。</p>
+</li>
+<li>
+<p>功能:以&lt;pattern&gt;模式过滤&lt;text&gt;字符串中的单词，去除符合模式&lt;pattern&gt;的单词。可以有多个模式。</p>
+</li>
+<li>
+<p>返回:返回不符合模式&lt;pattern&gt;的字串。</p>
+</li>
+<li>
+<p>示例:</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">objects=main1.o foo.o main2.o bar.o</span><br><span class="line">mains=main1.o main2.o</span><br></pre></td></tr></table></figure>
+<p><code>$(filter-out $(mains),$(objects))</code> 返回值是“foo.o bar.o”。</p>
+</li>
+</ul>
+<h4 id="sort">sort</h4>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">sort</span> &lt;list&gt;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>名称:排序函数——sort。</li>
+<li>功能:给字符串&lt;list&gt;中的单词排序(升序)。</li>
+<li>返回:返回排序后的字符串。</li>
+<li>示例: <code>$(sort foo bar lose)</code> 返回“bar foo lose”。</li>
+<li>备注:sort 函数会去掉&lt;list&gt;中相同的单词。</li>
+</ul>
+<h4 id="word">word</h4>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">word</span> &lt;n&gt;,&lt;text&gt;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>名称:取单词函数——word。</li>
+<li>功能:取字符串&lt;text&gt;中第&lt;n&gt;个单词。(从一开始)</li>
+<li>返回:返回字符串&lt;text&gt;中第&lt;n&gt;个单词。如果&lt;n&gt;比&lt;text&gt;中的单词数要大，那么返回空字符串。</li>
+<li>示例: <code>$(word 2, foo bar baz)</code> 返回值是“bar”。</li>
+</ul>
+<h4 id="wordlist">wordlist</h4>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">wordlist</span> &lt;s&gt;,&lt;e&gt;,&lt;text&gt;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>名称:取单词串函数——wordlist。</li>
+<li>功能:从字符串&lt;text&gt;中取从&lt;s&gt;开始到&lt;e&gt;的单词串。&lt;s&gt;和&lt;e&gt;是一个数字。</li>
+<li>返回:返回字符串&lt;text&gt;中从&lt;s&gt;到&lt;e&gt;的单词字串。如果&lt;s&gt;比&lt;text&gt;中的单词数要大，那么返回空字符串。如果&lt;e&gt;大于&lt;text&gt;的单词数，那么返回从&lt;s&gt;开始，到&lt;text&gt;结束的单词串。</li>
+<li>示例: <code>$(wordlist 2, 3, foo bar baz)</code> 返回值是“bar baz”。</li>
+</ul>
+<h4 id="words">words</h4>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(words &lt;text&gt;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>名称:单词个数统计函数——words。</li>
+<li>功能:统计&lt;text&gt;中字符串中的单词个数。</li>
+<li>返回:返回&lt;text&gt;中的单词数。</li>
+<li>示例: <code>$(words, foo bar baz)</code> 返回值是“3”。</li>
+<li>备注:如果我们要取&lt;text&gt;中最后的一个单词，我们可以这样: <code>$(word $(words &lt;text&gt;),&lt;text&gt;)</code> 。</li>
+</ul>
+<h4 id="firstword">firstword</h4>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">firstword</span> &lt;text&gt;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>名称:首单词函数——firstword。</li>
+<li>功能:取字符串&lt;text&gt;中的第一个单词。</li>
+<li>返回:返回字符串&lt;text&gt;的第一个单词。</li>
+<li>示例:$(firstword foo bar)返回值是“foo”。</li>
+<li>备注:这个函数可以用 word 函数来实现:$(word 1,&lt;text&gt;)。</li>
+</ul>
+<h4 id="字符串函数实例">字符串函数实例</h4>
+<p>以上，是所有的字符串操作函数，如果搭配混合使用，可以完成比较复杂的功能。</p>
+<p>这里，举一个现实中应用的例子。我们知道，make 使用“VPATH”变量来指定“依赖文件”的搜索路径。于是，我们可以利用这个搜索路径来指定编译器对头文件的搜索路径参数 CFLAGS ，如:</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> CFLAGS += <span class="variable">$(<span class="built_in">patsubst</span> %,-I%,$(<span class="built_in">subst</span> :, ,<span class="variable">$(VPATH)</span>)</span>)</span><br></pre></td></tr></table></figure>
+<p>如果我们的“$(VPATH)”值是“src:…/headers”，那么 <code>$(patsubst %,-I%,$(subst :, ,$(VPATH)))</code> 将返回 <code>-Isrc -I../headers</code> ，这正是 cc 或 gcc 搜索头文件路径的参数。</p>
+<h3 id="文件名操作函数">文件名操作函数</h3>
+<p>下面我们要介绍的函数主要是处理文件名的。每个函数的参数字符串都会被当做一个或是一系列的文件名来对待。</p>
+<h4 id="dir">dir</h4>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">dir</span> &lt;names...&gt;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>名称:取目录函数——dir。</li>
+<li>功能:从文件名序列&lt;names&gt;中取出目录部分。目录部分是指最后一个反斜杠(“/”)之前的部分。如果没有反斜杠，那么返回“./”。</li>
+<li>返回:返回文件名序列&lt;names&gt;的目录部分。</li>
+<li>示例: <code>$(dir src/foo.c hacks)</code> 返回值是“src/ ./”。</li>
+</ul>
+<h4 id="notdir">notdir</h4>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">notdir</span> &lt;names...&gt;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>名称:取文件名函数——notdir。</li>
+<li>功能:从文件名序列&lt;names&gt;中取出非目录部分。非目录部分是指最后一个反斜杠(“ /”)之后的部分。</li>
+<li>返回:返回文件名序列&lt;names&gt;的非目录部分。</li>
+<li>示例: <code>$(notdir src/foo.c hacks)</code> 返回值是“foo.c hacks”。</li>
+</ul>
+<h4 id="suffix">suffix</h4>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">suffix</span> &lt;names...&gt;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>名称:取后缀函数——suffix。</li>
+<li>功能:从文件名序列&lt;names&gt;中取出各个文件名的后缀。</li>
+<li>返回:返回文件名序列&lt;names&gt;的后缀序列，如果文件没有后缀，则返回空字串。</li>
+<li>示例: <code>$(suffix src/foo.c src-1.0/bar.c hacks)</code> 返回值是“.c .c”。</li>
+</ul>
+<h4 id="basename">basename</h4>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">basename</span> &lt;names...&gt;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>名称:取前缀函数——basename。</li>
+<li>功能:从文件名序列&lt;names&gt;中取出各个文件名的前缀部分。</li>
+<li>返回:返回文件名序列&lt;names&gt;的前缀序列，如果文件没有前缀，则返回空字串。</li>
+<li>示例: <code>$(basename src/foo.c src-1.0/bar.c hacks)</code> 返回值是“src/foo src-1.0/bar hacks”。</li>
+</ul>
+<h4 id="addsuffix">addsuffix</h4>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">addsuffix</span> &lt;<span class="built_in">suffix</span>&gt;,&lt;names...&gt;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>名称:加后缀函数——addsuffix。</li>
+<li>功能:把后缀&lt;suffix&gt;加到&lt;names&gt;中的每个单词后面。</li>
+<li>返回:返回加过后缀的文件名序列。</li>
+<li>示例: <code>$(addsuffix .c,foo bar)</code> 返回值是“foo.c bar.c”。</li>
+</ul>
+<h4 id="addprefix">addprefix</h4>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">addprefix</span> &lt;prefix&gt;,&lt;names...&gt;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>名称:加前缀函数——addprefix。</li>
+<li>功能:把前缀&lt;prefix&gt;加到&lt;names&gt;中的每个单词后面。</li>
+<li>返回:返回加过前缀的文件名序列。</li>
+<li>示例: <code>$(addprefix src/,foo bar)</code> 返回值是“src/foo src/bar”。</li>
+</ul>
+<h4 id="join">join</h4>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">join</span> &lt;list1&gt;,&lt;list2&gt;)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>名称:连接函数——join。</li>
+<li>功能:把&lt;list2&gt;中的单词对应地加到&lt;list1&gt;的单词后面。如果&lt;list1&gt;的单词个数要比&lt;list2&gt;的多，那么，&lt;list1&gt;中的多出来的单词将保持原样。如果&lt;list2&gt;的单词个数要比&lt;list1&gt;多，那么，&lt;list2&gt;多出来的单词将被复制到&lt;list2&gt;中。</li>
+<li>返回:返回连接过后的字符串。</li>
+<li>示例: <code>$(join aaa bbb , 111 222 333)</code> 返回值是“aaa111 bbb222 333”。</li>
+</ul>
+<h3 id="foreach函数">foreach函数</h3>
+<p>foreach 函数和别的函数非常的不一样。因为这个函数是用来做循环用的，Makefile中的 foreach 函数几乎是仿照于 Unix 标准 Shell(/bin/sh)中的 for 语句，或是 C-Shell (/bin/csh)中的 foreach 语句而构建的。它的语法是:</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">foreach</span> &lt;var&gt;,&lt;list&gt;,&lt;text&gt;)</span></span><br></pre></td></tr></table></figure>
+<p>这个函数的意思是，把参数&lt;list&gt;中的单词逐一取出放到参数&lt;var&gt;所指定的变量中，然后再执行&lt;text&gt;所包含的表达式。每一次&lt;text&gt;会返回一个字符串，循环过程中，&lt;text&gt;的所返回的每个字符串会以空格分隔，最后当整个循环结束时，&lt;text&gt;所返回的每个字符串所组成的整个字符串(以空格分隔)将会是 foreach 函数的返回值。</p>
+<p>所以，&lt;var&gt;最好是一个变量名，&lt;list&gt;可以是一个表达式，而&lt;text&gt;中一般会使用&lt;var&gt;这个参数来依次枚举&lt;list&gt;中的单词。举个例子:</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">names := a b c d</span><br><span class="line">files := <span class="variable">$(<span class="built_in">foreach</span> n,<span class="variable">$(names)</span>,<span class="variable">$(n)</span>.o)</span></span><br></pre></td></tr></table></figure>
+<p>上面的例子中，$(name)中的单词会被挨个取出，并存到变量“n”中，“$(n).o”每次根据“$(n)”计算出一个值，这些值以空格分隔，最后作为 foreach 函数的返回，所以，$(files)的值是“a.o b.o c.o d.o”。</p>
+<p>注意，foreach 中的&lt;var&gt;参数是一个临时的局部变量，foreach 函数执行完后，参数&lt;var&gt;的变量将不在作用，其作用域只在 foreach 函数当中。</p>
+<h3 id="if函数">if函数</h3>
+<p>if 函数很像 GNU 的 make 所支持的条件语句——<a href="#ifeq">ifeq</a>，if 函数的语法是:</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">if</span> &lt;condition&gt;,&lt;then-part&gt;)</span></span><br></pre></td></tr></table></figure>
+<p>或是：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">if</span> &lt;condition&gt;,&lt;then-part&gt;,&lt;else-part&gt;)</span></span><br></pre></td></tr></table></figure>
+<p>可见，if 函数可以包含“else”部分，或是不含。即 if 函数的参数可以是两个，也可以是三个。&lt;condition&gt;参数是 if 的表达式，如果其返回的为非空字符串，那么这个表达式就相当于返回真，于是，&lt;then-part&gt;会被计算，否则&lt;else-part&gt;会被计算。</p>
+<p>而 if 函数的返回值是，如果&lt;condition&gt;为真(非空字符串)，那个&lt;then-part&gt;会是整个函数的返回值，如果&lt;condition&gt;为假(空字符串)，那么&lt;else-part&gt;会是整个函数的返回值，此时如果&lt;else-part&gt;没有被定义，那么，整个函数返回空字串。</p>
+<p>所以，&lt;then-part&gt;和&lt;else-part&gt;只会有一个被计算。</p>
+<h3 id="call函数">call函数</h3>
+<p>call 函数是唯一一个可以用来 <strong>创建新的参数化的函数</strong> 。你可以写一个非常复杂的表达式，这个表达式中，你可以定义许多参数，然后你可以用 call 函数来向这个表达式传递参数。其语法是:</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">call</span> &lt;expression&gt;,&lt;parm1&gt;,&lt;parm2&gt;,&lt;parm3&gt;...)</span></span><br></pre></td></tr></table></figure>
+<p>当 make 执行这个函数时，&lt;expression&gt;参数中的变量，如$(1)，$(2)，$(3)等，会被参数&lt;parm1&gt;，&lt;parm2&gt;，&lt;parm3&gt;依次取代。而&lt;expression&gt;的返回值就是 call 函数的返回值。例如:</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reverse = $(1) $(2)</span><br><span class="line">foo = <span class="variable">$(<span class="built_in">call</span> reverse,a,b)</span></span><br></pre></td></tr></table></figure>
+<p>那么，foo 的值就是“a b”。当然，参数的次序是可以自定义的，不一定是顺序的，如:</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reverse = $(2) $(1)</span><br><span class="line">foo = <span class="variable">$(<span class="built_in">call</span> reverse,a,b)</span></span><br></pre></td></tr></table></figure>
+<p>此时的 foo 的值就是“b a”。</p>
+<h3 id="origin-函数">origin 函数</h3>
+<p>origin 函数不像其它的函数，他并不操作变量的值，他只是告诉你你的这个变量是哪里来的。</p>
+<p>其语法是:</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">origin</span> &lt;variable&gt;)</span></span><br></pre></td></tr></table></figure>
+<p>注意，&lt;variable&gt;是变量的名字，不应该是引用。所以你最好不要在&lt;variable&gt;中使用“$”字符。Origin 函数会以其返回值来告诉你这个变量的“出生情况”，下面，是 origin函数的返回值:</p>
+<ul>
+<li>
+<p>“undefined”：如果&lt;variable&gt;从来没有定义过，origin 函数返回这个值“undefined”。</p>
+</li>
+<li>
+<p>“default”: 如果&lt;variable&gt;是一个默认的定义，比如“CC”这个变量，这种变量我们将在后面讲述。</p>
+</li>
+<li>
+<p>“environment” 如果&lt;variable&gt;是一个环境变量，并且当 Makefile 被执行时，“-e”参数没有被打开。</p>
+</li>
+<li>
+<p>“file” 如果&lt;variable&gt;这个变量被定义在 Makefile 中。</p>
+</li>
+<li>
+<p>“command line” 如果&lt;variable&gt;这个变量是被命令行定义的。</p>
+</li>
+<li>
+<p>“override” 如果&lt;variable&gt;是被 override 指示符重新定义的。</p>
+</li>
+<li>
+<p>“automatic” 如果&lt;variable&gt;是一个命令运行中的自动化变量。关于自动化变量将在后面讲述。</p>
+<p>这些信息对于我们编写 Makefile 是非常有用的，例如，假设我们有一个 Makefile 其包了一个定义文件 Make.def，在 Make.def 中定义了一个变量“bletch”，而我们的环境中也有一个环境变量“bletch”，此时，我们想判断一下，如果变量来源于环境，那么我们就把之重定义了，如果来源于 Make.def 或是命令行等非环境的，那么我们就不重新定义它。于是，在我们的 Makefile 中，BEGIN:</p>
+</li>
+</ul>
+<p>ifdef bletch ifeq “$(origin bletch)” “environment” bletch = barf, gag, etc. endif endif</p>
+<p>当然，你也许会说，使用 override 关键字不就可以重新定义环境中的变量了吗?为什么需要使用这样的步骤?是的，我们用 override 是可以达到这样的效果，可是 override 过于粗暴，它同时会把从命令行定义的变量也覆盖了，而我们只想重新定义环境传来的，而不想重新定义命令行传来的。</p>
+<h3 id="shell函数">shell函数</h3>
+<p>shell 函数也不像其它的函数。顾名思义，它的参数应该就是操作系统 Shell 的命令。它和反引号 <code>`</code> 是相同的功能。这就是说， <strong>shell 函数把执行操作系统命令后的输出作为函数返回</strong> 。于是，我们可以用操作系统命令以及字符串处理命令 awk，sed 等等命令来生成一个变量，如:</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">contents := <span class="variable">$(<span class="built_in">shell</span> cat foo)</span></span><br><span class="line">files := <span class="variable">$(<span class="built_in">shell</span> echo *.c)</span></span><br></pre></td></tr></table></figure>
+<p>注意，这个函数会新生成一个 Shell 程序来执行命令，所以你要注意其运行性能，如果你的Makefile 中有一些比较复杂的规则，并大量使用了这个函数，那么对于你的系统性能是有害的。特别是 Makefile 的隐晦的规则可能会让你的 shell 函数执行的次数比你想像的多得多。</p>
+<h3 id="控制make的函数">控制make的函数</h3>
+<p>make 提供了一些函数来控制 make 的运行。通常，你需要检测一些运行 Makefile 时的运行时信息，并且根据这些信息来决定，你是让 make 继续执行，还是停止。</p>
+<h4 id="error">error</h4>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">error</span> &lt;text ...&gt;)</span></span><br></pre></td></tr></table></figure>
+<p>产生一个致命的错误，&lt;text …&gt;是错误信息。注意，error 函数不会在一被使用就会产生错误信息，所以如果你把其定义在某个变量中，并在后续的脚本中使用这个变量，那么也是可以的。例如:</p>
+<p>示例一:</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ifdef</span> ERROR_001</span><br><span class="line"><span class="variable">$(<span class="built_in">error</span> <span class="built_in">error</span> is <span class="variable">$(ERROR_001)</span>)</span></span><br><span class="line"><span class="keyword">endif</span></span><br></pre></td></tr></table></figure>
+<p>示例二:</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ERR = <span class="variable">$(<span class="built_in">error</span> found an <span class="built_in">error</span>!)</span></span><br><span class="line"><span class="meta"><span class="meta-keyword">.PHONY</span>: err</span></span><br><span class="line"><span class="section">err: ; <span class="variable">$(ERR)</span></span></span><br></pre></td></tr></table></figure>
+<p>示例一会在变量 ERROR<sub>001</sub> 定义了后执行时产生 error 调用，而示例二则在目标 err 被执行时才发生 error 调用。</p>
+<h4 id="warning">warning</h4>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">warning</span> &lt;text ...&gt;)</span></span><br></pre></td></tr></table></figure>
+<p>这个函数很像 error 函数，只是它并不会让 make 退出，只是输出一段警告信息，而 make 继续执行。</p>
+<h2 id="技巧">技巧</h2>
+<h3 id="静态模式">静态模式</h3>
+<p>静态模式可以 <strong>更加容易地定义多目标的规则</strong> ，可以让我们的规则变得更加的有弹性和灵活。我们还是先来看一下语法:</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;targets ...&gt;: &lt;target-pattern&gt;: &lt;prereq-patterns ...&gt;</span><br><span class="line">        &lt;commands&gt;</span><br><span class="line">        ....</span><br></pre></td></tr></table></figure>
+<ul>
+<li>targets 定义了一系列的 <strong>目标文件</strong> ，可以有通配符。是目标的一个集合。</li>
+<li>target-parrtern 指明了 targets 的模式，也就是的 <strong>目标集模式</strong> 。</li>
+<li>prereq-parrterns 是 <strong>目标的依赖模式</strong> ，它对 target-parrtern 形成的模式再进行一次依赖目标的定义。</li>
+</ul>
+<p>这样描述这三个东西，可能还是没有说清楚，还是举个例子来说明一下吧。如果我们的&lt;target-parrtern&gt;定义成“%.o”，意思是我们的&lt;target&gt;集合中都是以“.o”结尾的，而如果我们的&lt;prereq-parrterns&gt;定义成“%.c”，意思是对&lt;target-parrtern&gt;所形成的目标集进行二次定义，其计算方法是，取&lt;target-parrtern&gt;模式中的<code>%</code>(也就是去掉了&quot;.o&quot;这个结尾)，并为其加上&quot;.c&quot;这个结尾，形成的新集合。</p>
+<p>所以，我们的“目标模式”或是“依赖模式”中都应该有 <code>%</code> 这个字符，如果你的文件名中有 <code>%</code> 那么你可以使用反斜杠“\”进行转义，来标明真实的<code>%</code>字符。</p>
+<p>看一个例子:</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">objects = foo.o bar.o</span><br><span class="line">CFLAGS = <span class="variable">$(include_dirs)</span> -O</span><br><span class="line">include_dirs = -Ifoo -Ibar</span><br><span class="line"></span><br><span class="line"><span class="section">all: <span class="variable">$(objects)</span></span></span><br><span class="line"></span><br><span class="line"><span class="variable">$(objects)</span>: %.o: %.c</span><br><span class="line">        <span class="variable">$(CC)</span> -c <span class="variable">$(CFLAGS)</span> <span class="variable">$&lt;</span> -o <span class="variable">$@</span></span><br></pre></td></tr></table></figure>
+<p>上面的例子中，指明了我们的目标从$object 中获取，“%.o”表明要所有以“.o”结尾的目标，也就是“foo.o bar.o”，也就是变量 $object 集合的模式，而依赖模式“%.c”则取模式“%.o”的 <code>%</code>，也就是“foo bar”，并为其加下“.c”的后缀，于是，我们的依赖目标就是“foo.c bar.c”。于是，上面的规则展开后等价于下面的规则:</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">foo.o : foo.c</span><br><span class="line">        <span class="variable">$(CC)</span> -c <span class="variable">$(CFLAGS)</span> foo.c -o foo.o</span><br><span class="line">bar.o : bar.c</span><br><span class="line">        <span class="variable">$(CC)</span> -c <span class="variable">$(CFLAGS)</span> bar.c -o bar.o</span><br></pre></td></tr></table></figure>
+<p>试想，如果我们的“%.o”有几百个，那种我们只要用这种很简单的“静态模式规则”就可以写完一堆规则，实在是太有效率了。“静态模式规则”的用法很灵活，如果用得好，那会一个很强大的功能。</p>
+<h3 id="生成依赖关系">生成依赖关系</h3>
+<p>可以用gcc的<code>-M</code>选项自动生成目标文件和源文件的依赖关系。例如：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -M main.c</span><br><span class="line">main.o: main.c /usr/include/stdio.h /usr/include/features.h \</span><br><span class="line">  /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \</span><br><span class="line">  /usr/include/gnu/stubs.h /usr/include/gnu/stubs-32.h \</span><br><span class="line">  /usr/lib/gcc/i486-linux-gnu/4.3.2/include/stddef.h \</span><br><span class="line">  /usr/include/bits/types.h /usr/include/bits/typesizes.h \</span><br><span class="line">  /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h \</span><br><span class="line">  /usr/lib/gcc/i486-linux-gnu/4.3.2/include/stdarg.h \</span><br><span class="line">  /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h main.h \</span><br><span class="line">  stack.h maze.h</span><br></pre></td></tr></table></figure>
+<p><code>-M</code>选项把stdio.h以及它所包含的系统头文件也找出来了，如果我们不需要输出系统头文件的依赖关系，可以用<code>-MM</code>选项：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -MM *.c</span><br><span class="line">main.o: main.c main.h stack.h maze.h</span><br><span class="line">maze.o: maze.c maze.h main.h</span><br><span class="line">stack.o: stack.c stack.h main.h</span><br></pre></td></tr></table></figure>
+<p>然后可以把这些规则包含到 Makefile 中，例如：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">all: main</span></span><br><span class="line"></span><br><span class="line"><span class="section">main: main.o stack.o maze.o</span></span><br><span class="line">    gcc <span class="variable">$^</span> -o <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    -rm main *.o</span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="meta-keyword">.PHONY</span>: clean</span></span><br><span class="line"></span><br><span class="line">sources = main.c stack.c maze.c</span><br><span class="line"></span><br><span class="line"><span class="keyword">include</span> $(sources:.c=.d)</span><br><span class="line"></span><br><span class="line"><span class="section">%.d: %.c</span></span><br><span class="line">    set -e; rm -f <span class="variable">$@</span>; \</span><br><span class="line">    <span class="variable">$(CC)</span> -MM <span class="variable">$(CPPFLAGS)</span> <span class="variable">$&lt;</span> &gt; <span class="variable">$@</span>.$$$$; \</span><br><span class="line">    sed &#x27;s,\(<span class="variable">$*</span>\)\.o[ :]*,\1.o <span class="variable">$@</span> : ,g&#x27; &lt; <span class="variable">$@</span>.$$$$ &gt; <span class="variable">$@</span>; \</span><br><span class="line">    rm -f <span class="variable">$@</span>.$$$$</span><br></pre></td></tr></table></figure>
+<p>sources变量包含我们要编译的所有.c文件，$(sources:.c=.d)是一个变量替换语法，把sources变量中每一项的.c替换成.d，所以include这一句相当于：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">include</span> main.d stack.d maze.d</span><br></pre></td></tr></table></figure>
+<p>类似于C语言的#include指示，这里的include表示包含三个文件main.d、stack.d和maze.d，这三个文件也应该符合Makefile的语法。如果现在你的工作目录是干净的，只有.c文件、.h文件和Makefile，运行make的结果是：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">$ make</span><br><span class="line"><span class="section">Makefile:13: main.d: No such file or directory</span></span><br><span class="line"><span class="section">Makefile:13: stack.d: No such file or directory</span></span><br><span class="line"><span class="section">Makefile:13: maze.d: No such file or directory</span></span><br><span class="line">set -e; rm -f maze.d; \</span><br><span class="line">    cc -MM  maze.c &gt; maze.d.$$; \</span><br><span class="line">    sed &#x27;s,\(maze\)\.o[ :]*,\1.o maze.d : ,g&#x27; &lt; maze.d.$$ &gt; maze.d; \</span><br><span class="line">    rm -f maze.d.$$</span><br><span class="line">set -e; rm -f stack.d; \</span><br><span class="line">    cc -MM  stack.c &gt; stack.d.$$; \</span><br><span class="line">    sed &#x27;s,\(stack\)\.o[ :]*,\1.o stack.d : ,g&#x27; &lt; stack.d.$$ &gt; stack.d; \</span><br><span class="line">    rm -f stack.d.$$</span><br><span class="line">set -e; rm -f main.d; \</span><br><span class="line">    cc -MM  main.c &gt; main.d.$$; \</span><br><span class="line">    sed &#x27;s,\(main\)\.o[ :]*,\1.o main.d : ,g&#x27; &lt; main.d.$$ &gt; main.d; \</span><br><span class="line">    rm -f main.d.$$</span><br><span class="line">cc    -c -o main.o main.c</span><br><span class="line">cc    -c -o stack.o stack.c</span><br><span class="line">cc    -c -o maze.o maze.c</span><br><span class="line">gcc main.o stack.o maze.o -o main</span><br></pre></td></tr></table></figure>
+<p>一开始找不到.d文件，所以make会报警告。但是make会把include的文件名也当作目标来尝试更新，而这些目标适用模式规则<code>%.d: %c</code>，所以执行它的命令列表。</p>
+<h2 id="常用命令行选项">常用命令行选项</h2>
+<h3 id="n选项">-n选项</h3>
+<p><code>-n</code>选项只打印要执行的命令，而不会真的执行命令，这个选项有助于我们检查Makefile写得是否正确，由于Makefile不是顺序执行的，用这个选项可以先看看命令的执行顺序，确认无误了再真正执行命令。</p>
+<h3 id="C选项">-C选项</h3>
+<p><code>-C</code>选项可以切换到另一个目录执行那个目录下的Makefile，比如先退到上一级目录再执行我们的Makefile（假设我们的源代码都放在testmake目录下）：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ cd ..</span><br><span class="line">$ make -C testmake</span><br><span class="line"><span class="section">make: Entering directory `/home/akaedu/testmake&#x27;</span></span><br><span class="line">cc    -c -o main.o main.c</span><br><span class="line">cc    -c -o stack.o stack.c</span><br><span class="line">cc    -c -o maze.o maze.c</span><br><span class="line">gcc main.o stack.o maze.o -o main</span><br><span class="line"><span class="section">make: Leaving directory `/home/akaedu/testmake&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>一些规模较大的项目会把不同的模块或子系统的源代码放在不同的子目录中，然后在每个子目录下都写一个该目录的Makefile，然后在一个总的Makefile中用<code>make -C</code>命令执行每个子目录下的Makefile。例如Linux内核源代码根目录下有Makefile，子目录fs、net等也有各自的Makefile，二级子目录fs/ramfs、net/ipv4等也有各自的Makefile。</p>
+<h3 id="直接在命令行定义Makefile变量">直接在命令行定义Makefile变量</h3>
+<p>在make命令行也可以用<code>=</code>或<code>:=</code>定义变量，如果这次编译我想加调试选项<code>-g</code>，但我不想每次编译都加<code>-g</code>选项，可以在命令行定义CFLAGS变量，而不必修改Makefile编译完了再改回来：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ make CFLAGS=-g</span><br><span class="line">cc -g   -c -o main.o main.c</span><br><span class="line">cc -g   -c -o stack.o stack.c</span><br><span class="line">cc -g   -c -o maze.o maze.c</span><br><span class="line">gcc main.o stack.o maze.o -o main</span><br></pre></td></tr></table></figure>
+<p>如果在Makefile中也定义了CFLAGS变量，则命令行的值覆盖Makefile中的值。</p>
+<h2 id="深入阅读">深入阅读</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://wiki.ubuntu.org.cn/%E8%B7%9F%E6%88%91%E4%B8%80%E8%B5%B7%E5%86%99Makefile">跟我一起写Makefile</a></li>
+<li><a target="_blank" rel="noopener" href="http://mirrors.ibrother.me/linuxc/ch22.html">Makefile基础</a></li>
+</ol>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	
+		<li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/tools-automake.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: 'Makefile'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

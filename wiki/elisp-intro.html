@@ -1,0 +1,754 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>入门 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="参考资料
+
+《Elisp 入门》
+《Emacs Lisp 15 分钟入门》
+
+Hello World
+1(message &amp;quot;hello world&amp;quot;)
+首先切换到 *scratch* 缓冲里，如果当前模式不是 lisp-interaction-mode，用 M-x lisp-in">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="入门"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '入门'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 入门</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc',  2 , 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="参考资料">参考资料</h2>
+<ul>
+<li>《<a target="_blank" rel="noopener" href="http://www.newsmth.net/nForum/#!article/Emacs/58338">Elisp 入门</a>》</li>
+<li>《<a target="_blank" rel="noopener" href="http://blog.jobbole.com/44932/">Emacs Lisp 15 分钟入门</a>》</li>
+</ul>
+<h2 id="Hello-World">Hello World</h2>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">message</span> <span class="string">&quot;hello world&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>首先切换到 <code>*scratch*</code> 缓冲里，如果当前模式不是 lisp-interaction-mode，用 <code>M-x lisp-interaction-mode</code> 先切换到 lisp-interaction-mode。 后输入这一语句。在尾右括号后，按 <code>C-j</code> 键。如果 Minibuffer 里显示 hello world，光标前一行也显示“hello world”，那说明你的操作没有问题。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  注： elisp 里的一个完整表达式, 除了简单数据类型（如数字，向量）, 都是用括号括起来，称为一个 S-表达式。 elisp 解释器执行一个 S-表达式 除了前一种方法之外，还可以用 <code>C-x C-e</code>。它们的区别是, <code>C-x C-e</code> 是一个全局按键绑定，几乎可以在所有地方都能用。它会将运行返回值显示在 Minibuffer 里。这里需要强调一个概念是返回值和作用是不同的。比如前面 message 函数它的作用是在 Minibuffer 里显示一个字符串，但是它的返回值是“hello world”字符串。
+</div>
+<h2 id="15分钟入门">15分钟入门</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br></pre></td><td class="code"><pre><span class="line">;; This gives an introduction to Emacs Lisp in 15 minutes (v0.2d)</span><br><span class="line">;;</span><br><span class="line">;; 英文原作者: Bastien &#x2F; @bzg2 &#x2F; http:&#x2F;&#x2F;bzg.fr</span><br><span class="line">;; 中文翻译: iamxuxiao</span><br><span class="line">;; </span><br><span class="line">;; </span><br><span class="line">;; 如何安装 Emacs </span><br><span class="line">;; </span><br><span class="line">;; Debian: apt-get install emacs (or see your distro instructions)</span><br><span class="line">;; MacOSX: http:&#x2F;&#x2F;emacsformacosx.com&#x2F;emacs-builds&#x2F;Emacs-24.3-universal-10.6.8.dmg</span><br><span class="line">;; Windows: http:&#x2F;&#x2F;ftp.gnu.org&#x2F;gnu&#x2F;windows&#x2F;emacs&#x2F;emacs-24.3-bin-i386.zip</span><br><span class="line">;;</span><br><span class="line">;; More general information can be found at:</span><br><span class="line">;; http:&#x2F;&#x2F;www.gnu.org&#x2F;software&#x2F;emacs&#x2F;#Obtaining</span><br><span class="line">;; 免责声明：</span><br><span class="line">;;</span><br><span class="line">;; Going through this tutorial won&#39;t damage your computer unless</span><br><span class="line">;; you get so angry that you throw it on the floor. In that case,</span><br><span class="line">;; I hereby decline any responsability. Have fun!</span><br><span class="line"></span><br><span class="line">&#x3D;&#x3D; 启动Emacs, 缓冲区和工作模式&#x3D;&#x3D;</span><br><span class="line">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span><br><span class="line">;; </span><br><span class="line">;; 第一步首先启动Emacs: (在windows中可以双击emacs图标，在Linux中可以输入% emacs &amp; )，</span><br><span class="line">;; 然后在键盘上键入q 跳过系统欢迎的信息，</span><br><span class="line">;; 先观察在Emacs屏幕的底部，会给出一堆关于当前的工作情况的信息，其中灰色的一行叫做状态行，</span><br><span class="line">;; 在其中你会发现 *scratch* 的字样，这表示你当前的缓冲区(buffer)的名字。</span><br><span class="line">;; 缓冲区也叫做工作区，在Emacs中打开一个文件，实际只是在Emacs中构造该文件的一个副本，放到缓冲区中，</span><br><span class="line">;; 在Emacs中对该文件的编辑也是针对该副本的编辑，唯有保存改动时，Emacs才会把缓冲区中的内容在复制到原文件中去。</span><br><span class="line">;; 状态行下面的那行，叫做辅助输入区(minibuffer),该minibuffer用于显示计算结果，以及和用户做交互。</span><br><span class="line">;;</span><br><span class="line">;; </span><br><span class="line">;; 如何切换Emacs的工作模式 </span><br><span class="line">;; Emacs有各种各样功能各异的模式，工作模式的含义其实就是Emacs对当前的文本编辑工作</span><br><span class="line">;; 更加的敏感，比如高亮和缩进，并且支持一些特殊的命令。</span><br><span class="line">;; 为了实验本教程中的lisp命令，我们要让Emacs工作在lisp-interaction-mode工作模式下，</span><br><span class="line">;; 这个模式可以让我们在缓冲区中和Emacs进行互动，并且直接执行Lisp命令,得到结果。</span><br><span class="line">;; 进入lisp-interaction-mode的方法： 把光标移动到辅助输入区，键入M-x lisp-interaction-mode </span><br><span class="line">;; 然后回车。</span><br><span class="line"></span><br><span class="line">&#x3D;&#x3D; 表达式，变量和函数 &#x3D;&#x3D;</span><br><span class="line"></span><br><span class="line">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span><br><span class="line">;;</span><br><span class="line">;; 冒号在Lisp中表示注释</span><br><span class="line">;; 在Elisp中做运算，调用函数的最简单的方式是</span><br><span class="line">;; (function arg1 arg2) </span><br><span class="line">;; 这相当于通常的function(arg1,arg2)，下面的表达式，对两个数字进行加法运算</span><br><span class="line">(+ 2 2)</span><br><span class="line"></span><br><span class="line">;; Elisp中表达式可以通过括号来嵌套</span><br><span class="line">(+ 2 (+ 1 1))</span><br><span class="line"></span><br><span class="line">;; 在lisp-interaction-mode模式中，我们可以直接计算一个表达式,计算的方法是</span><br><span class="line">(+ 3 (+ 1 2))</span><br><span class="line">;; ^ 把光标放在这里，并且键入Ctrl-j (之后将简写成C-j)</span><br><span class="line">;; C-j是一个快捷命令，在后台，该快捷键将调用求值命令，并且把计算的结果</span><br><span class="line">;; 插入到当前的缓冲区中</span><br><span class="line"></span><br><span class="line">;; 如果不希望Emacs在缓冲区中插入计算结果，我们还可以在表达式的末尾使用C-x C-e组合键</span><br><span class="line">;; C-x C-e的意思是: 先按下Ctrl-x 再按下Ctrl-e </span><br><span class="line">;; 这个命令会让Emacs在辅助缓冲区，也就是Emacs窗口的最底部那行显示计算结果</span><br><span class="line"></span><br><span class="line">;; ELisp中的赋值函数是是setq，下面的表达式给变量my-name赋值&quot;Bastien&quot;</span><br><span class="line">(setq my-name &quot;Bastien&quot;)</span><br><span class="line">;; ^ 把光标停在这里，再键入C-x C-e</span><br><span class="line"></span><br><span class="line">;; 下面insert函数的作用是在光标所在出插入字符Hello</span><br><span class="line">(insert &quot;Hello!&quot;)</span><br><span class="line">;; ^ 把光标停在这里，再键入C-x C-e</span><br><span class="line"></span><br><span class="line">;; insert函数还可以两个常量字符，比如</span><br><span class="line">(insert &quot;Hello&quot; &quot; world!&quot;)</span><br><span class="line"></span><br><span class="line">;; insert函数还可以接受变量作为参数，我们之前已经给my-name变量赋过值了</span><br><span class="line">;; 所以下面命令的输出结果是 &quot;Hello, I am Bastien&quot;</span><br><span class="line">(insert &quot;Hello, I am &quot; my-name)</span><br><span class="line"></span><br><span class="line">;; defun命令用来定义一个函数,语法是</span><br><span class="line">;; (defun 函数名 (参数列表) (函数体))</span><br><span class="line">(defun hello () (insert &quot;Hello, I am &quot; my-name))</span><br><span class="line">;; ^ 把光标停在这里，再键入C-x C-e 执行defun命令来定义函数</span><br><span class="line">;; 通过defun命令，你已经在Emacs中安装了这个hello函数，这个函数就成为了Emacs的一部分，知道你退出Emacs或者改变hello的定义</span><br><span class="line"></span><br><span class="line">;; 从下面开始，我们将不再提醒读者使用C-x C-e来定义函数和执行ELisp指令</span><br><span class="line"></span><br><span class="line">;; 在Elisp中直接输入函数的名称就是调用该函数。</span><br><span class="line">;; 下面的命令的输入结果是: Hello, I am Bastien</span><br><span class="line">(hello)</span><br><span class="line"></span><br><span class="line">;; 前面定义的hello函数不接受任何参数,过于简单，</span><br><span class="line">;; 现在我们重新定义hello函数，让它接受一个参数name。 </span><br><span class="line">(defun hello (name) (insert &quot;Hello &quot; name))</span><br><span class="line"></span><br><span class="line">;; 然后调用新的hello函数，并且提供一个参数。</span><br><span class="line">;; 下面命令的输出结果是&quot;Hello you&quot;</span><br><span class="line">(hello &quot;you&quot;)</span><br><span class="line"></span><br><span class="line">&#x3D;&#x3D; progn,let和交互式函数&#x3D;&#x3D; </span><br><span class="line">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span><br><span class="line">;;</span><br><span class="line">;; 执行switch-to-buffer-other-window命令，将在在一个新的窗口中打开一个buffer</span><br><span class="line">;; 该buffer命名叫做 test, 并且把光标移到新的buffer的窗口中。</span><br><span class="line">(switch-to-buffer-other-window &quot;*test*&quot;)</span><br><span class="line"></span><br><span class="line">;; 要回到原来的buffer中，可以使用鼠标点击原来的buffer</span><br><span class="line">;; 或者使用组合键 C-x o </span><br><span class="line">;; C-x o的意思是: 先按下Ctrl-x 再按下o</span><br><span class="line"></span><br><span class="line">;; 如果要执行一系列的指令，可以使用流程函数progn，把函数命令连接起来.</span><br><span class="line">;; 下面的命令,先打开一个新的buffer,再执行hello函数，该hello函数的参数是&quot;you&quot;</span><br><span class="line">(progn</span><br><span class="line">  (switch-to-buffer-other-window &quot;*test*&quot;)</span><br><span class="line">  (hello &quot;you&quot;))</span><br><span class="line"></span><br><span class="line">;; 如果要清空一个buffer,可以调用erase-buffer函数。下面的命令先清空test buffer,再调用hello函数做打印</span><br><span class="line">(progn</span><br><span class="line">  (switch-to-buffer-other-window &quot;*test*&quot;)</span><br><span class="line">  (erase-buffer)</span><br><span class="line">  (hello &quot;there&quot;))</span><br><span class="line"></span><br><span class="line">;; 在这一系列的质量后面再添加调用一个other-window函数，这样在hello函数被调用完毕之后</span><br><span class="line">;; 光标自动回到之前的buffer窗口中</span><br><span class="line">(progn</span><br><span class="line">  (switch-to-buffer-other-window &quot;*test*&quot;)</span><br><span class="line">  (erase-buffer)</span><br><span class="line">  (hello &quot;you&quot;)</span><br><span class="line">  (other-window 1))</span><br><span class="line"></span><br><span class="line">;; let函数用来做局部变量的定义 下面的一系列命令中</span><br><span class="line">;; let函数首先定义local-name变量的值为“you”</span><br><span class="line">;; 然后接着执行括号中其它的语句块部分，这个功能和progn类似</span><br><span class="line">(let ((local-name &quot;you&quot;))</span><br><span class="line">  (switch-to-buffer-other-window &quot;*test*&quot;)</span><br><span class="line">  (erase-buffer)</span><br><span class="line">  (hello local-name)</span><br><span class="line">  (other-window 1))</span><br><span class="line"></span><br><span class="line">;; format函数可以用做格式化的输出 其中%s表示该s的地方将被之后提供的一个字符串,即visitor替换</span><br><span class="line">;; \n表示换行</span><br><span class="line">(format &quot;Hello %s!\n&quot; &quot;visitor&quot;)</span><br><span class="line"></span><br><span class="line">;; 现在我们利用format函数来改进之前定义的hello函数</span><br><span class="line">(defun hello (name)</span><br><span class="line">  (insert (format &quot;Hello %s!\n&quot; name)))</span><br><span class="line"></span><br><span class="line">;; 执行这个函数结果是&quot;Hello you&quot;，并且光标换到下一行</span><br><span class="line">(hello &quot;you&quot;)</span><br><span class="line"></span><br><span class="line">;; 下面我们再设计一个greeting函数，该函数接受一个参数name,</span><br><span class="line">;; 在函数体的内部又使用了let函数，给一个局部变量your-name赋值</span><br><span class="line">;; 最后把参数和局部变量格式化的打印出来</span><br><span class="line">(defun greeting (name)</span><br><span class="line">  (let ((your-name &quot;Bastien&quot;))</span><br><span class="line">    (insert (format &quot;Hello %s!\n\nI am %s.&quot;</span><br><span class="line">                    name </span><br><span class="line">                    your-name ; 局部变量</span><br><span class="line">                    ))))</span><br><span class="line"></span><br><span class="line">;; 执行greeting函数，并提供&quot;you&quot;字符串作为参数</span><br><span class="line">(greeting &quot;you&quot;)</span><br><span class="line"></span><br><span class="line">;; read-from-minibuffer函数提供和用户交互的功能，这个函数可以帮助Elisp程序从用户处得到输入</span><br><span class="line">(read-from-minibuffer &quot;Enter your name: &quot;)</span><br><span class="line"></span><br><span class="line">;; 比如如果我们希望greeting函数能够从用户处得到姓名，并且做打印格式化的欢迎信息。</span><br><span class="line">;; 可以先调用read-from-minibuffer在minibuffer中提示用户输入姓名，</span><br><span class="line">;; 然后把得到的结果赋给局部变量your-name，</span><br><span class="line">;; 最后insert函数在当前buffer中插入格式化的输出</span><br><span class="line">(defun greeting (from-name)</span><br><span class="line">  (let ((your-name (read-from-minibuffer &quot;Enter your name: &quot;)))</span><br><span class="line">    (insert (format &quot;Hello!\n\nI am %s and you are %s.&quot;</span><br><span class="line">                    from-name ; 格式化输出参数1</span><br><span class="line">                    your-name ; 格式化输出参数2</span><br><span class="line">                    ))))</span><br><span class="line"></span><br><span class="line">;; 执行这个函数</span><br><span class="line">(greeting &quot;Bastien&quot;)</span><br><span class="line"></span><br><span class="line">;; 再稍加改进greeting 把结果打印在新的buffer中</span><br><span class="line">(defun greeting (from-name)</span><br><span class="line">  (let ((your-name (read-from-minibuffer &quot;Enter your name: &quot;)))</span><br><span class="line">    (switch-to-buffer-other-window &quot;*test*&quot;)</span><br><span class="line">    (erase-buffer)</span><br><span class="line">    (insert (format &quot;Hello %s!\n\nI am %s.&quot; your-name from-name))</span><br><span class="line">    (other-window 1)))</span><br><span class="line"></span><br><span class="line">;; 执行这个函数</span><br><span class="line">(greeting &quot;Bastien&quot;)</span><br><span class="line"></span><br><span class="line">&#x3D;&#x3D; 列表和综合实例 &#x3D;&#x3D;</span><br><span class="line"></span><br><span class="line">;; Lisp中使用括号构造列表，使用setq给变量赋值。</span><br><span class="line">;; 下面的命令先构造一个列表，再把这个列表赋给list-of-names变量</span><br><span class="line">(setq list-of-names &#39;(&quot;Sarah&quot; &quot;Chloe&quot; &quot;Mathilde&quot;))</span><br><span class="line">;; ^这里的单引号表示这是一个列表</span><br><span class="line"></span><br><span class="line">;; 如果想要得到列表中的第一个元素，可以使用car函数</span><br><span class="line">(car list-of-names)</span><br><span class="line"></span><br><span class="line">;; 如果想要得到列表中的除第一个元素以外的其它元素，可以使用cdr函数</span><br><span class="line">(cdr list-of-names)</span><br><span class="line"></span><br><span class="line">;; 以后push函数可以在列表的头部插入新的元素，所以下面的命令将改变list-of-name中元素的个数</span><br><span class="line">(push &quot;Stephanie&quot; list-of-names)</span><br><span class="line"></span><br><span class="line">;; mapcar函数对列表中的把列表中的每一个元素分别取出来，赋给hello函数</span><br><span class="line">(mapcar &#39;hello list-of-names)</span><br><span class="line"></span><br><span class="line">;; 重新定义greeting函数，在一个新的，清空的buffer中，对list-of-names列表中的每一个元素，调用hello函数</span><br><span class="line">;; 调用完毕之后，再让光标回到原的buffer中</span><br><span class="line">(defun greeting ()</span><br><span class="line">  (switch-to-buffer-other-window &quot;*test*&quot;)</span><br><span class="line">  (erase-buffer)</span><br><span class="line">  (mapcar &#39;hello list-of-names)</span><br><span class="line">  (other-window 1))</span><br><span class="line"></span><br><span class="line">;;执行这个函数，我们将得到一个名叫test的buffer，其中的内容是</span><br><span class="line">;; Hello Stephanie!</span><br><span class="line">;; Hello Sarah!</span><br><span class="line">;; Hello Chloe!</span><br><span class="line">;; Hello Mathilde!</span><br><span class="line">;; 暂时先不要关闭这个buffer!后面还有用！ </span><br><span class="line">(greeting)</span><br><span class="line"></span><br><span class="line">;; 下面我们对buffer做一些更有意思的事情！</span><br><span class="line">;; 定义一个replace-hello-by-bonjour函数，顾名思义，就是把hello替换成bonjour</span><br><span class="line">;; 该函数首先把光标移到一个叫做test的buffer中</span><br><span class="line">;; 再把光标移到该buffer的开头</span><br><span class="line">;; 从头开始搜索字符串Hello,并且替换成Bonjour</span><br><span class="line">;; 结束之后在把光标移会到一开始的buffer中。</span><br><span class="line">(defun replace-hello-by-bonjour ()</span><br><span class="line">  (switch-to-buffer-other-window &quot;*test*&quot;)</span><br><span class="line">  (goto-char (point-min)) ;该函数把光标移到buffer的开头</span><br><span class="line">  (while (search-forward &quot;Hello&quot;)</span><br><span class="line">    (replace-match &quot;Bonjour&quot;))</span><br><span class="line">  (other-window 1))</span><br><span class="line"></span><br><span class="line">;; 其中 (search-forward &quot;Hello&quot;) 在当前的buffer中做前向搜索</span><br><span class="line">;; (while x y) 当x 的条件满足时执行y指令 ，当x返回nil时，while循环结束</span><br><span class="line"></span><br><span class="line">;; 执行这个函数 替换test buffer中的hello</span><br><span class="line">(replace-hello-by-bonjour)</span><br><span class="line"></span><br><span class="line">;; test buffer中的结果如下</span><br><span class="line">;; Bonjour Stephanie!</span><br><span class="line">;; Bonjour Sarah!</span><br><span class="line">;; Bonjour Chloe!</span><br><span class="line">;; Bonjour Mathilde!</span><br><span class="line"></span><br><span class="line">;; 在minibuff中，还会有一条错误信息 &quot;Search failed: Hello&quot;.</span><br><span class="line">;; 把(search-forward &quot;Hello&quot;)一句换成如下就不会有错误信息了</span><br><span class="line">;; (search-forward &quot;Hello&quot; nil t)</span><br><span class="line"></span><br><span class="line">;; 其中 nil参数表示 搜索的区域不加限制，直到buffer结束</span><br><span class="line">;; 其中t参数指示search-foward函数 跳过错误信息 直接退出</span><br><span class="line"></span><br><span class="line">;; 新hello-to-bonjour如下：</span><br><span class="line">(defun hello-to-bonjour ()</span><br><span class="line">  (switch-to-buffer-other-window &quot;*test*&quot;)</span><br><span class="line">  (erase-buffer)</span><br><span class="line">  ;; 对list-of-names列表中的每个元素 使用hello函数</span><br><span class="line">  (mapcar &#39;hello list-of-names)</span><br><span class="line">  (goto-char (point-min))</span><br><span class="line">  ;; 搜索Hello替换成Bonjour</span><br><span class="line">  (while (search-forward &quot;Hello&quot; nil t)</span><br><span class="line">    (replace-match &quot;Bonjour&quot;))</span><br><span class="line">  (other-window 1))</span><br><span class="line"></span><br><span class="line">;; 执行这个函数</span><br><span class="line">(hello-to-bonjour)</span><br><span class="line"></span><br><span class="line">;; 下面的boldify-names 函数 ，</span><br><span class="line">;; 首先把光标挪到名叫test的buffer的开头，</span><br><span class="line">;; 然后使用regular expression 搜索 “Bonjour + 其它任何内容” 的pattern，</span><br><span class="line">;; 然后对找到的字符加粗。 </span><br><span class="line">(defun boldify-names ()</span><br><span class="line">  (switch-to-buffer-other-window &quot;*test*&quot;)</span><br><span class="line">  (goto-char (point-min))</span><br><span class="line">  (while (re-search-forward &quot;Bonjour \\(.+\\)!&quot; nil t)</span><br><span class="line">    (add-text-properties (match-beginning 1) ;返回匹配模式中，最先匹配的位置</span><br><span class="line">                         (match-end 1) ;返回最后匹配的位置</span><br><span class="line">                         (list &#39;face &#39;bold)))</span><br><span class="line">  (other-window 1))</span><br><span class="line"></span><br><span class="line">;; 执行这个函数 </span><br><span class="line">(boldify-names)</span><br><span class="line"></span><br><span class="line">&#x3D;&#x3D; 帮助和参考&#x3D;&#x3D;</span><br><span class="line"></span><br><span class="line">;; 在Emacs中我们可以通过如下的方式得到变量和函数的帮助信息</span><br><span class="line">;; C-h v a-variable RET</span><br><span class="line">;; C-h f a-function RET</span><br><span class="line">;;</span><br><span class="line">;; 下面的命令将打开整个Emacs Manual</span><br><span class="line">;;</span><br><span class="line">;; C-h i m elisp RET</span><br><span class="line">;;</span><br><span class="line">;; Emacs Lisp 教程</span><br><span class="line">;; https:&#x2F;&#x2F;www.gnu.org&#x2F;software&#x2F;emacs&#x2F;manual&#x2F;html_node&#x2F;eintr&#x2F;index.html</span><br><span class="line"></span><br><span class="line">;; Thanks to these people for their feedback and suggestions:</span><br><span class="line">;; - Wes Hardaker</span><br><span class="line">;; - notbob</span><br><span class="line">;; - Kevin Montuori</span><br><span class="line">;; - Arne Babenhauserheide</span><br><span class="line">;; - Alan Schmitt</span><br><span class="line">;; - LinXitoW</span><br><span class="line">;; - Aaron Meurer</span><br></pre></td></tr></table></figure>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+			
+			
+			
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/elisp-function.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/elisp-basic.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '入门'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

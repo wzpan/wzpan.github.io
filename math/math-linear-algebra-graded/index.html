@@ -1,0 +1,918 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>机器学习的数学基础：线性代数进阶篇 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="本篇是线性代数子系列的最终篇，结合 Python 实践，概括总结了阶梯形矩阵、线性子空间、最小二乘逼近和特征向量的基础知识点。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="机器学习的数学基础：线性代数进阶篇"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '机器学习的数学基础：线性代数进阶篇'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 机器学习的数学基础：线性代数进阶篇</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>本篇是线性代数子系列的最终篇，结合 Python 实践，概括总结了阶梯形矩阵、线性子空间、最小二乘逼近和特征向量的基础知识点。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <h2 id="前言">前言</h2>
+<p>在前面两篇文章中，我简要概括了线性代数中两个最基本的数据表达方式：<a href="/math/math-matrix/">矩阵</a> 和 <a href="/math/math-vector/">向量</a>。有了这两个数学工具作为基础，我们可以再进一步，讨论下面一些内容：</p>
+<ol>
+<li>如何求解线性空间的基？</li>
+<li>向量的子空间、零空间、列空间、行空间、左零空间都是什么东西？怎么求解？</li>
+<li>如何用线性代数的知识来拟合数据？</li>
+<li>机器学习、图像处理中常见的“特征向量”究竟是什么东西？它和变换矩阵有什么联系？</li>
+</ol>
+<p>本篇文章将作为线性代数子系列的最终篇。</p>
+<span id="more"></span>
+<h2 id="阶梯形矩阵">阶梯形矩阵</h2>
+<p>阶梯形矩阵是一类非常实用的工具，可以帮助我们求解出线性空间的基，这就能用在诸如计算解不唯一的方程组之类的问题上。</p>
+<h3 id="阶梯形矩阵-v2">阶梯形矩阵</h3>
+<p>若矩阵 \(\mathbf{A}\) 满足两条件：</p>
+<ol>
+<li>若有零行（元素全为0的行），则零行应在最下方；</li>
+<li>非零首元（即非零行的第一个不为零的元素）的列标号随行标号的增加而严格递增。</li>
+</ol>
+<p>则称此矩阵 \(\mathbf{A}\) 为阶梯形矩阵。</p>
+<p>示例：</p>
+<p>\[
+\begin{bmatrix}
+2 &amp; 0 &amp; 2 &amp; 1 \\
+0 &amp; 5 &amp; 2 &amp; -2 \\
+0 &amp; 0 &amp; 3 &amp; 2 \\
+0 &amp; 0 &amp; 0 &amp; 0
+\end{bmatrix}
+\]</p>
+<h3 id="行简化阶梯形矩阵">行简化阶梯形矩阵</h3>
+<p>若矩阵 \(\mathbf{A}\) 满足两条件：</p>
+<ol>
+<li>它是阶梯形矩阵；</li>
+<li>非零首元所在的列除了非零首元外，其余元素全为0。</li>
+</ol>
+<p>则称此矩阵 \(\mathbf{A}\) 为行简化阶梯形矩阵。</p>
+<p>示例：</p>
+<p>\[
+\begin{bmatrix}
+2 &amp; 0 &amp; 2 &amp; 1 \\
+0 &amp; 5 &amp; 2 &amp; -2 \\
+0 &amp; 0 &amp; 3 &amp; 2 \\
+0 &amp; 0 &amp; 0 &amp; 0
+\end{bmatrix}
+\]</p>
+<h3 id="行最简形矩阵">行最简形矩阵</h3>
+<p>若矩阵 \(\mathbf{A}\) 满足两条件：</p>
+<ol>
+<li>它是行简化阶梯形矩阵；</li>
+<li>非零首元都为1</li>
+</ol>
+<p>则称此矩阵 \(\mathbf{A}\) 为行最简形矩阵。</p>
+<h3 id="将矩阵化简成行最简阶梯形">将矩阵化简成行最简阶梯形</h3>
+<p>对如下矩阵</p>
+<p>\[
+\begin{bmatrix}
+1 &amp; 2 &amp; 1 &amp; 1 &amp; 7\\ 
+1 &amp; 2 &amp; 2 &amp; -1 &amp; 12\\ 
+2 &amp; 4 &amp; 0 &amp; 6 &amp; 4
+\end{bmatrix}
+\]</p>
+<p>，使用初等变换可以将这个矩阵转换成如下的形式：</p>
+<p>\[
+\begin{bmatrix}
+1 &amp; 2 &amp; 1 &amp; 1 &amp; 7\\ 
+1 &amp; 2 &amp; 2 &amp; -1 &amp; 12\\ 
+2 &amp; 4 &amp; 0 &amp; 6 &amp; 4
+\end{bmatrix}
+\rightarrow
+\begin{bmatrix}
+1 &amp; 2 &amp; 1 &amp; 1 &amp; 7\\ 
+0 &amp; 0 &amp; 1 &amp; -2 &amp; 5\\ 
+2 &amp; 4 &amp; 0 &amp; 6 &amp; 4
+\end{bmatrix}
+\rightarrow
+\begin{bmatrix}
+1 &amp; 2 &amp; 1 &amp; 1 &amp; 7\\ 
+0 &amp; 0 &amp; 1 &amp; -2 &amp; 5\\ 
+0 &amp; 0 &amp; -2 &amp; 4 &amp; -10
+\end{bmatrix}
+\rightarrow
+\begin{bmatrix}
+1 &amp; 2 &amp; 1 &amp; 1 &amp; 7\\ 
+0 &amp; 0 &amp; 1 &amp; -2 &amp; 5\\ 
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0
+\end{bmatrix}
+\rightarrow
+\begin{bmatrix}
+1 &amp; 2 &amp; 0 &amp; 3 &amp; 2\\ 
+0 &amp; 0 &amp; 1 &amp; -2 &amp; 5\\ 
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0
+\end{bmatrix}
+\]</p>
+<p>行最简形非常实用。例如，对于下面的方程组：</p>
+<p>\[\left\{ 
+\begin{eqnarray} 
+x_1 + 2x_2 + x_3 + x_4 &amp;=&amp; 7 \\\
+x_1 + 2x_2 + 2x_3 - x_4 &amp;=&amp; 12 \\\
+2x_1 + 4x_2 + 6x_4 &amp;=&amp; 4
+\end{eqnarray}
+\right.
+\]</p>
+<p>只有三个方程，肯定无法求解出四个未知数（此时如果在用 <code>numpy.linalg.solve</code> 求解这个矩阵会引发 <code>LinAlgError</code> ），但是通过化成行最简形，我们可以进一步找出变量的限制关系。先将方程组表达成增广矩阵形式：</p>
+<p>\[
+\begin{bmatrix}
+1 &amp; 2 &amp; 1 &amp; 1 &amp; 7\\ 
+1 &amp; 2 &amp; 2 &amp; -1 &amp; 12\\ 
+2 &amp; 4 &amp; 0 &amp; 6 &amp; 4
+\end{bmatrix}
+\]</p>
+<p>这个矩阵和完全和我们上一步给出的矩阵相同，因此其行简化阶梯性就是</p>
+<p>\[
+\begin{bmatrix}
+1 &amp; 2 &amp; 0 &amp; 3 &amp; 2\\ 
+0 &amp; 0 &amp; 1 &amp; -2 &amp; 5\\ 
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0
+\end{bmatrix}
+\]</p>
+<p>对于方程组，非0首元位置对应的变量就叫做<strong>主元变量</strong>，其他的变量就叫做<strong>自由变量</strong>。例如上面的行最简形，\(x_1\) 和 \(x_3\) 是首元变量，\(x_2\) 和 \(x_4\) 就是自由变量。我们可以将方程改写成下面的形式：</p>
+<p>\[
+\left\{ 
+\begin{eqnarray} 
+x_1 &amp;=&amp; 2 - 2x_2 - 3x_4 \\\
+x_3 &amp;=&amp; 5 + 2x_4
+\end{eqnarray}
+\right.
+\]</p>
+<p>然后可以得到：</p>
+<p>\[
+\begin{bmatrix} x_{ 1 } \\ x_{ 2 } \\ x_{ 3 } \\ x_{ 4 } \end{bmatrix}=\begin{bmatrix} 2 \\ 0 \\ 5 \\ 0 \end{bmatrix}+x_{ 2 }\underbrace { \begin{bmatrix} -2 \\ 1 \\ 0 \\ 0 \end{bmatrix} }_{ \vec{\mathbf{a}} } +x_{ 4 }\underbrace{\begin{bmatrix} -3 \\ 0 \\ 2 \\ 1 \end{bmatrix}}_{\vec{\mathbf{b}}}
+\]</p>
+<p>观察这个结果，方程组的解集就是向量 \(\vec{\mathbf{a}}\) 和向量 \(\vec{\mathbf{b}}\) 的线性组合。这两个向量张成了 \(\mathbb{R}^1\) 中的一个平面。</p>
+<h2 id="线性子空间">线性子空间</h2>
+<p>在前面的内容中我们已经多少涉及到了一些关于空间、张成空间的知识了。有时候我们需要从一个空间 \(K\) 里头挑出一些向量张成一个新的空间 \(\mathbf{W}\) ，这个空间 \(\mathbf{W}\) 就是原来的向量 \(\mathbf{K}\) 的子空间。</p>
+<div class="alert alert-warning"><i class="far fa-bell"></i>  <strong>定理</strong>：设 \(\mathbf{V}\) 是在域 \(\mathbf{K}\) 上的向量空间，并设 \(\mathbf{W}\) 是 \(\mathbf{V}\) 的子集。则 \(\mathbf{W}\) 是个子空间，当且仅当它满足下列三个条件:
+<ol>
+<li>零向量 0 在 \(\mathbf{W}\) 中。</li>
+<li>加法封闭：如果 \(\vec{\mathbf{u}}\) 和 \(\vec{\mathbf{v}}\) 是 \(\mathbf{W}\) 的元素，则向量和 \(\mathbf{\vec{\mathbf{u}}+\vec{\mathbf{v}}}\) 是 \(\mathbf{W}\) 的元素。</li>
+<li>标量乘法封闭：如果 \(\vec{\mathbf{u}}\) 是 \(\mathbf{W}\) 的元素而 \(c\) 是标量，则标量积 \(c\vec{\mathbf{u}}\) 是 \(\mathbf{W}\) 的元素。</li>
+</ol>
+</div>
+<p>子空间的引入有助于我们更专注于某类线性组合，从中找出这些子空间的特点，以及与原来的空间的关系。下面将列举几种典型的子空间。</p>
+<h3 id="零空间">零空间</h3>
+<p>矩阵 \(\mathbf{A}\) 的零空间 \(N(\mathbf{A})\) 就是由满足 \(\mathbf{A}\vec{\mathbf{x}}=0\) 的所有向量 \(\vec{\mathbf{x}}\) 的集合。</p>
+<p>要求解一个矩阵的零空间，可以先将其化简成行最简形。例如矩阵 $\mathbf{A} = \begin{bmatrix} 1 &amp; 1 &amp; 1 &amp; 1 \\ 1 &amp; 2 &amp; 3 &amp; 4 \\ 4 &amp; 3 &amp; 2 &amp; 1 \end{bmatrix} $，为了计算零空间，可以写出如下的等式：</p>
+<p>\[\begin{bmatrix} 1 &amp; 1 &amp; 1 &amp; 1 \\ 1 &amp; 2 &amp; 3 &amp; 4 \\ 4 &amp; 3 &amp; 2 &amp; 1 \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \\ x_3 \\ x_4 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix}\]</p>
+<p>展开得到如下的方程组：</p>
+<p>\[
+\left\{ 
+\begin{eqnarray} 
+x_1 + x_2 + x_3 + x_4 &amp;=&amp; 0 \\\
+x_1 + 2x_2 + 3x_3 + 4x_4 &amp;=&amp; 0 \\\
+4x_1 + 3x_2 + 2x_4 + x_4 &amp;=&amp; 0
+\end{eqnarray}
+\right.
+\]</p>
+<p>参考 <a href="#%E5%8C%96%E7%AE%80%E6%88%90%E8%A1%8C%E6%9C%80%E7%AE%80%E9%98%B6%E6%A2%AF%E5%BD%A2">化简成行最简阶梯形</a> 一节里介绍的方法，先把上面的方程组表示成增广矩阵：</p>
+<p>\[
+\begin{bmatrix} 1 &amp; 1 &amp; 1 &amp; 1 &amp; 0 \\ 1 &amp; 2 &amp; 3 &amp; 4 &amp; 0 \\ 4 &amp; 3 &amp; 2 &amp; 1 &amp; 0 \end{bmatrix}
+\]</p>
+<p>然后将其转换成行最简形：</p>
+<p>\[
+\begin{bmatrix} 1 &amp; 0 &amp; -1 &amp; -2 &amp; 0 \\ 0 &amp; 1 &amp; 2 &amp; 3 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \end{bmatrix}
+\]</p>
+<p>最终求解得到：</p>
+<p>\[
+\begin{bmatrix} x_{ 1 } \\ x_{ 2 } \\ x_{ 3 } \\ x_{ 4 } \end{bmatrix}=x_{ 3 }\underbrace { \begin{bmatrix} 1 \\ -2 \\ 1 \\ 0 \end{bmatrix} }_{ \vec{\mathbf{a}} } +x_{ 4 }\underbrace{\begin{bmatrix} 2 \\ -3 \\ 0 \\ 1 \end{bmatrix}}_{\vec{\mathbf{b}}}
+\]</p>
+<p>因此矩阵 \(\mathbf{A}\) 的零空间就是由上式中的 \(\vec{\mathbf{a}}\) 向量和 \(\vec{\mathbf{b}}\) 向量张成的空间。即</p>
+<p>\[N(\mathbf{A}) = span\left(\begin{bmatrix} 1 \\ -2 \\ 1 \\ 0 \end{bmatrix} \begin{bmatrix} 2 \\ -3 \\ 0 \\ 1 \end{bmatrix}\right)\]</p>
+<p>另外，上面得到的这个行最简形有两个自由变量，就称矩阵 \(\mathbf{A}\) 的 <strong>零度</strong> 为 2。零度等于 \(\mathbf{A}\vec{\mathbf{x}} = 0\) 化成行最简形后自由变量的个数。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  零空间其实和线性无关其实有很大的联系。一个矩阵的零空间为 \(\vec{\mathbf{0}}\) 的充分必要条件是这个矩阵的所有列线性无关。
+</div>
+<h3 id="列空间">列空间</h3>
+<p>矩阵的列空间就是由每一列的向量张成的空间。对于矩阵 \(\underset { m\times n }{ \mathbf{A} } =\begin{bmatrix} \underbrace { \begin{bmatrix} a_{ 11 } \\ a_{ 21 } \\ \ldots \\ a_{ m1 } \end{bmatrix} }_{ \vec { \mathbf{ V }_{ 1 } }  }  &amp; \underbrace { \begin{bmatrix} a_{ 12 } \\ a_{ 22 } \\\ldots  \\ a_{ m2 } \end{bmatrix} }_{ \vec { \mathbf{ V_{ 2 } } }  } &amp; \ldots &amp; \underbrace { \begin{bmatrix} a_{ 1n } \\ a_{ 2n } \\ \ldots \\ a_{ mn } \end{bmatrix} }_{ \vec { \mathbf{ V_{ n } } }  }  \end{bmatrix}\)，那么矩阵 \(\mathbf{A}\) 的列空间就是</p>
+<p>\[C(\mathbf{A}) = span(\vec{v_1}, \vec{v_2}, \ldots, \vec{v_n})\]</p>
+<p>例如，矩阵 \(\mathbf{A} = \begin{bmatrix}1 &amp; 1 &amp; 1 &amp; 1 \\ 1 &amp; 2 &amp; 3 &amp; 4 \\4 &amp; 3 &amp; 2 &amp; 1\end{bmatrix}\) 的列空间是 \(C(\mathbf{A}) = span\left(\begin{bmatrix}1 \\ 1 \\ 4\end{bmatrix}\begin{bmatrix}1 \\ 2 \\ 3\end{bmatrix}\begin{bmatrix}1 \\ 3 \\ 2\end{bmatrix}\begin{bmatrix}1 \\ 4 \\ 1\end{bmatrix}\right)\)</p>
+<p>把一个矩阵化成行最简形后，这个矩阵的不相关主列（基底）的个数就称为矩阵的<strong>秩</strong>（Rank），或者叫维数。</p>
+<p>例如，上面的矩阵 \(\mathbf{A}\) 化成最简形矩阵是（参考上节的化简结果）：</p>
+<p>\[
+\begin{bmatrix} 1 &amp; 0 &amp; -1 &amp; -2  \\ 0 &amp; 1 &amp; 2 &amp; 3  \\ 0 &amp; 0 &amp; 0 &amp; 0 \end{bmatrix}
+\]</p>
+<p>从结果可以看出这个矩阵的主列有 2 个，而且是线性无关的。所以矩阵 \(\mathbf{A}\) 的秩为 2 ，即 \(rank(\mathbf{A}) = 2\)。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  矩阵的秩有一个特性：矩阵 \(\mathbf{A}\) 的秩等于矩阵 \(\mathbf{A}\) 的转置的秩。即 \(Rank(\mathbf{A}) = Rank(\mathbf{A^T})\)
+</div>
+<p>在 Python 中，可以使用 Numpy 包中的 <code>linalg.matrix_rank</code> 方法计算矩阵的秩：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = np.matrix(<span class="string">&#x27;1 1 1 1;1 2 3 4;4 3 2 1&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> np.linalg.matrix_rank(a)  <span class="comment"># 2</span></span><br></pre></td></tr></table></figure>
+<div class="alert alert-warning"><i class="far fa-bell"></i>  <strong>注意</strong> 在 Numpy 中的秩和线性代数里的秩是不同的概念。在NumPy中维度（dimensions）叫做轴（axes），轴的个数叫做秩。
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">a = np.matrix(<span class="string">&#x27;1 1 1 1;1 2 3 4; 0 0 1 0&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> a.ndim  <span class="comment"># 2（维度）</span></span><br><span class="line"><span class="built_in">print</span> np.rank(a)  <span class="comment"># 2（a.ndim 的别名，已经过时）</span></span><br><span class="line"><span class="built_in">print</span> np.linalg.matrix_rank(a)  <span class="comment"># 3（秩）</span></span><br></pre></td></tr></table></figure>
+</div>
+<h3 id="行空间">行空间</h3>
+<p>有了列空间的定义，行空间顾名思义就是矩阵的每一行转置得到的向量张成的子空间，也就是矩阵的转置的列空间，记为 \(R(\mathbf{A}) = C(\mathbf{A}^T)\)。</p>
+<p>例如，矩阵 \(\mathbf{A} = \begin{bmatrix}1 &amp; 1 &amp; 1 &amp; 1 \\ 1 &amp; 2 &amp; 3 &amp; 4 \\4 &amp; 3 &amp; 2 &amp; 1\end{bmatrix}\) 的行空间是 \(R(\mathbf{A}) = C(\mathbf{A}^T) = span\left(\begin{bmatrix}1 \\ 1 \\ 1 \\ 1\end{bmatrix}\begin{bmatrix}1 \\ 2 \\ 3 \\ 4\end{bmatrix}\begin{bmatrix}4 \\ 3 \\ 2 \\ 1\end{bmatrix}\right)\)。</p>
+<h3 id="左零空间">左零空间</h3>
+<p>矩阵 \(\mathbf{A}\) 的左零空间是 \(\mathbf{A}\) 的转置的零空间。即：</p>
+<p>\[N(\mathbf{A}^T) = \left\{ \vec{\mathbf{x}} | \mathbf{A}^{T} \vec{\mathbf{x}} = \vec{\mathbf{0}} \right\} = \left\{ \vec{\mathbf{x}} | \vec{\mathbf{x}}^{T} \mathbf{A} = \vec{\mathbf{0}}^{T} \right\}\]</p>
+<p>例如，矩阵 \(\mathbf{B} = \begin{bmatrix}1 &amp; 1 &amp; 4 \\ 1 &amp; 2 &amp; 3 \\1 &amp; 4 &amp; 2\\ 1 &amp; 3 &amp; 1\end{bmatrix}\) 的转置是矩阵 \(\mathbf{A} = \mathbf{A} = \begin{bmatrix}1 &amp; 1 &amp; 1 &amp; 1 \\ 1 &amp; 2 &amp; 3 &amp; 4 \\4 &amp; 3 &amp; 2 &amp; 1\end{bmatrix}\) ，因此左零空间是 \(N(\mathbf{B^T}) = N(\mathbf{A}) = span\left(\begin{bmatrix} 1 \\ -2 \\ 1 \\ 0 \end{bmatrix} \begin{bmatrix} 2 \\ -3 \\ 0 \\ 1 \end{bmatrix}\right)\)</p>
+<p>由于转置是对称的，所以矩阵 \(\mathbf{A}\) 的转置的左零空间也是矩阵 \(\mathbf{A}\) 的零空间。</p>
+<h3 id="子空间的正交补">子空间的正交补</h3>
+<p>假设 \(\mathbf{V}\) 是 \(\mathbb{R}^n\) 的一个子空间，那么 \(\mathbf{V}\) 的正交补 \(\mathbf{V}^{\bot}\) 也是一个子空间，定义为 \(\left\{\vec{\mathbf{x}} | \vec{\mathbf{x}} \vec{\mathbf{v}}=0\right\}\)，也即是 \(\mathbb{R}^{n}\) 中所有正交于 \(\mathbf{V}\) 的向量所组成的子空间。</p>
+<p>由于正交是对称的，所以正交补也是对称的。一个子空间的正交补的正交补依然等于这个子空间。</p>
+<p>矩阵的零空间是行空间的正交补<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>，即 \(N(\mathbf{A}) = R(\mathbf{A})^{\bot}\)。反过来，矩阵的左零空间是列空间的正交补，即  \(N(\mathbf{B}^T) = C(\mathbf{B})^{\bot}\)。</p>
+<h2 id="最小二乘逼近">最小二乘逼近</h2>
+<p>最小二乘法是一个实用的数学工具，利用它可以在方程无解的情况下给出近似解。在机器学习中，最小二乘逼近也是一个重要的拟合方法。</p>
+<p>假设有一个方程</p>
+<p>\[\underset{n\times k}{\mathbf{A}}\vec{\mathbf{x}} = \vec{\mathbf{b}}\]</p>
+<p>无解。把上式写成：</p>
+<p>\[\vec{a_1}\vec{\mathbf{x}} + \vec{a_2}\vec{\mathbf{x}} + \ldots + \vec{a_k}\vec{\mathbf{x}} = \vec{\mathbf{b}}\]</p>
+<p>无解就意味着 \(\mathbf{A}\) 的所有列向量的张成空间不包括向量 \(\vec{\mathbf{b}}\) 。即 \(\vec{\mathbf{b}} \notin span(C(\mathbf{A}))\)。</p>
+<p>我们可以通过最小二乘法求解出近似解。即是要让找出一些向量 \(\vec{\mathbf{x}^*}\) 使得 \(\left\|\vec{\mathbf{b}}-\mathbf{A}\vec{\mathbf{x}^*}\right\|\) 最小。用向量 \(\vec{\mathbf{V}}\) 代表 \(\mathbf{A}\vec{\mathbf{x}^*}\) ，有：</p>
+<p>\[\left\|\begin{bmatrix}\vec{b_1}-\vec{v_1}\\\vec{b_2}-\vec{v_2}\\\ldots\\\vec{b_n}-\vec{v_n}\\\end{bmatrix}\right\|^2= (b_1-v_1)^2 + (b_2-v_2)^2 + \ldots + (b_n-v_n)^2\]</p>
+<p>把这个值最小化的过程就叫做<strong>最小二乘逼近</strong>。</p>
+<p>如何求出 \(\mathbf{A}\vec{\mathbf{x}^*}\) 这个近似值呢？从几何上考虑，列空间可以看成空间中张成的一个平面，而向量 \(\vec{\mathbf{b}}\) 并不落在这个平面上。但我们知道，在这个平面上与向量 \(\vec{\mathbf{b}}\) 最接近的向量就是它的<a href="/math/math-vector/#%E5%90%91%E9%87%8F%E7%82%B9%E7%A7%AF">投影</a>！所以，</p>
+<p>\[
+\mathbf{A}\vec{\mathbf{x}^*} = Proj_{C(\mathbf{A})}\vec{\mathbf{b}}
+\]</p>
+<p>直接计算 \(Proj_{C(\mathbf{A})}\vec{\mathbf{b}}\) 并不简单。不过，\(\vec{\mathbf{b}}-\mathbf{A}\vec{\mathbf{x}}\) 其实就是 \(\mathbf{A}\vec{\mathbf{x}}\) 的正交补，所以一个简单的求解方法是将原来无解的方程左乘一个 \(\mathbf{A}\) 的转置再求解：</p>
+<p>\[
+\mathbf{A}^T\mathbf{A}\vec{\mathbf{x}^*} = \mathbf{A}^T\vec{\mathbf{b}}
+\]</p>
+<p>得出的解就是原方程的近似解。</p>
+<h3 id="实例1：求解方程">实例1：求解方程</h3>
+<p>问题：求解如下方程组</p>
+<p>\[\left\{ \begin{eqnarray} x + y &amp;=&amp; 3 \\\x - y &amp;=&amp; -2 \\\y &amp;=&amp; 1\end{eqnarray}\right.\]</p>
+<p>将三个方程表示的直线画出来，可以看出这三条直线并没有交点：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig8.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>如何找出一个与三条直线距离最近的一个点呢？这时候我们的最小二乘逼近就派上用场了。</p>
+<p>先将方程写成矩阵和向量的形式：</p>
+<p>\[\underbrace{\begin{bmatrix}1 &amp; 1 \\1 &amp; -1 \\0 &amp; 1\end{bmatrix}}_{\mathbf{A}}
+\underbrace{\begin{bmatrix}x \\y\end{bmatrix}}_{\vec{\mathbf{x}}}=\underbrace{
+\begin{bmatrix}3 \\-2 \\1\end{bmatrix}}_{\vec{\mathbf{b}}}\]</p>
+<p>这个等式的最小二乘逼近就是：</p>
+<p>\[
+\begin{align}
+\begin{bmatrix}
+1 &amp; 1 &amp; 0 \\
+1 &amp; -1 &amp; 1\\
+\end{bmatrix}
+\begin{bmatrix}
+1 &amp; 1 \\
+1 &amp; -1 \\
+0 &amp; 1
+\end{bmatrix}
+\begin{bmatrix}
+x^* \\
+y^*
+\end{bmatrix}
+&amp; = 
+\begin{bmatrix}
+1 &amp; 1 &amp; 0 \\
+1 &amp; -1 &amp; 1\\
+\end{bmatrix}
+\begin{bmatrix}
+3 \\
+-2 \\
+1
+\end{bmatrix}
+\\\
+\begin{bmatrix}
+2 &amp; 0 \\
+0 &amp; 3
+\end{bmatrix}
+\begin{bmatrix}
+x^* \\
+y^*
+\end{bmatrix}
+&amp; =
+\begin{bmatrix}
+1 \\
+6
+\end{bmatrix}
+\end{align}
+\]</p>
+<p>由于是二阶方程，可以很容易求出矩阵 \(\begin{bmatrix}2 &amp; 0 \\ 0 &amp; 3\end{bmatrix}\) 的逆是 \(\begin{bmatrix}\frac{1}{2} &amp; 0 \\ 0 &amp; \frac{1}{3}\end{bmatrix}\)，所以：</p>
+<p>\[\begin{bmatrix}x^* \\y^*\end{bmatrix}=\begin{bmatrix}\frac{1}{2} &amp; 0 \\ 0 &amp; \frac{1}{3}\end{bmatrix}\begin{bmatrix}1 \\6\end{bmatrix}=\begin{bmatrix}\frac{1}{2} \\
+2\end{bmatrix}\]</p>
+<p>因此 \(\begin{bmatrix}\frac{1}{2} \\ 2 \end{bmatrix}\) 就是方程组的近似解。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig9.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>在 Python 中，可以使用 <code>numpy.linalg.lstsq</code> 方法来求解最小二乘逼近。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.array([[<span class="number">1</span>, <span class="number">1</span>], [<span class="number">1</span>, -<span class="number">1</span>], [<span class="number">0</span>, <span class="number">1</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = np.array([<span class="number">3</span>, -<span class="number">2</span>, <span class="number">1</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = np.linalg.lstsq(a,b)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span> x</span><br><span class="line">(array([ <span class="number">0.5</span>,  <span class="number">2.</span> ]), array([ <span class="number">1.5</span>]), <span class="number">2</span>, array([ <span class="number">1.73205081</span>,  <span class="number">1.41421356</span>]))</span><br></pre></td></tr></table></figure>
+<p><code>numpy.linalg.lstsq</code> 的返回包括四个部分：</p>
+<ol>
+<li>最小二乘逼近解。如果 <code>b</code> 是二维的，那么这个逼近的结果有多个列，每一列是一个逼近解。对于上例，逼近解就是 \(\begin{bmatrix}0.5 \\  2 \end{bmatrix}\) 。</li>
+<li>残差。即每一个 <code>b - a*x</code> 的长度的和。对于上例，残差是 1.5 。</li>
+<li>矩阵 <code>a</code> 的秩。对于上例，矩阵 <code>a</code> 的秩为 2 。</li>
+<li>矩阵 <code>a</code> 的奇异值。对于上例，矩阵 <code>a</code> 的奇异值为 \(\begin{bmatrix}1.73205081 \\  1.41421356\end{bmatrix}\)</li>
+</ol>
+<h3 id="实例2：线性回归">实例2：线性回归</h3>
+<p>问题：给定4个坐标点 \((-1, 0)\), \((0, 1)\), \((1, 2)\), \((2, 1)\) ，求一条经过这些点的直线 \(y=mx+b\)。</p>
+<p>将四个点画图如下：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig10.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>显然这样的直线并不存在。然而我们能够使用最小二乘逼近，找到一条尽可能接近这些点的直线。将四个点表示成方程组的形式：</p>
+<p>\[
+\left\{
+\begin{eqnarray}
+f(-1) &amp;= -m + b = 0\\\
+f(0) &amp;= 0 + b  = 1\\\
+f(1) &amp;= m + b = 2\\\
+f(2) &amp;= 2m + b = 1
+\end{eqnarray}
+\right.
+\]</p>
+<p>还是那个套路，将方程组表示成矩阵和向量的形式：</p>
+<p>\[\underbrace{\begin{bmatrix}-1 &amp; 1 \\0 &amp; 1 \\1 &amp; 1 \\2 &amp; 1\end{bmatrix}}_{\mathbf{A}}\underbrace{\begin{bmatrix}m\\b\end{bmatrix}}_{\vec{\mathbf{x}}}=\underbrace{
+\begin{bmatrix}0\\1\\2\\1\end{bmatrix}}_{\vec{\mathbf{b}}}\]</p>
+<p>这个等式的最小二乘逼近就是：</p>
+<p>\[\begin{align}\begin{bmatrix}-1 &amp; 0 &amp; 1 &amp; 2 \\1 &amp; 1 &amp; 1 &amp; 1\end{bmatrix}\begin{bmatrix}-1 &amp; 1 \\0 &amp; 1 \\1 &amp; 1 \\2 &amp; 1\end{bmatrix}\begin{bmatrix}m^*\\b^*
+\end{bmatrix}&amp;=\begin{bmatrix}-1 &amp; 0 &amp; 1 &amp; 2 \\1 &amp; 1 &amp; 1 &amp; 1\end{bmatrix}\begin{bmatrix}0\\1\\2\\1\end{bmatrix}\\\\begin{bmatrix}6 &amp; 2 \\2 &amp; 4\end{bmatrix}
+\begin{bmatrix}m^*\\b^*\end{bmatrix}&amp;=\begin{bmatrix}4\\4\end{bmatrix}\end{align}\]</p>
+<p>容易求得 \(\begin{bmatrix}6 &amp; 2\\2 &amp; 4\end{bmatrix}\) 的逆为 \(\frac{1}{20}\begin{bmatrix}4 &amp; -2\\-2 &amp; 6\end{bmatrix}\)，因此</p>
+<p>\[\begin{bmatrix}m^*\\b^*\end{bmatrix} = \frac{1}{20}\begin{bmatrix}4 &amp; -2\\-2 &amp; 6\end{bmatrix}\begin{bmatrix}4 \\ 4\end{bmatrix} = \frac{1}{20}\begin{bmatrix}8 \\ 16\end{bmatrix} = \begin{bmatrix}\frac{2}{5} \\ \frac{4}{5}\end{bmatrix}\]</p>
+<p>将直线 \(y = \frac{2}{5}x + \frac{4}{5}\) 绘图如下所示：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/fig11.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>这就是所求的直线的近似解。</p>
+<p>Python 示例如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.matrix(<span class="string">&#x27;-1 1;0 1;1 1;2 1&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = np.array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = np.linalg.lstsq(a, b)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span> x</span><br><span class="line">(array([ <span class="number">0.4</span>,  <span class="number">0.8</span>]), array([ <span class="number">1.2</span>]), <span class="number">2</span>, array([ <span class="number">2.68999405</span>,  <span class="number">1.66250775</span>]))</span><br></pre></td></tr></table></figure>
+<h2 id="特征向量">特征向量</h2>
+<p>“特征”在模式识别和图像处理中是非常常见的一个词汇。我们要认识和描绘一件事物，首先得找出这个事物的特征。同样的道理，要让计算机识别一件事物，首先就要让计算机学会理解或者抽象出事物的特征。什么样的东西能当成特征呢？那必须是能“放之四海皆准”的依据，不论个体如何变换，都能从中找到这类群体共有的特点。例如，计算机视觉中常用的 <a href="/wiki/opencv-video.html#sift-%E7%89%B9%E5%BE%81%E7%82%B9">SIFT 特征点</a> 是一种很经典的用于视觉跟踪的特征点，即使被跟踪的物体的尺度、角度发生了变化，这种特征点依然能够找到关联。在机器学习中， 特征向量选取也是整个机器学习系统中非常重要的一步。</p>
+<p>在线性代数中，“特征” 就是一种更抽象的描述。我们知道，矩阵乘法对应了一个变换，是把任意一个向量变成另一个方向或长度都大多不同的新向量。在这个变换的过程中，原向量主要发生旋转、伸缩的变化。如果矩阵对某一个向量或某些向量只发生伸缩（尺度）变换，而没有产生旋转的效果（也就意味着张成的子空间没有发生改变），这样的向量就认为是特征向量。</p>
+<p>\[\mathbf{T}(\vec{\mathbf{v}}) = \underbrace{\mathbf{A}}_{n\times n}\vec{\mathbf{v}} = \underbrace{\lambda}_{特征值} \overbrace{\vec{\mathbf{v}}}^{特征向量}\]</p>
+<p>其中， \(T\) 是一种线性变换，我们知道线性变换可以用矩阵向量积来表示，因此可以表示成 \(\mathbf{A}\vec{\mathbf{v}}\) 。\(\mathbf{A}\) 是一个 \(n\times n\) 的方阵。\(\vec{\mathbf{v}}\) 就是特征向量（Eigen Vector），也就是<q>能被伸缩的向量</q>（要求是非 \(\mathbf{0}\) 向量），而 \(\lambda\) 是特征向量 \(\vec{\mathbf{v}}\) 所对应的特征值，也就是<q>伸缩了多少</q>。如果特征值是负数，那说明了矩阵不但把向量拉长（缩短）了，而且让向量指向了相反的方向。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  简而言之，特征向量就是在线性变化当中不变的向量。
+</div>
+<p>听起来很抽象，放个例子就清楚了。下图出自 wikipedia的《<a target="_blank" rel="noopener" href="http://zh.wikipedia.org/wiki/%C3%A7%C2%89%C2%B9%C3%A5%C2%BE%C2%81%C3%A5%C2%90%C2%91%C3%A9%C2%87%C2%8F">特征向量</a>》一文：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/math-linear-algebra/eigen.jpg" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>在这个仿射变换中，蒙娜丽莎的图像被变形，但是中心的纵轴在变换下保持不变。（注意：角落在右边的图像中被裁掉了。）蓝色的向量，从胸部到肩膀，其方向改变了，但是红色的向量，从胸部到下巴，其方向不变。因此红色向量是该变换的一个特征向量，而蓝色的不是。因为红色向量既没有被拉伸又没有被压缩，其特征值为1。所有沿着垂直线的向量也都是特征向量，它们的特征值相等。它们构成这个特征值的特征空间。</p>
+<h3 id="求解特征值">求解特征值</h3>
+<p>非 \(\mathbf{0}\) 向量 \(\vec{\mathbf{v}}\) 是线性变化矩阵 \(\mathbf{A}\) 的特征向量，需要满足如下条件<div class="label-anchor"><span>eq: 1 »</span></div>：</p>
+<p>\[det(\lambda \mathbf{I}_n - \underbrace{\mathbf{A}}_{n\times n}) = 0\]</p>
+<p>其中，\(det\) 表示矩阵行列式，\(\lambda\) 是特征值，\(\mathbf{I}\) 是单位矩阵。</p>
+<p>例如矩阵 \(\mathbf{A} = \begin{bmatrix}1 &amp; 2 \\ 4 &amp; 3\end{bmatrix}\) ，代入公式 2 得：</p>
+<p>\[
+\begin{align} det\left( \lambda \begin{bmatrix} 1 &amp; 0 \\ 0 &amp; 1 \end{bmatrix}-\begin{bmatrix} 1 &amp; 2 \\ 4 &amp; 3 \end{bmatrix} \right)  &amp;=0 \\ det\left( \begin{bmatrix} \lambda  &amp; 0 \\ 0 &amp; \lambda  \end{bmatrix}-\begin{bmatrix} 1 &amp; 2 \\ 4 &amp; 3 \end{bmatrix} \right)  &amp;=0 \\ det\left( \begin{bmatrix} \lambda -1 &amp; -2 \\ -4 &amp; \lambda -3 \end{bmatrix} \right)  &amp;=0 \end{align}
+\]</p>
+<p>所以有：</p>
+<p>\[\begin{align} (\lambda -1)(\lambda -3)-8 &amp; =0 \\ \lambda ^{ 2 }-4\lambda -5 &amp;=0 \\ (\lambda - 5)(\lambda +1) &amp;= 0\end{align}\]</p>
+<p>因此 \(\lambda\) 的值为 5 或者 -1 。</p>
+<p>在 Python 中，可以使用 <code>numpy.linalg.eigvals</code> 方法求解一个方阵的特征值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.matrix(<span class="string">&#x27;1 2;4 3&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span> np.linalg.eigvals(a)</span><br><span class="line">[-<span class="number">1.</span>  <span class="number">5.</span>]</span><br></pre></td></tr></table></figure>
+<p>前面说了变换矩阵必须是方阵，所以如果用在其他形状的矩阵上就会抛出 <code>LinAlgError</code> 错误：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = np.matrix(<span class="string">&#x27;1 2 3;4 3 1&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span> np.linalg.eigvals(b)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">  File <span class="string">&quot;/usr/local/lib/python2.7/dist-packages/numpy/linalg/linalg.py&quot;</span>, line <span class="number">902</span>, <span class="keyword">in</span> eigvals</span><br><span class="line">    _assertNdSquareness(a)</span><br><span class="line">  File <span class="string">&quot;/usr/local/lib/python2.7/dist-packages/numpy/linalg/linalg.py&quot;</span>, line <span class="number">212</span>, <span class="keyword">in</span> _assertNdSquareness</span><br><span class="line">    <span class="keyword">raise</span> LinAlgError(<span class="string">&#x27;Last 2 dimensions of the array must be square&#x27;</span>)</span><br><span class="line">numpy.linalg.linalg.LinAlgError: Last <span class="number">2</span> dimensions of the array must be square</span><br></pre></td></tr></table></figure>
+<h3 id="求解特征向量">求解特征向量</h3>
+<p>变换矩阵 \(\mathbf{A}\) 的特征空间（特征向量张成的空间）可以用下面的等式来求解： <div class="label-anchor"><span>eq: 2 »</span></div></p>
+<p>\[\mathbf{E}_{\lambda}=N(\lambda I_n - \mathbf{A})\]</p>
+<p>例如上面的变换矩阵 \(\mathbf{A} = \begin{bmatrix}1 &amp; 2 \\ 4 &amp; 3\end{bmatrix}\) ，代入公式 3 得：</p>
+<p>\[{ E }_{ \lambda  }=N\left( \lambda I_{ n }-\begin{bmatrix} 1 &amp; 2 \\ 4 &amp; 3 \end{bmatrix} \right) =N\left( \lambda \begin{bmatrix} 1 &amp; 0 \\ 0 &amp; 1 \end{bmatrix}-\begin{bmatrix} 1 &amp; 2 \\ 4 &amp; 3 \end{bmatrix} \right) =N\left( \begin{bmatrix} \lambda -1 &amp; -2 \\ -4 &amp; \lambda -3 \end{bmatrix} \right) \]</p>
+<p>当 \(\lambda = 5\) 时，</p>
+<p>\[{ E }_{ 5  }=N\left( \begin{bmatrix} 4 &amp; -2 \\ -4 &amp; 2 \end{bmatrix} \right) \]</p>
+<p>利用前面所学的 <a href="#%E9%9B%B6%E7%A9%BA%E9%97%B4">零空间的求解方法</a> ，得</p>
+<p>\[{ E }_{ 5  }= span\left(\begin{bmatrix}\frac{1}{2} \\ 1 \end{bmatrix}\right) \]</p>
+<p>同样地，当 \(\lambda = -1\) 时，</p>
+<p>\[{ E }_{ -1  }= span\left(\begin{bmatrix}1 \\ -1 \end{bmatrix}\right) \]</p>
+<p>在 Python 中，可以使用 <code>numpy.linalg.eig</code> 方法来求解方阵的特征值和特征向量：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.matrix(<span class="string">&#x27;1 2;4 3&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span> np.linalg.eig(a)</span><br><span class="line">(array([-<span class="number">1.</span>,  <span class="number">5.</span>]), matrix([[-<span class="number">0.70710678</span>, -<span class="number">0.4472136</span> ],</span><br><span class="line">        [ <span class="number">0.70710678</span>, -<span class="number">0.89442719</span>]]))</span><br></pre></td></tr></table></figure>
+<p>得到的元组中，第一部分是特征值，和前面使用 <code>numpy.linalg.eigvals</code> 得到的结果完全一样；第二部分是特征向量，乍一看好像和我们上面求解的结果不一样，但如果我们这么写就完全一样了：\(\begin{bmatrix}-0.70710678\begin{bmatrix}1 \\ -1\end{bmatrix} &amp; -0.89442719\begin{bmatrix}\frac{1}{2} \\ 1\end{bmatrix} \end{bmatrix}\)</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  变换矩阵线性无关的特征向量特别适合作为空间的基，因为在这些方向上变换矩阵可以拉伸向量而不必扭曲和旋转它，使得计算大为简单。我们把这种基称为 <strong>特征基</strong> 。
+</div>
+<h2 id="小结">小结</h2>
+<p>终于完成了线性代数的系列。作为保研党，真正系统学习线性代数也就是在大一的时期，然后大学四年也没怎么用到数学，渐渐地就忘得差不多了。后来读研的时候虽然也用到些线性代数，但都是用到啥补啥，跟其他考研上来的同学比起来，心里面总是缺少一点底气。在中科院实习结束的时候，陈宝权老师和 Andrei 一直劝我读博，最后我婉拒了，其中一个原因也和这个“没底气”有关吧。而今我也工作快两年了，虽然还是没有读博的念头，但还是希望把数学捡起来，让自己也有底气一些。</p>
+<p>读者也许会发现最近我很喜欢写系列文章。我倒不是为了要出书啦。只是我觉得既然博客的文章不止是写给我一个人看的，那么也得考虑读者的感受。如果把一篇文章写得太长，那就很难让人坚持读完，更别说这种公式很多的文章了；而如果写得太短，又不够完整，读得不够尽兴，于我也没有多少益处。</p>
+<p>写系列文章其实最大的难点在于把握好 tradeoff 。像线性代数的知识点，两三篇文章的篇幅肯定是讲不完的，有些知识点如果再深入一下，就又拔出萝卜带出泥。比如最后一节提到特征向量，其实我还可以继续讨论特征值分解，然后又可以扯到奇异值分解。这样就很容易把整个系列写成像裹脚布一样了。所以，我只讲最基础的知识点，而且是可能对机器学习有帮助的，目的是让自己今后读相关的文章时有底气一些，至少不会在“秩”、“转置矩阵”这种最基础的知识点上犯晕。有了这个基础后，再去学习像奇异值分解之类的其他知识也会轻松很多。如果这个系列也能对读者们有所帮助，那就再好不过了。</p>
+<p>如果您希望将这个线性代数子系列保存为书签，作为后面的工具文来查阅，我建议您保存我在wiki上的线性代数笔记（<a href="/wiki/math-linear-algebra.html">跳转入口</a>）。因为我的 wiki 的更新频率会更频繁一些。且日后随着我的学习还可能继续添加一些新的内容。</p>
+<p>下篇文章我将继续从一个机器学习工程师的角度，开始回顾微积分的基础知识点。</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>证明过程视频：<a target="_blank" rel="noopener" href="http://open.163.com/movie/2011/6/E/M/M82ICR1D9_M83HEAPEM.html">http://open.163.com/movie/2011/6/E/M/M82ICR1D9_M83HEAPEM.html</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/work/enterprise-class-git-version-control-4/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/math/math-vector/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '机器学习的数学基础：线性代数进阶篇'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/math-linear-algebra-graded.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2017-02-12 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/math/">math<span>3</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-article-text">前言</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E9%98%B6%E6%A2%AF%E5%BD%A2%E7%9F%A9%E9%98%B5"><span class="toc-article-text">阶梯形矩阵</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E9%98%B6%E6%A2%AF%E5%BD%A2%E7%9F%A9%E9%98%B5-v2"><span class="toc-article-text">阶梯形矩阵</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E8%A1%8C%E7%AE%80%E5%8C%96%E9%98%B6%E6%A2%AF%E5%BD%A2%E7%9F%A9%E9%98%B5"><span class="toc-article-text">行简化阶梯形矩阵</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E8%A1%8C%E6%9C%80%E7%AE%80%E5%BD%A2%E7%9F%A9%E9%98%B5"><span class="toc-article-text">行最简形矩阵</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%B0%86%E7%9F%A9%E9%98%B5%E5%8C%96%E7%AE%80%E6%88%90%E8%A1%8C%E6%9C%80%E7%AE%80%E9%98%B6%E6%A2%AF%E5%BD%A2"><span class="toc-article-text">将矩阵化简成行最简阶梯形</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%BA%BF%E6%80%A7%E5%AD%90%E7%A9%BA%E9%97%B4"><span class="toc-article-text">线性子空间</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E9%9B%B6%E7%A9%BA%E9%97%B4"><span class="toc-article-text">零空间</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%88%97%E7%A9%BA%E9%97%B4"><span class="toc-article-text">列空间</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E8%A1%8C%E7%A9%BA%E9%97%B4"><span class="toc-article-text">行空间</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%B7%A6%E9%9B%B6%E7%A9%BA%E9%97%B4"><span class="toc-article-text">左零空间</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AD%90%E7%A9%BA%E9%97%B4%E7%9A%84%E6%AD%A3%E4%BA%A4%E8%A1%A5"><span class="toc-article-text">子空间的正交补</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E9%80%BC%E8%BF%91"><span class="toc-article-text">最小二乘逼近</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AE%9E%E4%BE%8B1%EF%BC%9A%E6%B1%82%E8%A7%A3%E6%96%B9%E7%A8%8B"><span class="toc-article-text">实例1：求解方程</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AE%9E%E4%BE%8B2%EF%BC%9A%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92"><span class="toc-article-text">实例2：线性回归</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F"><span class="toc-article-text">特征向量</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%B1%82%E8%A7%A3%E7%89%B9%E5%BE%81%E5%80%BC"><span class="toc-article-text">求解特征值</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%B1%82%E8%A7%A3%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F"><span class="toc-article-text">求解特征向量</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-article-text">小结</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

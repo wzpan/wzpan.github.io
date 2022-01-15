@@ -1,0 +1,1363 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>模块 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="模块的编写
+创建你自己的模块很简单，其实你一直在这样做！因为每个python脚本都是一个模块。你只需确保它带有.py扩展名即可。
+下面的例子会让你对其有一个清晰的认识：
+示例
+123456789#!/usr/bin/python# Filename: mymodule.pydef sayhi(): ">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="模块"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '模块'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 模块</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc', 2, 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="模块的编写">模块的编写</h2>
+<p>创建你自己的模块很简单，其实你一直在这样做！因为每个python脚本都是一个模块。你只需确保它带有.py扩展名即可。</p>
+<p>下面的例子会让你对其有一个清晰的认识：</p>
+<h4 id="示例">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: mymodule.py</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sayhi</span>():</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Hi, this is mymodule speaking.&#x27;</span>)</span><br><span class="line"></span><br><span class="line">__version__ = <span class="string">&#x27;0.1&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 结束mymodule.py编写</span></span><br></pre></td></tr></table></figure>
+<p>上面就是一个简单的模块，如你所见，这和我们平时的python程序相比没有什么特别之处。记住模块应该放到导入它的那个程序所在的目录下，或者放到sys.path列出的目录之一中。</p>
+<h2 id="模块的导入">模块的导入</h2>
+<h3 id="使用-import-语句">使用 import 语句</h3>
+<p>可以使用 import 语句导入模块。</p>
+<h4 id="示例-v2">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: mymodule_demo.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> mymodule</span><br><span class="line"></span><br><span class="line">mymodule.sayhi()</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;Version&#x27;</span>, mymodule.__version__)</span><br></pre></td></tr></table></figure>
+<h4 id="输出">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ python mymodule_demo.py</span><br><span class="line">Hi, this is mymodule speaking.</span><br><span class="line">Version 0.1</span><br></pre></td></tr></table></figure>
+<p>import 会在哪些目录里查找模块呢？可以通过 <code>sys.path</code> 查看：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> sys</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>sys.path</span><br><span class="line">[<span class="string">&#x27;&#x27;</span>, <span class="string">&#x27;/usr/bin&#x27;</span>, <span class="string">&#x27;/usr/lib/python33.zip&#x27;</span>, <span class="string">&#x27;/usr/lib/python3.3</span></span><br><span class="line"><span class="string">&#x27;</span>, <span class="string">&#x27;/usr/lib/python3.3/plat-linux&#x27;</span>, <span class="string">&#x27;/usr/lib/python3.3/lib-d</span></span><br><span class="line"><span class="string">ynload&#x27;</span>, <span class="string">&#x27;/usr/lib/python3.3/site-packages&#x27;</span>, <span class="string">&#x27;/usr/lib/python</span></span><br><span class="line"><span class="string">3.3/site-packages/setuptools-0.6c11.egg-info&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<p>要添加一个新的目录到 <code>sys.path</code> 列表的第一项（从而使其出现在python搜索路径的开头，并且优先级最高），可以使用<code>sys.path.insert(0, newpath)</code>。</p>
+<h3 id="使用-from…import…语句">使用 from…import…语句</h3>
+<p>如果你希望将变量argv直接导入到你的程序中（避免每次输入<code>sys.</code>），那么可以使用<code>from sys import argv</code>语句。</p>
+<p>如果希望导入sys模块中的所有名字（除了以<code>__</code>开头的名字），则<code>from sys import *</code>可以做到。此语句可以用于任何模块。</p>
+<p>通常你应该<strong>避免</strong>使用这个语句并用import语句代替之，因为使用后者可以避免名字冲突，程序的可读性也更好。</p>
+<h4 id="示例-v3">示例</h4>
+<p>下面是一个使用from…import语法的版本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: mymodule_demo2.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> mymodule <span class="keyword">import</span> sayhi, __version__</span><br><span class="line">sayhi()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Version&#x27;</span>, __version__)Python en:Modules <span class="number">59</span></span><br></pre></td></tr></table></figure>
+<p><code>mymodule_demo2.py</code>与<code>mymodule_demo</code>的输出完全相同。</p>
+<p>注意，如果导入mymodule的模块中已经存在同名的<code>__version__</code>，则将发生名字冲突。</p>
+<p>事实上这很可能发生，因为每个模块都用<code>__version__</code>声明它的版本是一种常见的做法。</p>
+<p>因此建议你优先考虑<code>import</code>语句，虽然它可能会让你的程序变的更长一些。</p>
+<p>你同样可以使用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mymodule <span class="keyword">import</span> *</span><br></pre></td></tr></table></figure>
+<p>这将导入模块的所有公有名字，例如<code>sayhi</code>，但是不会导入<code>__version__</code>因为它以双下划线开头。</p>
+<h3 id="字节编译文件-pyc">字节编译文件 .pyc</h3>
+<p>导入模块是一个相对昂贵的操作，所以python使用了一些技巧加速这个过程。</p>
+<p>一个办法是创建后缀为.pyc的字节编译文件用于将程序转换为中间格式。(还记得介绍python如何工作的那一节吗？)</p>
+<p>当你下次从其他文件导入模块时pyc文件会非常有用 – 它将大大增加导入速度，因为导入模块的部分操作已经预先完成了。</p>
+<p>并且这个字节编译文件仍然是平台无关的。</p>
+<div class="alert alert-warning"><i class="far fa-bell"></i>  .pyc文件一般被创建在与其对应的.py文件所在的相同目录下。如果python没有这个目录的写权限，则.pyc文件不会被创建。
+</div>
+<h3 id="模块的-name-属性">模块的<code>__name__</code>属性</h3>
+<p>每个模块都有一个名字，并且通过模块中的某些语句可以得到这个模块名。在一些想要搞清模块是独立运行还是被导入的情况下，这会非常方便。</p>
+<p>如前所述当模块第一次被导入时模块中的代码会被执行。我们可以据此改变模块独立执行时的行为方式。这可以通过模块的<code>__name__</code>属性做到。(注：独立运行是指程序最开始运行的那个脚本文件(/模块))</p>
+<h4 id="示例-v4">示例</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: using_name.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;This program is being run by itself&#x27;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;I am being imported from another module&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="输出-v2">输出</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ python using_name.py</span><br><span class="line">This program is being run by itself</span><br><span class="line"></span><br><span class="line">$ python</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; import using_name</span><br><span class="line"></span><br><span class="line">I am being imported from another module</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="重新加载模块">重新加载模块</h3>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  因为效率的原因, 每个模块在每个解释器会话中只被导入一次. 一旦你修订了你的模块, 就需要重启解释器 —— 或者, 若你只是想交互式地测试一个模块，使用 <code>imp.reload()</code>，例如 <code>import imp; imp.reload(modulename)</code>
+</div>
+<h2 id="查看已定义的所有标识符">查看已定义的所有标识符</h2>
+<p>你可以使用<code>dir</code>函数列出一个对象定义的所有标识符。例如对于一个模块，标识符包括函数，类，变量。</p>
+<p>当你为<code>dir()</code>函数提供一个模块名，它将返回定义在其中的所有名字。</p>
+<p>当<code>dir()</code>的参数为空时，返回定义在当前模块中所有名字。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> sys  <span class="comment"># 得到sys模块的属性列表</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">dir</span>(sys)</span><br><span class="line">[<span class="string">&#x27;__displayhook__&#x27;</span>, <span class="string">&#x27;__doc__&#x27;</span>, <span class="string">&#x27;__excepthook__&#x27;</span>, <span class="string">&#x27;__loader__&#x27;</span>, <span class="string">&#x27;__name__&#x27;</span>, <span class="string">&#x27;__package__&#x27;</span>, <span class="string">&#x27;__stderr__&#x27;</span>, <span class="string">&#x27;__stdin__&#x27;</span>, <span class="string">&#x27;__stdout__&#x27;</span>, <span class="string">&#x27;_clear_type_cache&#x27;</span>, <span class="string">&#x27;_current_frames&#x27;</span>, <span class="string">&#x27;_debugmallocstats&#x27;</span>, <span class="string">&#x27;_getframe&#x27;</span>, <span class="string">&#x27;_home&#x27;</span>, <span class="string">&#x27;_mercurial&#x27;</span>, <span class="string">&#x27;_xoptions&#x27;</span>, <span class="string">&#x27;abiflags&#x27;</span>, <span class="string">&#x27;api_version&#x27;</span>, <span class="string">&#x27;argv&#x27;</span>, <span class="string">&#x27;base_exec_prefix&#x27;</span>, <span class="string">&#x27;base_prefix&#x27;</span>, <span class="string">&#x27;builtin_module_names&#x27;</span>, <span class="string">&#x27;byteorder&#x27;</span>, <span class="string">&#x27;call_tracing&#x27;</span>, <span class="string">&#x27;callstats&#x27;</span>, <span class="string">&#x27;copyright&#x27;</span>, <span class="string">&#x27;displayhook&#x27;</span>, <span class="string">&#x27;dont_write_bytecode&#x27;</span>, <span class="string">&#x27;exc_info&#x27;</span>, <span class="string">&#x27;excepthook&#x27;</span>, <span class="string">&#x27;exec_prefix&#x27;</span>, <span class="string">&#x27;executable&#x27;</span>, <span class="string">&#x27;exit&#x27;</span>, <span class="string">&#x27;flags&#x27;</span>, <span class="string">&#x27;float_info&#x27;</span>, <span class="string">&#x27;float_repr_style&#x27;</span>, <span class="string">&#x27;getcheckinterval&#x27;</span>, <span class="string">&#x27;getdefaultencoding&#x27;</span>, <span class="string">&#x27;getdlopenflags&#x27;</span>, <span class="string">&#x27;getfilesystemencoding&#x27;</span>, <span class="string">&#x27;getprofile&#x27;</span>, <span class="string">&#x27;getrecursionlimit&#x27;</span>, <span class="string">&#x27;getrefcount&#x27;</span>, <span class="string">&#x27;getsizeof&#x27;</span>, <span class="string">&#x27;getswitchinterval&#x27;</span>, <span class="string">&#x27;gettrace&#x27;</span>, <span class="string">&#x27;hash_info&#x27;</span>, <span class="string">&#x27;hexversion&#x27;</span>, <span class="string">&#x27;implementation&#x27;</span>, <span class="string">&#x27;int_info&#x27;</span>, <span class="string">&#x27;intern&#x27;</span>, <span class="string">&#x27;maxsize&#x27;</span>, <span class="string">&#x27;maxunicode&#x27;</span>, <span class="string">&#x27;meta_path&#x27;</span>, <span class="string">&#x27;modules&#x27;</span>, <span class="string">&#x27;path&#x27;</span>, <span class="string">&#x27;path_hooks&#x27;</span>, <span class="string">&#x27;path_importer_cache&#x27;</span>, <span class="string">&#x27;platform&#x27;</span>, <span class="string">&#x27;prefix&#x27;</span>, <span class="string">&#x27;ps1&#x27;</span>, <span class="string">&#x27;ps2&#x27;</span>, <span class="string">&#x27;setcheckinterval&#x27;</span>, <span class="string">&#x27;setdlopenflags&#x27;</span>, <span class="string">&#x27;setprofile&#x27;</span>, <span class="string">&#x27;setrecursionlimit&#x27;</span>, <span class="string">&#x27;setswitchinterval&#x27;</span>, <span class="string">&#x27;settrace&#x27;</span>, <span class="string">&#x27;stderr&#x27;</span>, <span class="string">&#x27;stdin&#x27;</span>, <span class="string">&#x27;stdout&#x27;</span>, <span class="string">&#x27;thread_info&#x27;</span>, <span class="string">&#x27;version&#x27;</span>, <span class="string">&#x27;version_info&#x27;</span>, <span class="string">&#x27;warnoptions&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">del</span> sys  <span class="comment"># 删除sys模块</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">dir</span>(sys)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">NameError: name <span class="string">&#x27;sys&#x27;</span> <span class="keyword">is</span> <span class="keyword">not</span> defined</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">dir</span>()  <span class="comment"># 得到当前模块的属性列表</span></span><br><span class="line">[<span class="string">&#x27;__builtins__&#x27;</span>, <span class="string">&#x27;__doc__&#x27;</span>, <span class="string">&#x27;__loader__&#x27;</span>, <span class="string">&#x27;__name__&#x27;</span>, <span class="string">&#x27;__package__&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = <span class="number">5</span> <span class="comment"># create a new variable &#x27;a&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">dir</span>()</span><br><span class="line">[<span class="string">&#x27;__builtins__&#x27;</span>, <span class="string">&#x27;__doc__&#x27;</span>, <span class="string">&#x27;__name__&#x27;</span>, <span class="string">&#x27;__package__&#x27;</span>, <span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;sys&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">del</span> a <span class="comment"># 删除名字a</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">dir</span>()</span><br><span class="line">[<span class="string">&#x27;__builtins__&#x27;</span>, <span class="string">&#x27;__doc__&#x27;</span>, <span class="string">&#x27;__name__&#x27;</span>, <span class="string">&#x27;__package__&#x27;</span>, <span class="string">&#x27;sys&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="模块的组织：包">模块的组织：包</h2>
+<p>如今，你必须开始留心组织你的程序层次了。</p>
+<p>变量在函数内部，函数和全局变量通常在模块内部。那么如何组织模块呢？这就轮到包登场了。</p>
+<p>包仅仅是包含模块的文件夹，并带有一个特殊的文件<code>__init__.py</code>用于<strong>指示python这个文件夹是特殊的，因为它包含python模块</strong>。</p>
+<p>让我们假设你需要创建一个叫做<code>world</code>的包，里面包括诸如<code>asia</code>，<code>africa</code>等的子包。</p>
+<p>下面告诉你应该如何组织文件夹结构：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">-&lt;some folder present in the sys.path&gt;&#x2F;</span><br><span class="line">    - world&#x2F;</span><br><span class="line">        - __init__.py</span><br><span class="line">        - asia&#x2F;</span><br><span class="line">            - __init__.py</span><br><span class="line">            - india&#x2F;</span><br><span class="line">                - __init__.py</span><br><span class="line">                - foo.py</span><br><span class="line">        - africa&#x2F;</span><br><span class="line">            - __init__.py</span><br><span class="line">            - madagascar&#x2F;</span><br><span class="line">                - __init__.py</span><br><span class="line">                - bar.py</span><br></pre></td></tr></table></figure>
+<p>包只是用来有层次的组织模块。你会在标准库中看到它的很多应用。</p>
+<h2 id="模块的发布">模块的发布</h2>
+<p>关于打包的详细信息，可以参考<a href="/wiki/python3-packaging.html">打包</a>。</p>
+<h2 id="第三方模块的安装">第三方模块的安装</h2>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pip install 模块名</span><br></pre></td></tr></table></figure>
+<p>如果装了 <a target="_blank" rel="noopener" href="https://pypi.python.org/pypi/virtualenv">Vitualenv</a> 库，它也自带了 pip installer， 因此也可以使用：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ENV/bin/pip 模块名</span><br></pre></td></tr></table></figure>
+<h2 id="常用库">常用库</h2>
+<p>下面简单介绍一些常用的库：</p>
+<h3 id="sys模块">sys模块</h3>
+<p><code>sys</code>模块包含一些系统相关的功能。</p>
+<h4 id="获取参数列表">获取参数列表</h4>
+<p>一个常见的功能是利用它获取 argv 变量 —— 具体说sys.argv是一个包含命令行参数的列表，其首项为该程序的名称，第二个参数及后续的参数为该程序的命令行参数（有点像shell语言的 <code>$0</code> 为程序名称，<code>$1</code> 之后为命令行参数）。</p>
+<h5 id="示例-v5">示例</h5>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: using_sys.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;The command line arguments are:&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> sys.argv: <span class="comment"># 注意通过sys.argv引用</span></span><br><span class="line">    <span class="built_in">print</span>(i)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;\n\nThe PYTHONPATH is&#x27;</span>, sys.path, <span class="string">&#x27;\n&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h5 id="输出-v3">输出</h5>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ python using_sys.py we are arguments</span><br><span class="line">The <span class="built_in">command</span> line arguments are:</span><br><span class="line">using_sys.py</span><br><span class="line">we</span><br><span class="line">are</span><br><span class="line">arguments</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">The PYTHONPATH is [<span class="string">&#x27;&#x27;</span>, <span class="string">&#x27;/usr/lib/python33.zip&#x27;</span>, <span class="string">&#x27;/usr/lib/python3.3&#x27;</span>, <span class="string">&#x27;/usr/lib/python3.3/plat-linux&#x27;</span>, <span class="string">&#x27;/usr/lib/python3.3/lib-dynload&#x27;</span>, <span class="string">&#x27;/usr/lib/python3.3/site-packages&#x27;</span>, <span class="string">&#x27;/usr/lib/python3.3/site-packages/setuptools-0.6c11.egg-info&#x27;</span>] </span><br></pre></td></tr></table></figure>
+<h5 id="说明">说明</h5>
+<p>当python执行<code>import sys</code>语句时，它将查找sys模块。本例中sys是内建模块之一，因此python知道在哪能找到它。如果导入的不是一个编译模块，即不是用python编写的模块，python解释器会在变量<code>sys.path</code>中列出的目录中查找它。如果模块被找到，这个模块中的语句将被执行然后你就可以使用它了(注: <strong>只有顶级语句才会执行</strong>，也就是主块中的语句)。</p>
+<p>注意<strong>一个模块只有在第一次导入时会被初始化</strong>。</p>
+<p>sys模块中的argv通过点号引用即<code>sys.argv</code>。它清晰的指出这个名字是sys模块中的一部分。这种语法的另一个优势是不会和你的程序中的同名argv变量发生冲突。</p>
+<p><code>sys.path</code>包含一个目录名列表指示从哪里导入模块。观察程序输出，sys.path的第一个字符串为空 —— 其指出当前目录也是<code>sys.path</code>的一部分，这与<code>PYTHONPATH</code>环境变量是相同的。这意味着你可以直接导入当前目录下的模块，否则你就必须将你的模块放到<code>sys.path</code>列出的目录中的一个了。</p>
+<p>注意程序在哪个目录运行的，这个目录就是这个程序的当前目录。运行<code>import os; print(os.getcwd())</code>可以看到你的程序的当前目录。</p>
+<div class="alert alert-warning"><i class="far fa-bell"></i>  <strong>Windows用户注意</strong>： windows下sys.path[0]可能不为空，而是显式指出当前路径。
+</div>
+<h4 id="检查python版本">检查python版本</h4>
+<p>假设我们想要检查所使用的python命令行的版本，比方说我们需要确定正在使用的版本不低于3。</p>
+<p>诸如此类的功能正是sys模块所提供的。</p>
+<h5 id="示例-v6">示例</h5>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> sys</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>sys.version_info</span><br><span class="line">(<span class="number">3</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="string">&#x27;beta&#x27;</span>, <span class="number">2</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>sys.version_info[<span class="number">0</span>] &gt;= <span class="number">3</span></span><br><span class="line"><span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<h5 id="说明-v2">说明</h5>
+<p><code>sys</code>模块含有一个<code>version_info</code>元组用于提供版本信息。其第一个元素为主版本。</p>
+<p>因此我们可以通过检查它确保程序只会运行在python 3.0和3.0以上：</p>
+<h5 id="示例-v7">示例</h5>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: versioncheck.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys, warnings</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> sys.version_info[<span class="number">0</span>] &lt; <span class="number">3</span>:</span><br><span class="line">    warnings.warn(<span class="string">&quot;Need Python 3.0 for this program to run&quot;</span>,</span><br><span class="line">        RuntimeWarning)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Proceed as normal&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h5 id="输出-v4">输出</h5>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ python2.5 versioncheck.py</span><br><span class="line">versioncheck.py:6: RuntimeWarning: Need Python 3.0 <span class="keyword">for</span> this program to run</span><br><span class="line">  RuntimeWarning)</span><br><span class="line">$ python3 versioncheck.py</span><br><span class="line">Proceed as normal</span><br></pre></td></tr></table></figure>
+<h3 id="os-模块">os 模块</h3>
+<p>Python 3 带有一个模块叫做<code>os</code>,代表 “操作系统(operating system)。” <code>os</code> 模块 包含非常多的函数用于获取(和修改)本地目录、文件进程、环境变量等的信息。Python 尽最大的努力在所有支持的操作系统上提供一个统一的API, 这样你就可以在保证程序能够在任何的计算机上运行的同时尽量少的包含平台特定的代码。</p>
+<h5 id="示例1：-处理当前工作目录">示例1： 处理当前工作目录</h5>
+<p><code>os</code> 模块提供了两个函数处理当前工作目录</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> os</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(os.getcwd())</span><br><span class="line">C:\Python31 </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>os.chdir(<span class="string">&#x27;/Users/pilgrim/diveintopython3/examples&#x27;</span>) <span class="comment"># 即使在windows上也可以使用Linux风格的路径</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(os.getcwd())</span><br><span class="line">C:\Users\pilgrim\diveintopython3\examples</span><br></pre></td></tr></table></figure>
+<h4 id="os-path">os.path</h4>
+<p><code>os.path</code> 模块包含了操作文件名和目录名的函数。</p>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>abspath(path)</code></td>
+<td>返回绝对路径。</td>
+</tr>
+<tr>
+<td><code>basename(p)</code></td>
+<td>返回路径名最后的部分。</td>
+</tr>
+<tr>
+<td><code>commonprefix(m)</code></td>
+<td>给定一个路径列表，返回从起始算起最长的公共部分。</td>
+</tr>
+<tr>
+<td><code>dirname(p)</code></td>
+<td>返回给定路径名所在的目录的路径。</td>
+</tr>
+<tr>
+<td><code>exits(p)</code></td>
+<td>测试一个文件是否存在。如果不存在，返回<code>False</code>。</td>
+</tr>
+<tr>
+<td><code>expanduser(path)</code></td>
+<td>扩展<code>~</code>和<code>~user</code>为完整的路径。如果<code>user</code>或<code>$HOME</code>不存在，不做任何事情。</td>
+</tr>
+<tr>
+<td><code>expandvars(path)</code></td>
+<td>扩展形式为<code>$var</code>和<code>$&#123;var&#125;</code>的shell变量，未知变量将保持不变。</td>
+</tr>
+<tr>
+<td><code>getatime(filename)</code></td>
+<td>返回指定文件的最近访问时间。</td>
+</tr>
+<tr>
+<td><code>getctime(filename)</code></td>
+<td>返回指定文件的元数据的修改时间。</td>
+</tr>
+<tr>
+<td><code>getmtime(Filename)</code></td>
+<td>返回指定文件的最近修改时间。</td>
+</tr>
+<tr>
+<td><code>getsize(Filename)</code></td>
+<td>返回文件的大小。</td>
+</tr>
+<tr>
+<td><code>isabs(s)</code></td>
+<td>测试一个路径是否为绝对路径。</td>
+</tr>
+<tr>
+<td><code>isdir(s)</code></td>
+<td>测试一个路径名是否指向一个存在的目录。</td>
+</tr>
+<tr>
+<td><code>isfile(s)</code></td>
+<td>测试一个路径是否为一个常规的文件。</td>
+</tr>
+<tr>
+<td><code>islink(path)</code></td>
+<td>测试一个路径是否为一个符号链接。</td>
+</tr>
+<tr>
+<td><code>ismount(path)</code></td>
+<td>测试一个路径是否为一个挂载点。</td>
+</tr>
+<tr>
+<td><code>join(a, *p)</code></td>
+<td>将两个或多个路径部分连接。必要时自动插入<code>/</code>。</td>
+</tr>
+<tr>
+<td><code>lexists(path)</code></td>
+<td>测试一个路径是否<strong>不</strong>存在。如果不存在，返回<code>True</code>。</td>
+</tr>
+<tr>
+<td><code>normcase(s)</code></td>
+<td>将路径名转为标准形式。在Posix标准文件系统下没有什么变化。</td>
+</tr>
+<tr>
+<td><code>normpath(path)</code></td>
+<td>将路径名标准化，例如消除双重斜杠，等。</td>
+</tr>
+<tr>
+<td><code>realpath(Filename)</code></td>
+<td>返回文件所在的真实路径，消除路径中遇到的任何符号连接。</td>
+</tr>
+<tr>
+<td><code>relpath(path, start=None)</code></td>
+<td>返回给定路径的相对路径。</td>
+</tr>
+<tr>
+<td><code>samefile(f1, f2)</code></td>
+<td>测试两个路径是否引用同一个文件。</td>
+</tr>
+<tr>
+<td><code>sameopenfile(fp1, fp2)</code></td>
+<td>测试两个打开的文件对象是否引用同一个文件。</td>
+</tr>
+<tr>
+<td><code>samestat(s1, s2)</code></td>
+<td>测试两个stat缓冲是否引用同一个文件。</td>
+</tr>
+<tr>
+<td><code>split(p)</code></td>
+<td>分割路径名，返回一个形式为<code>(head, tail)</code>的元组，其中，<code>tail</code>是最后一个斜杠后的所有内容，其他部分则为<code>head</code>。任一部分都允许为空。</td>
+</tr>
+<tr>
+<td><code>splitdrive(p)</code></td>
+<td>将路径名分割成驱动名<code>drive</code>和路径<code>path</code>。在Posix标准的文件系统下，<code>drive</code>部分为空。</td>
+</tr>
+<tr>
+<td><code>splitext(p)</code></td>
+<td>从路径名分割出扩展名和其他部分。返回<code>(root, ext)</code>元组。<code>ext</code>部分可能为空。</td>
+</tr>
+</tbody>
+</table>
+<h5 id="示例2：-处理文件名和目录名">示例2： 处理文件名和目录名</h5>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> os </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(os.path.join(<span class="string">&#x27;/Users/pilgrim/diveintopython3/examples/&#x27;</span>, <span class="string">&#x27;humansize.py&#x27;</span>))</span><br><span class="line">/Users/pilgrim/diveintopython3/examples/humansize.py </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(os.path.join(<span class="string">&#x27;/Users/pilgrim/diveintopython3/examples&#x27;</span>, <span class="string">&#x27;humansize.py&#x27;</span>))</span><br><span class="line">/Users/pilgrim/diveintopython3/examples\humansize.py  <span class="comment"># Windows下会添加一个反斜杠。*nix下则是正斜杠&#x27;/&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(os.path.expanduser(<span class="string">&#x27;~&#x27;</span>)) </span><br><span class="line">c:\Users\pilgrim </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(os.path.join(os.path.expanduser(<span class="string">&#x27;~&#x27;</span>), <span class="string">&#x27;diveintopython3&#x27;</span>, <span class="string">&#x27;examples&#x27;</span>, <span class="string">&#x27;humansize.py&#x27;</span>))</span><br><span class="line">c:\Users\pilgrim\diveintopython3\examples\humansize.py </span><br></pre></td></tr></table></figure>
+<p><code>os.path.expanduser()</code>用来将包含<code>~</code>符号(表示当前用户Home 目录)的路径扩展为完整的路径。在任何有 Home 目录概念的操作系统上(包括 Linux，Mac OS X 和 Windows)，这个函数都能工作。返回的路径不以斜杠结尾，但是 <code>os.path.join()</code> 并不介意这一点。</p>
+<h5 id="示例3：-分割完整路径名，目录名和文件名">示例3： 分割完整路径名，目录名和文件名</h5>
+<p>os.path 也包含用于分割完整路径名，目录名和文件名的函数：</p>
+<ol>
+<li><code>os.path.split</code>：分割一个完整路径并返回目录和文件名。</li>
+<li><code>os.path.splitext</code>: 分割一个文件名并返回短文件名和扩展名。</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>pathname = </span><br><span class="line"><span class="string">&#x27;/Users/pilgrim/diveintopython3/examples/humansize.py&#x27;</span> </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>os.path.split(pathname) </span><br><span class="line">(<span class="string">&#x27;/Users/pilgrim/diveintopython3/examples&#x27;</span>, <span class="string">&#x27;humansize.py&#x27;</span>) </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>(dirname, filename) = os.path.split(pathname)  <span class="comment"># 将多变量值传给一个元组</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>dirname </span><br><span class="line"><span class="string">&#x27;/Users/pilgrim/diveintopython3/examples&#x27;</span> </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>filename</span><br><span class="line"><span class="string">&#x27;humansize.py&#x27;</span> </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>(shortname, extension) = os.path.splitext(filename) </span><br><span class="line"><span class="number">5</span> </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>shortname </span><br><span class="line"><span class="string">&#x27;humansize&#x27;</span> </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>extension </span><br><span class="line"><span class="string">&#x27;.py&#x27;</span> </span><br></pre></td></tr></table></figure>
+<h5 id="示例4：-获取文件元信息">示例4： 获取文件元信息</h5>
+<p>每一个现代文件系统都对文件存储了元信息: 创建时间，最后修改时间，文件大小等等。Python 单独提供了一个的 API 用于访问这些元信息。你不需要打开文件。知道文件名就足够了。</p>
+<ol>
+<li><code>os.stat(文件名)</code>：返回一个包含多种文件元信息的对象。</li>
+<li><code>os.st_mtime()</code>：获取最后修改时间</li>
+<li><code>os.st_size</code>：返回文件大小</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> os </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(os.getcwd()) </span><br><span class="line">c:\Users\pilgrim\diveintopython3\examples </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>metadata = os.stat(<span class="string">&#x27;feed.xml&#x27;</span>)  <span class="comment"># 调用 os.stat() 函数</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>metadata.st_mtime   <span class="comment"># 获取最后修改时间</span></span><br><span class="line"><span class="number">1247520344.9537716</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> time <span class="comment"># 用于在不同时间格式中转换</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>time.localtime(metadata.st_mtime)</span><br><span class="line">time.struct_time(tm_year=<span class="number">2009</span>, tm_mon=<span class="number">7</span>, tm_mday=<span class="number">13</span>, </span><br><span class="line">tm_hour=<span class="number">17</span>, </span><br><span class="line">tm_min=<span class="number">25</span>, tm_sec=<span class="number">44</span>, tm_wday=<span class="number">0</span>, tm_yday=<span class="number">194</span>, tm_isdst=<span class="number">1</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>metadata.st_size  <span class="comment"># 返回文件大小</span></span><br><span class="line"><span class="number">3070</span> </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> humansize </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>humansize.approximate_size(metadata.st_size)</span><br><span class="line"><span class="string">&#x27;3.0 KiB&#x27;</span> </span><br></pre></td></tr></table></figure>
+<h5 id="示例5：构造绝对路径">示例5：构造绝对路径</h5>
+<p>当你希望构造一个从根目录开始或者是包含盘符的绝对路径时，可以使用<code>os.path.realpath()</code>函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> os </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(os.getcwd()) </span><br><span class="line">c:\Users\pilgrim\diveintopython3\examples </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span>(os.path.realpath(<span class="string">&#x27;feed.xml&#x27;</span>)) </span><br><span class="line">c:\Users\pilgrim\diveintopython3\examples\feed.xml </span><br></pre></td></tr></table></figure>
+<h3 id="time-模块">time 模块</h3>
+<p><code>time</code> 模块可用于获取当前日期和时间，比如 <code>time.strftime</code> 方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">time.strftime(&#39;%Y-%m-%d&#39;,time.localtime(time.time()))</span><br></pre></td></tr></table></figure>
+<p>time.strftime里面有很多参数，可以让你能够更随意的输出自己想要的东西：</p>
+<ul>
+<li><code>%y</code> 两位数的年份表示（00-99）</li>
+<li><code>%Y</code> 四位数的年份表示（000-9999）</li>
+<li><code>%m</code> 月份（01-12）</li>
+<li><code>%d</code> 月内中的一天（0-31）</li>
+<li><code>%H</code> 24小时制小时数（0-23）</li>
+<li><code>%I</code> 12小时制小时数（01-12）</li>
+<li><code>%M</code> 分钟数（00=59）</li>
+<li><code>%S</code> 秒（00-59）</li>
+<li><code>%a</code> 本地简化星期名称</li>
+<li><code>%A</code> 本地完整星期名称</li>
+<li><code>%b</code> 本地简化的月份名称</li>
+<li><code>%B</code> 本地完整的月份名称</li>
+<li><code>%c</code> 本地相应的日期表示和时间表示</li>
+<li><code>%j</code> 年内的一天（001-366）</li>
+<li><code>%p</code> 本地A.M.或P.M.的等价符</li>
+<li><code>%U</code> 一年中的星期数（00-53）星期天为星期的开始</li>
+<li><code>%w</code> 星期（0-6），星期天为星期的开始</li>
+<li><code>%W</code> 一年中的星期数（00-53）星期一为星期的开始</li>
+<li><code>%x</code> 本地相应的日期表示</li>
+<li><code>%X</code> 本地相应的时间表示</li>
+<li><code>%Z</code> 当前时区的名称</li>
+<li><code>%%</code> %号本身</li>
+</ul>
+<h3 id="glob模块">glob模块</h3>
+<p>glob 模块是 Python 标准库中的另一个工具,它可以通过编程的方法获得一个目录的内容,并且它使用熟悉的命令行下的通配符。 glob 模块使用 shell 风格的通配符。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>os.chdir(<span class="string">&#x27;/Users/pilgrim/diveintopython3/&#x27;</span>) </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> glob </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>glob.glob(<span class="string">&#x27;examples/*.xml&#x27;</span>)</span><br><span class="line">[<span class="string">&#x27;examples\\feed‐broken.xml&#x27;</span>, </span><br><span class="line"><span class="string">&#x27;examples\\feed‐ns0.xml&#x27;</span>, </span><br><span class="line"><span class="string">&#x27;examples\\feed.xml&#x27;</span>] </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>os.chdir(<span class="string">&#x27;examples/&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>glob.glob(<span class="string">&#x27;*test*.py&#x27;</span>) </span><br><span class="line">[<span class="string">&#x27;alphameticstest.py&#x27;</span>, </span><br><span class="line"><span class="string">&#x27;pluraltest1.py&#x27;</span>, </span><br><span class="line"><span class="string">&#x27;pluraltest2.py&#x27;</span>, </span><br><span class="line"><span class="string">&#x27;pluraltest3.py&#x27;</span>, </span><br><span class="line"><span class="string">&#x27;pluraltest4.py&#x27;</span>, </span><br><span class="line"><span class="string">&#x27;pluraltest5.py&#x27;</span>, </span><br><span class="line"><span class="string">&#x27;pluraltest6.py&#x27;</span>, </span><br><span class="line"><span class="string">&#x27;romantest1.py&#x27;</span>, </span><br><span class="line"><span class="string">&#x27;romantest10.py&#x27;</span>, </span><br><span class="line"><span class="string">&#x27;romantest2.py&#x27;</span>, </span><br><span class="line"><span class="string">&#x27;romantest3.py&#x27;</span>, </span><br><span class="line"><span class="string">&#x27;romantest4.py&#x27;</span>, </span><br><span class="line"><span class="string">&#x27;romantest5.py&#x27;</span>, </span><br><span class="line"><span class="string">&#x27;romantest6.py&#x27;</span>, </span><br><span class="line"><span class="string">&#x27;romantest7.py&#x27;</span>, </span><br><span class="line"><span class="string">&#x27;romantest8.py&#x27;</span>, </span><br><span class="line"><span class="string">&#x27;romantest9.py&#x27;</span>] </span><br></pre></td></tr></table></figure>
+<h3 id="re-模块">re 模块</h3>
+<p>正则表达式模块，常见的正则式有：</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.</code></td>
+<td>匹配任意字符</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>匹配字符串开始位置。</td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td>匹配字符串结束位置。</td>
+</tr>
+<tr>
+<td><code>\b</code></td>
+<td>匹配一个单词边界。</td>
+</tr>
+<tr>
+<td><code>\d</code></td>
+<td>匹配一个数字。</td>
+</tr>
+<tr>
+<td><code>\D</code></td>
+<td>匹配一个任意的非数字字符。</td>
+</tr>
+<tr>
+<td><code>x?</code></td>
+<td>匹配可选的 x 字符。换句话说,就是 0 个或者 1 个 x 字符。</td>
+</tr>
+<tr>
+<td><code>x*</code></td>
+<td>匹配 0 个或更多的 x。</td>
+</tr>
+<tr>
+<td><code>x+</code></td>
+<td>匹配 1 个或者更多 x。</td>
+</tr>
+<tr>
+<td><code>x&#123;n,m&#125;</code></td>
+<td>匹配 n 到 m 个 x,至少 n 个,不能超过 m 个。</td>
+</tr>
+<tr>
+<td><code>(a|b|c)</code></td>
+<td>匹配单独的任意一个 a 或者 b 或者 c。</td>
+</tr>
+<tr>
+<td><code>(x)</code></td>
+<td>把括号里匹配得到的内容作为一个组，它会记忆它匹配到的字符串。你可以用<code>re.search</code>返回的匹配对象的<code>groups()</code>函数来获取到匹配的值。</td>
+</tr>
+</tbody>
+</table>
+<p>更多支持的正则式请参见 <code>help(re)</code>。常用的正则式可以参见<a href="/wiki/sundries.regexp.html#%E5%B8%B8%E7%94%A8%E6%AD%A3%E5%88%99%E5%BC%8F">正则表达式</a>。</p>
+<h5 id="示例一：查找">示例一：查找</h5>
+<p>查找地址中的单词 ‘ROAD’：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = <span class="string">&#x27;100 BROAD ROAD. APT 3&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>re.search(<span class="string">r&#x27;\bROAD\b&#x27;</span>,s)</span><br><span class="line">&lt;_sre.SRE_Match <span class="built_in">object</span> at <span class="number">0x7f0f85cb17e8</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>pattern = <span class="string">&#x27;^M&#123;0,3&#125;$&#x27;</span> <span class="comment"># 匹配0到3个&#x27;M&#x27;字符</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>re.search(pattern, <span class="string">&#x27;M&#x27;</span>) </span><br><span class="line">&lt;_sre.SRE_Match <span class="built_in">object</span> at <span class="number">0x008EEB48</span>&gt; </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>re.search(pattern, <span class="string">&#x27;MM&#x27;</span>) </span><br><span class="line">&lt;_sre.SRE_Match <span class="built_in">object</span> at <span class="number">0x008EE090</span>&gt; </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>re.search(pattern, <span class="string">&#x27;MMM&#x27;</span>) </span><br><span class="line">&lt;_sre.SRE_Match <span class="built_in">object</span> at <span class="number">0x008EEDA8</span>&gt; </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>re.search(pattern, <span class="string">&#x27;MMMM&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>re.findall(<span class="string">&#x27;[0-9]+&#x27;</span>, <span class="string">&#x27;16 2-by-4s in rows of 8&#x27;</span>) <span class="comment"># 找出字符串中出现该模式的所有地方</span></span><br><span class="line">[<span class="string">&#x27;16&#x27;</span>, <span class="string">&#x27;2&#x27;</span>, <span class="string">&#x27;4&#x27;</span>, <span class="string">&#x27;8&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<p>也可以先构造一个模式的类然后用它进行查找：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = <span class="string">&#x27;100 BROAD ROAD. APT 3&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>mypattern = re.<span class="built_in">compile</span>(<span class="string">r&#x27;\bROAD\b&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>mypattern.search(s)</span><br><span class="line">&lt;_sre.SRE_Match <span class="built_in">object</span> at <span class="number">0x7f141e9cb7e8</span>&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="示例二：替换">示例二：替换</h5>
+<p>替换地址中的 ‘ROAD’ 字符串为 ‘RD.’：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = <span class="string">&#x27;100 BROAD ROAD. APT 3&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>re.sub(<span class="string">r&#x27;\bROAD\b&#x27;</span>, <span class="string">&#x27;RD.&#x27;</span>, s)</span><br><span class="line"><span class="string">&#x27;100 BROAD RD. APT 3&#x27;</span></span><br></pre></td></tr></table></figure>
+<h5 id="说明-v3">说明</h5>
+<p>在 python 中，比较复杂的是 <code>\</code> 字符必须被转义，这有的时候会导致 <code>\</code> 字符传染(想想可能还要对<code>\</code>字符做转义的情况)。</p>
+<p>为了解决 <code>\</code> 字符传染的问题，可以使用原始字符串。这只需要在字符串的前面添加一个字符<code>r</code>。它告诉 python，字符串中没有任何字符需要转义。<code>\t</code>是一个制表符，但 r<code>\t</code> 只是一个字符 <code>\</code> 紧跟着一个字符 t。</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  <strong>建议</strong>：在处理正则表达式的时候总是使用原始字符串。否则，会因为理解正则表达式而消耗大量时间(本身正则表达式就已经够让人困惑的了)。
+</div>
+<h4 id="松散表达式">松散表达式</h4>
+<p>python 允许你使用松散正则表达式来达到目的。松散正字表达式和普通紧凑的正则表达式有两点不同：</p>
+<ul>
+<li>空白符被忽略。空格、制表符和回车在正则表达式中并不会匹配空格、制表符、回车。如果你想在正则表达式中匹配他们,可以在前面加一个<code>\</code>来转义。</li>
+<li>注释信息被忽略。松散正字表达式中的注释和 python 代码中的一样,都是以<code>#</code>开头直到行尾。它可以在多行正则表达式中增加注释信息,这就避免了在 python 代码中的多行注释。他们的工作方式是一样的。</li>
+</ul>
+<h5 id="示例-v8">示例</h5>
+<p>判断一串字符是否为合法的罗马数字：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>pattern = <span class="string">&#x27;&#x27;&#x27; </span></span><br><span class="line"><span class="string">    ^                   # beginning of string </span></span><br><span class="line"><span class="string">    M&#123;0,3&#125;              # thousands ‐ 0 to 3 Ms </span></span><br><span class="line"><span class="string">    (CM|CD|D?C&#123;0,3&#125;)    # hundreds ‐ 900 (CM), 400 (CD), 0‐300 (0 to 3 Cs), </span></span><br><span class="line"><span class="string">                        # or 500‐800 (D, followed by 0 to 3 Cs) </span></span><br><span class="line"><span class="string">    (XC|XL|L?X&#123;0,3&#125;)    # tens ‐ 90 (XC), 40 (XL), 0‐30 (0 to 3 Xs),</span></span><br><span class="line"><span class="string">                        # or 50‐80 (L, followed by 0 to 3 Xs) </span></span><br><span class="line"><span class="string">    (IX|IV|V?I&#123;0,3&#125;)    # ones ‐ 9 (IX), 4 (IV), 0‐3 (0 to 3 Is),</span></span><br><span class="line"><span class="string">                        # or 5‐8 (V, followed by 0 to 3 Is) </span></span><br><span class="line"><span class="string">    $                   # end of string </span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span> </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>re.search(pattern, <span class="string">&#x27;M&#x27;</span>, re.VERBOSE)  <span class="comment"># 注意必须传递 re.VERBOSE 参数</span></span><br><span class="line">&lt;_sre.SRE_Match <span class="built_in">object</span> at <span class="number">0x008EEB48</span>&gt; </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>re.search(pattern, <span class="string">&#x27;MCMLXXXIX&#x27;</span>, re.VERBOSE)</span><br><span class="line">&lt;_sre.SRE_Match <span class="built_in">object</span> at <span class="number">0x008EEB48</span>&gt; </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>re.search(pattern, <span class="string">&#x27;MMMDCCCLXXXVIII&#x27;</span>, re.VERBOSE)  </span><br><span class="line">&lt;_sre.SRE_Match <span class="built_in">object</span> at <span class="number">0x008EEB48</span>&gt; </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>re.search(pattern, <span class="string">&#x27;M&#x27;</span>) </span><br></pre></td></tr></table></figure>
+<h5 id="说明-v4">说明</h5>
+<p>注意，如果要使用松散正则表达式，需要传递一个叫 <code>re.VERBOSE</code> 的参数。就像你看到的那样，正则表达式中有很多空白符，他们都被忽略掉了。还有一些注释信息，当然也被正则表达式忽略掉。当空白符和注释信息被忽略掉后，这个正则表达式和上面的是完全一样的，但是它有更高的可读性。</p>
+<h3 id="logging模块">logging模块</h3>
+<p>如果你希望得到存储在某处的重要信息或调试信息，以便检查程序是否如期运行时该咋办呢？你如何将这些信息存储在某处呢？</p>
+<p>这些可以通过<code>logging</code>模块做到。</p>
+<h5 id="示例-v9">示例</h5>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># Filename: use_logging.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os, platform, logging</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> platform.platform().startswith(<span class="string">&#x27;Windows&#x27;</span>):</span><br><span class="line">    logging_file = os.path.join(os.getenv(<span class="string">&#x27;HOMEDRIVE&#x27;</span>),os.getenv(<span class="string">&#x27;HOMEPATH&#x27;</span>), <span class="string">&#x27;test.log&#x27;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    logging_file = os.path.join(os.getenv(<span class="string">&#x27;HOME&#x27;</span>), <span class="string">&#x27;test.log&#x27;</span>)</span><br><span class="line">logging.basicConfig(</span><br><span class="line">    level=logging.DEBUG,</span><br><span class="line">    <span class="built_in">format</span>=<span class="string">&#x27;%(asctime)s : %(levelname)s : %(message)s&#x27;</span>,</span><br><span class="line">    filename = logging_file,</span><br><span class="line">    filemode = <span class="string">&#x27;w&#x27;</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">logging.debug(<span class="string">&quot;Start of the program&quot;</span>)</span><br><span class="line">logging.info(<span class="string">&quot;Doing something&quot;</span>)</span><br><span class="line">logging.warning(<span class="string">&quot;Dying now&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h5 id="输出-v5">输出</h5>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$python</span> use_logging.py</span><br><span class="line">Logging to C:/Users/swaroop/test.log</span><br></pre></td></tr></table></figure>
+<p>如果我们查看生成的日志文件 test.log ，它的内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2008-09-03 13:18:16,233 : DEBUG : Start of the program</span><br><span class="line">2008-09-03 13:18:16,233 : INFO : Doing something</span><br><span class="line">2008-09-03 13:18:16,233 : WARNING : Dying now</span><br></pre></td></tr></table></figure>
+<h5 id="说明-v5">说明</h5>
+<p>我们使用了3个标准库模块 —— <code>os</code>模块与系统交互，<code>platform</code>模块取得平台信息，即操作系统信息。而<code>logging</code>模块用于记录日志信息。</p>
+<p>首先，我们通过<code>platform.platform</code>(详见<code>help(platform)</code>)返回的字符串检测操作系统类型。如果为windows系统，则分别计算出主驱动器，主目录与文件名，这个文件用于存储相关信息。然后将这三部分合并得到文件的全路径。对于其他平台，我们只需得到用户的主目录就能计算出文件的全路径了。</p>
+<p>我们之所以没有简单的使用字符串连接合并这三部分而是利用<code>os.path.join</code>，原因在于这个特殊的函数可以确保路径格式符合特定系统的规范。</p>
+<p>之后我们配置logging模块，指示在我们指定的文件中以特殊的格式写入所有信息。最后，我们就能写入信息了，它们可以是调试信息，警告信息甚至是危机信息(critical messages)。</p>
+<p>一但程序开始运行，我们就可以检查这个文件以了解程序发生了什么，而用户并不会看到这些信息。</p>
+<h3 id="Python之禅">Python之禅</h3>
+<p>执行<code>import this</code>可以看到《Python 之禅》。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> this</span><br><span class="line">The Zen of Python, by Tim Peters</span><br><span class="line"></span><br><span class="line">Beautiful <span class="keyword">is</span> better than ugly.</span><br><span class="line">Explicit <span class="keyword">is</span> better than implicit.</span><br><span class="line">Simple <span class="keyword">is</span> better than <span class="built_in">complex</span>.</span><br><span class="line">Complex <span class="keyword">is</span> better than complicated.</span><br><span class="line">Flat <span class="keyword">is</span> better than nested.</span><br><span class="line">Sparse <span class="keyword">is</span> better than dense.</span><br><span class="line">Readability counts.</span><br><span class="line">Special cases aren<span class="string">&#x27;t special enough to break the rules.</span></span><br><span class="line"><span class="string">Although practicality beats purity.</span></span><br><span class="line"><span class="string">Errors should never pass silently.</span></span><br><span class="line"><span class="string">Unless explicitly silenced.</span></span><br><span class="line"><span class="string">In the face of ambiguity, refuse the temptation to guess.</span></span><br><span class="line"><span class="string">There should be one-- and preferably only one --obvious way to do it.</span></span><br><span class="line"><span class="string">Although that way may not be obvious at first unless you&#x27;</span>re Dutch.</span><br><span class="line">Now <span class="keyword">is</span> better than never.</span><br><span class="line">Although never <span class="keyword">is</span> often better than *right* now.</span><br><span class="line">If the implementation <span class="keyword">is</span> hard to explain, it<span class="string">&#x27;s a bad idea.</span></span><br><span class="line"><span class="string">If the implementation is easy to explain, it may be a good idea.</span></span><br><span class="line"><span class="string">Namespaces are one honking great idea -- let&#x27;</span>s do more of those!</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/228181/zen-of-python">这里的讨论</a>列出了每个原则的范例。</p>
+<h2 id="常用模块不完全列表">常用模块不完全列表</h2>
+<h4 id="Python增强">Python增强</h4>
+<table>
+<thead>
+<tr>
+<th>模块名</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>re</td>
+<td>实现了对正则表达式(regular expression)的支持</td>
+</tr>
+<tr>
+<td>array</td>
+<td>数组</td>
+</tr>
+<tr>
+<td>queue</td>
+<td>队列</td>
+</tr>
+<tr>
+<td>copy</td>
+<td>复制对象</td>
+</tr>
+<tr>
+<td>string</td>
+<td>定义了一些有用的常量，比如 <code>ascii_letters</code>与<code>ascii_lowercase</code></td>
+</tr>
+<tr>
+<td>textwrap</td>
+<td>提供了用于包裹与填充字符串的函数与方法</td>
+</tr>
+<tr>
+<td>unicodedata</td>
+<td>获取unicode字符和相关信息</td>
+</tr>
+<tr>
+<td>logging</td>
+<td>记录日志信息</td>
+</tr>
+<tr>
+<td>pdb</td>
+<td>调试</td>
+</tr>
+<tr>
+<td>timeit</td>
+<td>对代码进行即时</td>
+</tr>
+<tr>
+<td>cProfile</td>
+<td>用于比较函数与方法的性能。精确的展示了有什么被调用及每个调用耗费了多少时间。</td>
+</tr>
+<tr>
+<td>itertools</td>
+<td>为创建和使用迭代器提供很多便利工具，例如排列组合等。</td>
+</tr>
+<tr>
+<td>unittest</td>
+<td>单元测试模块</td>
+</tr>
+</tbody>
+</table>
+<h4 id="文件格式">文件格式</h4>
+<table>
+<thead>
+<tr>
+<th>模块名</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pickle</td>
+<td>以二进制格式存储/读取对象</td>
+</tr>
+<tr>
+<td>ElementTree</td>
+<td>解析XML，详见<a href="/wiki/python3-xml.html">解析XML</a>。</td>
+</tr>
+<tr>
+<td>lxml</td>
+<td>非标准库，提供比 ElementTree 更完善的XML Xpath支持</td>
+</tr>
+<tr>
+<td>json</td>
+<td>读写json</td>
+</tr>
+</tbody>
+</table>
+<h4 id="数值计算">数值计算</h4>
+<table>
+<thead>
+<tr>
+<th>模块名</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fractions</td>
+<td>使用分数以及分数的运算</td>
+</tr>
+<tr>
+<td>decimal</td>
+<td>更精确的进行小数运算（速度慢一些）</td>
+</tr>
+<tr>
+<td>random</td>
+<td>产生随机数、随机取样等</td>
+</tr>
+<tr>
+<td>math</td>
+<td>补充了一些重要的数学常数和数学函数</td>
+</tr>
+<tr>
+<td>cmath</td>
+<td>专门提供复数使用的数学函数</td>
+</tr>
+<tr>
+<td>numpy</td>
+<td><strong>非标准库中的包</strong>，但它的数组运算的良好支持，让它在基于Python的科研和计算方面得到相当广泛的应用。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="系统交互">系统交互</h4>
+<table>
+<thead>
+<tr>
+<th>模块名</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sys</td>
+<td>管理Python自身的运行环境</td>
+</tr>
+<tr>
+<td>os</td>
+<td>包含非常多用于获取（和修改）本地目录、文件进程、环境变量等的信息</td>
+</tr>
+<tr>
+<td>time</td>
+<td>管理时间</td>
+</tr>
+<tr>
+<td>datetime</td>
+<td>管理日期和时间</td>
+</tr>
+<tr>
+<td>glob、shutil</td>
+<td>文件管理</td>
+</tr>
+<tr>
+<td>difflib</td>
+<td>用于比较文件（或字符串）之间的区别</td>
+</tr>
+<tr>
+<td>subprocess</td>
+<td>执行外部命令，其功能相当于我们在操作系统的命令行中输入命令以执行</td>
+</tr>
+<tr>
+<td>platform</td>
+<td>获取平台信息</td>
+</tr>
+<tr>
+<td>threading</td>
+<td>多线程</td>
+</tr>
+<tr>
+<td>multiprocessing</td>
+<td>多进程</td>
+</tr>
+<tr>
+<td>getopt</td>
+<td>处理命令行选项</td>
+</tr>
+<tr>
+<td>humansize</td>
+<td><strong>非标准库</strong>，获取文件大小信息，带kiB等单位</td>
+</tr>
+</tbody>
+</table>
+<h4 id="网络">网络</h4>
+<table>
+<thead>
+<tr>
+<th>模块名</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>socket</td>
+<td>网络可编程部分的底层</td>
+</tr>
+<tr>
+<td>asyncore</td>
+<td>实现异步处理</td>
+</tr>
+<tr>
+<td>urlparse</td>
+<td>URL理解和操作</td>
+</tr>
+<tr>
+<td>sqlite3</td>
+<td>数据库</td>
+</tr>
+<tr>
+<td>http.client, BaseHTTPServer、urllib、urllib2</td>
+<td>http服务</td>
+</tr>
+<tr>
+<td>httplib2</td>
+<td>http服务第三方开源库</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Module-of-the-Week">Module of the Week</h2>
+<p>进一步研究标准库的最好办法就是阅读<a target="_blank" rel="noopener" href="http://www.doughellmann.com/projects/PyMOTW/">Python Module of the Week</a>系列，或者<a target="_blank" rel="noopener" href="http://docs.python.org/py3k/">Python的官方文档</a>。</p>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+			
+			
+			
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/python3-http-web.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/python3-style.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '模块'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

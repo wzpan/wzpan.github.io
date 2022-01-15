@@ -1,0 +1,759 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>ubuntu下安装配置free-pascal | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="Pascal语言的介绍以及在Ubuntu下安装配置free-pascal的方法。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="ubuntu下安装配置free-pascal"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: 'ubuntu下安装配置free-pascal'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> ubuntu下安装配置free-pascal</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>Pascal语言的介绍以及在Ubuntu下安装配置free-pascal的方法。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <h2 id="Pascal语言简介">Pascal语言简介</h2>
+<p>Pascal是一种计算机通用的高级程序设计语言，而且是第一个结构化编程语言，由瑞士Niklaus
+Wirth教授于六十年代末设计并创立。Pascal的取名是为了纪念十七世纪法国著名哲学家和数学家Blaise
+Pascal。Wirth还是另外几个编程语言的主设计师和发明者——Algol
+W、Euler、Modula、Modula-2、Oberon等，他还有一句在计算机领域人尽皆知的名言：“算法+数据结构=程序”（Algorithm+Data
+Structures=Programs），这个公式对计算机科学的影响程度足以和物理学中爱因斯坦的(E=mc^2)相媲美。</p>
+<p>尽管Pascal语言从诞生到现在已经经历了将近半个世纪，但凭借着自身严格的结构化形式、丰富完备的数据类型、运行效率高、查错能力强的特点，Pascal语言在现在依然具有较高的流行度，IOI(国际奥林匹克信息学竞赛)把Pascal语言作为三种程序设计语言之一，NOI(全国奥林匹克信息学竞赛)把Pascal语言和c语言、c++语言作为竞赛使用程序设计语言，在大学中Pascal语言也常常被用作学习数据结构与算法的教学语言。在TIOBE排行榜的前二十名榜单上，Pascal语言和Pascal语言分支之一的Delphi语言依然名列其中：<span id="more"></span></p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/free-pascal-on-ubuntu/tiobe.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<h2 id="Pascal编译工具和Free-Pascal">Pascal编译工具和Free Pascal</h2>
+<h3 id="Pascal编译器编年史">Pascal编译器编年史</h3>
+<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/free-pascal-on-ubuntu/wirth.jpg alt=' Niklaus Wirth'></img><b>附图 1</b>  Niklaus Wirth</span></span></span>
+<p>Pascal是一门编程语言，而Turbo Pascal、Free
+Pascal等则是这门语言的编译系统.。这两者的关系就好比C++和VC、GCC的关系。Pascal编译系统的编年史如下：</p>
+<table align="center" class="table table-striped">
+<thead>
+<tr>
+<td align="left" valign="center" width="66"><strong>出版年代</strong></td>
+<td align="left" valign="center" width="122"><strong>版本名称</strong></td>
+<td align="left" valign="center" width="400"><strong>主要特色</strong></td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" valign="center" width="66">1983</td>
+<td align="left" valign="center" width="122">Turbo Pascal 1.0</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td align="left" valign="center" width="122">Turbo Pascal 2.0</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td align="left" valign="center" width="122">Turbo-87 Pascal</td>
+<td align="left" valign="center" width="400">提高实数运算速度并扩大值域</td>
+</tr>
+<tr>
+<td align="left" valign="center" width="66">1985</td>
+<td align="left" valign="center" width="122">Turbo Pascal 3.0</td>
+<td align="left" valign="center" width="400">增加图形功能</td>
+</tr>
+<tr>
+<td></td>
+<td align="left" valign="center" width="122">Turbo BCD Pascal</td>
+<td align="left" valign="center" width="400">特别适合应用于商业</td>
+</tr>
+<tr>
+<td align="left" valign="center" width="66">1987</td>
+<td align="left" valign="center" width="122">Turbo Pascal 4.0</td>
+<td align="left" valign="center" width="400">提供集成开发环境(IDE)，引入单元概念</td>
+</tr>
+<tr>
+<td align="left" valign="center" width="66">1988</td>
+<td align="left" valign="center" width="122">Turbo Pascal 5.0</td>
+<td align="left" valign="center" width="400">增加调试功能</td>
+</tr>
+<tr>
+<td align="left" valign="center" width="66">1989</td>
+<td align="left" valign="center" width="122">Turbo Pascal 5.5</td>
+<td align="left" valign="center" width="400">支持面向对象的程序设计(OPP)</td>
+</tr>
+<tr>
+<td align="left" valign="center" width="66">1990</td>
+<td align="left" valign="center" width="122">Turbo Pascal 6.0</td>
+<td align="left" valign="center" width="400">提供面向对象的应用框架和库(Turbo Vision)</td>
+</tr>
+<tr>
+<td align="left" valign="center" width="66">1992</td>
+<td align="left" valign="center" width="122">Turbo Pascal 7.0</td>
+<td align="left" valign="center" width="400">面向对象的应用系统、更完善的IDE</td>
+</tr>
+<tr>
+<td></td>
+<td align="left" valign="center" width="122">Turbo Vision 2.0</td>
+<td></td>
+</tr>
+<tr>
+<td align="left" valign="center" width="66">1993</td>
+<td align="left" valign="center" width="122">Borland Pascal 7.0 开发</td>
+<td align="left" valign="center" width="400">Object Windows库(For Windows) 提供对OLE多媒体应用开发的支持</td>
+</tr>
+<tr>
+<td align="left" valign="center" width="66">1995</td>
+<td align="left" valign="center" width="122">Delphi (Object Pascal)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td align="left" valign="center" width="122">Visual Pascal</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td align="left" valign="center" width="122">Free Pascal</td>
+<td></td>
+</tr>
+<tr>
+<td>2011</td>
+<td>lazarus 0.9.31</td>
+<td>图形应用程序编辑</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Turbo-Pascal的衰落和Free-Pascal的兴起">Turbo Pascal的衰落和Free Pascal的兴起</h3>
+<p>在DOS时期，Turbo Pascal（包括同个体系的Borland
+Pascal）曾经独领风骚，但由于Turbo
+Pascal是DOS下的16位编程工具，随着Windows和内存的增大，Turbo
+Pascal已经无法适应时代的需求，其地位逐渐被Delphi和Free
+Pascal取代。其中，Free
+Pascal是由一个国际组织开发的32/64位Pascal编程工具，属于自由软件，可用于各种操作系统。根据编译选项的不同，它可以使用Turbo
+Pascal兼容语法、Delphi
+语法或者其它语法进行编写程序。由于它拥有32/64位的编译器，而且一直在更新发展中，因此它的功能比Turbo
+Pascal更加强大，拥有许多现代程序设计的特征。全国信息学奥林匹克竞赛决赛（NOI）和国际信息学奥林匹克竞赛（IOI）已经指定Free
+Pascal为比赛使用的Pascal编程工具。</p>
+<h3 id="Free-Pascal和Turbo-Pascal的区别">Free Pascal和Turbo Pascal的区别</h3>
+<p>虽然Free Pascal尽量设计得和Turbo
+Pascal接近，但是由于以下的两个原因，两者之间还是有一些区别的：</p>
+<ol>
+<li>Free Pascal是一个32位的编译器，而Turbo Pascal只是16位编译器；</li>
+<li>Free Pascal是一个跨平台的编译器，可在linux系统应用，而Turbo
+Pascal只在windows上使用，信息竞赛中多用linux评测。</li>
+<li>如果你的代码是遵守ANSI Pascal的，那么代码从Turbo Pascal移植到Free
+Pascal是没有问题的。</li>
+</ol>
+<p>关于Turbo Pascal和Free
+Pascal在语言特性上的具体区别，别的地方已经列举得很详细，这里不做赘述，有需要请参见<a target="_blank" rel="noopener" href="http://baike.baidu.com/view/26358.htm#2"></a>。</p>
+<h2 id="Ubuntu下安装Free-Pascal编译器">Ubuntu下安装Free Pascal编译器</h2>
+<p>由于信息学奥林匹克竞赛普遍采用Linux系统作为系统平台，因此这里主要讲Ubuntu下的Free
+Pascal安装配置方法。如果你没有装好Ubuntu，可以选择安装专门为竞赛提供的<a target="_blank" rel="noopener" href="http://www.noi.cn/noi-linux">NOI
+Linux系统</a>，里面已经安装配置好Free Pascal。</p>
+<h3 id="下载Free-Pascal">下载Free Pascal</h3>
+<p>可以在Sourceforge上下载Free
+Pascal：<a target="_blank" rel="noopener" href="http://sourceforge.net/projects/freepascal/files/Linux/"></a></p>
+<h3 id="安装Free-Pascal">安装Free Pascal</h3>
+<ol>
+<li>以2.6.0为例，将下载下来的文件进行解压：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ tar -tvf fpc-2.6.0.i386-linux.tar</span><br></pre></td></tr></table></figure>
+<p>注意把上面的&quot;2.6.0&quot;改成实际的文件名上的版本号。</p>
+<ol start="2">
+<li>之后cd进去安装Free
+Pascal，一路y到底直到安装结束，遇到询问安装路径选择，就选择默认路径。</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> fpc-2.6.0.i386-linux sudo sh install.sh</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>安装完成后，可以测试一下编译官方给的例子，如果在安装过程中选择安装了系统文档，并且安装在默认路径（/usr/share/doc/fpc-2.6.0）下，可以试着编译这个路径下的例子。</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> /usr/share/doc/fpc-2.6.0/examples/text fpc hello.pp ./hello</span><br></pre></td></tr></table></figure>
+<p>如果找不到这个例子，可以手动创建一个hello.pp文件并输入以下的内容：</p>
+<figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">program</span> hello; <span class="keyword">begin</span> writeln(<span class="string">&#x27;Hello world&#x27;</span>); <span class="keyword">end</span>.</span><br></pre></td></tr></table></figure>
+<p>之后再使用上面的fpc命令编译这个文件，如果编译运行后成功输出“Hello
+world”，说明编译器已经安装成功。</p>
+<h2 id="安装配置Free-Pascal的IDE">安装配置Free Pascal的IDE</h2>
+<p>编译器装好之后，还得考虑使用什么集成开发环境（IDE）。这里介绍三种IDE，一种是官方自带的IDE，一种是专门为NOI开发的GUIDE，最后一种是Emacs的pascal-mode。</p>
+<h3 id="官方自带的IDE">官方自带的IDE</h3>
+<p>如果安装Free
+Pascal时选择安装IDE，则安装完后，打开终端并敲入“fp”命令将会进入Free
+Pascal自带的IDE。但我在安装完成后第一次运行时提示“缺少libtinfo.so.5”错误信息，解决方法是手动为它创建一个链接：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ln s /lib/libncurses.so.5 /usr/lib/libtinfo.so.5</span><br></pre></td></tr></table></figure>
+<p>再次敲入“fp”命令，进入IDE，如图1所示。</p>
+<p>
+      <figure>
+        <img src="http://i.imgur.com/9fHIA.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>为了方便键盘操作，可以点击终端菜单栏上的【查看】-&gt;【显示菜单栏】选项，取消菜单栏，如果需要菜单栏时可以在终端窗口中点击右键，重新勾选“显示菜单栏&quot;。</p>
+<p>按“Alt+F”键或者“File”菜单，选择“new”可以新建一个pas文件，在这里可以敲入代码，如图2所示。</p>
+<p>
+      <figure>
+        <img src="http://i.imgur.com/gCZjK.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>个人认为这个编辑器设计得很简单易用，符合KISS原则。具体的使用方法交给读者去尝试，这里不花篇幅去一一介绍。值得一提的是，这个IDE也支持多窗口和窗口大小调整的操作，如果窗口布局错乱，可以删除fp同一目录下的fp.dsk文件，回复默认的窗口布局。</p>
+<h3 id="GUIDE编辑器">GUIDE编辑器</h3>
+<p>如果离不开GUI界面，可以使用GUIDE。GUIDE(GAIT Universal IDE)是由北航GAIT研究组开发的、专门为NOI选手设计的轻型集成开发环境。GUIDE具有跨平台、操作简单、支持C/C++/Pascal三种语言和单文件编译调试等优点。这个编辑器的界面如图3所示。看起来是不是很亲切呢？</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/free-pascal-on-ubuntu/gkGSB.png" alt="GUIDE" />
+        <figcaption>GUIDE</figcaption>
+      </figure>
+    </p>
+<p>安装GUIDE的方法也非常简单，首先到<a target="_blank" rel="noopener" href="http://gait.buaa.edu.cn/~zjb/">http://gait.buaa.edu.cn/~zjb/</a>下载GUIDE的安装包，注意选择Ubuntu版本。目前最新的版本是1.02，即GUIDE-1.0.2-ubuntu。</p>
+<p>下载完成后，cd进去安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo sh install.sh</span><br></pre></td></tr></table></figure>
+<p>完成后，打开一个终端敲入 “GUIDE” 命令，即可启动GUIDE。</p>
+<h3 id="Emacs下的Pascal-Mode">Emacs下的Pascal Mode</h3>
+<p>作为一个Emacser，最关心的当然就是Emacs对Pascal的支持情况。Emacs为Pascal提供了一个pascal-mode环境，它包含以下一些特性：</p>
+<ol>
+<li>**缩进重排。**Emacs可以根据Pascal的语法规则对缓冲区的代码进行缩进重排。也可以手动缩进进行调整：行内缩进可以使用“TAB”键，缩进句子可以使用“C-M-q”组合键，缩进选区可以使用“C-M-”组合键，缩进整个缓冲可以使用“M-x
+indent-buffer”命令。</li>
+<li>**按过程、语句、表达式进行移动、删除、标记和置换。**例如，按表达式移动可以使用“C-M-f”和“C-M-b”，按句子移动可以使用“M-a”和“M-e”，按过程移动可以使用“C-M-a”和“C-M-e”，跳转到某个程序体可以使用“C-c
+C-”；标记表达式可以使用“C-M-@”，标记语句可以使用“C-x
+@”，标记过程可以使用“C-M-h”；删除从光标所在的位置到表达式的结束可以使用“C-M-k”，删除从光标所在的位置到句子的结束可以使用“M-k”，删除从光标所在的位置到句子的开头可以使用“C-x
+DEL”；置换两个表达式可以使用“C-M-t”，置换两个句子可以使用“C-x t”。</li>
+<li><strong>拼写补全</strong>。“M-TAB”可以补全光标所在的拼写，“M-?”可以给出当前光标处所在的拼写的建议。</li>
+<li><strong>从模板插入特定程序段。</strong>“C-c
+C-b”插入“begin…end”；“M-<em>”插入(</em>…*)。</li>
+<li><strong>注释。</strong>“C-c C-c”将选中的区域注释。“C-c C-u”取消使用“C-c
+C-c”的注释</li>
+<li><strong>大纲模式。</strong>“C-c C-o”进入大纲模式。</li>
+</ol>
+<p>另外，还可以修改几个变量来定制pascal-mode的风格：</p>
+<ul>
+<li>pascal-indent-level (默认值为3)：pascal语句的缩进长度；</li>
+<li>pascal-case-indent (默认值为2)：case语句的缩进长度；</li>
+<li>pascal-auto-newline
+(默认值为nil)：如果值设为非nil，则在输入分号后自动换行；</li>
+<li>pascal-indent-nested-functions
+(默认值为t)：如果值为nil，则嵌套的函数将缩进；</li>
+<li>pascal-tab-always-indent
+(默认值为t)：如果值为非nil，则按下TAB键后将再次将当前行往前缩进一个单位，而不考虑当前光标在这一行中的位置；</li>
+<li>pascal-auto-endcomments
+(默认值为t)：如果值为非nil，则每个分支和函数结束后都将自动产生一个注释对{
+… }，注释对里的内容是这个函数或者分支的名字；</li>
+</ul>
+<p>要让Emacs在打开*.pas文件后自动开启pascal-mode，可以在.emacs中添加以下内容：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">add-to-list</span> &#x27;auto-mode-alist &#x27;(<span class="string">&quot;\\.pas\\&#x27;&quot;</span> . pascal-mode))</span><br></pre></td></tr></table></figure>
+<p>要修改pascal-mode下的默认编译方式为fpc，可以继续添加下面的代码：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">add-hook</span> &#x27;pascal-mode-hook</span><br><span class="line">   (<span class="name">lambda</span> ()</span><br><span class="line">     (<span class="name">set</span> (<span class="name">make-local-variable</span> &#x27;compile-command)</span><br><span class="line">       (<span class="name">concat</span> <span class="string">&quot;fpc &quot;</span> (<span class="name">file-name-nondirectory</span> (<span class="name">buffer-file-name</span>)))</span><br><span class="line">     )</span><br><span class="line">   )</span><br><span class="line">   <span class="literal">t</span>)</span><br></pre></td></tr></table></figure>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/life/teaching-pascal/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/tools/abbreviation-on-emacs/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: 'ubuntu下安装配置free-pascal'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/free-pascal-on-ubuntu.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2012-01-07 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/codes/">codes<span>38</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Pascal/">Pascal<span>2</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#Pascal%E8%AF%AD%E8%A8%80%E7%AE%80%E4%BB%8B"><span class="toc-article-text">Pascal语言简介</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#Pascal%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7%E5%92%8CFree-Pascal"><span class="toc-article-text">Pascal编译工具和Free Pascal</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#Pascal%E7%BC%96%E8%AF%91%E5%99%A8%E7%BC%96%E5%B9%B4%E5%8F%B2"><span class="toc-article-text">Pascal编译器编年史</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#Turbo-Pascal%E7%9A%84%E8%A1%B0%E8%90%BD%E5%92%8CFree-Pascal%E7%9A%84%E5%85%B4%E8%B5%B7"><span class="toc-article-text">Turbo Pascal的衰落和Free Pascal的兴起</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#Free-Pascal%E5%92%8CTurbo-Pascal%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-article-text">Free Pascal和Turbo Pascal的区别</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#Ubuntu%E4%B8%8B%E5%AE%89%E8%A3%85Free-Pascal%E7%BC%96%E8%AF%91%E5%99%A8"><span class="toc-article-text">Ubuntu下安装Free Pascal编译器</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E4%B8%8B%E8%BD%BDFree-Pascal"><span class="toc-article-text">下载Free Pascal</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85Free-Pascal"><span class="toc-article-text">安装Free Pascal</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEFree-Pascal%E7%9A%84IDE"><span class="toc-article-text">安装配置Free Pascal的IDE</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AE%98%E6%96%B9%E8%87%AA%E5%B8%A6%E7%9A%84IDE"><span class="toc-article-text">官方自带的IDE</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#GUIDE%E7%BC%96%E8%BE%91%E5%99%A8"><span class="toc-article-text">GUIDE编辑器</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#Emacs%E4%B8%8B%E7%9A%84Pascal-Mode"><span class="toc-article-text">Emacs下的Pascal Mode</span></a></li></ol></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

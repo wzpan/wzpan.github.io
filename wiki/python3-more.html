@@ -1,0 +1,873 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>补完 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="查看文档
+可以通过 pydoc &amp;lt;命令&amp;gt; 来查看文档获取帮助。例如，想了解关于文件的相关知识，可以在终端中输入：
+1$ pydoc file
+对于同时安装了Python2和Python3的机器，可以通过pydoc2和pydoc3命令来获取指定版本的文档。
+exec和eval
+exec函数">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="补完"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '补完'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 补完</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc', 2, 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="查看文档">查看文档</h2>
+<p>可以通过 <code>pydoc &lt;命令&gt;</code> 来查看文档获取帮助。例如，想了解关于文件的相关知识，可以在终端中输入：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pydoc file</span><br></pre></td></tr></table></figure>
+<p>对于同时安装了Python2和Python3的机器，可以通过<code>pydoc2</code>和<code>pydoc3</code>命令来获取指定版本的文档。</p>
+<h2 id="exec和eval">exec和eval</h2>
+<p><code>exec</code>函数用于执行python<strong>语句</strong>，不过这些语句储存在字符串或文件中而不是程序自身中。</p>
+<p>例如，我们可以在运行时产生一个包含python代码的字符串，然后利用exec执行之。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">exec</span>(<span class="string">&#x27;print(&quot;Hello World&quot;)&#x27;</span>)</span><br><span class="line">Hello World</span><br></pre></td></tr></table></figure>
+<p>与之类似，<code>eval</code>函数用于执行合法的存储在字符串中的python<strong>表达式</strong>。下面是一个简单的例子。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">eval</span>(<span class="string">&#x27;2*3&#x27;</span>)</span><br><span class="line"><span class="number">6</span></span><br></pre></td></tr></table></figure>
+<h2 id="repr函数">repr函数</h2>
+<p><code>repr</code>函数用于获得对象的正规字符串表示。有趣的是多数时候<code>eval(repr(object))</code>等于<code>object</code>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>i = []</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>i.append(<span class="string">&#x27;item&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">repr</span>(i)</span><br><span class="line"><span class="string">&quot;[&#x27;item&#x27;]&quot;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">eval</span>(<span class="built_in">repr</span>(i))</span><br><span class="line">[<span class="string">&#x27;item&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">eval</span>(<span class="built_in">repr</span>(i)) == i</span><br><span class="line"><span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<p>基本上，<strong><code>repr</code>函数用来获得一个对象的可打印形式</strong>。你可以通过在类中定义<code>__repr__</code>方法控制<code>repr</code>的返回值。</p>
+<h2 id="在交互模式里执行python脚本">在交互模式里执行python脚本</h2>
+<p>直接用<code>import</code>命令也可以执行一个脚本，但<code>__name__</code>将不是<code>__main__</code>。所以如果该脚本涉及到这类检查的话可能会出问题。下面针对python2和python3有不同的解决方法：</p>
+<h3 id="Python2">Python2</h3>
+<p>在python2中，可以使用下面的形式</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt; execfile(<span class="string">&quot;script.py&quot;</span>, global_vars, local_vars)</span><br></pre></td></tr></table></figure>
+<h3 id="Python3">Python3</h3>
+<p>Python3并没有<code>execfile</code>命令，替代的命令是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; exec(open(&quot;.&#x2F;filename&quot;).read())</span><br></pre></td></tr></table></figure>
+<p>另外一个方案是自己定义一个<code>execfile</code>函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt; <span class="function"><span class="keyword">def</span> <span class="title">execfile</span>(<span class="params">afile, globalz=<span class="literal">None</span>, localz=<span class="literal">None</span></span>):</span></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(afile, <span class="string">&quot;r&quot;</span>) <span class="keyword">as</span> fh:</span><br><span class="line">        <span class="built_in">exec</span>(fh.read(), globalz, localz)</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/436198/what-is-an-alternative-to-execfile-in-python-3-0">这里</a>有更多的讨论。</p>
+<h3 id="IPython">IPython</h3>
+<p>如果使用的是<a target="_blank" rel="noopener" href="http://ipython.scipy.org/moin/">IPython</a>，它提供了很多“魔法”命令，包括</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">run script.py</span><br></pre></td></tr></table></figure>
+<p>可以执行一个脚本。</p>
+<h2 id="Python相关资源">Python相关资源</h2>
+<h3 id="实例代码">实例代码</h3>
+<p>学习程序设计最好的办法就是编写阅读大量代码：</p>
+<ul>
+<li>PLEAC项目<a target="_blank" rel="noopener" href="http://pleac.sourceforge.net/pleac_python">http://pleac.sourceforge.net/pleac_python</a></li>
+<li>Rosetta代码资料库(Rosetta code repository)<a target="_blank" rel="noopener" href="http://rosettacode.org/wiki/Category:Python">http://rosettacode.org/wiki/Category:Python</a></li>
+<li>java2s 网的python范例 <a target="_blank" rel="noopener" href="http://www.java2s.com/Code/Python/CatalogPython.htm">http://www.java2s.com/Code/Python/CatalogPython.htm</a></li>
+<li>Python Cookbook <a target="_blank" rel="noopener" href="http://code.activestate.com/recipes/langs/python/">http://code.activestate.com/recipes/langs/python/</a></li>
+</ul>
+<p>对于某些种类的问题Python Cookbook提供了许多解决问题的珍贵技巧和诀窍。此网是<strong>每个python用户都必读的</strong>。</p>
+<h3 id="问题与解答">问题与解答</h3>
+<ul>
+<li>官方Python Dos and Don’ts <a target="_blank" rel="noopener" href="http://docs.python.org/dev/howto/doanddont.html">http://docs.python.org/dev/howto/doanddont.html</a></li>
+<li>官方Python 问与答 <a target="_blank" rel="noopener" href="http://docs.python.org/faq/general">http://docs.python.org/faq/general</a></li>
+<li>Norvig的宝贵的已解答问题列表 <a target="_blank" rel="noopener" href="http://norvig.com/python-iaq.html">http://norvig.com/python-iaq.html</a></li>
+<li>Python面试问答 <a target="_blank" rel="noopener" href="http://dev.fyicenter.com/Interview-Questions/Python/index.html">http://dev.fyicenter.com/Interview-Questions/Python/index.html</a></li>
+<li>StackOverflow网的python相关问题 <a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/tagged/python">http://stackoverflow.com/questions/tagged/python</a></li>
+</ul>
+<h3 id="技巧和诀窍">技巧和诀窍</h3>
+<ul>
+<li>Python技巧和诀窍 <a target="_blank" rel="noopener" href="http://www.siafoo.net/article/52">http://www.siafoo.net/article/52</a></li>
+<li>使用python的高级软件木工 <a target="_blank" rel="noopener" href="http://ivory.idyll.org/articles/advanced-swc/">http://ivory.idyll.org/articles/advanced-swc/</a></li>
+<li>引人入胜的python(Charming Python) <a target="_blank" rel="noopener" href="http://gnosis.cx/publish/tech_index_cp.html">http://gnosis.cx/publish/tech_index_cp.html</a>是一系列优秀的python相关的文章，作者David Mertz</li>
+</ul>
+<h3 id="书籍，文章，教程，视频">书籍，文章，教程，视频</h3>
+<p>逻辑上看完本书应该读读 Mark Pilgrim 那超棒的 Dive Into Python 一书<a target="_blank" rel="noopener" href="http://www.diveintopython.org/">http://www.diveintopython.org/</a>，你可以在线完整阅读。</p>
+<p>此书详细的探索了诸如正则表达式，XML处理，web服务，单元测试等内容。</p>
+<p>其它有用的资源：</p>
+<ul>
+<li>ShowMeDo的python视频 <a target="_blank" rel="noopener" href="http://showmedo.com/videotutorials/python">http://showmedo.com/videotutorials/python</a></li>
+<li>GoogleTechTalks的python视频 <a target="_blank" rel="noopener" href="http://youtube.com/results?searchquery=googletechtalks+python">http://youtube.com/results?searchquery=googletechtalks+python</a></li>
+<li>Awaretek的python教程的综合列表 <a target="_blank" rel="noopener" href="http://www.awaretek.com/tutorials.html">http://www.awaretek.com/tutorials.html</a></li>
+<li>Effbot的Python Zone <a target="_blank" rel="noopener" href="http://effbot.org/zone/">http://effbot.org/zone/</a></li>
+<li>每个Python-URL!邮件尾的链接<a target="_blank" rel="noopener" href="http://groups.google.com/group/comp.lang.python.announce/t/37de95ef0326293d">http://groups.google.com/group/comp.lang.python.announce/t/37de95ef0326293d</a></li>
+<li>Python Papers <a target="_blank" rel="noopener" href="http://pythonpapers.org">http://pythonpapers.org</a></li>
+</ul>
+<h3 id="新闻">新闻</h3>
+<p>如果你想了解python的最新动态，请关注Official Python Planet <a target="_blank" rel="noopener" href="http://planet.python.org">http://planet.python.org</a> 和Unofficial Python Planet <a target="_blank" rel="noopener" href="http://www.planetpython.org">http://www.planetpython.org</a>.</p>
+<h3 id="安装库">安装库</h3>
+<p>python包索引(Python Package Index)拥有数量巨大的开源库，你可以在自己的程序中使用它们。<a target="_blank" rel="noopener" href="http://pypi.python.org/pypi">http://pypi.python.org/pypi</a></p>
+<p>安装和使用这些库，你可以使用Philip J. Eby的优秀的 EasyInstall 工具。</p>
+<p><a target="_blank" rel="noopener" href="http://peak.telecommunity.com/DevCenter/EasyInstall#using-easy-install">http://peak.telecommunity.com/DevCenter/EasyInstall#using-easy-install</a></p>
+<h3 id="图形软件">图形软件</h3>
+<p>如果你想使用python创建自己的图形程序。那么可以使用已绑定到python上的GUI(图形用户界面)库。</p>
+<p>绑定允许你在自己的程序中使用这些库，而库本身是用C/C++或其它语言编写的。</p>
+<p>使用python你可以选择很多种GUI库：</p>
+<h4 id="PyQt">PyQt</h4>
+<p>这是绑定到python的Qt工具包，它是创建KDE的基石。</p>
+<p>Qt非常易用，功能又很强大，尤其是仰仗于它的Qt Designer与出色的Qt文档。</p>
+<p>如果你在创建开源软件(GPL’ed)则PyQt是免费的, 相反创建私营闭源软件的用户就要掏银子买它了。</p>
+<p>从Qt4.5开始你同样可以用它创建非GPL软件。</p>
+<p>作为入门可以阅读PyQt教程<a target="_blank" rel="noopener" href="http://zetcode.com/tutorials/pyqt4/">http://zetcode.com/tutorials/pyqt4/</a>或者PyQt book <a target="_blank" rel="noopener" href="http://www.qtrac.eu/pyqtbook.html">http://www.qtrac.eu/pyqtbook.html</a>.</p>
+<h4 id="PyGTK">PyGTK</h4>
+<p>GTK+工具包的python绑定。它是GNOME的基础。</p>
+<p>GTK+含有很多奇怪的用法，不过一旦熟悉它你就能够快速创建GUI应用了。其中Glade图形界面设计器是必不可少的。</p>
+<p>GTK+的文档仍然完善中。GTK+在linux上工作的很好，但其windows实现仍未完成。</p>
+<p>另外使用GTK+你既可以创建开源也可以创建私营软件。</p>
+<p>入门可以阅读PyGTK教程<a target="_blank" rel="noopener" href="http://www.pygtk.org/tutorial.html">http://www.pygtk.org/tutorial.html</a></p>
+<h4 id="wxPython">wxPython</h4>
+<p>这是绑定到python的wxWidgets工具包。</p>
+<p>wxPython有一定的学习曲线。但是具有很强的可移植性，可以运行在linux，windows，Mac甚至是嵌入式平台之上。</p>
+<p>wxPython拥有很多可用的IDE，其中包括GUI设计器和诸如SPE(Stani的python编辑器)<a target="_blank" rel="noopener" href="http://spe.pycs.net">http://spe.pycs.net</a>和</p>
+<p>wxGlade<a target="_blank" rel="noopener" href="http://wxglade.sourceforge.net/">http://wxglade.sourceforge.net/</a>的开发工具。</p>
+<p>入门可以阅读wxPython教程<a target="_blank" rel="noopener" href="http://zetcode.com/wxpython/">http://zetcode.com/wxpython/</a></p>
+<h4 id="Tkinter">Tkinter</h4>
+<p>这是现存最老的GUI工具包之一。如果你用过IDLE，它就是一个使用Tkinter编写的程序。</p>
+<p>Tkinter没有什么不错的视觉外观，因为它是个守旧派。</p>
+<p>Tkinter是可移植的能够运行在Linux/Unix和Windows上。更重要的Tkinter是标准python发布版的一部分。</p>
+<p>入门可以阅读Tkinter教程<a target="_blank" rel="noopener" href="http://www.pythonware.com/library/tkinter/troduction/">http://www.pythonware.com/library/tkinter/troduction/</a>。</p>
+<p>更多的GUI库选择，见python官网的GuiProgramming维基页面<a target="_blank" rel="noopener" href="http://wiki.python.org/moin/GuiProgramming">http://wiki.python.org/moin/GuiProgramming</a></p>
+<h3 id="各种python实现">各种python实现</h3>
+<p>一个程序设计语言通常包含两部分 —— 语言和软件。语言指出如何编写程序。而软件用来运行我们的程序。</p>
+<p>我们一直在用CPython运行我们的程序，之所以称为CPython是因为它是用C语言实现的并且为标准python解释器。</p>
+<p>另外还有其它的软件也可以运行python程序：</p>
+<ul>
+<li>Jython <a target="_blank" rel="noopener" href="http://www.jython.org">http://www.jython.org</a> 一个运行在java平台的python实现。这意味着你可以在python语言内部使用java库和类，反之亦然。</li>
+<li>IronPython <a target="_blank" rel="noopener" href="http://www.codeplex.com/Wiki/View.aspx?ProjectName=IronPython">http://www.codeplex.com/Wiki/View.aspx?ProjectName=IronPython</a> 一个运行在.NET平台的python实现。即你可以在python语言内部使用java库和类，反之亦然</li>
+<li>PyPy <a target="_blank" rel="noopener" href="http://codespeak.net/pypy/dist/pypy/doc/home.html">http://codespeak.net/pypy/dist/pypy/doc/home.html</a> 一个用python写的python实现！这是一个研究项目，用于使之可以快而容易的改进解释器，因为解释器本身就是用动态语言编写的。（而不是类似上面的C, java或C#等静态语言）</li>
+<li>Stackless Python <a target="_blank" rel="noopener" href="http://www.tackless.com">http://www.tackless.com</a> 一个专用于基于线程性能的python实现。</li>
+<li>除此之外还有CLPython<a target="_blank" rel="noopener" href="http://common-lisp.net/project/clpython/">http://common-lisp.net/project/clpython/</a> 一个Common Lisp编写的python实现。</li>
+<li>IronMonkey<a target="_blank" rel="noopener" href="https://wiki.mozilla.org/Tamarin:IronMonkey">https://wiki.mozilla.org/Tamarin:IronMonkey</a> 是一个运行在JavaScript解释器之上的IronPython的接口，这可能意味着你可以使用python(替代JavaScript)编写web浏览器程序(“Ajax”)。</li>
+</ul>
+<p>以上的每个实现都有自己的擅长领域。</p>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+			
+			
+			
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/python3-generator.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/python3-http-web.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '补完'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

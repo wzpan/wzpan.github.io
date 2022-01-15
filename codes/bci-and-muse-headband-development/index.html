@@ -1,0 +1,790 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>脑机接口概述及Muse头环Python开发基础 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="本文介绍了关于脑机接口技术（Brain-Computer Interface）的基本概念以及 Muse 头环的 Python 开发基础，并分享了几个我开发的应用场景。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="脑机接口概述及Muse头环Python开发基础"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '脑机接口概述及Muse头环Python开发基础'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 脑机接口概述及Muse头环Python开发基础</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>本文介绍了关于脑机接口技术（Brain-Computer Interface）的基本概念以及 Muse 头环的 Python 开发基础，并分享了几个我开发的应用场景。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <h2 id="一、BCI-技术综述">一、BCI 技术综述</h2>
+<p>BCI 技术（Brain-Computer Interface Science， 脑机接口）是一种用于在人脑和外部设备间发送和接受信号的技术。BCI 的基本原理是捕获并解释人脑的信号，然后传输到与人脑相连接的机器上，这个机器可以进一步对人脑的信号进行处理，输出相应指令。</p>
+<p>BCI 技术有着非常广泛的应用前景，例如帮助残疾、老年或者行动不便的人士控制轮椅、智能家居以及机器人。BCI 的通信还可以是双工的：除了能将脑部信号传输到外部设备外，还能反向将外部设备的信号传输回脑部。这种能主动传回脑部的 BCI 称为主动 BCI（Active BCI），而只支持脑部到外部设备单向信号传输的 BCI 称为被动 BCI （Passive BCI）。</p>
+<p>BCI 的主要挑战在于从信噪比匮乏的脑部信号中精确识别出人类的意图。较低的分类准确度以及较差的泛化能力都制约着 BCI 技术的应用和普及。为了解决以上的问题，最近几年深度学习开始被用在大脑信息处理上。<span id="more"></span></p>
+<p>一个常见的 BCI 流程如图 1 所示 <sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>，该流程包含几个重要部分：脑部信号采集、信号预处理、特征工程、分类，以及智能设备。具体步骤如下：</p>
+<ol>
+<li>脑部信号被采集并发送给预处理模块进行降噪和增强。</li>
+<li>这些信号被进行分类，识别成控制指令。</li>
+<li>这些控制指令被发送给外部智能设备，从而实现控制外部设备的目的。</li>
+</ol>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/bci-and-muse-headband-development/fig1.png" alt="图1：常见的 BCI 流程示意图" />
+        <figcaption>图1：常见的 BCI 流程示意图</figcaption>
+      </figure>
+    </p>
+<h3 id="1-1-脑部信号采集">1.1 脑部信号采集</h3>
+<p>在步骤1，针对不同的信号，采集方法则分为侵入式和非侵入式两大类。其中，侵入式的方法是在大脑皮层或皮层表面下方采集；而非侵入式信号则是借助外部传感器来采集。图 2 概括了两大类方法下各自包括的常见脑部信号 <sup class="footnote-ref"><a href="#fn1" id="fnref1:1">[1:1]</a></sup> 。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/bci-and-muse-headband-development/fig2.png" alt="图2：BCI 常用的生物学信号" />
+        <figcaption>图2：BCI 常用的生物学信号</figcaption>
+      </figure>
+    </p>
+<p>图 3 概括了几种代表信号所采集的信号源位置。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/bci-and-muse-headband-development/fig3.png" alt="图3：几种脑部信号的信号源位置示意" />
+        <figcaption>图3：几种脑部信号的信号源位置示意</figcaption>
+      </figure>
+    </p>
+<p>这些信号的特点和差异见表 1 <sup class="footnote-ref"><a href="#fn1" id="fnref1:2">[1:2]</a></sup>。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/bci-and-muse-headband-development/table1.png" alt="表1：各类脑部信号的特点和差异" />
+        <figcaption>表1：各类脑部信号的特点和差异</figcaption>
+      </figure>
+    </p>
+<p>从表 1 可见，侵入式方法由于更靠近脑神经，所以具备较高的脑部信号时间、空间分辨率和信噪比。然而，侵入式的方法有两个挑战：1. 需要一个外科手术过程，价格昂贵且有很高风险。2. 植入的探测器是固定的，因此只能够识别固定位置的信号。因此，侵入式方法目前只用于动物研究（例如猴子、老鼠）以及特定疾病患者（例如 ALS 病患）上。<span class='block margin-div-outer'><span class='block margin-div-inner'><span class='block margin-note'><img src=/images/bci-and-muse-headband-development/Elon-Musks-New-AI-Startup-Neuralink-Promises-To-Merging-Your-Brain-With-AI-1-750x445.jpg alt=' 最近 Elon Musk 所带领提出的 Neuralink 技术也是一种侵入式的方法，其亮点在于通过一套称为“neural dust”的微型机器人来实现植入柔性电极。这套方法解决了以上两个挑战，值得后续关注。不过该技术目前最大的争议在于电极的植入位置无法同时覆盖全脑，且非消费级。'></img><b>附图 1</b>  最近 Elon Musk 所带领提出的 Neuralink 技术也是一种侵入式的方法，其亮点在于通过一套称为“neural dust”的微型机器人来实现植入柔性电极。这套方法解决了以上两个挑战，值得后续关注。不过该技术目前最大的争议在于电极的植入位置无法同时覆盖全脑，且非消费级。</span></span></span></p>
+<p>相比之下，非侵入式的方法可以在无需植入探测器的情况下采集人类的脑部信息。这种方案更加安全、快捷。然而，非侵入式的方法能读取到的信号类型和信噪比都很有限。</p>
+<p>其中，EEG （Electroencephalogram，脑电波）信号是 BCI 系统中最常用的一种非侵入式信号。EEG 记录大脑活动时的电波变化，是脑神经细胞的电生理活动在大脑皮层或头皮表面的总体反映。如图 4 所示，EEG 的探测位置通常遵循国际的 10-20 系统或中间 10% 探测位置（the intermediate 10% electrode positions）。其中，国际 10-20 系统将头皮按照 10% 和 20% 的间隔精度进行划分，总共包含 21 个探测点；而中间 10% 则是统一使用 10% 的间隔精度进行划分，因此包含 75 个探测点。目前工业采用的 EEG 采集系统通常不会达到 75 个探测点。例如，BCI 2000 拥有 64 个探测点，openBCI 头盔拥有 32 个探测点，Emotiv EpPOC+ 拥有 14 个探测点，Emotiv insight 头盔拥有 5 个探测点。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/bci-and-muse-headband-development/fig4.png" alt="图4：(A) 和 (B) 为国际 10-20 系统的左视图和顶视图；(C) 是中间 10% 探测位置" />
+        <figcaption>图4：(A) 和 (B) 为国际 10-20 系统的左视图和顶视图；(C) 是中间 10% 探测位置</figcaption>
+      </figure>
+    </p>
+<p>EEG 信号包含了多种信息不重复的频率基带，这些频率基带各自的特点和与人脑活动的对应关系如表 2 <sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup> 所示：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/bci-and-muse-headband-development/table2.png" alt="表2：EEG 信号包含的脑波种类" />
+        <figcaption>表2：EEG 信号包含的脑波种类</figcaption>
+      </figure>
+    </p>
+<p>实际上，如前面的图 2 所示，EEG 信号还可以细分为很多种子分类：</p>
+<ol>
+<li>Spontaneous EEG，顾名思义就是身体自然产生的 EEG 。当我们谈论 “EEG” 这个词的时候，我们通常指的就是 spontaneous EEG ，即在不给任何刺激的自然情况下，记录大脑在某个特定状态下的信号情况。例如，spontaneous EEG 可以记录受观察者在睡眠时、展开某个脑力任务时（例如算数）、疲劳时、受扰乱时等情况下的 EEG 信号。</li>
+<li>诱发电位（Evoked Potential，EP），表示的是通过事件刺激所诱发的 EEG 信号。根据刺激方法不同，EP 又可进一步细分为事件相关电位（Event-Related Potential， ERP）和稳态视觉诱发电位（Steady State Evoked Potential，SSEP）。其中，ERP 记录大脑在一个短时、特定事件下的 EEG 信号（例如让受观察者看电脑屏幕上变换的棋盘）；而 SSEP 则指的是周期性的表层刺激下的 EEG 信号（例如让受观察者接受固定频率的闪烁灯光刺激）。</li>
+<li>Event-related Desynchronization/Synchronization （ERD/ERS），用于记录大脑在某个特定状态下的信号幅度/频率变化的分布。其中，ERD 用于分析 EEG 信号的衰弱分布，而 ERS 则用于分析 EEG 信号的增强。ERD/ERS 的优点在于同样也是一种自然产生的信号，无需额外刺激。并且还能记录信号增强/衰弱的现象。不过，要采集高质量的 ERD/ERS ，需要被观察者接受可能长达数周的训练。并且，不同的用户的 ERD/ERS 表现可能有巨大的差异，且准确度并不是很高。所以，这种信号在 BCI 技术中并不常用。</li>
+</ol>
+<p>与其他几种非侵入式信号相比，EEG 有几个非常显著的优势：</p>
+<ol>
+<li>采集器容易做成头盔的形式，便携性更强，安装更为方便，且造价低廉；</li>
+<li>时间分辨率高（毫秒级）；</li>
+<li>EEG 对受观察目标移动等动作有较高容忍度；4. 受观察目标不需要暴露在强磁场下。</li>
+</ol>
+<p>EEG 主要有 3 个问题：</p>
+<ol>
+<li>记录的是整个大脑神经活动产生电信号的叠加，因此难以区分不同部位的神经活动；</li>
+<li>探测器数量比较有限，所以空间分辨率低；</li>
+<li>跟其他非侵入式的信号一样，经过头皮衰减导致信噪比很差。因此无创脑机通常用在消费电子领域较多，实现一些较简单的功能，例如情绪检测，简单的人机交互等。</li>
+</ol>
+<p>由于传感器和脑部之间的障碍物（例如头骨）会对检测到的 EEG 信号质量造成很大影响（信噪比约 5%），所以，在进行特征工程之前，通常需要对脑部信号进行诸如信号降噪、信号正规化、信号增强、信号简化/降维等预处理。</p>
+<h3 id="1-2-特征工程">1.2 特征工程</h3>
+<p>在步骤2，特征工程指的是对识别到的特征通过领域知识进行处理。传统的特征包括了时域特征（例如方差、均值、峰态），频域特征（例如快速傅里叶变换）以及时频特征（例如离散小波变换）。传统的特征工程非常依赖领域知识。例如，要研究癫痫病发作时的脑部信号就非常依赖医学知识。此外，人工提取这些特征也非常耗时和困难。而深度学习则提供了一种能自动识别特征的更好选择。</p>
+<p>文献 <sup class="footnote-ref"><a href="#fn1" id="fnref1:3">[1:3]</a></sup> 针对 BCI 领域的深度学习模型做了一个总结如图 4 所示。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/bci-and-muse-headband-development/fig5.png" alt="图5：深度学习模型" />
+        <figcaption>图5：深度学习模型</figcaption>
+      </figure>
+    </p>
+<p>可以将深度学习模型分为如下四大类：</p>
+<ol>
+<li>判别模型（discriminative models），用于将输入数据按照已知的标签分类。判别算法能利用非线性变换学习出有差异的特征，并依据概率来预测分类。因此相关的算法能够用于特征工程和分类。判别模型主要包括多层感知器（Multi-Layer Perceptron，MLP），循环神经网络（Recurrent Neural Networks，RNN），卷积神经网络（Convolutional Neural Networks，CNN）以及它们的变种。</li>
+<li>表示模型（representative models），用于从输入数据中提取出纯粹（pure）和可表示（representative）的特征。这些算法只能用于特征工程，但不能用于分类。常用的表示模型有自动编码器（Autoencoder，AE），受限玻尔兹曼机（Restricted Boltzmann Machine，RBM），深度置信网络（Deep Belief Networks，DBN），以及它们的变种。</li>
+<li>生成模型（generative models），用于学习输入数据及给定标签的相邻概率分布。在 BCI 领域，生成模型常用于重建或生成一批脑信号样本，以增强训练集。常用的生成模型包括变分编码器（Variational Autoencoder，VAE），生成式对抗网络（Generative Adversarial Networks，GAN），等等。</li>
+<li>混合模型（hybrid models），顾名思义就是将两种以上的深度学习网络进行结合的模型。例如，典型的混合深度学习模型采用一个表示模型用作特征提取，再采用一个判别模型用作分类。</li>
+</ol>
+<p>目前用于基于 EEG 信号的 BCI 技术 state-of-art 的深度学习主要用在两类 EEG 信号上：EEG 振荡（<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%A5%9E%E7%BB%8F%E6%8C%AF%E8%8D%A1">EEG oscillations，实际上就是指 Spontaneous EEG</a>）以及 ERP。</p>
+<h3 id="1-2-1-EEG-振荡">1.2.1 EEG 振荡</h3>
+<p>EEG 振荡其实就是前面提的 Spontaneous EEG 。实际上，Spontaneous EEG 包括了睡眠 EEG、运动想象 EEG（MI EEG） 、情绪 EEG、心理疾病 EEG 等。
+以睡眠 EEG 为例，典型的应用场景就是根据 EEG 来识别睡眠状态。美国睡眠医学学会（the American Academy of Sleep Medicine，AASM）推荐将睡眠分为五个等级：清醒、非快速眼动1、非快速眼动2、慢波睡眠（Slow Wave Sleep，SWS）、快速眼动。</p>
+<ol>
+<li>判别模型：很多文献使用 CNN ，并基于单通道 EEG 信号进行睡眠等级分类。</li>
+<li>表示模型：例如使用 DBM-RBM 来进行睡眠特征提取以及结合传统分类方法（如 SVM) 进行分类。</li>
+<li>混合模型：例如结合 CNN 和 MLP 来构造一个混合模型以估算睡眠等级。</li>
+</ol>
+<h3 id="1-2-2-ERP">1.2.2 ERP</h3>
+<p>ERP 信号最重要的成分叫做 P300 （又称为 P3），与其他成分（P1，P2，N1，N2）相比，P3 用于最强的振幅，更容易被检测。因此在 ERP 中应用最普遍。ERP 又可以进一步细分为视觉诱发电位（Visual Evoked Potentials，VEP）、听觉诱发电位（Auditory Evoked Potentials，AEP）、体觉诱发电位（Somatosensory Evoked Potentials，SEP）等。</p>
+<p>例如，VEP 是其中一种最受关注的子分类。Ma et al. [7] 基于运动 VEP （mVEP）使用深度学习提取出了运动时的表达特征。在初始阶段使用遗传算法来压缩原始的 mVEP EEG 信号，然后将该信号交给 DBN-RBM 算法来捕捉更抽象的高阶特征。另外，大量的 P300 相关研究是基于文献 <sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup> 提出的 P300 speller，该技术可以帮助用户拼写字母。目前该类技术的最高精确度达到了 95.5% ，则是结合了 CNN 的变种 <sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup>。</p>
+<h2 id="二、消费级非侵入式脑机产品对比">二、消费级非侵入式脑机产品对比</h2>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/bci-and-muse-headband-development/montage.jpg" alt="图6：三款消费级非侵入式脑机产品" />
+        <figcaption>图6：三款消费级非侵入式脑机产品</figcaption>
+      </figure>
+    </p>
+<p>目前市面上所能购买的消费级脑机越来越多。基于 EEG 的非侵入式脑机最出名的有如下三种：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://neurosky.com/">NeuroSky</a> 出品的 EEG 感应头盔。价格便宜（售价 99.99 刀），也有非常丰富的应用。不过据说 NeuroSky 的 EEG 信噪比较低，因此更适合用于开发玩具性质的产品。</li>
+<li><a target="_blank" rel="noopener" href="https://choosemuse.com/">Muse</a> 头环，常规售价为 120 刀。它有着最为专业的冥想引导工具，能够较为准确地判断出大脑是否处于放松状态，还能提取出眨眼、咬牙等操作。同时，它提供了完全免费的导出 EEG 数据的接口。因此可以用来进行其他开发研究。</li>
+<li><a target="_blank" rel="noopener" href="https://www.emotiv.com/product/emotiv-insight-5-channel-mobile-eeg/?gclid=Cj0KCQiAr8bwBRD4ARIsAHa4YyLr-CAjTr0USMUijmzaJT_rep6aWVMKTry00j8-g6jMLQz3daFCIpEaAnBOEALw_wcB">Emotive Insight</a> 头盔，常规售价为 299 刀。Emotive Insight 拥有 5 个 EEG 感应通道，相比前两者，它还提供了训练最多 4 个 mental commmands 的功能，能提取的情绪和表情更丰富。不过，Emotive Insight 并不免费提供 EEG 数据 —— 你需要另外购买 <a target="_blank" rel="noopener" href="https://www.emotiv.com/emotivpro/">Emotive Pro</a> 软件才能获取 EEG 数据。而这个软件的价格死贵死贵，商业版需要月付 199 刀（几乎都可以买下其他两个设备了）；即使是最便宜的学生版方案，也要月付 29 刀<del>（Emotive 你咋不上天？）</del>。</li>
+</ol>
+<p>关于三款产品的详细比较，可以观看 <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=7TtLFllWo8M">Cody Rall MD 的分析（需自备梯子）</a>。</p>
+<p>出于信噪比和性价比（贫穷）的考虑，我选择先购入了 Muse 。下面将介绍如何使用 Python 语言开发 Muse 应用，以及我所开发的一个 python-muse 脚手架项目。</p>
+<h2 id="三、Muse-头环开发基础">三、Muse 头环开发基础</h2>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/bci-and-muse-headband-development/muse_meditation_headset.png" alt="图7：Muse头环" />
+        <figcaption>图7：Muse头环</figcaption>
+      </figure>
+    </p>
+<p>坑爹的 Muse 官方在 2019 年 7 月份就停止了对开发者的支持。现在要基于 Muse 进行开发，有两种方式：</p>
+<ol>
+<li>使用第三方 App <a target="_blank" rel="noopener" href="https://mind-monitor.com/#page-top">Muse Monitor</a> ，将 EEG 数据通过 OSC 协议发送到终端设备进行处理（推荐）。Muse Monitor 的价格只有 15 刀，且在 iOS 和 Android 两个平台都有上架对应的版本。相比官方的 Muse Direct ，还额外预置了关注程度（concentration）估算的算法实现，这价格算是业界良心了。</li>
+<li>使用官方提供的 <a target="_blank" rel="noopener" href="https://choosemuse.com/muse-direct/">Muse Direct</a> iOS 应用，将 EEG 数据通过 OSC 协议发送到终端设备进行处理。Muse Direct 只有 iOS 版本，而且价格是月付或年付制的，每月最低要 4 刀。</li>
+</ol>
+<p>不管使用哪个工具，流程都大同小异：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/bci-and-muse-headband-development/rtaImage.png" alt="Muse Direct的工作流示例" />
+        <figcaption>Muse Direct的工作流示例</figcaption>
+      </figure>
+    </p>
+<p>下面主要介绍基于 Muse Monitor 的 Python 开发方案。需要准备的东西包括：</p>
+<ol>
+<li>Muse 头环，支持 2014 版 Muse Model MU-01、2016 版 Muse Model MU-02 及 2018 “Muse 2” Model MU-03 全系列 Muse 头环；</li>
+<li>一台能够使用官方 Muse 应用连接 Muse 头环的手机。注意国内的 Android 手机可能无法正常运行 Muse 应用，所以建议使用 iPhone 或带有 GMS 的 Android 手机。</li>
+<li>Muse Monitor。将其安装到与 Muse 连接的那台手机上。</li>
+<li><a target="_blank" rel="noopener" href="https://sites.google.com/a/interaxon.ca/muse-developer-site/">MuseLab</a>。用于调试和可视化 Muse Monitor 传过来的 OSC 数据（非必须）。</li>
+<li>一台装有 Python 环境的电脑。</li>
+</ol>
+<h3 id="3-1-安装-python-muse">3.1 安装 python-muse</h3>
+<p>Muse 开发的关键在于识别 Muse Monitor 通过蓝牙传输过来的 OSC 数据。为了便于开发，我开源了一个项目 <a target="_blank" rel="noopener" href="https://github.com/wzpan/python-muse">python-muse</a> 。</p>
+<p>在使用之前，先将其克隆到本地：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/wzpan/python-muse.git</span><br><span class="line"><span class="built_in">cd</span> python-muse</span><br></pre></td></tr></table></figure>
+<p>然后安装依赖：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
+<h3 id="3-2-使用-python-muse">3.2 使用 python-muse</h3>
+<ol>
+<li>确保你的 Muse 头环已经通过手机的 Muse 官方应用与手机完成了连接。</li>
+<li>获取你的电脑的局域网 IP 地址。</li>
+<li>启动 Muse Monitor，点击 <i class="fa fa-cog"></i> 按钮进入 settings 页面，在里头可以找到 <code>OSC Stream Target IP</code> 和 <code>OSC Stream Port</code> 两个输入区域，分别填入你的电脑的局域网 IP 地址及一个用于 OSC 通信的端口号（选择一个未被占用的端口号即可），然后回到主界面，点击一个有点像 AirDrop 的图标 <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/bci-and-muse-headband-development/ic_action_stream.png"/> 即可开启 OSC 传输。</li>
+<li>在你的电脑中，执行：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python demo.py --ip 电脑局域网IP --port 端口号</span><br></pre></td></tr></table></figure>
+<p>此时可以试试眨一下眼睛，看看屏幕中是否打印 <code>blink</code> 信息。如果有打印，说明 python-muse 就执行成功了！</p>
+<h3 id="3-3-python-muse-实现解析">3.3 python-muse 实现解析</h3>
+<p>python-muse 的实现非常简单，就是基于 <a target="_blank" rel="noopener" href="https://pypi.org/project/python-osc/">python-osc</a> 实现了对 Muse Monitor 传过来的 OSC 数据的解析和处理。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    parser = argparse.ArgumentParser()</span><br><span class="line">    parser.add_argument(<span class="string">&quot;--ip&quot;</span>,</span><br><span class="line">                        default=<span class="string">&quot;127.0.0.1&quot;</span>,</span><br><span class="line">                        <span class="built_in">help</span>=<span class="string">&quot;The ip to listen on&quot;</span>)</span><br><span class="line">    parser.add_argument(<span class="string">&quot;--port&quot;</span>,</span><br><span class="line">                        <span class="built_in">type</span>=<span class="built_in">int</span>,</span><br><span class="line">                        default=<span class="number">5000</span>,</span><br><span class="line">                        <span class="built_in">help</span>=<span class="string">&quot;The port to listen on&quot;</span>)</span><br><span class="line">    args = parser.parse_args()</span><br><span class="line"></span><br><span class="line">    dispatcher = dispatcher.Dispatcher()</span><br><span class="line">    dispatcher.<span class="built_in">map</span>(<span class="string">&quot;/muse/elements/alpha_absolute&quot;</span>, alpha_handler, <span class="string">&quot;EEG&quot;</span>)</span><br><span class="line">    dispatcher.<span class="built_in">map</span>(<span class="string">&quot;/muse/elements/beta_absolute&quot;</span>, beta_handler, <span class="string">&quot;EEG&quot;</span>)</span><br><span class="line">    dispatcher.<span class="built_in">map</span>(<span class="string">&quot;/muse/elements/delta_absolute&quot;</span>, delta_handler, <span class="string">&quot;EEG&quot;</span>)</span><br><span class="line">    dispatcher.<span class="built_in">map</span>(<span class="string">&quot;/muse/elements/theta_absolute&quot;</span>, theta_handler, <span class="string">&quot;EEG&quot;</span>)</span><br><span class="line">    dispatcher.<span class="built_in">map</span>(<span class="string">&quot;/muse/elements/gamma_absolute&quot;</span>, gamma_handler, <span class="string">&quot;EEG&quot;</span>)</span><br><span class="line">    dispatcher.<span class="built_in">map</span>(<span class="string">&quot;/muse/elements/blink&quot;</span>, blink_handler, <span class="string">&quot;EEG&quot;</span>)</span><br><span class="line">    dispatcher.<span class="built_in">map</span>(<span class="string">&quot;/muse/elements/jaw_clench&quot;</span>, jaw_clench_handler, <span class="string">&quot;EEG&quot;</span>)</span><br><span class="line">    dispatcher.<span class="built_in">map</span>(<span class="string">&quot;/muse/algorithm/concentration&quot;</span>, concen_handler, <span class="string">&quot;EEG&quot;</span>)    </span><br><span class="line"></span><br><span class="line">    server = osc_server.ThreadingOSCUDPServer(</span><br><span class="line">        (args.ip, args.port), dispatcher)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Serving on &#123;&#125;&quot;</span>.<span class="built_in">format</span>(server.server_address))</span><br><span class="line">    server.serve_forever()</span><br></pre></td></tr></table></figure>
+<p>从上面的代码可见，在 python-osc 的 dispatcher 设置了对 <code>alpha_absolute</code>、<code>belta_absolute</code>、<code>delta_absolute</code>、<code>theta_absolute</code>、<code>gamma_absolute</code> 五类脑波以及眨眼动作 <code>blink</code> 、咬牙动作 <code>jaw_clench</code> 还有关注度算法 <code>concentration</code> 等类型数据的分发处理。每种数据类型各指定了一个 <code>handler</code> 方法来进行处理，例如 <code>blink_handler</code> 是在屏幕中打印 <code>blink</code> 字样：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">blink_handler</span>(<span class="params">unused_addr, args, blink</span>):</span></span><br><span class="line">    <span class="keyword">if</span> blink:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;blink&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>这样，当用户眨眼时，屏幕中就会打印出 <code>blink</code> 信息。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/bci-and-muse-headband-development/blink.png" alt="python-muse 提取到的 `blink` 信息" />
+        <figcaption>python-muse 提取到的 `blink` 信息</figcaption>
+      </figure>
+    </p>
+<p>这些数据类型的分发操作可以根据需要开启或禁用（注释掉即可）。Muse Monitor 总共支持提取和传输的数据类型可以在其官网的 <a target="_blank" rel="noopener" href="https://mind-monitor.com/FAQ.php#oscspec">FAQ 页面</a> 中查看。这里解释其中几个名词，帮助读者理解：</p>
+<ul>
+<li>
+<p><a target="_blank" rel="noopener" href="https://mind-monitor.com/Technical_Manual.php#help_horseshoe">Horseshoe</a>：Muse 的几个感应器分布在头环的四周，形成一个独特的马蹄状。这个马蹄形状的图可以表示每个感应器是否正确连接。如果展示的是实心的色块，表示连接良好；如果展示的是空心的形状，表示连接很弱；而如果没有颜色，则表示没有连接。</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/bci-and-muse-headband-development/ic_action_horseshoe.png" alt="Muse 特有的马蹄图" />
+        <figcaption>Muse 特有的马蹄图</figcaption>
+      </figure>
+    </p>
+</li>
+<li>
+<p>Blink：表示眨眼动作。</p>
+</li>
+<li>
+<p>Jaw Clench：表示咬牙动作。</p>
+</li>
+<li>
+<p>Markers：Muse Monitor 的 App 里额外设计的几个 UI 按钮事件，实际上和 Muse 头环本身无关，用处不大。</p>
+</li>
+</ul>
+<p>另外，如果希望能够识别当前大脑关注程度（concentration），则需要在 Muse 的设置页面里滑到最底部，在版本号上点击 10 次，启用算法功能，然后在 <code>ALGORITHMS</code> 区域里的 <code>Concentration</code> 选项。不过，<a target="_blank" rel="noopener" href="https://mind-monitor.com/FAQ.php#oscspec">如 Muse Monitor 的作者所述</a>，作者对 Concentration 的识别算法效果并不是 100% 满意，仅仅只是提供一个实验性质的实现。我在实际使用过程中，也发现这个算法需要使用者保持相对静止的情况下训练十几秒时间，成本的确比较高。</p>
+<h3 id="3-4-如何诊断或调试-Muse-的-EEG-数据">3.4 如何诊断或调试 Muse 的 EEG 数据</h3>
+<p>如果电脑端无法正确获取 EEG 数据，或者希望可视化 EEG 数据，可以借助几种手段来进行：</p>
+<h4 id="3-4-1-检查-IP-地址是否正确以及端口号是否被占用">3.4.1 检查 IP 地址是否正确以及端口号是否被占用</h4>
+<p>首先检查局域网 IP 地址是否填写正确，对于 Linux/Mac 等 *nix 系统，可以使用 <code>ifconfig</code> 命令来打印出 Wi-Fi 网络获取到的 ip 地址；对于 Windows 系统，则可以使用 <code>ipconfig</code> 命令。</p>
+<p>而如果要检查端口号是否被占用，Linux/Mac 等 *nix 系统可以使用 <code>lsof -i:端口号</code> 命令来打印出 Wi-Fi 网络获取到的 ip 地址；对于 Windows 系统，则可以使用 <code>netstat -aon|findstr &quot;端口号&quot;</code> 命令。</p>
+<p>如果端口号被占用，改成其他端口即可。</p>
+<h4 id="3-4-2-可视化-Muse-的-EEG-数据">3.4.2 可视化 Muse 的 EEG 数据</h4>
+<p><a target="_blank" rel="noopener" href="https://sites.google.com/a/interaxon.ca/muse-developer-site/">MuseLab</a> 提供了方便的工具，可以可视化 Muse 的 EEG 数据。</p>
+<p>在 Muse Monitor 开启 OSC 数据流传输后，启动 MuseLab ，在左侧面板中，输入端口号，传输方式改为 <code>UDP</code> ，然后点击【Open Port】按钮，即可开始抓取 Muse Monitor 传输过来的 OSC 流数据。此时，左侧面板将会出现非常丰富的 EEG 数据类型：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/bci-and-muse-headband-development/muselab-osc.png" alt="使用 MuseLab 解析 OSC 流 EEG 数据" />
+        <figcaption>使用 MuseLab 解析 OSC 流 EEG 数据</figcaption>
+      </figure>
+    </p>
+<p>这些数据类型与 Muse Monitor 的 FAQ 页面列举的 <a target="_blank" rel="noopener" href="https://mind-monitor.com/FAQ.php#oscspec">OSC Specification</a> 一致。</p>
+<p>之后，点击上方的下拉框，切换到 Visualizers 面板：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/bci-and-muse-headband-development/muselab-function-type.png" alt="切换到 Visualizers 面板" />
+        <figcaption>切换到 Visualizers 面板</figcaption>
+      </figure>
+    </p>
+<p>点击【New…】按钮，在弹出来的新建窗口中选择 “Scrolling Line Graph” ，创建一个时域的可视化器。此时左侧的面板将会出现所有可供可视化的数据类型，将感兴趣的数据类型勾上即可对该类型进行可视化：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/bci-and-muse-headband-development/muselab-visualizers.png" alt="使用 MuseLab 可视化 EEG 数据" />
+        <figcaption>使用 MuseLab 可视化 EEG 数据</figcaption>
+      </figure>
+    </p>
+<p>频域信息的可视化也大同小异，区别是新建可视化器时选择 “Stationary Line Graph” 即可。</p>
+<h3 id="3-5-Muse-应用示例">3.5 Muse 应用示例</h3>
+<h4 id="3-5-1-脑机-IoT">3.5.1 脑机 IoT</h4>
+<p>拿到脑机的前几天非常兴奋，很快我就写出了几个 IoT 应用。分别使用眨眼、咬牙、关注度来打开家里的灯。</p>
+<iframe src="//player.bilibili.com/player.html?aid=76551889&cid=130944190&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" height=600 width=100%> </iframe>
+<h4 id="3-5-2-脑机智能音箱">3.5.2 脑机智能音箱</h4>
+<p>之后我对我的智能音箱项目 wukong-robot 进行了改造，支持了 Muse 脑机唤醒：</p>
+<iframe src="//player.bilibili.com/player.html?aid=76739580&cid=131259456&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" height=600 width=100%> </iframe>
+<h4 id="3-5-3-脑控游戏">3.5.3 脑控游戏</h4>
+<p>脑控游戏也是一个有趣的应用方向。例如我魔改的一个眨眼控制的 FlappyBird 游戏 <a target="_blank" rel="noopener" href="https://github.com/wzpan/MuseFlappyBird">MuseFlappyBird</a> 。</p>
+<p>如下是一个稍微粗糙一点的早期版本演示视频：</p>
+<iframe src="//player.bilibili.com/player.html?aid=76336320&cid=130575552&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" height=600 width=100%> </iframe>
+<h2 id="四、后续计划">四、后续计划</h2>
+<p>玩了几天 Muse 后，我就已经把目前 Muse 所提供的现成能力都“榨干”了。后面就需要开始往更加困难的目标前进：真正识别意图。但如 Muse Direct 所述：</p>
+<blockquote>
+<p>It is important to note that this raw data can be difficult to interpret and you may want to consider getting in touch with an experienced EEG Researcher for your project as we are unable to provide further support with the analysis and processing of the EEG data you collect.</p>
+</blockquote>
+<p>仅靠 Muse 所提供的几个通道的 EEG 要准确识别出意图是非常困难的。不过，当我凝视深渊的时候，深渊不也正在凝视着我吗？</p>
+<p>我与 BCI 的故事，才刚刚开始。</p>
+<h2 id="参考文献">参考文献</h2>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>A Survey on Deep Learning based Brain Computer Interface: Recent Advances and New Frontiers <a href="#fnref1" class="footnote-backref">↩︎</a> <a href="#fnref1:1" class="footnote-backref">↩︎</a> <a href="#fnref1:2" class="footnote-backref">↩︎</a> <a href="#fnref1:3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>脑电图-维基百科：<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%85%A6%E9%9B%BB%E5%9C%96">https://zh.wikipedia.org/wiki/腦電圖</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p>Ajay Shanbhag, Aman Prabhu Kholkar, Saish Sawant, Allister Vicente, Sparsh Martires, and Supriya Patil. 2017. P300
+analysis using deep neural network. In 2017 International Conference on Energy, Communication, Data Analytics and
+SoComputing (ICECDS). IEEE, 3142–3147. <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p>Mingfei Liu, Wei Wu, Zhenghui Gu, Zhuliang Yu, FeiFei Qi, and Yuanqing Li. 2018. Deep learning based on Batch
+Normalization for P300 signal detection. Neurocomputing 275 (2018), 288–297 <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/life/2019-montage/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/life/donation-by-wukong-robot/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '脑机接口概述及Muse头环Python开发基础'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/bci-and-muse-headband-development.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2020-01-05 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/codes/">codes<span>38</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Python/">Python<span>3</span></a></li> <li><a href="/tags/脑机/">脑机<span>1</span></a></li> <li><a href="/tags/BCI/">BCI<span>1</span></a></li> <li><a href="/tags/Muse/">Muse<span>1</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%80%E3%80%81BCI-%E6%8A%80%E6%9C%AF%E7%BB%BC%E8%BF%B0"><span class="toc-article-text">一、BCI 技术综述</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#1-1-%E8%84%91%E9%83%A8%E4%BF%A1%E5%8F%B7%E9%87%87%E9%9B%86"><span class="toc-article-text">1.1 脑部信号采集</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#1-2-%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B"><span class="toc-article-text">1.2 特征工程</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#1-2-1-EEG-%E6%8C%AF%E8%8D%A1"><span class="toc-article-text">1.2.1 EEG 振荡</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#1-2-2-ERP"><span class="toc-article-text">1.2.2 ERP</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BA%8C%E3%80%81%E6%B6%88%E8%B4%B9%E7%BA%A7%E9%9D%9E%E4%BE%B5%E5%85%A5%E5%BC%8F%E8%84%91%E6%9C%BA%E4%BA%A7%E5%93%81%E5%AF%B9%E6%AF%94"><span class="toc-article-text">二、消费级非侵入式脑机产品对比</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%B8%89%E3%80%81Muse-%E5%A4%B4%E7%8E%AF%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80"><span class="toc-article-text">三、Muse 头环开发基础</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-1-%E5%AE%89%E8%A3%85-python-muse"><span class="toc-article-text">3.1 安装 python-muse</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-2-%E4%BD%BF%E7%94%A8-python-muse"><span class="toc-article-text">3.2 使用 python-muse</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-3-python-muse-%E5%AE%9E%E7%8E%B0%E8%A7%A3%E6%9E%90"><span class="toc-article-text">3.3 python-muse 实现解析</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-4-%E5%A6%82%E4%BD%95%E8%AF%8A%E6%96%AD%E6%88%96%E8%B0%83%E8%AF%95-Muse-%E7%9A%84-EEG-%E6%95%B0%E6%8D%AE"><span class="toc-article-text">3.4 如何诊断或调试 Muse 的 EEG 数据</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#3-4-1-%E6%A3%80%E6%9F%A5-IP-%E5%9C%B0%E5%9D%80%E6%98%AF%E5%90%A6%E6%AD%A3%E7%A1%AE%E4%BB%A5%E5%8F%8A%E7%AB%AF%E5%8F%A3%E5%8F%B7%E6%98%AF%E5%90%A6%E8%A2%AB%E5%8D%A0%E7%94%A8"><span class="toc-article-text">3.4.1 检查 IP 地址是否正确以及端口号是否被占用</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#3-4-2-%E5%8F%AF%E8%A7%86%E5%8C%96-Muse-%E7%9A%84-EEG-%E6%95%B0%E6%8D%AE"><span class="toc-article-text">3.4.2 可视化 Muse 的 EEG 数据</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-5-Muse-%E5%BA%94%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-article-text">3.5 Muse 应用示例</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#3-5-1-%E8%84%91%E6%9C%BA-IoT"><span class="toc-article-text">3.5.1 脑机 IoT</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#3-5-2-%E8%84%91%E6%9C%BA%E6%99%BA%E8%83%BD%E9%9F%B3%E7%AE%B1"><span class="toc-article-text">3.5.2 脑机智能音箱</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#3-5-3-%E8%84%91%E6%8E%A7%E6%B8%B8%E6%88%8F"><span class="toc-article-text">3.5.3 脑控游戏</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%9B%9B%E3%80%81%E5%90%8E%E7%BB%AD%E8%AE%A1%E5%88%92"><span class="toc-article-text">四、后续计划</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="toc-article-text">参考文献</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

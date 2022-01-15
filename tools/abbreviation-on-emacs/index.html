@@ -1,0 +1,626 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Emacs的缩写补全 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="介绍Emacs里的缩写补全功能。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Emacs的缩写补全"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: 'Emacs的缩写补全'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> Emacs的缩写补全</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>介绍Emacs里的缩写补全功能。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <p>有些编辑器（比如Edit
+Plus）可以实现缩写补全，允许我们把经常要输入一大段相同的文本或者代码用简单的文本代替，这样可以大大提高我们的编辑效率。Emacs也提供了单词简写（word
+abbreviation）的支持。</p>
+<h2 id="动态简写（Dynamic-Abbreviations）">动态简写（Dynamic Abbreviations）</h2>
+<p>如果你经常要拼写一个很长的词汇，比如“abbreviation”，你可以在<strong>输入一遍</strong>这个单词之后，在碰到要拼写这个单词的时候使用动态简写功能来偷懒：先给出单词的前面几个字母，然后使用Emacs的动态简写功能来帮助我们把它补全。</p>
+<p>要注意的是，这个动态的简写功能和前篇博文提到的<a href="/tools/ispell-and-flyspell">Ispell单词补全</a>原理不一样，Ispell的单词补全功能依据的是Ispell的辞典，而动态简写的功能依据的是在Emacs本次运行期间的所有缓存中查找位置最靠近的一个单词。<span id="more"></span></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">M-&#x2F; 动态简写</span><br></pre></td></tr></table></figure>
+<h2 id="单词简写模式（Word-Abbreviation-Mode）">单词简写模式（Word Abbreviation Mode）</h2>
+<p>动态简写使用方便，但它的功能也很有限——比如，它只能根据最近的输入情况来补全一个单词，碰上短语就无能为力了。</p>
+<p>相比动态简写，单词简写模式就显得强大很多了。在单词简写模式下，你可以事先自定义好简写单词和补全短语的对应词汇表，当你输入简写单词后，Emacs会帮你自动补全成短语。</p>
+<p>这种先根据自己定义的词汇表来补全的方式有以下几个优点和用途：</p>
+<ol>
+<li>你可以快速的输入一大段文本，而不只是一个单词；</li>
+<li>告诉Emacs哪些词你经常拼错，当你又不小心拼错了这个词，让Emacs自动帮你纠正过来；</li>
+<li>你还可以将这些词汇设定为永久有效，而不只是依赖于你这次运行Emacs的输入情况，做到一劳永逸。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">M-x abbrev-mode &lt;Return&gt;</span><br></pre></td></tr></table></figure>
+<p>进入单词简写模式，“Abbrev”字样将出现在状态行上。</p>
+<h3 id="快速输入一大段文本">快速输入一大段文本</h3>
+<p>单词简写模式可以帮助你快速的输入一大段文本，而不只是一个单词。在使用这个功能之前，你需要先定义好简写词汇。要定义临时性的（只在本次Emacs运行期间有效的）简写词汇，最方便的做法是使用先输入简写词，再输入补全词的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">C-x a i g   （命令名是add-inverse-global）将刚输入的单词定义为全局简写（所有主模式都有效），输入补全词后回车</span><br><span class="line">C-x a i l   （命令名是add-inverse-local）将刚输入的单词定义为局部简写（当前所用的主模式有效），输入补全词后回车</span><br></pre></td></tr></table></figure>
+<p>这种定义方法称为“逆方法”，因为还有一种“正方法”是先输入补全词，再输入简写词，但这种方法使用起来比较麻烦，因此没有多少人喜欢用。</p>
+<p>举个例子，假如你需要经常输入“Shenzhen Institute of Advanced
+Technology”，重复输入这么长的短语不但费时，也很容易拼错，为了省点力气，可以专门定义一个简写词“siat”。先输入“siat”，然后按下C-x
+a i
+g来定义一个在所有模式下都有效的临时词汇，Emacs会要求你输入它的补全词汇，输入“Shenzhen
+Institute of Advanced
+Technology”后回车，你就有了“siat”的定义，此时“siat”会变成“Shenzhen
+Institute of Advanced
+Technology”。以后只要输入“siat”加一个空格或者标点符号，Emacs就会把那个短语完整的插入到文本里。Emacs会密切关注你输入的内容，一旦输入了一个简写词，并按下了空格键或者某个标点符号键，它就会立刻自动地将此简写词展开为其对应的短语。</p>
+<p>![](/images/abbreviation-on-emacs/zO3QA.png “图1 输入&quot;siat”&quot;)</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/abbreviation-on-emacs/KcBFD.png" alt="" />
+        <figcaption></figcaption>
+      </figure>
+    </p>
+<p>定义简写词汇要注意几点：</p>
+<ol>
+<li>尽量避免误用另一个单词作为这个单词的简写。但如果你觉得这个单词作为简写很有必要，当你遇到非得要拼这个单词的时候，可以在自动补全之后按 <code>C-/</code> 来撤销这次的补全；</li>
+<li>简写只能通过模式（mode）来限定作用范围，而不能通过针对文件或者缓冲。如果要定义一个全局的简写，可以使用global类型，如果要定义一个只作用在text模式而不在C模式下的简写，则就要在text模式下使用local类型。</li>
+</ol>
+<h3 id="单词自动纠错">单词自动纠错</h3>
+<p>这是一个很实用的用途。在单词简写模式下，你可以告诉Emacs哪些词你经常拼错，当你又不小心拼错了这个词，让Emacs自动帮你纠正过来。</p>
+<p>其实原理和方法和上面的内容如出一辙，你同样也需要先定义简写词汇，只不过这次你要定义的简写词汇是你经常犯的错误拼写，而补全词汇是正确的单词。</p>
+<p>例如，如果你总喜欢把“receive”拼成“recieve”，你可以定义一个简写词为“recieve”，补全为“receive”的简写词汇，但要注意：Emacs会严格按照你定义的简写来补全单词，这意味着当你定义receive的简写时，你也应该同时定义receives、received、receiving，尽量定义完这个词的全部形式。</p>
+<h3 id="定义永久性的简写词汇">定义永久性的简写词汇</h3>
+<p>上面我们介绍了如何定义临时的简写词汇，当你关闭Emacs后再打开就无效了。如果有些词汇你经常需要输入，要让Emacs能够永远记得这些词汇，可以按照下面几步来定义永久性的简写词汇：</p>
+<ol>
+<li>在.emacs设置默认打开单词简写模式</li>
+</ol>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq-default</span> abbrev-mode <span class="literal">t</span>)</span><br><span class="line">(<span class="name">read-abbrev-file</span> <span class="string">&quot;~/.abbrev_defs&quot;</span>)</span><br><span class="line">(<span class="name">setq</span> save-abbrevs <span class="literal">t</span>)</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>
+<p>保存.emacs文件并重启Emacs。此时会看到状态行上显示“Abbrev”字样。如果提示无法读取abbrev
+文件，不要担心，那是因为你还没有创建这个文件，这将在你定义了永久性的简写词汇后不再显示。</p>
+</li>
+<li>
+<p>输入一个简写后，使用 <code>C-x a i g</code> 或者 <code>C-x a -</code> 组合键定义一个全局简写。也可以使用 <code>C-x a i l</code> 组合键定义一个局部性简写词。</p>
+</li>
+<li>
+<p>输入补全词后回车。Emacs会对简写词继续扩展，并且会在每次输入这个简写词再跟上一个空格或标点符号的时候照章行事。根据需要重复第3、4步以定义任意多个简写词。</p>
+</li>
+<li>
+<p>完成这些定义后，别忘了将这些定义保存到abbrev文件里，输入 <code>M-x write-abbrev-file &lt;Return&gt;</code>
+保存简写词汇文件。Emacs会提示输入一个文件名。</p>
+</li>
+<li>
+<p>输入 <code>~/.abbrev_defs &lt;Return&gt;</code> ，将这些定义保存为.abbrev_defs文件。</p>
+</li>
+</ol>
+<h3 id="查看、修改简写文件">查看、修改简写文件</h3>
+<pre><code>要对你定义的简写词汇进行查看、修改和删除，可以使用下面几个命令：
+</code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">M-x list-abbrevs &lt;Return&gt; 查看abbrev文件（只读）</span><br><span class="line">M-x edit-abbrevs &lt;Return&gt; 编辑abbrev文件</span><br></pre></td></tr></table></figure>
+<h3 id="关闭单词简写模式">关闭单词简写模式</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">M-x kill-all-abbrevs &lt;Return&gt; 关闭当前会话的单词简写模式</span><br></pre></td></tr></table></figure>
+<h3 id="简写补全和大小写的关系">简写补全和大小写的关系</h3>
+<p>Emacs对简写词所作的字母大小写设置，通常都会让人称心如意。但如果对简写词的字母大小写有特殊的要求，那么多知道些内幕往往会有很多好处。请看下面这些规则：</p>
+<ul>
+<li>只要简写词的补全短语里有大写字母，Emacs在插入这个短语定义的时候就不会对它做任何改动。</li>
+<li>如果简写词的补全短语都是小写字母，Emacs将根据以下规则对它进行字母大小写设置：
+<ul>
+<li>如果简写词的全部字母是小写，Emacs就将以小写字母补全；</li>
+<li>只要简写词里有大写字母，Emacs就将其补全短语的第一个单词的第一个字母设为大写；</li>
+<li>如果简写词都是大写字母，并且变量“abbrev-all-caps”设置为&quot;nil&quot;，Emacs就把其补全短语的每一个单词的第一个字母设置为大写；如果变量“abbrev-all-caps”设置为&quot;t&quot;，Emacs就将把其短语定义的每一个单词的每一个字母设置为大写。</li>
+</ul>
+</li>
+</ul>
+<h2 id="本文参考资料">本文参考资料</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://www.google.com.hk/url?sa=t&amp;rct=j&amp;q=Learning+GNU+Emacs&amp;source=web&amp;cd=1&amp;ved=0CCwQFjAA&amp;url=http%3A%2F%2Fbook.douban.com%2Fsubject%2F1431970%2F&amp;ei=Npr1Ttv4OeaziQeg4KXuAw&amp;usg=AFQjCNGR0JeJmtslTGgFcY3le75a1jIIhA&amp;sig2=CvEr-ea6iU4hRy06oFG2Sg">Learning GNU Emacs, 3rd Edition(Debra Cameron, James Elliott, Marc
+Loy)</a></li>
+</ol>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/codes/free-pascal-on-ubuntu/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/tools/ispell-and-flyspell/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: 'Emacs的缩写补全'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/abbreviation-on-emacs.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2011-12-25 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/tools/">tools<span>12</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/emacs/">emacs<span>6</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8A%A8%E6%80%81%E7%AE%80%E5%86%99%EF%BC%88Dynamic-Abbreviations%EF%BC%89"><span class="toc-article-text">动态简写（Dynamic Abbreviations）</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%8D%95%E8%AF%8D%E7%AE%80%E5%86%99%E6%A8%A1%E5%BC%8F%EF%BC%88Word-Abbreviation-Mode%EF%BC%89"><span class="toc-article-text">单词简写模式（Word Abbreviation Mode）</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%BF%AB%E9%80%9F%E8%BE%93%E5%85%A5%E4%B8%80%E5%A4%A7%E6%AE%B5%E6%96%87%E6%9C%AC"><span class="toc-article-text">快速输入一大段文本</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%8D%95%E8%AF%8D%E8%87%AA%E5%8A%A8%E7%BA%A0%E9%94%99"><span class="toc-article-text">单词自动纠错</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AE%9A%E4%B9%89%E6%B0%B8%E4%B9%85%E6%80%A7%E7%9A%84%E7%AE%80%E5%86%99%E8%AF%8D%E6%B1%87"><span class="toc-article-text">定义永久性的简写词汇</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%9F%A5%E7%9C%8B%E3%80%81%E4%BF%AE%E6%94%B9%E7%AE%80%E5%86%99%E6%96%87%E4%BB%B6"><span class="toc-article-text">查看、修改简写文件</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%85%B3%E9%97%AD%E5%8D%95%E8%AF%8D%E7%AE%80%E5%86%99%E6%A8%A1%E5%BC%8F"><span class="toc-article-text">关闭单词简写模式</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E7%AE%80%E5%86%99%E8%A1%A5%E5%85%A8%E5%92%8C%E5%A4%A7%E5%B0%8F%E5%86%99%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-article-text">简写补全和大小写的关系</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%9C%AC%E6%96%87%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-article-text">本文参考资料</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

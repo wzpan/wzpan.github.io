@@ -1,0 +1,1367 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>速查表 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="运算符
+
+
+
+运算符
+名称
+说明
+例子
+
+
+
+
+
+
++
+加
+两个对象相加
+3 + 5得到8。&#39;a&#39; + &#39;b&#39;得到&#39;ab&#39;。
+
+
+
+
+-
+减
+得到负数或是一个数减去另一个数
+-5.2得到一个负数。50 - 24得到26。
+
+
+
+
+*
+乘
+两个数相乘 或是 返回一个被重复若干次的字符串
+2 * 3得到">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="速查表"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '速查表'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 速查表</h1>
+		</div>		
+	
+
+
+
+<div class="row wiki">
+	<!-- span -->
+    
+        <div class="col-md-3 toc" id="toc">
+             <!-- toc -->
+		     
+   	<script type="text/javascript">
+		jQuery(document).ready(function() {
+		
+           generateWikiTOC('.note', '.toc', 2, 2 );
+		
+		});
+	</script>
+
+
+
+        </div>
+        <div class="col-md-9 note">
+    
+
+	
+
+		<!-- content -->
+		<h2 id="运算符">运算符</h2>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>名称</th>
+<th>说明</th>
+<th>例子</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>+</code></td>
+<td>加</td>
+<td>两个对象相加</td>
+<td><code>3 + 5</code>得到<code>8</code>。<code>'a' + 'b'</code>得到<code>'ab'</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>-</code></td>
+<td>减</td>
+<td>得到负数或是一个数减去另一个数</td>
+<td><code>-5.2</code>得到一个负数。<code>50 - 24</code>得到<code>26</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>乘</td>
+<td>两个数相乘 <strong>或是</strong> 返回一个被重复若干次的字符串</td>
+<td><code>2 * 3</code>得到<code>6</code>。<code>'la' * 3</code>得到 <code>'lalala'</code> 。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>**</code></td>
+<td>幂</td>
+<td>返回x的y次幂 3</td>
+<td><code>\** 4</code>得到<code>81</code>（即<code>3 * 3 * 3 * 3</code>）</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>/</code></td>
+<td>除</td>
+<td>x除以y</td>
+<td><code>4 / 3</code> 得到 <code>1.3333333333333333</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>//</code></td>
+<td>取整除</td>
+<td>返回商的整数部分</td>
+<td><code>4 // 3</code>得到<code>1</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>%</code></td>
+<td>取模</td>
+<td>返回除法的余数</td>
+<td><code>8%3</code>得到<code>2</code>。<code>-25.5%2.25</code>得到<code>1.5</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>&lt;&lt;</code></td>
+<td>左移</td>
+<td>把一个数的向左移若干<strong>比特位</strong>（每个数在内存中都表示为比特或二进制数字，即0和1）</td>
+<td><code>2 &lt;&lt; 2</code>得到<code>8</code>。——<code>2</code>按比特表示为<code>10</code>，左位移两bit位后得到<code>1000</code>，十进制中表示为<code>8</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>&gt;&gt;</code></td>
+<td>右移</td>
+<td>把一个数的向右移若干<strong>比特位</strong></td>
+<td><code>11 &gt;&gt; 1</code> 得到<code>5</code>。——<code>11</code>按比特表示为<code>1011</code>，向右移动1比特后得到<code>101</code>，即十进制的<code>5</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>&amp;</code></td>
+<td>按位与</td>
+<td>数的按位与</td>
+<td><code>5 &amp; 3</code>得到1。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>|</code></td>
+<td>按位或</td>
+<td>数的按位或</td>
+<td><code>5 | 3</code>得到<code>7</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>按位异或</td>
+<td>数的按位异或</td>
+<td><code>5 ^ 3</code>得到6</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>~</code></td>
+<td>按位翻转</td>
+<td>x的按位翻转是-(x+1)</td>
+<td><code>~5</code>得到<code>6</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>&lt;</code></td>
+<td>小于</td>
+<td>返回x是否小于y。所有比较运算符返回布尔值True或False。请注意布尔值大小写敏感。</td>
+<td><code>5 &lt; 3</code>返回<code>False</code>，<code>3 &lt; 5</code>返回<code>True</code>。比较可以被任意连接，如<code>3 &lt; 5 &lt; 7</code>返回<code>True</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>&gt;</code></td>
+<td>大于</td>
+<td>返回x是否大于y</td>
+<td><code>5 &gt; 3</code>返回<code>True</code>。如果两个操作数都是数字，它们首先被转换为一个共同的类型。否则，它总是返回<code>False</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>&lt;=</code></td>
+<td>小于等于</td>
+<td>返回x是否小于等于y</td>
+<td><code>x = 3; y = 6; x &lt;= y</code>返回<code>True</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>&gt;=</code></td>
+<td>大于等于</td>
+<td>返回x是否大于等于y</td>
+<td><code>x = 4; y = 3; x &gt;= y</code>返回<code>True</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>==</code></td>
+<td>等于</td>
+<td>比较对象是否相等</td>
+<td><code>x = 2; y = 2; x == y</code>返回<code>True</code>。<code>x = 'str'; y = 'stR'; x == y</code>返回<code>False</code>。<code>x = 'str'; y = 'str'; x == y</code>返回<code>True</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>!=</code></td>
+<td>不等于</td>
+<td>比较两个对象是否不相等</td>
+<td><code>x = 2; y = 3; x != y</code>返回<code>True</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>not</code></td>
+<td>布尔“非”</td>
+<td>如果x为True，返回False。如果x为False，它返回True。</td>
+<td><code>x = True; not x</code>返回<code>False</code>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>and</code></td>
+<td>布尔“与”</td>
+<td>如果x为False，x and y返回False，否则它返回y的计算值。</td>
+<td><code>x = False; y = True; x and y</code>，由于x是<code>False</code>，返回<code>False</code>。在这里，Python不会计算y，因为它知道这个表达式的值肯定是<code>False</code>（因为x是False）。这个现象称为<strong>短路计算</strong>。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>or</code></td>
+<td>布尔“或”</td>
+<td>如果x是True，它返回True，否则它返回y的计算值。</td>
+<td><code>x = True; y = False; x or y</code>返回<code>True</code>。短路计算在这里也适用。</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="操作符优先级">操作符优先级</h2>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lambda</code></td>
+<td>Lambda表达式</td>
+</tr>
+<tr>
+<td><code>or</code></td>
+<td>布尔“或”</td>
+</tr>
+<tr>
+<td><code>and</code></td>
+<td>布尔“与”</td>
+</tr>
+<tr>
+<td><code>not x</code></td>
+<td>布尔“非”</td>
+</tr>
+<tr>
+<td><code>in</code>，<code>not in</code></td>
+<td>成员测试</td>
+</tr>
+<tr>
+<td><code>is</code>，<code>is not</code></td>
+<td>同一性测试</td>
+</tr>
+<tr>
+<td><code>&lt;</code>，<code>&lt;=</code>，<code>&gt;</code>，<code>&gt;=</code>，<code>!=</code>，<code>==</code></td>
+<td>比较</td>
+</tr>
+<tr>
+<td><code>|</code></td>
+<td>按位或</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>按位异或</td>
+</tr>
+<tr>
+<td><code>&amp;</code></td>
+<td>按位与</td>
+</tr>
+<tr>
+<td><code>&lt;&lt;</code>，<code>&gt;&gt;</code></td>
+<td>移位</td>
+</tr>
+<tr>
+<td><code>+</code>，<code>-</code></td>
+<td>加法与减法</td>
+</tr>
+<tr>
+<td><code>*</code>，<code>/</code>，<code>%</code></td>
+<td>乘法、除法与取余</td>
+</tr>
+<tr>
+<td><code>+x</code>，<code>-x</code></td>
+<td>正负号</td>
+</tr>
+<tr>
+<td><code>~x</code></td>
+<td>按位翻转</td>
+</tr>
+<tr>
+<td><code>**</code></td>
+<td>指数</td>
+</tr>
+<tr>
+<td><code>x.attribute</code></td>
+<td>属性参考</td>
+</tr>
+<tr>
+<td><code>x[index]</code></td>
+<td>下标</td>
+</tr>
+<tr>
+<td><code>x[index:index]</code></td>
+<td>寻址段</td>
+</tr>
+<tr>
+<td><code>f(arguments...)</code></td>
+<td>函数调用</td>
+</tr>
+<tr>
+<td><code>(experession,...)</code></td>
+<td>绑定或元组显示</td>
+</tr>
+<tr>
+<td><code>[expression,...]</code></td>
+<td>列表显示</td>
+</tr>
+<tr>
+<td><code>&#123;key:datum,...&#125;</code></td>
+<td>字典显示</td>
+</tr>
+<tr>
+<td><code>'expression,...'</code></td>
+<td>字符串转换</td>
+</tr>
+</tbody>
+</table>
+<h2 id="format">format</h2>
+<p>一个通用的标准格式说明语言如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">format_spec ::&#x3D;  [[fill]align][sign][#][0][width][,][.precision][type]</span><br><span class="line">fill        ::&#x3D;  &lt;a character other than &#39;&#123;&#39; or &#39;&#125;&#39;&gt;</span><br><span class="line">align       ::&#x3D;  &quot;&lt;&quot; | &quot;&gt;&quot; | &quot;&#x3D;&quot; | &quot;^&quot;</span><br><span class="line">sign        ::&#x3D;  &quot;+&quot; | &quot;-&quot; | &quot; &quot;</span><br><span class="line">width       ::&#x3D;  integer</span><br><span class="line">precision   ::&#x3D;  integer</span><br><span class="line">type        ::&#x3D;  &quot;b&quot; | &quot;c&quot; | &quot;d&quot; | &quot;o&quot; | &quot;s&quot; | &quot;x&quot; | &quot;X&quot; | &quot;e&quot; | &quot;E&quot; | &quot;f&quot; | &quot;F&quot; | &quot;g&quot; | &quot;G&quot; | &quot;n&quot; | &quot;%&quot;</span><br></pre></td></tr></table></figure>
+<h4 id="align-对齐选项">align 对齐选项</h4>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;</code></td>
+<td>强制在可用空间中左对齐（该选项对于大部分对象是默认选项）</td>
+</tr>
+<tr>
+<td><code>&gt;</code></td>
+<td>强制在可用空间中右对齐（该选项对于数值型对象是默认选项）</td>
+</tr>
+<tr>
+<td><code>=</code></td>
+<td>强制在可用空间中在正负号（如果有的话）之后，有效数值之前进行填充。该选项常用于打印‘+000000120’这类数值。该对齐选项只对数值型对象可用。</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>强制在可用空间中居中对齐。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="sign-符号选项">sign 符号选项</h4>
+<p>“sign”说明字符只可用于数值型参数，它用于确定是否打印正负号。</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>+</code></td>
+<td>不管该数值为正数还是负数，都要打印正负号。</td>
+</tr>
+<tr>
+<td><code>-</code></td>
+<td>只当该数值为负数时，才打印负号。（默认）</td>
+</tr>
+<tr>
+<td><code>SPC</code></td>
+<td>为正数输出空格，为负数输出负号。</td>
+</tr>
+</tbody>
+</table>
+<p>用于字符串的有效类型有：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>s</code></td>
+<td>字符串格式。字符串类型默认都会带上这个选项，因此允许忽略。</td>
+</tr>
+<tr>
+<td>无</td>
+<td>和<code>s</code>等效</td>
+</tr>
+</tbody>
+</table>
+<p>用于整型的有效类型有：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>b</code></td>
+<td>二进制形式。</td>
+</tr>
+<tr>
+<td><code>d</code></td>
+<td>十进制形式。</td>
+</tr>
+<tr>
+<td><code>o</code></td>
+<td>八进制形式。</td>
+</tr>
+<tr>
+<td><code>x</code></td>
+<td>小写十六进制形式。</td>
+</tr>
+<tr>
+<td><code>X</code></td>
+<td>大写十六进制形式。</td>
+</tr>
+<tr>
+<td><code>c</code></td>
+<td>输出整数对应的Unicode字符。</td>
+</tr>
+<tr>
+<td><code>n</code></td>
+<td>以场所敏感的方式输出数字。其作用与<code>d</code>相同。</td>
+</tr>
+<tr>
+<td>无</td>
+<td>和<code>d</code>等效</td>
+</tr>
+</tbody>
+</table>
+<p>用于浮点数的有效类型有：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>e</code></td>
+<td>使用小写字母e的指数形式</td>
+</tr>
+<tr>
+<td><code>E</code></td>
+<td>使用大写字母E的指数形式</td>
+</tr>
+<tr>
+<td><code>f</code></td>
+<td>标准的浮点形式</td>
+</tr>
+<tr>
+<td><code>g</code></td>
+<td>“通常”格式，与<code>f</code>的作用等同，除非数字特别大（在这种情况下与<code>e</code>作用等同）</td>
+</tr>
+<tr>
+<td><code>G</code></td>
+<td>与<code>g</code>几乎等同，但总是使用<code>f</code>或<code>E</code></td>
+</tr>
+<tr>
+<td><code>n</code></td>
+<td>以场所敏感的方式输出数字，其作用与<code>g</code>相同</td>
+</tr>
+<tr>
+<td><code>%</code></td>
+<td>使用百分比的形式输出数字。产生的数字结果使用<code>f</code>并附加一个<code>%</code>字符的格式输出</td>
+</tr>
+<tr>
+<td>无</td>
+<td>与<code>g</code>相似，但小数点后至少保留一位数字，且默认精度为12。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="转义序列">转义序列</h2>
+<p>除非在字符串前加上<code>r</code>或<code>R</code>，否则字符串中的转义序列将会根据既定的规则来进行解释，这些规则和标准的C语言类似。这些转义序列包括：</p>
+<table>
+<thead>
+<tr>
+<th>转义序列</th>
+<th>含义</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\\</code></td>
+<td>Backslash (<code>\</code>)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\'</code></td>
+<td>Single quote (<code>'</code>)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\&quot;</code></td>
+<td>Double quote (<code>&quot;</code>)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\a</code></td>
+<td>ASCII Bell (<code>BEL</code>)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\b</code></td>
+<td>ASCII Backspace (<code>BS</code>)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\f</code></td>
+<td>ASCII Formfeed (<code>FF</code>)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\n</code></td>
+<td>ASCII Linefeed (<code>LF</code>)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\r</code></td>
+<td>ASCII Carriage Return (<code>CR</code>)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\t</code></td>
+<td>ASCII Horizontal Tab (<code>TAB</code>)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\v</code></td>
+<td>ASCII Vertical Tab (<code>VT</code>)</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\ooo</code></td>
+<td>Character with octal value <code>ooo</code></td>
+<td>(1,3)</td>
+</tr>
+<tr>
+<td><code>\xhh</code></td>
+<td>Character with hex value <code>hh</code></td>
+<td>(2,3)</td>
+</tr>
+</tbody>
+</table>
+<p>只能用在字符串里的转义序列有：</p>
+<table>
+<thead>
+<tr>
+<th>转义序列</th>
+<th>含义</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>\N&#123;name&#125;</code></td>
+<td>Character named name in the Unicode database</td>
+<td>(4)</td>
+</tr>
+<tr>
+<td><code>\uxxxx</code></td>
+<td>Character with 16-bit hex value <code>xxxx</code></td>
+<td>(5)</td>
+</tr>
+<tr>
+<td><code>\Uxxxxxxxx</code></td>
+<td>Character with 32-bit hex value <code>xxxxxxxx</code></td>
+<td>(6)</td>
+</tr>
+</tbody>
+</table>
+<p>备注：</p>
+<ol>
+<li>和标准C相同，最多可以接收三个数位作为八进制数；</li>
+<li>与标准C不同，一个十六进制数由确切的两个数位表示；</li>
+<li>在字节的语法中，十六进制和八进制转义符使用给定的值表示字节。在字符串的语法中，这些转义符使用给定的值表示一个Unicode字符。</li>
+<li>从3.3版本开始，支持使用别名（alias）；</li>
+<li>被编码为一对16比特长的码元(即32bit,4Bytes)，称作<a target="_blank" rel="noopener" href="http://zh.wikipedia.org/wiki/UTF-16">代理对</a>(surrogate pair)。代理对可以使用这个转义序列来编码。共需要4个十六进制数位。</li>
+<li>任意Unicode字符可以使用这个方式编码。共需要8个十六进制数位。</li>
+</ol>
+
+
+		<!-- pagination -->
+		<div>
+		  <center>
+  		    <div class="pagination">
+<ul class="pagination">
+	
+	
+	
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+		
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+	
+	    
+			
+			
+			
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+			
+			
+		
+	
+	    
+			
+			
+			
+	    
+			
+		
+	
+	    
+			
+		
+	
+	    
+	
+	    
+	
+	    
+			
+		
+	
+	
+		<li class="prev"><a data-pjax href="/wiki/python3-style.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+	
+	<li><a data-pjax href="/wiki"><i class="fa fa-tasks"></i>Wiki</a></li>
+	
+		<li class="next"><a data-pjax href="/wiki/python3-unittest.html" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>
+	
+</ul>
+</div>
+
+	      </center>
+		</div>
+				
+		<!-- comment -->
+		
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '速查表'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+		
+
+	</div> <!-- span9/span12 -->
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

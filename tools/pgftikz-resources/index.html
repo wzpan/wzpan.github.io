@@ -1,0 +1,694 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>PGF/TikZ资源汇总 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="收集汇总了PGF/TikZ的一些有用的资源。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="PGF/TikZ资源汇总"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: 'PGF/TikZ资源汇总'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> PGF/TikZ资源汇总</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>收集汇总了PGF/TikZ的一些有用的资源。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <h2 id="什么是TikZ和PGF？">什么是TikZ和PGF？</h2>
+<p>Ti<em>k</em>Z和PGF是一种用在TeX上的CLI绘图工具。CLI和GUI是两种常见的绘图方式，前者是所想即所得（WYTIWYG）的，通过类编程的思想实现绘图，这种方式往往能够生成精确控制的函数图，常见的有PostScript、PGF、Asymptote、PSTricks等。后者则是所见即所得（WYSIWYG）的，常见的有CorelDraw、Illustrator、Photoshop、GIMP、Office、Visio等。
+Ti<em>k</em>Z和PGF的关系则是高层和底层的关系，简单说来，Ti<em>k</em>Z基于PGF，它可以帮助我们用更易于理解的方式创建复杂的图形。PGF的全名是“portable
+graphics format”，或者“pretty, good,
+functional”，Ti<em>k</em>Z的命名更有趣，采用的是递归式的取名：“TikZ ist kein
+Zeichenprogramm”(TikZ is not a drawing
+program)，类似的取名最出名的恐怕就是GNU（GNU is Not Unix）了。</p>
+<span id="more"></span>
+<h2 id="教程">教程</h2>
+<ol>
+<li>TikZ and pgf Manual：官方指导教程。</li>
+<li>Graphics with Tikz：一份简单的Ti<em>k</em>Z教程slide。</li>
+<li>例学Tikz &amp; PGF：从具体例子入手学习Ti<em>k</em>Z和PGF。</li>
+<li><a target="_blank" rel="noopener" href="http://automatica.dei.unipd.it/people/varagnolo/tikz.html">A TikZ mini
+course</a>：一份介绍Ti<em>k</em>Z的简短的slide。</li>
+<li><a target="_blank" rel="noopener" href="http://river-valley.tv/a-tikz-tutorial-generating-graphics-in-the-spirit-of-tex/">A TikZ tutorial: Generating graphics in the spirit of
+TeX</a>：TUG
+2009视频教程。</li>
+<li><a target="_blank" rel="noopener" href="http://www.felixl.de/commu.pdf">Commutative Diagrams using
+TikZ</a>：一份介绍如何在( )中应用Ti<em>k</em>Z绘制交换图的教程。</li>
+<li><a target="_blank" rel="noopener" href="http://www.tug.org/pracjourn/2007-1/beccari/">Graphics in
+LaTeX</a>：一份对( )常见画图工具的综述，包含了对Ti<em>k</em>Z的有用的介绍。</li>
+<li><a target="_blank" rel="noopener" href="http://www.tug.org/pracjourn/2007-1/mertz/">Graphics with PGF and
+TikZ</a>：一篇发表在PracTeX杂志上的文章，包含了许多有用的图例。还有它的<a target="_blank" rel="noopener" href="http://www.river-valley.tv/conferences/practex2006/entries/william-com.html">演示视频</a>。</li>
+<li><a target="_blank" rel="noopener" href="http://kogs-www.informatik.uni-hamburg.de/~meine/tikz/process/">Including TikZ
+pictures</a>：介绍如何导入外部Ti<em>k</em>Z图案的文章。</li>
+<li><a target="_blank" rel="noopener" href="http://particlephd.wordpress.com/2009/01/02/latex-figures-with-pgf-and-tikz/">LaTeX Figures with PGF and
+TikZ</a>：一份关于使用PGF和Ti<em>k</em>Z的利弊的讨论，发表于<a target="_blank" rel="noopener" href="http://particlephd.wordpress.com/">High
+Energy PhDs weblog</a>。</li>
+<li><a target="_blank" rel="noopener" href="http://www.statistiker-wg.de/pgf/tutorials.htm">Statistiker-wg.de
+tutorials</a>：收集了很多PP的Ti<em>k</em>Z实例，不过是德文的。</li>
+<li><a target="_blank" rel="noopener" href="http://elishapeterson.wikidot.com/tikz:diagrams">Trace Diagram Codes &amp;
+Examples</a>：展示如何绘制<a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Trace_diagram">trance图</a>。</li>
+</ol>
+<h2 id="相关论坛、博客以及邮件列表">相关论坛、博客以及邮件列表</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://groups.google.com/group/comp.text.tex/topics">comp.text.tex</a>：最大并且是最活跃的( )相关的论坛。</li>
+<li><a target="_blank" rel="noopener" href="http://www.latex-community.org/index.php">LaTeX-Community.org</a>：一个相对比较新的不过发展很迅速的( )论坛/社区。拥有很多友善并且活跃的用户，可以帮忙解决大部分( )相关的问题。</li>
+<li><a target="_blank" rel="noopener" href="http://sourceforge.net/forum/?group_id=92412">Beamer forums on
+SF</a>：Beamer和PGF都是由同个作者写的，所以Sourceforge上的Beamer论坛上也有专门讨论PGF/Tikz的版块。</li>
+<li><a target="_blank" rel="noopener" href="http://sourceforge.net/forum/?group_id=142562">PGF and TikZ forums on
+Sourceforge</a>：Sourceforge上的PGF/TikZ论坛。活跃度比较低。但如果你向PGF用户邮件列表提交问题，获取帮助的机会比较大。</li>
+<li><a target="_blank" rel="noopener" href="http://blog.sina.com.cn/s/articlelist_1578561911_6_1.html">LaTeX_Fun</a>：介绍( )技术的博客。</li>
+<li><a target="_blank" rel="noopener" href="http://sourceforge.net/mailarchive/forum.php?forum_name=latex-beamer-users">The latex-beamer-users mailing list on
+SF</a>：Sourceforge上的( )-Beamer用户邮件列表。在这个邮件列表中也能够找到关于PGF/TikZ的讨论。</li>
+<li><a target="_blank" rel="noopener" href="http://bbs.ctex.org/">CTeX论坛</a>：里面有专门的( )绘图专区版块，不过介绍的内容比较杂，还可以找到Asymptote、PostScript等的资源。</li>
+</ol>
+<h2 id="实例">实例</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://www.texample.net/">TeXample.net</a>：PGF/TikZ的官方gallery，要检索全部实例可以访问<a target="_blank" rel="noopener" href="http://www.texample.net/tikz/examples/all/">这里</a>。</li>
+<li><a target="_blank" rel="noopener" href="http://graphtheoryinlatex.blogspot.com/">Graph Theory in
+LaTeX</a>：收集( )下的绘图工具绘制的图案；</li>
+<li><a target="_blank" rel="noopener" href="http://altermundus.com/">Altermundus.com</a>：介绍Ti<em>k</em>Z相关的包和绘制出来的实例。</li>
+<li><a target="_blank" rel="noopener" href="http://www.fauskes.net/pgftikzexamples/simple-flow-chart/">简单流图</a>（Simple
+flow chart）</li>
+<li><a target="_blank" rel="noopener" href="http://www.texample.net/tikz/examples/tex-workflow/">工作流图</a>（The
+TeX work flow）</li>
+<li><a target="_blank" rel="noopener" href="http://www.fauskes.net/pgftikzexamples/pgf-umlsd/">UML时序图</a>（UML
+sequence diagrams）</li>
+<li><a target="_blank" rel="noopener" href="http://www.texample.net/tikz/examples/class-diagram/">类图</a>（Class diagram）</li>
+<li><a target="_blank" rel="noopener" href="http://www.texample.net/tikz/examples/entity-relationship-diagram/">ER图</a>（Entity-Relationship
+diagram）</li>
+<li><a target="_blank" rel="noopener" href="http://www.texample.net/tikz/examples/system-combination/">系统架构图</a>（System Combination）</li>
+<li><a target="_blank" rel="noopener" href="http://www.fauskes.net/pgftikzexamples/inertial-navigation-system/">基于数据流的系统架构图</a>（Inertial
+navigation system）</li>
+<li><a target="_blank" rel="noopener" href="http://www.texample.net/tikz/examples/merge-sort-recursion-tree/">归并树</a>（Merge
+sort recursion tree）</li>
+<li><a target="_blank" rel="noopener" href="http://www.texample.net/tikz/examples/intersecting-lines/">Prim算法</a>（Prim’s
+algorithm，用于生成最小生成树）</li>
+<li><a target="_blank" rel="noopener" href="http://www.texample.net/tikz/examples/neural-network/">神经网络</a>（Neural
+network）</li>
+<li><a target="_blank" rel="noopener" href="http://www.texample.net/tikz/examples/state-machine/">有限状态机</a>（state
+machine）</li>
+<li><a target="_blank" rel="noopener" href="http://www.texample.net/tikz/examples/diagram-chains/">正则表达式图</a>（Putting
+a diagrams in chains）</li>
+<li><a target="_blank" rel="noopener" href="http://www.texample.net/tikz/examples/boxes-with-text-and-math/">便签条图</a>（Boxes
+with text and math）</li>
+<li><a target="_blank" rel="noopener" href="http://www.texample.net/tikz/examples/beamer-arrows/">公式说明</a>（Beamer
+Arrows）</li>
+<li><a target="_blank" rel="noopener" href="http://www.fauskes.net/pgftikzexamples/control-system-principles/">负反馈系统控制图</a>（Control
+system principles）</li>
+<li><a target="_blank" rel="noopener" href="http://www.texample.net/tikz/examples/intersecting-lines/">直线相交</a>（Intersecting
+lines）</li>
+<li><a target="_blank" rel="noopener" href="http://www.texample.net/tikz/examples/parabola-plot/">函数图</a>（Parabola
+plot）</li>
+<li><a target="_blank" rel="noopener" href="http://www.texample.net/tikz/examples/parameterized-plots/">波形图</a>（Parameterized
+plots）</li>
+<li><a target="_blank" rel="noopener" href="http://www.texample.net/tikz/examples/node-shapes/">节点形状</a>（Node
+shapes）</li>
+<li><a target="_blank" rel="noopener" href="http://media.texample.net/tikz/examples/thumbs/connecting-text-and-graphics.jpg">连接文字和图形</a>（Connecting
+text and graphics）</li>
+<li><a target="_blank" rel="noopener" href="http://www.texample.net/tikz/examples/set-operations-illustrated-with-venn-diagrams/">韦恩图</a>（Set
+operations illustrated with Venn diagrams）</li>
+<li><a target="_blank" rel="noopener" href="http://www.texample.net/tikz/examples/computer-science-mindmap/">心智图</a>（Computer
+science mindmap）</li>
+<li><a target="_blank" rel="noopener" href="http://www.texample.net/tikz/examples/yin-and-yang/">太极图</a>（Yin
+and yang）</li>
+<li><a target="_blank" rel="noopener" href="http://www.texample.net/tikz/examples/spiderweb-diagram/">蛛网图</a>（Spiderweb
+diagram）</li>
+<li><a target="_blank" rel="noopener" href="http://www.texample.net/tikz/examples/scatterplot/">分散的点</a>（Scatterplot）</li>
+</ol>
+<h2 id="扩展宏包">扩展宏包</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://www.ctan.org/tex-archive/help/Catalogue/entries/bclogo.html">bclogo</a>：一个用于创建带标题和logo的彩色盒子的宏包。支持Ti<em>k</em>Z和PSTricks。</li>
+<li><a target="_blank" rel="noopener" href="http://latex-beamer.sourceforge.net/">Beamer</a>：用来创建精美的幻灯片的宏包，可能是( )下最简单易用的幻灯片制作工具了。它和PGF/Ti<em>k</em>Z出自同一个作者。</li>
+<li><a target="_blank" rel="noopener" href="http://www.sciences-indus-cpge.apinc.org/Bode-Black-et-Nyquist-avec-Tikz">Bodegraph</a>：一个用来绘制Bode图、Nichols-Black图和Nyquist图的宏包。</li>
+<li><a target="_blank" rel="noopener" href="http://home.dei.polimi.it/mredaelli/circuitikz/index.html">CircuiTikz for drawing electrical
+networks</a>：一套用来在科学刊物中绘制电路图的( )宏包。PGF的电路图库就是根据这个包开发出来的。</li>
+<li><a target="_blank" rel="noopener" href="http://www.ctan.org/tex-archive/help/Catalogue/entries/pgfplots.html">Pgfplots</a>：提供一个非常友好的接口，用来完成普通或者对数尺度函数图的绘制。</li>
+<li><a target="_blank" rel="noopener" href="http://www.ctan.org/tex-archive/help/Catalogue/entries/prerex.html">prerex</a>：一个基于PGF的用来创建有节点相连的图表的工具。</li>
+<li><a target="_blank" rel="noopener" href="http://www.papanicola.info/post-it/spip.php?article53">Schéma-blocs avec
+PGF/TIKZ</a>：用于绘制block。</li>
+<li><a target="_blank" rel="noopener" href="http://www.ctan.org/tex-archive/help/Catalogue/entries/sparklines.html">sparklines</a>：用于绘制波形图。</li>
+<li><a target="_blank" rel="noopener" href="http://www.ctan.org/tex-archive/help/Catalogue/entries/tikz-qtree.html">tikz-qtree: Simple syntax and smarter layout for
+trees</a>：用于在Ti<em>k</em>Z中绘制树，使用的是Alexis
+Dimitriadis’<a target="_blank" rel="noopener" href="http://www.ctan.org/tex-archive/help/Catalogue/entries/qtree.html">Qtree</a>的创建语法。使用它绘制出来的树不会有树节点的碰撞问题，相比Ti<em>k</em>Z的标准绘制树的功能而言有了较大的改进。</li>
+<li><a target="_blank" rel="noopener" href="http://www.ctan.org/tex-archive/help/Catalogue/entries/tikz-timing.html">tikz-timing</a>：用于绘制时序图。</li>
+<li><a target="_blank" rel="noopener" href="http://altermundus.com/pages/graphtheory.html">tkz-berge</a>：一组用于绘制多种图形的宏包。</li>
+<li><a target="_blank" rel="noopener" href="http://altermundus.com/pages/graph.html">tkz-graph</a>：用于绘制基本图形。</li>
+<li><a target="_blank" rel="noopener" href="http://www.ctan.org/tex-archive/help/Catalogue/entries/tkz-linknodes.html">tkz-linknodes</a>：用于连接两个节点元素。</li>
+<li><a target="_blank" rel="noopener" href="http://www.ctan.org/tex-archive/help/Catalogue/entries/tkz-tab.html">tkz-tab</a>：用于绘制复杂的表格图案。</li>
+</ol>
+<h2 id="实用工具">实用工具</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://cse.unl.edu/~cbourke/latex/extractpgf">extractpgf</a>：一个perl脚本，可以直接由tikzpicture环境里的内容生成pdf文件。</li>
+<li><a target="_blank" rel="noopener" href="http://www.kde-apps.org/content/show.php/ktikz?content=63188">ktikz</a>：一个小巧的KDE工具，可以可视化生成Ti<em>k</em>Z图表。</li>
+<li><a target="_blank" rel="noopener" href="http://kogs-www.informatik.uni-hamburg.de/~meine/tikz/process/#tikz2pdf">TikZ2PDF</a>：一个Python脚本工具，可以自动检测文件的改动并预览生成的图案效果。</li>
+<li><a target="_blank" rel="noopener" href="http://sourceforge.net/projects/tikzit/">TikZIT</a>：一个基于Ti<em>k</em>Z的跨平台GUI绘图工具。最初是针对Ti<em>k</em>Z快速绘制点状图而开发，现在也可以用来进行常规的图形绘制。</li>
+<li><a target="_blank" rel="noopener" href="http://webgen.rubyforge.org/documentation/tag/tikz.html">Webgen::Tag::TikZ</a>：一个用于生成静态的网站的工具。它支持使用TikZ标签直接在网页中自动生成基于Ti<em>k</em>Z的图形。</li>
+<li><a target="_blank" rel="noopener" href="http://www.fauskes.net/code/blend2tikz/">Blend2TikZ</a>：一个支持将blender曲线转换为Ti<em>k</em>Z路径的脚本。</li>
+<li><a target="_blank" rel="noopener" href="http://blog.lindoze.net/software/convert-vym-mindmap-pgftikz/">Convert Your VYM Mindmap to
+PGF/TikZ</a>：一个小巧的C语言程序，可以将 <a target="_blank" rel="noopener" href="http://sourceforge.net/projects/vym/">VYM</a> (View
+Your
+Mind)的Mindmap图导出的XML文件转换为Ti<em>k</em>Z的Mindmap图（<a target="_blank" rel="noopener" href="http://www.fauskes.net/pgftikzexamples/computer-science-mindmap/" title="PGF/TikZ mind mapping example">查看示例文件</a>）。</li>
+<li><a target="_blank" rel="noopener" href="http://live.gnome.org/Dia">Dia</a>：基于GTK+的图形绘制程序。能够将图形保存成PGF代码。</li>
+<li><a target="_blank" rel="noopener" href="http://www.fauskes.net/code/dot2tex/">Dot2TeX</a>：Graphviz转( )。</li>
+<li><a target="_blank" rel="noopener" href="http://ece.uwaterloo.ca/~aplevich/dpic/">dpic</a>：一个类PIC语言的解释器，可以导出成PGF/TikZ等多种格式。它与<a target="_blank" rel="noopener" href="http://www.ctan.org/tex-archive/help/Catalogue/entries/circuit-macros.html">circuit-macros</a>一起使用，可以生成电路图。</li>
+<li><a target="_blank" rel="noopener" href="http://mathcs.holycross.edu/~ahwang/epix/ePiX.html">ePIX</a>：一组命令行工具，能够生成精确控制的函数图，并支持TikZ、PSTricks、EEPIC等多种导出格式。</li>
+<li><a target="_blank" rel="noopener" href="http://sourceforge.net/projects/eps2pgf/">Eps2pgf</a>：将Eps图形转换为PGF/TikZ命令
+。</li>
+<li><a target="_blank" rel="noopener" href="http://kogs-www.informatik.uni-hamburg.de/~meine/software/figpy/#fig2tikz">fig2tikz</a>：一个优雅的工具，可以将XFig文件转换为TikZ命令。</li>
+<li><a target="_blank" rel="noopener" href="http://www.geogebra.org/cms/">GeoGebra</a>：一个支持几何、线性代数、微积分的数学图像软件，最新的预览版本<a target="_blank" rel="noopener" href="http://www.geogebra.org/en/wiki/index.php/Release_Notes_GeoGebra_Pre-Release">pre-release
+version</a>已经支持TikZ格式命令的导出。</li>
+<li><a target="_blank" rel="noopener" href="http://peter.affenbande.org/gnuplot/">Gnuplot TikZ
+terminal</a>：一个用Lua编写的Gnuplot终端。能够生成PGF和TikZ代码。</li>
+<li><a target="_blank" rel="noopener" href="http://code.google.com/p/inkscape2tikz/">Inkscape TikZ
+exporter</a>：<a target="_blank" rel="noopener" href="http://www.inkscape.org/">Inkscape</a>的一个扩展工具，可以导出TikZ格式的SVG路径。目前还处在开发阶段。</li>
+<li><a target="_blank" rel="noopener" href="http://tug.ctan.org/pkg/jflap2tikz">JFlap2TikZ</a>：<a target="_blank" rel="noopener" href="http://www.jflap.org/">JFlap</a>是一个用于有限状态机、图灵机和计算机理论探索实验的工具。JFlap2TikZ则是一个非常有用的脚本，用它可以将JFlap生成的包含图形信息的jff文件转换为包含了TikZ代码的( )文件。</li>
+<li><a target="_blank" rel="noopener" href="http://theoval.cmp.uea.ac.uk/~nlct/jpgfdraw/">JpgfDraw</a>：一个使用Java编写的线性图形工具。可以将插画导出为PGF格式命令、PNG以及SVG文件。一个有趣的特性是它可以生成<a target="_blank" rel="noopener" href="http://www.ctan.org/tex-archive/help/Catalogue/entries/flowfram.html">flowfram</a>和<a target="_blank" rel="noopener" href="http://www.ctan.org/tex-archive/help/Catalogue/entries/shapepar.html">shapepar</a>包需要的帧序列和图形信息</li>
+<li><a target="_blank" rel="noopener" href="http://jtikz.sourceforge.net/">JTikZ</a>：一个基于Java
+AWT/Swing的PGF/TikZ可视化绘制工具。</li>
+<li><a target="_blank" rel="noopener" href="http://www.beurden.cjb.net/latexpix.htm">LaTeXPiX</a>：一个GUI绘制工具，支持导出EEPIC和PGF代码，不过只支持Windows。</li>
+<li><a target="_blank" rel="noopener" href="http://www.mathworks.com/matlabcentral/fileexchange/loadFile.do?objectId=12962">Matfig2PGF</a>：一个能够将Matlab图形脚本转换为PGF代码的工具。</li>
+<li><a target="_blank" rel="noopener" href="http://www.win.ua.ac.be/~nschloe/content/matlab2tikz">matlab2tikz</a>：基于上面的<a target="_blank" rel="noopener" href="http://www.mathworks.com/matlabcentral/fileexchange/loadFile.do?objectId=12962">Matfig2PGF</a>，也是一个能将Matlab的图形转换为Ti<em>k</em>Z格式命令的工具。</li>
+<li><a target="_blank" rel="noopener" href="http://soft.proindependent.com/qtiplot.html">QtiPlot</a>：一个用于二维/三维数据可视化及数据分析的程序。</li>
+<li><a target="_blank" rel="noopener" href="http://www.frontiernet.net/~eugene.ressler/">Sketch - A 3D Scene Description
+Translator</a>：一个小巧而简单的系统，可以生成二维/三维的物体和场景草图。Sketch可生成PSTricks或者PGF/TikZ代码，并允许对绘制出来的三维物体进行标注。</li>
+<li><a target="_blank" rel="noopener" href="http://r-forge.r-project.org/projects/tikzdevice/">tikzDevice - TikZ output from
+R</a>：提供一个针对<a target="_blank" rel="noopener" href="http://www.r-project.org/">R</a><a target="_blank" rel="noopener" href="http://www.r-project.org/">项目</a>的全新的图形引擎，支持直接输出为TikZ命令。</li>
+<li><a target="_blank" rel="noopener" href="http://tpx.sourceforge.net/TpX.htm">TpX drawing
+tool</a>：一个轻量级的GUI图形绘制工具，可以绘制矢量图形。只支持Windows。</li>
+</ol>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/reading/ann2/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/reading/ann1/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: 'PGF/TikZ资源汇总'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/pgftikz-resources.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2011-11-14 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/tools/">tools<span>12</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/CLI/">CLI<span>1</span></a></li> <li><a href="/tags/Drawing/">Drawing<span>1</span></a></li> <li><a href="/tags/Graphics/">Graphics<span>1</span></a></li> <li><a href="/tags/PGF/">PGF<span>1</span></a></li> <li><a href="/tags/TikZ/">TikZ<span>1</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFTikZ%E5%92%8CPGF%EF%BC%9F"><span class="toc-article-text">什么是TikZ和PGF？</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%95%99%E7%A8%8B"><span class="toc-article-text">教程</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E7%9B%B8%E5%85%B3%E8%AE%BA%E5%9D%9B%E3%80%81%E5%8D%9A%E5%AE%A2%E4%BB%A5%E5%8F%8A%E9%82%AE%E4%BB%B6%E5%88%97%E8%A1%A8"><span class="toc-article-text">相关论坛、博客以及邮件列表</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%AE%9E%E4%BE%8B"><span class="toc-article-text">实例</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%89%A9%E5%B1%95%E5%AE%8F%E5%8C%85"><span class="toc-article-text">扩展宏包</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="toc-article-text">实用工具</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

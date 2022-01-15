@@ -1,0 +1,671 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>使用叮当声控智米电风扇 | HaHack</title>
+  <meta name="author" content="wzpan">
+  
+  <meta name="description" content="作为一个完全开源的智能音箱项目，叮当也能够很方便的接入其他智能家电，并声控它们。本文将介绍如何使用叮当声控智米电风扇。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="使用叮当声控智米电风扇"/>
+  <meta property="og:site_name" content="HaHack"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+    <link rel="alternative" href="//atom.xml" title="HaHack" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" id="theme" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/bubble.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/sidenav.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/article.css" media="screen" type="text/css">
+  <!-- <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css"> -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+    <![endif]-->
+
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery-2.0.3.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.pjax.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/pace.min.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/theme.js"></script>
+  <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/search.js"></script>
+  
+    
+    <link rel="stylesheet" href="/css/gitalk.css">
+    <script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/gitalk.min.js"></script>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $(document).pjax('a[target!=_blank][rel!=gallery]', '.pjax', {fragment:'.pjax', timeout:8000});
+    });
+
+    $(document).on('pjax:send', function() {
+	  Pace.restart();
+    })
+    $(document).on('pjax:complete', function() {
+       Pace.stop();
+        
+       var search_path = "search.xml";
+	   if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	   }
+	   var path = '/' + search_path;
+      searchFunc(path, 'local-search-input', 'local-search-result');
+
+       $('[data-spy="affix"]').each(function () {
+          var $spy = $(this)
+          , data = $spy.data()
+          data.offset = data.offset || {}
+          data.offsetBottom && (data.offset.bottom = data.offsetBottom)
+          data.offsetTop && (data.offset.top = data.offsetTop)
+          $spy.affix(data)
+       });
+
+    })
+    $(document).on({'pjax:end': function() {
+      $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function() { 
+            MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+                tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+                TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+                messageStyle: "none"
+            });
+
+            var math = document.getElementsByClassName("pjax")[0];
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+            
+        });
+        $.getScript("//hahack-1253537070.file.myqcloud.com/images/blog/js/gallery.js");
+        if ($('#gitalk-container').length > 0) {
+            var gitalk = new Gitalk({
+                clientID: '19f93019e0c0b8fdc4b3',
+                clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+                id: undefined != undefined ? 'undefined' : window.location.pathname,
+                repo: 'wzpan.github.io',
+                owner: 'wzpan',
+                admin: 'wzpan',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+                title: '使用叮当声控智米电风扇'
+            })
+            gitalk.render('gitalk-container');
+        }
+      }
+    })
+  </script>
+  <!-- analytics -->
+  
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+ <body data-spy="scroll" data-target=".wiki .toc">
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">HaHack</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archive" title="所有文章存档">
+			  <i class="fas fa-archive"></i>Archive
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="所有文章分类.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="所有文章标签.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/wiki" title="我的笔记库">
+			  <i class="fa fa-tasks"></i>wiki
+			</a>
+		  </li>
+		  
+		</ul>
+        <ul class="nav navbar-nav navright">
+          <li class="dropdown works">
+          <a href="#" title="更换主题" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-palette"></i></a>
+          <ul class="dropdown-menu">
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cerulean" title="更换颜色主题为cerulean"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#0B4C8D"></span>cerulean</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-cyborg" title="更换颜色主题为cyborg"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#272B30"></span>cyborg</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-paper" title="更换颜色主题为paper"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#2B97F0"></span>paper</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-flatly" title="更换颜色主题为flatly"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#28BB9C"></span>flatly</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-journal" title="更换颜色主题为journal"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#E96967"></span>journal</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-simplex" title="更换颜色主题为simplex"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#D7261E"></span>simplex</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="freemind-spacelab" title="更换颜色主题为spacelab"><span style="width:1em; height:1em; margin-top: 2px; margin-right: 5px; float: left; display: block; background:#507DAC"></span>spacelab</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+          <a href="#" title="作品集" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/wukong-robot" title="wukong-robot 是一个简单、灵活、优雅的中文语音对话机器人。"><i class="fab fa-github"></i>wukong-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/dingdang-robot/dingdang-robot" title="叮当是一款可以工作在 Raspberry Pi 上的中文语音对话机器人/智能音箱项目。"><i class="fab fa-github"></i>dingdang-robot</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/comment.js" title="纯JS实现的静态站点评论系统，使用 Github/OSChina 作为 backend。"><i class="fab fa-github"></i>comment.js</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://github.com/wzpan/qtevm" title="首个完整的 C++ 开源实现，能同时放大动作变化和颜色变化"><i class="fab fa-github"></i>QtEVM</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/hexo-series" title="为 Hexo 写的一系列主题/工具/插件"><i class="fab fa-github"></i>hexo-series</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/scnu/scnuthesis" title="符合华南师范大学硕士/博士学位论文格式要求的LaTeX模板。"><i class="fab fa-github"></i>SCNUThesis</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://github.com/wzpan/wzpan.github.io/wiki/slides" title="一些幻灯片作品"><i class="fab fa-github"></i>Slides</a></li>
+			
+				   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="http://www.hahack.com/codes/fcevm/" title="硕士毕业论文"><i class="fab fa-github"></i>Dissertation</a></li>
+			
+            <li role="separator" class="divider"></li>
+            
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/list/python%20next%20潘伟洲" title="Python 从入门到实践系列"><i class="fas fa-video"></i>Python</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/350627" title="使用Cocos Creator开发微信小游戏《2048》"><i class="fas fa-video"></i>2048</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/326820" title="微信小游戏入门与实战"><i class="fas fa-video"></i>minigame</a></li> 
+			
+                   <li role="presentation"><a role="menuitem" tabindex="-1" target="_blank" href="https://ke.qq.com/course/471888?_bid=167&_wv=3&term_id=100565039&taid=4061608838378320" title="微信小游戏入门与实战"><i class="fas fa-video"></i>IT大咖说</a></li> 
+			
+          </ul>
+          </li>
+          <li class="dropdown works">
+            <a href="#" title="订阅本站" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subscribe <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  href="/atom.xml"  title="使用 RSS 阅读器订阅 HaHack"  ><i class="fa fa-rss-square"></i>RSS</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  title="订阅 HaHack 的公众平台"  data-toggle="modal" data-target="#wechat-modal" ><i class="fa fa-qrcode"></i>WeChat</a></li>
+			  
+			    <li role="presentation"><a role="menuitem" tabindex="-1"  target="_blank" rel="noopener" href="http://toutiao.io/u/147640"  title=""  ><i class="fa fa-align-justify"></i>Toutiao</a></li>
+			   
+            </ul>
+          </li>
+          
+				<li><a data-pjax href="/about" title="关于我"><i class="fa fa-user"></i>About</a></li>				   				
+   	  	  
+        </ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content pjax">
+      
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> 使用叮当声控智米电风扇</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>作为一个完全开源的智能音箱项目，叮当也能够很方便的接入其他智能家电，并声控它们。本文将介绍如何使用叮当声控智米电风扇。</p>
+			
+		 </div> <!-- alert -->
+	  		
+
+	  <h2 id="前言">前言</h2>
+<p><a target="_blank" rel="noopener" href="http://github.com/wzpan/dingdang-robot">dingdang-robot</a> （以下简称“叮当”），是我在今年5月20号开源的一个中文智能音箱项目。</p>
+<p>起初，我只是抱着一个好玩的心态做这个项目，并不期望这个项目能得到多少关注。然而，随着 QQ 用户群人数的不断壮大，越来越多的朋友安装了叮当，并且真正将它投入在了日常的使用上。很多朋友也提出了各种好玩的建议、想法，甚至为叮当贡献了插件或者捐赠了这个项目，让我觉得这个项目是很有价值的，也让我知道，我能做的还有很多东西。因此，我并不是开源了叮当之后就撒手不管了，而是利用业余时间不断完善叮当，又陆续发布了 8 个小版本，使得叮当在响应速度和功能丰富程度上都有了很大提升：</p>
+<ul>
+<li>自 v0.1.1 起，邮件通知也增加了 echo 功能，用户可以发送带 <code>[echo]</code> 前缀的邮件给叮当接入的邮箱，从而实现让叮当朗读标题的消息，而不是提醒有新的邮件。利用这个功能，可以很方便地和 ifttt 结合，当满足某个条件时让图灵通知这个事件。例如，我将 ifttt 的 <a target="_blank" rel="noopener" href="https://ifttt.com/date_and_time">Date &amp; Time</a> 触发器和 <a target="_blank" rel="noopener" href="https://ifttt.com/email">Email</a> 做了联动，实现定时在每天晚上 11 点发送邮件通知我睡觉；</li>
+<li>自 v0.1.2 起，叮当的响应速度有了很大提升；</li>
+<li>v0.1.3 增加了 snowboy 离线唤醒 STT 引擎，目前有 PocketSphinx 和 snowboy 两套离线唤醒引擎可供选择；</li>
+<li>v0.1.4 增加了 SendQR 插件，可以让叮当将微信的登录二维码发送到邮箱。<a target="_blank" rel="noopener" href="https://github.com/hhao">@hhao</a> 也给叮当写了个可以获取二维码图片文件的服务器插件。另外，邮箱增加了 <code>[control]</code> 前缀支持，用户可以发送带 <code>[control]</code> 前缀标题的邮件，该标题里的内容会被当成一句指令交给叮当执行，从而实现类似微信的远程控制叮当的功能；</li>
+<li>v0.1.5 开始，可以微信控制音乐播放了；</li>
+<li>v0.1.7 开始，所有插件都可以通过在插件配置里头通过 <code>enable</code> 选项开关；</li>
+<li>叮当的官方+第三方插件数量由 6 个增加到了 13 个。</li>
+</ul>
+<p>除了完善已有的功能，我也正试图让叮当往智能家电控制中心的方向上发展。</p>
+<p>如今很多智能音箱除了用来听歌对话之外，还扮演了家庭中的一个控制中心的角色。不过，由于各家采用的接入协议有所区别，A 家的智能家电并不见得能得到 B 家的智能音箱的支持。而由于叮当是开源的项目，对其进行定制，接入控制家电所需的协议，从而实现声控大部分的智能家电是完全可能的。今天我就分享一下如何用叮当控制智米电风扇。</p>
+<span id="more"></span>
+<h2 id="智米风扇声控插件">智米风扇声控插件</h2>
+<p>先上视频。这个视频演示了使用叮当实现对智米风扇的电源开关、摇头开关、自然风开关、风量调节、预约关机的声控：</p>
+<div class="alert alert-success"><i class="fas fa-lightbulb"></i>  使用手机阅读本文的用户，如果看不到视频，可以点击<a target="_blank" rel="noopener" href="http://www.miaopai.com/show/1NZnXdBMryZsDvyshBNdoPHNBHUHTEjW.html">这个链接</a>前往观看。
+</div>
+<p><embed src='http://player.youku.com/player.php/sid/XMjg5NDAwOTUxMg==/v.swf' allowFullScreen='true' quality='high' width='480' height='400' align='middle' allowScriptAccess='always' type='application/x-shockwave-flash'></embed></p>
+<p>插件的主页：<a target="_blank" rel="noopener" href="https://github.com/wzpan/dingdang-smart-mi-fan">https://github.com/wzpan/dingdang-smart-mi-fan</a> 。</p>
+<h3 id="安装插件">安装插件</h3>
+<p>先安装 python2-miio ：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install python2-miio</span><br></pre></td></tr></table></figure>
+<p>之后，克隆本项目到任意目录：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/wzpan/dingdang-smart-mi-fan.git</span><br></pre></td></tr></table></figure>
+<p>再将里头的 <a target="_blank" rel="noopener" href="http://SmartMiFan.py">SmartMiFan.py</a> 拷贝至 /home/pi/.dingdang/custom 目录。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp dingdang-smart-mi-fan/SmartMiFan.py /home/pi/.dingdang/custom/</span><br></pre></td></tr></table></figure>
+<p>如果没有 custom 目录，就先创建它然后再执行上面的拷贝命令：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /home/pi/.dingdang/custom</span><br></pre></td></tr></table></figure>
+<p>然后，确保你的智米电风扇已开机并和叮当所在的机器处于同一个局域网下。然后执行以下命令获取风扇的 <code>host</code> 和  <code>token</code>:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">miio2 discover</span><br></pre></td></tr></table></figure>
+<p>最后在 /home/pi/.dingdang/profile.yml 中添加如下配置：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 智米风扇</span></span><br><span class="line"><span class="attr">smart_mi_fan:</span></span><br><span class="line">    <span class="attr">host:</span> <span class="string">&quot;192.168.1.106&quot;</span></span><br><span class="line">    <span class="attr">token:</span> <span class="string">&quot;32e9af2050bc9d6f599c061733effee0&quot;</span></span><br><span class="line">    <span class="attr">angle:</span> <span class="number">60</span>  <span class="comment"># 摇头的角度范围。可选值为 30/60/90/120</span></span><br></pre></td></tr></table></figure>
+<p>完成后重启叮当即可使用本插件。</p>
+<h3 id="指令列表">指令列表</h3>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>相同指令</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>打开风扇</td>
+<td>启动风扇</td>
+<td>打开风扇</td>
+</tr>
+<tr>
+<td>关闭风扇</td>
+<td>-</td>
+<td>关闭风扇</td>
+</tr>
+<tr>
+<td>开启自然风</td>
+<td>启动自然风</td>
+<td>切换到自然风模式</td>
+</tr>
+<tr>
+<td>关闭自然风</td>
+<td>关闭自然风</td>
+<td>切换到普通模式</td>
+</tr>
+<tr>
+<td>开始摇头</td>
+<td>开启摇头</td>
+<td>开始摇头</td>
+</tr>
+<tr>
+<td>停止摇头</td>
+<td>结束摇头，关闭摇头</td>
+<td>结束摇头</td>
+</tr>
+<tr>
+<td>加大风速</td>
+<td>加快风速，加大风量，加大风力</td>
+<td>加大风扇转速</td>
+</tr>
+<tr>
+<td>减少风速</td>
+<td>减慢风速，减少风量，减小风力</td>
+<td>降低风扇转速</td>
+</tr>
+<tr>
+<td><code>$num</code> <code>$unit</code> 后关闭风扇</td>
+<td><code>$num</code> 是数字，<code>$unit</code> 可以是秒/分钟/小时</td>
+<td>预约关机</td>
+</tr>
+</tbody>
+</table>
+<h2 id="开发心得">开发心得</h2>
+<p>下面说说开发心得。小米的智能家电使用的是 miio 协议。在编写这个插件之前，我先试用了 <a target="_blank" rel="noopener" href="https://github.com/homeassistantchina">@homeassistantchina</a> 提供的 HomeAssistant 的智米风扇插件 <a target="_blank" rel="noopener" href="https://github.com/homeassistantchina/custom_components/blob/master/custom_components/fan/smart_mi_fan.py">smart_mi_fan.py</a>，这个插件在 HomeAssistant 里头的体验非常不错：</p>
+<p>
+      <figure>
+        <img src="//hahack-1253537070.file.myqcloud.com/images/blog/images/use-dingdang-to-control-smart-mi-fan/smart-mi-fan-hass.png" alt="HASS的智米风扇插件" />
+        <figcaption>HASS的智米风扇插件</figcaption>
+      </figure>
+    </p>
+<p>通过阅读这个插件，我发现这个插件依赖了一个封装了 miio 协议的 Python 3 的库 python-miio 。再阅读 python-miio 的源码，可以发现这个库就是通过 socket 来实现和家电的通讯的。整个发送消息的逻辑写成了一个 <code>send</code> 函数：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">send</span>(<span class="params">self, command, parameters=<span class="literal">None</span></span>)</span></span><br></pre></td></tr></table></figure>
+<p>使用这个函数非常简单，只需要传入要发送的指令即可。</p>
+<p>通过阅读 <code>smart_mi_fan.py</code> 的源码，不难发现 miio 的指令主要是两个类型：</p>
+<ol>
+<li>
+<p>获取属性。获取风扇的温度、角度、电源、风速等属性。通过发送 <code>get_prop</code> 指令并带上需要获取的属性名即可得到这些属性的值。具体有如下这些：</p>
+<ul>
+<li><code>temp_dec</code>：温度；</li>
+<li><code>humidity</code>：湿度；</li>
+<li><code>angle</code>：角度；</li>
+<li><code>speed</code>：风速；</li>
+<li><code>poweroff_time</code>：预约关机的时间（秒）；</li>
+<li><code>power</code>：是否开机；</li>
+<li><code>ac_power</code>：是否使用交流电供电；</li>
+<li><code>battery</code>：电池剩余电量；</li>
+<li><code>angle_enable</code>：是否摇头；</li>
+<li><code>speed_level</code>：正常风风速等级；</li>
+<li><code>natural_level</code>：自然风风速等级；</li>
+<li><code>child_lock</code>：儿童锁；</li>
+<li><code>buzzer</code>：是否有声音反馈；</li>
+<li><code>led_b</code>：LED指示灯的亮度。</li>
+</ul>
+</li>
+<li>
+<p>设置属性。设置某个属性的值。通过发送 <code>set_属性名</code> 指令并带上值即可对该属性进行控制。</p>
+</li>
+</ol>
+<p>了解了这个套路后，我只需要照着写一个叮当的插件，即可实现让叮当声控智米风扇的目标。</p>
+<p>不过，在完成这个目标前，我还遇到了一个问题：python-miio 只能在 Python 3 环境中使用，而叮当是使用 Python 2 编写的。于是我对 python-miio 进行了 Python 2 版本的移植，发布为 <a target="_blank" rel="noopener" href="https://pypi.python.org/pypi/python2-miio/0.0.3">python2-miio</a> 。为了避免两个版本的 <code>miio</code> 命令行工具冲突，我把 python 2 版本的 <code>miio</code> 更名为 <code>miio2</code> 。</p>
+<p>插件的编写过程也很轻松，和写其他的叮当插件一样的套路，所以整个插件我只用了一个晚上的时间就写好了。如果你看过我之前写的一篇编写叮当插件的教程《<a href="/codes/how-to-write-dingdang-plugin/">手把手教你编写叮当机器人插件</a>》，那么阅读风扇声控插件的源码也不会很困难，这里就只放上源码链接：<a target="_blank" rel="noopener" href="https://github.com/wzpan/dingdang-smart-mi-fan/blob/master/SmartMiFan.py">https://github.com/wzpan/dingdang-smart-mi-fan/blob/master/SmartMiFan.py</a>。</p>
+<p>最后就是插件的发布问题。考虑到这个插件比较私人——大部分用户并没有智米风扇，因此我并没有把它丢进 dingdang-contrib 中，而是单独创建了一个仓库来托管。对于需要使用这个插件的人，只需要将它放到个人的插件目录 /home/pi/.dingdang/custom 中，即可让该插件生效<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>。这样的好处是无需改动 contrib 目录，也不会影响 contrib 目录的更新。</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><code>custom</code> 目录的支持在叮当 v0.1.9 开始引进。 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/work/my-2-years-at-pingan/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+  		
+
+        <li><a href="/archive"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/codes/comment-js/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        <!-- 
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+ -->
+        <!-- 
+ -->
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+  
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    if ($('#gt-container').length <= 0) {
+    var gitalk = new Gitalk({
+        clientID: '19f93019e0c0b8fdc4b3',
+        clientSecret: '00ca18ff55f2b4f0f33af3fb90ff524e7acd1032',
+        id: undefined != undefined ? 'undefined' : window.location.pathname,
+        repo: 'wzpan.github.io',
+        owner: 'wzpan',
+        admin: 'wzpan',
+        proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
+        title: '使用叮当声控智米电风扇'
+    })
+    gitalk.render('gitalk-container');
+    }
+  </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+    <a href='https://github.com/wzpan/hexo-blog/edit/master/source/_posts/use-dingdang-to-control-smart-mi-fan.md' target='_blank'><i class="fa fa-edit"></i> edit on Github</a>
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2017-07-15 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/codes/">codes<span>38</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/dingdang/">dingdang<span>5</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget meta-toc" data-spy="affix" data-offset-top="400">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-article-text">前言</span></a></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E6%99%BA%E7%B1%B3%E9%A3%8E%E6%89%87%E5%A3%B0%E6%8E%A7%E6%8F%92%E4%BB%B6"><span class="toc-article-text">智米风扇声控插件</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6"><span class="toc-article-text">安装插件</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#%E6%8C%87%E4%BB%A4%E5%88%97%E8%A1%A8"><span class="toc-article-text">指令列表</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#%E5%BC%80%E5%8F%91%E5%BF%83%E5%BE%97"><span class="toc-article-text">开发心得</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+    
+    
+    
+    
+          <div class="modal fade" id="wechat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+               <div class="modal-body">
+                 <img src='https://hahack-1253537070.cos.ap-chengdu.myqcloud.com/images/blog/images/qrcode.jpg'/>
+              </div>
+            </div>
+          </div>
+		
+    
+    
+    
+  <footer> <p>
+  &copy; 2021 wzpan
+  
+    <small>
+     <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh"><img title="知识共享许可协议" style="border-width: 0px; vertical-align: middle; display: inline; " src="/images/license.png"></a>
+    </small>
+</p>
+ </footer>
+  </div> <!-- container-narrow -->
+  
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/bootstrap.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/jquery.tableofcontents.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/tocgenerator.min.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/main.js"></script>
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/js/fadetoc.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="//hahack-1253537070.file.myqcloud.com/images/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = '/' + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      
+         $("#freemind-cerulean").click(function(){
+           document.cookie = "theme=cerulean; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cerulean; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cerulean.css");
+         });
+      
+         $("#freemind-cyborg").click(function(){
+           document.cookie = "theme=cyborg; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=cyborg; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/cyborg.css");
+         });
+      
+         $("#freemind-paper").click(function(){
+           document.cookie = "theme=paper; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=paper; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/paper.css");
+         });
+      
+         $("#freemind-flatly").click(function(){
+           document.cookie = "theme=flatly; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=flatly; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/flatly.css");
+         });
+      
+         $("#freemind-journal").click(function(){
+           document.cookie = "theme=journal; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=journal; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/journal.css");
+         });
+      
+         $("#freemind-simplex").click(function(){
+           document.cookie = "theme=simplex; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=simplex; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/simplex.css");
+         });
+      
+         $("#freemind-spacelab").click(function(){
+           document.cookie = "theme=spacelab; domain=www.hahack.com; maxAge=0";
+           document.cookie = "theme=spacelab; domain=www.hahack.com";
+           $("#theme").attr("href", "/css/themes/spacelab.css");
+         });
+      
+     });
+  </script>
+
+
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>
